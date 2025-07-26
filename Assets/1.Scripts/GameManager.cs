@@ -94,6 +94,7 @@ public class GameManager : MonoBehaviour
 
         /// playground reset mat
         PG.RefreshMatFromDiff(MGM.miniGamesDifficulty);
+        PG.RefreshMatFromLoopLevel(playerData.loopLevel);
 
         // Start game again
         StartGame();

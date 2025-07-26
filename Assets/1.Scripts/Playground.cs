@@ -17,6 +17,7 @@ public class Playground : MonoBehaviour
     public Texture2D LoopLevelColorGrading;
     public bool AnimateBG = true;
     public float AnimationDeltaTime = 0.5f;
+    private float currAnimationDeltaTime;
     List<Color> loopLevelColors;
     GameObject go_colliders, go_bg, go_playfield;
     MeshRenderer BG_MR, PF_MR;
@@ -112,10 +113,12 @@ public class Playground : MonoBehaviour
     {
         Color c = (iLoopLevel >= loopLevelColors.Count) ? loopLevelColors[loopLevelColors.Count - 1] : loopLevelColors[iLoopLevel];
         BG_MR.material.SetColor("_Color", c);
+        currAnimationDeltaTime = AnimationDeltaTime / iLoopLevel;
     }
 
     IEnumerator AnimateCo()
     {
+        currAnimationDeltaTime = AnimationDeltaTime;
         short phase = 0;
         Vector2 phase0 = Vector2.zero;
         Vector2 phase1 = new Vector2(0.5f, 0f);
@@ -131,7 +134,7 @@ public class Playground : MonoBehaviour
                 BG_MR.material.SetTextureOffset("_MainTex",phase1);
                 phase = 0;
             }
-            yield return new WaitForSeconds(AnimationDeltaTime/Time.timeScale);
+            yield return new WaitForSeconds(currAnimationDeltaTime);
         }
         
     }

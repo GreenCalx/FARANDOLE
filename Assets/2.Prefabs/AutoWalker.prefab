@@ -145,6 +145,7 @@ MonoBehaviour:
   AutoWalk: 0
   from: {x: 0, y: 0, z: 0}
   to: {x: 0, y: 0, z: 0}
+  isDelayed: 0
 --- !u!50 &2305746928130172609
 Rigidbody2D:
   serializedVersion: 5
@@ -207,4 +208,4 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.13
+  m_Radius: 0.1
