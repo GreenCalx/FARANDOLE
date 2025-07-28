@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 8106188639129109386}
   - component: {fileID: 5631274227081818332}
   m_Layer: 0
-  m_Name: Diff1_LabyrinthLayout0
+  m_Name: Diff2_LabyrinthLayout1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -116,36 +116,36 @@ CompositeCollider2D:
         Y: -15000000
   - m_Collider: {fileID: 5867340295364520129}
     m_ColliderPaths:
-    - - X: -5200000
-        Y: 7950000
-      - X: -10200000
-        Y: 7950000
-      - X: -10200000
-        Y: -16550000
-      - X: -5200000
-        Y: -16550000
+    - - X: 11500000
+        Y: 2500000
+      - X: -11500000
+        Y: 2500000
+      - X: -11500000
+        Y: -2500000
+      - X: 11500000
+        Y: -2500000
   - m_Collider: {fileID: 8106188639129109386}
     m_ColliderPaths:
-    - - X: 10000000
-        Y: 8000000
-      - X: -10000000
-        Y: 8000000
-      - X: -10000000
-        Y: 3000000
-      - X: 10000000
-        Y: 3000000
+    - - X: -2500000
+        Y: 20000000
+      - X: -7500000
+        Y: 20000000
+      - X: -7500000
+        Y: 0
+      - X: -2500000
+        Y: 0
   m_CompositePaths:
     m_Paths:
-    - - {x: -1.0200293, y: -1.5}
-      - {x: -1.0199707, y: 0.795}
-      - {x: -1, y: 0.7950293}
-      - {x: -0.9999706, y: 0.8}
-      - {x: 1, y: 0.7999706}
-      - {x: 0.9999706, y: 0.3}
-      - {x: -0.52, y: 0.29997072}
-      - {x: -0.5199707, y: -1.5}
-      - {x: 1.5, y: -1.4999707}
+    - - {x: 1.4999707, y: -1.5}
       - {x: 1.4999707, y: 1.5}
+      - {x: -0.25, y: 1.4999707}
+      - {x: -0.2499707, y: 0.25}
+      - {x: 1.15, y: 0.2499706}
+      - {x: 1.1499707, y: -0.25}
+      - {x: -1.15, y: -0.2499706}
+      - {x: -1.1499707, y: 0.25}
+      - {x: -0.75, y: 0.2500293}
+      - {x: -0.7500293, y: 1.5}
       - {x: -1.5, y: 1.4999707}
       - {x: -1.4999707, y: -1.5}
   m_VertexDistance: 0.0005
@@ -232,7 +232,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 3
   m_CompositeOrder: 1
-  m_Offset: {x: -0.77, y: -0.43}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -242,7 +242,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.5, y: 2.45}
+  m_Size: {x: 2.3, y: 0.5}
   m_EdgeRadius: 0
 --- !u!61 &8106188639129109386
 BoxCollider2D:
@@ -278,7 +278,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 3
   m_CompositeOrder: 1
-  m_Offset: {x: 0, y: 0.55}
+  m_Offset: {x: -0.5, y: 1}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -288,7 +288,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 2, y: 0.5}
+  m_Size: {x: 0.5, y: 2}
   m_EdgeRadius: 0
 --- !u!114 &5631274227081818332
 MonoBehaviour:
@@ -329,7 +329,7 @@ Transform:
   m_GameObject: {fileID: 7453803601713162861}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.68, y: 0.55, z: 0}
+  m_LocalPosition: {x: -0.631, y: 0.644, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -16,9 +16,9 @@ public class WaveformMatcherMiniGame : MiniGame
     public float minFreq = 1f;
     public float maxFreq = 2f;
     public XYController xyController;
-    // public int n_cycles = 3;
-    // public int cycleResolution = 12;
     public int resolution = 60;
+    [Range(0f,1f)]
+    public float targetRandGround = 0.1f; // unit ircle center exclusion
     public Transform targetWaveformPoint;
     public Transform controlledWaveformPoint;
     public Material LRTargetMat;
@@ -28,16 +28,28 @@ public class WaveformMatcherMiniGame : MiniGame
     LineRenderer targetLR;
     Waveshape controlled;
     LineRenderer controlledLR;
+    float minAmpByDiff, maxAmpByDiff;
+    float minFreqByDiff, maxFreqByDiff;
+    float freqCentroid, ampCentroid;
     public override void Init()
     {
-        //target = new Waveshape(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f));
+        minAmpByDiff = minAmp   / MGM.miniGamesDifficulty;
+        minFreqByDiff = minFreq / MGM.miniGamesDifficulty;
+        maxFreqByDiff = maxFreq * MGM.miniGamesDifficulty;
+        maxAmpByDiff = maxAmp   * MGM.miniGamesDifficulty;
+
+        freqCentroid = (maxFreqByDiff + minFreqByDiff) / 2f;
+        ampCentroid = (maxAmpByDiff + minAmpByDiff) / 2f;
+
+        // Get a random target value, excluding centroid values
         Vector2 randPoint = Random.insideUnitCircle;
-        Debug.Log(randPoint);
-        // randPoint.x = Utils.Remap(randPoint.x, 0f, 1f, -1f, 1f);
-        // randPoint.y = Utils.Remap( randPoint.y, 0f, 1f, -1f, 1f);
+        if (randPoint.x < targetRandGround)
+            randPoint.x = (randPoint.x < 0f) ? -targetRandGround : targetRandGround;
+        if (randPoint.y < targetRandGround)
+            randPoint.y = (randPoint.y < 0f) ? -targetRandGround : targetRandGround;
         target = new Waveshape(
-            Utils.Remap(randPoint.x, -1f, 1f, minFreq, maxFreq),
-            Utils.Remap(randPoint.y, -1f, 1f, minAmp, maxAmp)
+            Utils.Remap(randPoint.x, -1f, 1f, minFreqByDiff, maxFreqByDiff),
+            Utils.Remap(randPoint.y, -1f, 1f, minAmpByDiff, maxAmpByDiff)
             );
 
         targetLR = GOBuilder.Create()
@@ -50,7 +62,7 @@ public class WaveformMatcherMiniGame : MiniGame
         targetLR.startWidth = 0.05f;
         targetLR.endWidth = 0.05f;
 
-        controlled = new Waveshape((maxFreq+minFreq)/2f, (maxAmp+minAmp)/2f);
+        controlled = new Waveshape(freqCentroid, ampCentroid);
         controlledLR = GOBuilder.Create()
                     .WithName("TargetWaveform")
                     .WithParent(transform)
@@ -60,7 +72,6 @@ public class WaveformMatcherMiniGame : MiniGame
                     .GetComponent<LineRenderer>();
         controlledLR.startWidth = 0.05f;
         controlledLR.endWidth = 0.05f;
-
 
         PC.AddPositionTracker(xyController);
     }
@@ -91,15 +102,15 @@ public class WaveformMatcherMiniGame : MiniGame
     }
     public override bool SuccessCheck()
     {
-        bool eq_freq = Mathf.Abs(controlled.freq - target.freq) < 0.01f;
-        bool eq_amp = Mathf.Abs(controlled.amp - target.amp) < 0.01f;
+        bool eq_freq = Mathf.Abs(controlled.freq - target.freq) < 0.02f;
+        bool eq_amp = Mathf.Abs(controlled.amp - target.amp) < 0.02f;
         return eq_freq && eq_amp;
     }
 
     void Update()
     {
-        controlled.freq = Utils.Remap(xyController.XY.x, -1f, 1f, minFreq, maxFreq);
-        controlled.amp = Utils.Remap(xyController.XY.y, -1f, 1f, minAmp, maxAmp);
+        controlled.freq = Utils.Remap(xyController.XY.x, -1f, 1f, minFreqByDiff, maxFreqByDiff);
+        controlled.amp = Utils.Remap(xyController.XY.y, -1f, 1f, minAmpByDiff, maxAmpByDiff);
         DrawControlled();
         if (SuccessCheck())
             Win();
@@ -117,16 +128,10 @@ public class WaveformMatcherMiniGame : MiniGame
 
     public Vector3[] GetSinWave(float iAmp, float iFreq, Vector3 iWorldAnchor)
     {
-        //int n_points = n_cycles * cycleResolution;
         Vector3[] positions = new Vector3[resolution];
 
         float fPoints = (float)resolution;
-        float fullCircle = 2f * Mathf.PI;
-
-        float xStart = 0f;
-        float xFinish = fullCircle;
-        float xOffset = 0f;
-        float progress = 0f, x = 0f, y = 0f;
+        float  x = 0f, y = 0f;
         float xStep = windowSize.x / fPoints;
         for (int i = 0; i < resolution; i++)
         {

@@ -55,10 +55,14 @@ MonoBehaviour:
   inst_movingLabyrinth: {fileID: 8487501759319076828}
   diff1Layouts:
   - {fileID: 4726206639710619473, guid: 9b8a5f87e1f7122429edbf167d0f5c6c, type: 3}
+  - {fileID: 4726206639710619473, guid: 88716a2f4d0f87b4eac1904ce01ca296, type: 3}
   diff2Layouts:
   - {fileID: 4726206639710619473, guid: fb5e205038952f840b1983c40a34d3a7, type: 3}
+  - {fileID: 4726206639710619473, guid: edb7717a81bba3541a19900641fab004, type: 3}
+  - {fileID: 4726206639710619473, guid: 6e7c8d91112a0614bb9115406420afe8, type: 3}
   diff3Layouts:
   - {fileID: 4726206639710619473, guid: deee2c8d6f02ee64191ddf89bf7b9ffb, type: 3}
+  - {fileID: 4726206639710619473, guid: 1afb8611788ce6d44b31bfcbd16029e2, type: 3}
 --- !u!1 &3278629205828269616
 GameObject:
   m_ObjectHideFlags: 0

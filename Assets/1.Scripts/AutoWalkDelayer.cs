@@ -31,7 +31,11 @@ public class AutoWalkDelayer : MonoBehaviour
 
     void OnDestroy()
     {
-        StopCoroutine(delayPhysxCo);
+        if (delayPhysxCo!=null)
+        {
+            StopCoroutine(delayPhysxCo);
+            delayPhysxCo = null;
+        }
         OnDestroyCB.Invoke();
     }
 

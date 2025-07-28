@@ -38,7 +38,6 @@ public class Labyrinth : MonoBehaviour, IPositionTracker
         if (delta.magnitude > 0.01f)
         {
             angle = Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg;
-            Debug.Log("angle" + angle);
             currRot = Quaternion.AngleAxis(angle, Vector3.forward);
         }
     }
