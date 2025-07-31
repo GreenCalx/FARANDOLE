@@ -27,10 +27,8 @@ public class MiniGameManager : MonoBehaviour, IManager
         OnHPLossCB = new UnityEvent<float>();
         PC = iGameManager.PC;
         PG = iGameManager.PG;
-
-        WarmUpMiniGames();
-        //Next();
     }
+    
     public bool IsReady()
     {
         return true;
@@ -49,6 +47,7 @@ public class MiniGameManager : MonoBehaviour, IManager
             as_mg.MGM = this;
             as_mg.PC = PC;
             as_mg.PG = PG;
+            as_mg.gameClock = GameData.Get.gameSettings.MiniGameTime;
             miniGames.Add(as_mg);
             new_mg.SetActive(false);
         }

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 public class LabyrinthMiniGame : MiniGame
 {
+    public TorqueRotater rotater;
     public GameObject prefab_ballToEscape;
     GameObject inst_ballToEscape;
     RollingBall inst_asBall;
     public Labyrinth inst_movingLabyrinth;
-
     public List<GameObject> diff1Layouts;
     public List<GameObject> diff2Layouts;
     public List<GameObject> diff3Layouts;
@@ -27,13 +27,13 @@ public class LabyrinthMiniGame : MiniGame
         switch (MGM.miniGamesDifficulty)
         {
             case 1:
-                selectedLayoutPrefab = diff1Layouts[UnityEngine.Random.Range(0, diff1Layouts.Count - 1)];
+                selectedLayoutPrefab = diff1Layouts[UnityEngine.Random.Range(0, diff1Layouts.Count)];
                 break;
             case 2:
-                selectedLayoutPrefab = diff2Layouts[UnityEngine.Random.Range(0, diff2Layouts.Count - 1)];
+                selectedLayoutPrefab = diff2Layouts[UnityEngine.Random.Range(0, diff2Layouts.Count)];
                 break;
             case 3:
-                selectedLayoutPrefab = diff3Layouts[UnityEngine.Random.Range(0, diff3Layouts.Count - 1)];
+                selectedLayoutPrefab = diff3Layouts[UnityEngine.Random.Range(0, diff3Layouts.Count)];
                 break;
             default:
                 Debug.LogError("Very bad error on layout pick for labyrinth with " + MGM.miniGamesDifficulty + " mini game difficutly. NO LAYOUTS !!");
@@ -51,7 +51,6 @@ public class LabyrinthMiniGame : MiniGame
     {
         PickLayout();
         inst_movingLabyrinth.SetFromLayout(selectedLayout);
-
         inst_movingLabyrinth.transform.rotation = Quaternion.identity;
 
         inst_ballToEscape = Instantiate(prefab_ballToEscape);
@@ -61,8 +60,8 @@ public class LabyrinthMiniGame : MiniGame
         inst_asBall = inst_ballToEscape.GetComponent<RollingBall>();
         inst_asBall.MG = this;
 
-        PC.AddPositionTracker(inst_movingLabyrinth);
-
+        rotater.Init();
+        PC.AddPositionTracker(rotater);
     }
     public override void Play()
     {
@@ -74,7 +73,7 @@ public class LabyrinthMiniGame : MiniGame
         inst_movingLabyrinth.transform.rotation = Quaternion.identity;
         inst_movingLabyrinth.Reset();
 
-        PC.RemovePositionTracker(inst_movingLabyrinth);
+        PC.RemovePositionTracker(rotater);
         if (!!inst_ballToEscape)
             Destroy(inst_ballToEscape.gameObject);
         IsActiveMiniGame = false;

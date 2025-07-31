@@ -12,6 +12,7 @@ EditorBuildSettings:
     path: Assets/0.Scenes/MiniGameScene.unity
     guid: 4161885c98a68de4aa4443be8479f003
   m_configObjects:
+    com.unity.adaptiveperformance.google.android.provider_settings: {fileID: 11400000, guid: ec56eba5d1ca8134d8697bce0090e1bf, type: 2}
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: ca4f0749513c4a144b2f2c45b3417e66, type: 2}
     com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: 380027a4b3b828e46bcf08700a9b7db1, type: 2}
     com.unity.input.settings: {fileID: 11400000, guid: 5e562b16f3477b14eacf9fc73592ea54, type: 2}

@@ -17,7 +17,12 @@ public class WaveformMatcherMiniGame : MiniGame
     public float maxFreq = 2f;
     public XYController xyController;
     public int resolution = 60;
-    [Range(0f,1f)]
+    // Careful if changing below range
+    // Upper bound must be reachable by XY Controller
+    // current clamp code doesn't check if the 'limited' randpoint
+    // is still reachable within unit circle
+    // Examples : diagonals 
+    [Range(0f, 0.5f)]
     public float targetRandGround = 0.1f; // unit ircle center exclusion
     public Transform targetWaveformPoint;
     public Transform controlledWaveformPoint;
@@ -33,20 +38,23 @@ public class WaveformMatcherMiniGame : MiniGame
     float freqCentroid, ampCentroid;
     public override void Init()
     {
-        minAmpByDiff = minAmp   / MGM.miniGamesDifficulty;
-        minFreqByDiff = minFreq / MGM.miniGamesDifficulty;
-        maxFreqByDiff = maxFreq * MGM.miniGamesDifficulty;
-        maxAmpByDiff = maxAmp   * MGM.miniGamesDifficulty;
+        float rangeExtension = ((float)MGM.miniGamesDifficulty - 1f) / 10f;
+        minAmpByDiff = minAmp   - (minAmp * rangeExtension);
+        minFreqByDiff = minFreq - (minFreq * rangeExtension);
+        maxFreqByDiff = maxFreq + (maxFreq * rangeExtension);
+        maxAmpByDiff = maxAmp   + (maxAmp * rangeExtension);
 
         freqCentroid = (maxFreqByDiff + minFreqByDiff) / 2f;
         ampCentroid = (maxAmpByDiff + minAmpByDiff) / 2f;
 
         // Get a random target value, excluding centroid values
+        // A targetRandGround too high transform the random range to a 'box'
         Vector2 randPoint = Random.insideUnitCircle;
-        if (randPoint.x < targetRandGround)
+        if ((randPoint.x <= targetRandGround)&&(randPoint.x >= -targetRandGround))
             randPoint.x = (randPoint.x < 0f) ? -targetRandGround : targetRandGround;
-        if (randPoint.y < targetRandGround)
+        if ((randPoint.y <= targetRandGround)&&(randPoint.y >= -targetRandGround))
             randPoint.y = (randPoint.y < 0f) ? -targetRandGround : targetRandGround;
+
         target = new Waveshape(
             Utils.Remap(randPoint.x, -1f, 1f, minFreqByDiff, maxFreqByDiff),
             Utils.Remap(randPoint.y, -1f, 1f, minAmpByDiff, maxAmpByDiff)
@@ -109,6 +117,7 @@ public class WaveformMatcherMiniGame : MiniGame
 
     void Update()
     {
+        Debug.Log(xyController.XY);
         controlled.freq = Utils.Remap(xyController.XY.x, -1f, 1f, minFreqByDiff, maxFreqByDiff);
         controlled.amp = Utils.Remap(xyController.XY.y, -1f, 1f, minAmpByDiff, maxAmpByDiff);
         DrawControlled();

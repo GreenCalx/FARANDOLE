@@ -69,7 +69,7 @@ TextureImporter:
   serializedVersion: 13
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 0
+    enableMipMap: 1
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -85,7 +85,7 @@ TextureImporter:
     normalMapFilter: 0
     flipGreenChannel: 0
   isReadable: 0
-  streamingMipmaps: 0
+  streamingMipmaps: 1
   streamingMipmapsPriority: 0
   vTOnly: 0
   ignoreMipmapLimit: 0
@@ -106,7 +106,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -638,7 +638,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -647,7 +647,28 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      balloon_explode_0: -3928832366174145197
+      balloon_explode_1: 2157630341721095538
+      balloon_explode_10: -4970130928499889447
+      balloon_explode_11: -744465989602253343
+      balloon_explode_12: -3875304101306755881
+      balloon_explode_13: -7039511589290735318
+      balloon_explode_14: -2645847404086190413
+      balloon_explode_15: 8482056048303768047
+      balloon_explode_16: 3154779937221375399
+      balloon_explode_17: 5900554561156305124
+      balloon_explode_18: 7980371256580458017
+      balloon_explode_19: -6996272098320075871
+      balloon_explode_2: 4898574390241772805
+      balloon_explode_20: 497436569762401688
+      balloon_explode_3: -4247593793479826287
+      balloon_explode_4: -129365203268850896
+      balloon_explode_5: 7190541742862867084
+      balloon_explode_6: 1959455995621426144
+      balloon_explode_7: -5753378663054251274
+      balloon_explode_8: 4653086167613315583
+      balloon_explode_9: -5338031060651605566
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

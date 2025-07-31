@@ -8,7 +8,7 @@ public class PlayerData
     public int loopLevel = 0;
     public PlayerData()
     {
-        HP = 10f;
+        HP = GameData.Get.gameSettings.PlayerHP;
         score = 0;
         timeScale = 1f;
         loopLevel = 0;

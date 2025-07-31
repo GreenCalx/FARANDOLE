@@ -74,6 +74,7 @@ public class PlayerController : MonoBehaviour
         catch (InvalidOperationException ioe)
         {
             Debug.LogError("InvalidOperationException On PlayerController::Tap. Might happening in minigame switch.");
+            Debug.LogError(ioe.ToString());
         }
         
     }

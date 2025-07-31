@@ -84,7 +84,7 @@ public static class Utils
 
     public static float Remap(float iVal, float iOldMin, float iOldMax, float iNewMin, float iNewMax)
     {
-        return iNewMin + (iVal / (iOldMax - iOldMin)) * (iNewMax - iNewMin);
+        return iNewMin + ((iVal-iOldMin) / (iOldMax - iOldMin)) * (iNewMax - iNewMin);
     }
 
     public static bool IsNaN(Vector3 iVec)

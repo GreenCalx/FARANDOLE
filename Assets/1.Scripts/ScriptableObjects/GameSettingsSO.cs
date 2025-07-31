@@ -3,7 +3,11 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "GameSettingsSO", menuName = "Scriptable Objects/GameSettingsSO")]
 public class GameSettingsSO : ScriptableObject
 {
+    [Header("Player Tweaks")]
+    public float PlayerHP = 10f;
+
     [Header("GameLoop Tweaks")]
+    public float MiniGameTime = 5f;
     public int MaxMiniGameDifficulty = 3;
     public int miniGameLevelUpThreshold = 2;
     public float MaxTimeScale = 3f;

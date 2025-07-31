@@ -7,12 +7,16 @@ public class UIVisualToggle : MonoBehaviour
     public Transform Point_On;
     public Transform Point_Off;
     public Transform ToggleKnob;
+    public SpriteRenderer FreezeVisual;
     public TextMeshProUGUI Text_On;
     public TextMeshProUGUI Text_Off;
     public Color Color_On;
     public Color Color_Off;
 
-
+    public bool freeze
+    {
+        set { FreezeVisual.enabled = value; }
+    }
     public void SetOn()
     {
         ToggleKnob.transform.position = Point_On.position;

@@ -10,6 +10,8 @@ public class AutoWalker : MonoBehaviour, ITapTracker
     public bool ReverseBehaviour = false;
     public UnityEvent<bool> OnAutoWalkToggleCB;
     public UnityEvent OnReachCB;
+    public UnityEvent OnPreDelayedyCB;
+    public UnityEvent OnPostDelayedCB;
     [Header("Internals")]
     public bool AutoWalk = false;
     public Vector3 from;
@@ -28,6 +30,9 @@ public class AutoWalker : MonoBehaviour, ITapTracker
     }
     public void OnTap(Vector2 iVec2)
     {
+        if (isDelayed)
+            return;
+        
         AutoWalk = !AutoWalk;
         OnAutoWalkToggleCB.Invoke(AutoWalk);
     }
@@ -59,6 +64,9 @@ public class AutoWalker : MonoBehaviour, ITapTracker
 
     public void Delay(AutoWalkDelayer iDelayer)
     {
+        if (isDelayed)
+            return;
+
         if (DelayedCo != null)
         {
             StopCoroutine(DelayedCo);
@@ -70,6 +78,7 @@ public class AutoWalker : MonoBehaviour, ITapTracker
     IEnumerator DelayCo(float iTime)
     {
         isDelayed = true;
+        OnPreDelayedyCB.Invoke();
 
         bool wasAutoWalking = AutoWalk;
         AutoWalk = false;
@@ -77,6 +86,7 @@ public class AutoWalker : MonoBehaviour, ITapTracker
         AutoWalk = wasAutoWalking;
 
         isDelayed = false;
+        OnPostDelayedCB.Invoke();
     }
 
 }

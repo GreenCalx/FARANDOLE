@@ -29,9 +29,12 @@ public class RainDropsMiniGame : MiniGame
         inst_walker.to = handle_endLine.position;
         inst_walker.OnReachCB.AddListener(() => { if (SuccessCheck()) { Win(); } });
         inst_walker.OnAutoWalkToggleCB.AddListener((b) => UIVisualToggle.Toggle(b));
+        inst_walker.OnPreDelayedyCB.AddListener(() => UIVisualToggle.freeze = true );
+        inst_walker.OnPostDelayedCB.AddListener(() => UIVisualToggle.freeze = false );
         PC.AddTapTracker(inst_walker);
 
         UIVisualToggle.Toggle(inst_walker.AutoWalk);
+        UIVisualToggle.freeze = false;
 
         inst_rainDrops = new List<AutoWalkDelayer>();
     }
@@ -85,6 +88,5 @@ public class RainDropsMiniGame : MiniGame
                                     .Build().GetComponent<AutoWalkDelayer>();
         newDrop.OnDestroyCB.AddListener(() => inst_rainDrops.Remove(newDrop));
         inst_rainDrops.Add(newDrop);
-        
     }
 }

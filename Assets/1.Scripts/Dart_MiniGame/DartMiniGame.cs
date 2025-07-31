@@ -37,9 +37,17 @@ public class DartMiniGame : MiniGame
 
     public void PopTarget(ObjectTarget iTarget)
     {
-        if (balloons.Contains(iTarget.gameObject))
-            balloons.Remove(iTarget.gameObject);
-        Destroy(iTarget.gameObject);
+        if (!balloons.Contains(iTarget.gameObject))
+            return;
+
+        balloons.Remove(iTarget.gameObject);
+
+        Balloon asBalloon = iTarget.GetComponent<Balloon>();
+        if (asBalloon != null)
+        {
+            asBalloon.ExplodeAnim();
+        }
+        Destroy(iTarget.gameObject, 0.2f);
 
         if (SuccessCheck())
             Win();

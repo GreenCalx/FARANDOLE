@@ -163,12 +163,13 @@ MonoBehaviour:
   IsActiveMiniGame: 0
   gameClock: 5
   windowSize: {x: 4, y: 2}
-  minAmp: 1
-  maxAmp: 2
+  minAmp: 0.5
+  maxAmp: 1
   minFreq: 0.2
   maxFreq: 0.3
   xyController: {fileID: 9008774579250620429}
   resolution: 80
+  targetRandGround: 0.388
   targetWaveformPoint: {fileID: 4006086730372813668}
   controlledWaveformPoint: {fileID: 4006086730372813668}
   LRTargetMat: {fileID: 2100000, guid: bb5ed207406334745b294a872816cb3b, type: 2}
