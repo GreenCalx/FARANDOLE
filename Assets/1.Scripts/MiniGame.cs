@@ -4,7 +4,7 @@ public class MiniGame : MonoBehaviour, IMiniGame
 {
     public MiniGameManager MGM;
     public PlayerController PC;
-    public Playground PG;
+    public PlaygroundManager PG;
     public bool IsActiveMiniGame;
     public float gameClock = 5f;
     public virtual void Init()

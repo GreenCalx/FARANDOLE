@@ -6,7 +6,7 @@ using UnityEngine.Events;
 using UnityEngine.Rendering.PostProcessing;
 using static Utils;
 
-public class Playground : MonoBehaviour
+public class PlaygroundManager : MonoBehaviour, IManager
 {
     public Bounds bounds;
     public CompositeCollider2D compositeCollider;
@@ -19,17 +19,30 @@ public class Playground : MonoBehaviour
     public float AnimationDeltaTime = 0.5f;
     private float currAnimationDeltaTime;
     List<Color> loopLevelColors;
-    GameObject go_colliders, go_bg, go_playfield;
-    MeshRenderer BG_MR, PF_MR;
+    GameObject go_colliders, go_fg, go_playfield;
+    MeshRenderer FG_MR, PF_MR;
     Coroutine AnimationCoroutine;
+    LayerManager2D LM2D;
     // public string postProcessLayer = "PostFX";
     // public PostProcessProfile ref_postProcessProfile;
     // GameObject LocalPostFX;
-    public void Init()
+    #region IManager
+    public void Init(GameManager iGameManager)
     {
+        LM2D = iGameManager.LM2D;
+
         InitColorGrading();
         BuildPlayground();
     }
+    public bool IsReady()
+    {
+        return (
+            (go_colliders != null) &&
+            (go_fg != null) &&
+            (go_playfield != null)
+        );
+    }
+    #endregion
 
     void InitColorGrading()
     {
@@ -47,7 +60,7 @@ public class Playground : MonoBehaviour
         Vector2 gameFieldSize = new Vector2(fullScreenWorldSize.x * GameData.GetSettings.GameFieldScreenProportion,
                                             fullScreenWorldSize.y * GameData.GetSettings.GameFieldScreenProportion);
 
-        Mesh BG_Mesh, Playfield_Mesh;
+        Mesh BG_Mesh, Playfield_Mesh, FG_Mesh;
         go_colliders = GOBuilder.Create()
                                     .WithName("Playground Colliders")
                                     .WithParent(transform)
@@ -55,27 +68,31 @@ public class Playground : MonoBehaviour
                                     .WithRB2D(RigidbodyType2D.Static)
                                     .WithBoxCollider2DAndMesh(Vector2.zero, fullScreenWorldSize, out BG_Mesh, Collider2D.CompositeOperation.Merge)
                                     .WithBoxCollider2DAndMesh(Vector2.zero, gameFieldSize, out Playfield_Mesh, Collider2D.CompositeOperation.Difference)
-                                    .WithCompositeCollider2D(true)
+                                    .WithCompositeCollider2D(out FG_Mesh)
                                     .Build();
 
-        go_bg = GOBuilder.Create()
-                            .WithName("PlaygroundBackground")
+        go_fg = GOBuilder.Create()
+                            .WithName("PlaygroundForground")
                             .WithParent(transform)
-                            .WithLocalPosition(new Vector3(0, 0, 1))
-                            .WithMeshFilter(BG_Mesh, true)
+                            .WithLocalPosition(Vector3.zero)
+                            .WithMeshFilter(FG_Mesh, true)
                             .WithRenderer(diff1Mat)
                             .Build();
-        BG_MR = go_bg.GetComponent<MeshRenderer>();
+        FG_MR = go_fg.GetComponent<MeshRenderer>();
+        
 
         go_playfield = GOBuilder.Create()
                             .WithName("PlayField")
                             .WithParent(transform)
-                            .WithLocalPosition(new Vector3(0, 0, 0))
+                            .WithLocalPosition(Vector3.zero)
                             .WithMeshFilter(Playfield_Mesh, true)
                             .WithRenderer(playFieldMat)
                             .Build();
         PF_MR = go_playfield.GetComponent<MeshRenderer>();
         bounds = PF_MR.bounds;
+
+        LM2D.PlaceTop(go_fg.transform);
+        LM2D.PlaceBot(go_playfield.transform);
 
         AnimationCoroutine = StartCoroutine(AnimateCo());
     }
@@ -91,18 +108,18 @@ public class Playground : MonoBehaviour
 
     public void RefreshMatFromDiff(int iDifficultyLevel)
     {
-        if (BG_MR == null)
+        if (FG_MR == null)
             return;
         switch (iDifficultyLevel)
             {
                 case 1:
-                    BG_MR.material = diff1Mat;
+                    FG_MR.material = diff1Mat;
                     break;
                 case 2:
-                    BG_MR.material = diff2Mat;
+                    FG_MR.material = diff2Mat;
                     break;
                 case 3:
-                    BG_MR.material = diff3Mat;
+                    FG_MR.material = diff3Mat;
                     break;
                 default:
                     break;
@@ -112,7 +129,7 @@ public class Playground : MonoBehaviour
     public void RefreshMatFromLoopLevel(int iLoopLevel)
     {
         Color c = (iLoopLevel >= loopLevelColors.Count) ? loopLevelColors[loopLevelColors.Count - 1] : loopLevelColors[iLoopLevel];
-        BG_MR.material.SetColor("_Color", c);
+        FG_MR.material.SetColor("_Color", c);
         currAnimationDeltaTime = AnimationDeltaTime / iLoopLevel;
     }
 
@@ -126,12 +143,12 @@ public class Playground : MonoBehaviour
         {
             if (phase == 0)
             {
-                BG_MR.material.SetTextureOffset("_MainTex",phase0);
+                FG_MR.material.SetTextureOffset("_MainTex",phase0);
                 phase++;
             }
             else if (phase == 1)
             {
-                BG_MR.material.SetTextureOffset("_MainTex",phase1);
+                FG_MR.material.SetTextureOffset("_MainTex",phase1);
                 phase = 0;
             }
             yield return new WaitForSeconds(currAnimationDeltaTime);

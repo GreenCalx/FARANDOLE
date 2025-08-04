@@ -121,6 +121,7 @@ MonoBehaviour:
   UIVisualToggle: {fileID: 451599589271195452}
   timeBeforeRainDrops: 0.5
   dropsPerSec: 1
+  pathLRMat: {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
 --- !u!1001 &5344727963432534473
 PrefabInstance:
   m_ObjectHideFlags: 0

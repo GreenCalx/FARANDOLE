@@ -9,17 +9,24 @@ public class LayerManager2D : MonoBehaviour, IManager
     public void Init(GameManager iGameManager)
     {
         layers = new List<List<Transform>>(MaxDepth);
-        for (int i = 0; i < MaxDepth; i++)
+        for (int i = 0; i <= MaxDepth; i++)
         {
             layers.Add(new List<Transform>());
         }
     }
     public bool IsReady()
     {
-        return (layers != null) && (layers.Count > 0);
+        return (layers != null) && (layers.Count == 1 + MaxDepth);
     }
     #endregion
 
+    public void ClearLayers()
+    {
+        foreach (List<Transform> layer in layers)
+        {
+            layer.Clear();
+        }
+    }
     public void Place(Transform iT, int iDepth)
     {
         if (layers[iDepth].Contains(iT))
@@ -28,7 +35,7 @@ public class LayerManager2D : MonoBehaviour, IManager
         layers[iDepth].Add(iT);
     }
 
-    public void PlaceTop(Transform iT)
+    public void PlaceTop( Transform iT)
     {
         Place(iT,0);
     }

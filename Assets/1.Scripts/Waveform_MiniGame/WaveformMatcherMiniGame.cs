@@ -49,6 +49,7 @@ public class WaveformMatcherMiniGame : MiniGame
 
         // Get a random target value, excluding centroid values
         // A targetRandGround too high transform the random range to a 'box'
+        // leading to unreachable values via XY circle controller
         Vector2 randPoint = Random.insideUnitCircle;
         if ((randPoint.x <= targetRandGround)&&(randPoint.x >= -targetRandGround))
             randPoint.x = (randPoint.x < 0f) ? -targetRandGround : targetRandGround;
@@ -117,7 +118,6 @@ public class WaveformMatcherMiniGame : MiniGame
 
     void Update()
     {
-        Debug.Log(xyController.XY);
         controlled.freq = Utils.Remap(xyController.XY.x, -1f, 1f, minFreqByDiff, maxFreqByDiff);
         controlled.amp = Utils.Remap(xyController.XY.y, -1f, 1f, minAmpByDiff, maxAmpByDiff);
         DrawControlled();

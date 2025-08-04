@@ -15,9 +15,11 @@ public class MiniGameManager : MonoBehaviour, IManager
     public UnityEvent<float> OnHPLossCB;
     public UnityEvent<int> OnScoreGainCB;
     public UnityEvent OnLoopComplete;
+    public LayerManager2D LM2D;
     float gameStartTime;
     PlayerController PC;
-    Playground PG;
+    PlaygroundManager PG;
+
 
     #region IManager
     public void Init(GameManager iGameManager)
@@ -27,6 +29,7 @@ public class MiniGameManager : MonoBehaviour, IManager
         OnHPLossCB = new UnityEvent<float>();
         PC = iGameManager.PC;
         PG = iGameManager.PG;
+        LM2D = iGameManager.LM2D;
     }
     
     public bool IsReady()
@@ -68,6 +71,7 @@ public class MiniGameManager : MonoBehaviour, IManager
         miniGames[currIndex].Stop();
         miniGames[currIndex].gameObject.SetActive(false);
         PC.ClearAllTrackers();
+        LM2D.ClearLayers();
     }
 
     public void WinMiniGame()
@@ -82,8 +86,6 @@ public class MiniGameManager : MonoBehaviour, IManager
         {
             Stop();
         }
-
-
         if (++currIndex >= miniGames.Count)
         {
             OnLoopComplete.Invoke();

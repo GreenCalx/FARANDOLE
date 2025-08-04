@@ -99,11 +99,18 @@ public class GOBuilder
         return this;
     }
 
+    public GOBuilder WithCompositeCollider2D(out Mesh oMesh)
+    {
+        CompositeCollider2D cc2d = GO.AddComponent<CompositeCollider2D>();
+        cc2d.GenerateGeometry();
+        oMesh = cc2d.CreateMesh(true, true);
+        return this;
+    }
+
     public GOBuilder WithLineRenderer(Material iMat)
     {
         LineRenderer LR = GO.AddComponent<LineRenderer>();
         LR.material = iMat;
         return this;
     }
-
 }

@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.Events;
 using System.Collections.Generic;
+using System.Collections;
+using System;
 using System.Threading.Tasks;
 public class RainDropsMiniGame : MiniGame
 {
@@ -13,13 +15,33 @@ public class RainDropsMiniGame : MiniGame
 
     public float timeBeforeRainDrops = 0.5f;
     public float dropsPerSec = 1f;
+    public Material pathLRMat;
+    [Range(0.03f,0.1f)]
+    public float LRWidth = 0.03f;
     float lastDropTime = 0f;
     AutoWalker inst_walker;
     List<AutoWalkDelayer> inst_rainDrops;
 
+    LineRenderer pathLR;
 
     public override void Init()
     {
+        pathLR = GOBuilder.Create()
+                    .WithName("PathLineRenderer")
+                    .WithParent(transform)
+                    .WithPosition(handle_startLine.position)
+                    .WithLineRenderer(pathLRMat)
+                    .Build().GetComponent<LineRenderer>();
+        pathLR.startWidth = LRWidth;
+        pathLR.endWidth = LRWidth;
+        pathLR.positionCount = 2;
+        Vector3[] positions = {
+                                handle_startLine.position,
+                                handle_endLine.position
+                                };
+        pathLR.SetPositions(positions);
+
+
         inst_walker = GOBuilder.Create(prefab_walker)
                         .WithName("AutoWalker")
                         .WithParent(transform)
@@ -29,14 +51,18 @@ public class RainDropsMiniGame : MiniGame
         inst_walker.to = handle_endLine.position;
         inst_walker.OnReachCB.AddListener(() => { if (SuccessCheck()) { Win(); } });
         inst_walker.OnAutoWalkToggleCB.AddListener((b) => UIVisualToggle.Toggle(b));
-        inst_walker.OnPreDelayedyCB.AddListener(() => UIVisualToggle.freeze = true );
-        inst_walker.OnPostDelayedCB.AddListener(() => UIVisualToggle.freeze = false );
+        inst_walker.OnPreDelayedyCB.AddListener(() => UIVisualToggle.freeze = true);
+        inst_walker.OnPostDelayedCB.AddListener(() => UIVisualToggle.freeze = false);
+
         PC.AddTapTracker(inst_walker);
 
         UIVisualToggle.Toggle(inst_walker.AutoWalk);
         UIVisualToggle.freeze = false;
 
         inst_rainDrops = new List<AutoWalkDelayer>();
+
+        MGM.LM2D.Place(inst_walker.transform, 2);
+        MGM.LM2D.PlaceUnder(pathLR.transform, inst_walker.transform);
     }
     public override void Play()
     {
@@ -87,6 +113,7 @@ public class RainDropsMiniGame : MiniGame
                                     .WithPosition(spawnPos)
                                     .Build().GetComponent<AutoWalkDelayer>();
         newDrop.OnDestroyCB.AddListener(() => inst_rainDrops.Remove(newDrop));
+        MGM.LM2D.PlaceAbove(newDrop.transform, inst_walker.transform);
         inst_rainDrops.Add(newDrop);
     }
 }

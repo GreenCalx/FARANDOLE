@@ -10,11 +10,11 @@ public class GameManager : MonoBehaviour
     public MiniGameManager MGM;
     public GameSceneManager GSM;
     public LayerManager2D LM2D;
+    public PlaygroundManager PG;
 
     [Header("Extra Refs")]
     public PlayerController PC;
     public UIGame UI;
-    public Playground PG;
     public PlayerData playerData;
     public GameObject prefab_UIGameOver;
     UIGameOver inst_UIGameOver;
@@ -31,7 +31,9 @@ public class GameManager : MonoBehaviour
         { yield return null; }
 
         playerData = new PlayerData();
-        PG.Init();
+        PG.Init(this);
+        while (!PG.IsReady())
+        { yield return null; }
 
         MGM.Init(this);
         MGM.WarmUpMiniGames();
