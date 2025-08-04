@@ -63,6 +63,7 @@ public class DartMiniGame : MiniGame
     }
     public override void Win()
     {
+        PC.RemovePositionTracker(gun);
         MGM.WinMiniGame();
     }
     public override void Lose()

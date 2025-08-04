@@ -33,6 +33,7 @@ public class DogPetMiniGame : MiniGame
     }
     public override void Win()
     {
+        PC.RemoveTapTracker(inst_dogHead);
         MGM.WinMiniGame();
     }
     public override void Lose()

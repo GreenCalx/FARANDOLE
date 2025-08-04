@@ -104,6 +104,7 @@ public class WaveformMatcherMiniGame : MiniGame
     public override void Win()
     {
         MGM.WinMiniGame();
+        PC.RemovePositionTracker(xyController);
     }
     public override void Lose()
     {
@@ -118,6 +119,9 @@ public class WaveformMatcherMiniGame : MiniGame
 
     void Update()
     {
+        if (!IsActiveMiniGame)
+            return;
+
         controlled.freq = Utils.Remap(xyController.XY.x, -1f, 1f, minFreqByDiff, maxFreqByDiff);
         controlled.amp = Utils.Remap(xyController.XY.y, -1f, 1f, minAmpByDiff, maxAmpByDiff);
         DrawControlled();

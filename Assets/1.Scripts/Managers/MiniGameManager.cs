@@ -1,15 +1,19 @@
 using UnityEngine;
 using UnityEngine.Events;
+using System;
+using System.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 
 public class MiniGameManager : MonoBehaviour, IManager
 {
     [Header("MGM Set")]
+    public int postGameLatchInMs = 1000;
     public List<GameObject> prefab_miniGames;
     [Header("Internals")]
     public List<MiniGame> miniGames;
-    public float currGameClock;
+    //public float currGameClock;
+    public GameClock gameClock;
     public int miniGamesDifficulty;
     int currIndex = -1;
     public UnityEvent<float> OnHPLossCB;
@@ -24,6 +28,7 @@ public class MiniGameManager : MonoBehaviour, IManager
     #region IManager
     public void Init(GameManager iGameManager)
     {
+        gameClock = new GameClock();
         miniGamesDifficulty = 1;
         currIndex = 0;
         OnHPLossCB = new UnityEvent<float>();
@@ -59,11 +64,13 @@ public class MiniGameManager : MonoBehaviour, IManager
     public void Play()
     {
         miniGames[currIndex].gameObject.SetActive(true);
+        miniGames[currIndex].IsInPostGame = false;
         miniGames[currIndex].Init();
 
         miniGames[currIndex].Play();
-        currGameClock = miniGames[currIndex].gameClock;
-        gameStartTime = Time.time;
+        // currGameClock = miniGames[currIndex].gameClock;
+        // gameStartTime = Time.time;
+        gameClock.Reset();
     }
 
     public void Stop()
@@ -76,7 +83,20 @@ public class MiniGameManager : MonoBehaviour, IManager
 
     public void WinMiniGame()
     {
+        if (miniGames[currIndex].IsInPostGame)
+        {
+            Debug.LogWarning("WinMiniGame fired multiple times by current Minigame. Not good !!");
+            return;
+        }
+        gameClock.Freeze(true);
+        miniGames[currIndex].IsInPostGame = true;
         OnScoreGainCB.Invoke(1);
+        DelayedNext();
+    }
+
+    async void DelayedNext()
+    {
+        await Task.Delay(postGameLatchInMs);
         Next();
     }
 
@@ -94,11 +114,6 @@ public class MiniGameManager : MonoBehaviour, IManager
         Play();
     }
 
-    public float GetRemainingTime()
-    {
-        return Mathf.Clamp(currGameClock - (Time.time - gameStartTime),0f, currGameClock);
-    }
-
     public void RaiseDifficulty()
     {
         if (miniGamesDifficulty >= GameData.Get.gameSettings.MaxMiniGameDifficulty)
@@ -108,7 +123,12 @@ public class MiniGameManager : MonoBehaviour, IManager
 
     void Update()
     {
-        if (Time.time - gameStartTime > currGameClock)
+        if (miniGames[currIndex].IsInPostGame)
+            return;
+
+        gameClock.Tick();
+            
+        if (gameClock.MiniGameTimeExpired())
         {
             // Lose hp
             OnHPLossCB.Invoke(Time.deltaTime);

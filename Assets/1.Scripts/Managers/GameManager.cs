@@ -131,7 +131,7 @@ public class GameManager : MonoBehaviour
 
     void RefreshUI()
     {
-        UI.miniGameClock.text    = MGM.GetRemainingTime().ToString("#0.0");
+        UI.miniGameClock.text    = MGM.gameClock.GetRemainingTime().ToString("#0.0");
         UI.hpClock.text          = playerData.HP.ToString("#0.0");
         UI.score.text            = playerData.score.ToString();
     }

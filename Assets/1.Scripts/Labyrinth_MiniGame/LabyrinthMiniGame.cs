@@ -80,6 +80,7 @@ public class LabyrinthMiniGame : MiniGame
     }
     public override void Win()
     {
+        PC.RemovePositionTracker(rotater);
         MGM.WinMiniGame();
     }
     public override void Lose()
