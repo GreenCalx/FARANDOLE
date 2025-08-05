@@ -10,26 +10,26 @@ public class MiniGameManager : MonoBehaviour, IManager
     [Header("MGM Set")]
     public List<GameObject> prefab_miniGames;
     [Header("Internals")]
-    public List<MiniGame> miniGames;
+    //public List<MiniGame> miniGames; // > TODO : Make 'MGLoop' 
+    public MiniGameLoop MGLoop;
     public GameClock gameClock;
     public int miniGamesDifficulty;
-    int currIndex = -1;
+    //int currIndex = -1;
     public UnityEvent<float> OnHPLossCB;
     public UnityEvent<int> OnScoreGainCB;
     public UnityEvent OnLoopComplete;
     public UnityEvent<bool> ShowPostGameUICB;
     public LayerManager2D LM2D;
     float gameStartTime;
-    PlayerController PC;
-    PlaygroundManager PG;
-
+    public PlayerController PC;
+    public PlaygroundManager PG;
 
     #region IManager
     public void Init(GameManager iGameManager)
     {
         gameClock = new GameClock();
         miniGamesDifficulty = 1;
-        currIndex = 0;
+        
         OnHPLossCB = new UnityEvent<float>();
         PC = iGameManager.PC;
         PG = iGameManager.PG;
@@ -42,51 +42,39 @@ public class MiniGameManager : MonoBehaviour, IManager
     }
     #endregion
 
-    public void WarmUpMiniGames()
+    public void LoadLoop()
     {
-        miniGames = new List<MiniGame>();
-        foreach (GameObject prefab in prefab_miniGames)
-        {
-            GameObject new_mg = Instantiate(prefab);
-            MiniGame as_mg = new_mg.GetComponent<MiniGame>();
-            if (as_mg == null)
-                return;
-            as_mg.MGM = this;
-            as_mg.PC = PC;
-            as_mg.PG = PG;
-            miniGames.Add(as_mg);
-            new_mg.SetActive(false);
-        }
+        MGLoop = new MiniGameLoop(this, prefab_miniGames);
     }
 
     public void Play()
     {
-        miniGames[currIndex].gameObject.SetActive(true);
-        miniGames[currIndex].IsInPostGame = false;
-        miniGames[currIndex].Init();
+        MGLoop.Current.gameObject.SetActive(true);
+        MGLoop.Current.IsInPostGame = false;
+        MGLoop.Current.Init();
         ShowPostGameUICB.Invoke(false);
 
-        miniGames[currIndex].Play();
+        MGLoop.Current.Play();
         gameClock.Reset();
     }
 
     public void Stop()
     {
-        miniGames[currIndex].Stop();
-        miniGames[currIndex].gameObject.SetActive(false);
+        MGLoop.Current.Stop();
+        MGLoop.Current.gameObject.SetActive(false);
         PC.ClearAllTrackers();
         LM2D.ClearLayers();
     }
 
     public void WinMiniGame()
     {
-        if (miniGames[currIndex].IsInPostGame)
+        if (MGLoop.Current.IsInPostGame)
         {
             Debug.LogWarning("WinMiniGame fired multiple times by current Minigame. Not good !!");
             return;
         }
         gameClock.Freeze(true);
-        miniGames[currIndex].IsInPostGame = true;
+        MGLoop.Current.IsInPostGame = true;
         ShowPostGameUICB.Invoke(true);
         OnScoreGainCB.Invoke(1);
         DelayedNext();
@@ -100,14 +88,11 @@ public class MiniGameManager : MonoBehaviour, IManager
 
     void Next()
     {
-        if (currIndex >= 0)
-        {
-            Stop();
-        }
-        if (++currIndex >= miniGames.Count)
+        Stop();
+        if (!MGLoop.MoveNext())
         {
             OnLoopComplete.Invoke();
-            currIndex = 0;
+            MGLoop.Reset();
         }
         Play();
     }
@@ -121,7 +106,7 @@ public class MiniGameManager : MonoBehaviour, IManager
 
     void Update()
     {
-        if (miniGames[currIndex].IsInPostGame)
+        if (MGLoop.Current.IsInPostGame)
             return;
 
         gameClock.Tick();

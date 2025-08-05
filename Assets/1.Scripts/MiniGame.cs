@@ -1,6 +1,13 @@
 using UnityEngine;
 using UnityEngine.Events;
 
+public enum SCREEN_ORIENTATION
+{
+    PORTRAIT = 0,
+    LANDSCAPE = 1,
+    BOTH = 2
+}
+
 public class MiniGame : MonoBehaviour, IMiniGame
 {
     public MiniGameManager MGM;
@@ -9,7 +16,8 @@ public class MiniGame : MonoBehaviour, IMiniGame
     public bool IsActiveMiniGame;
     // Might want to implement a full FSM..
     public bool IsInPostGame;
-
+    public SCREEN_ORIENTATION orientationRequirement = SCREEN_ORIENTATION.PORTRAIT;
+    
     public virtual void Init()
     {
 

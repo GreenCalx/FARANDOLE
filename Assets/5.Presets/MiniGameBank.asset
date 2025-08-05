@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 996a3265d0558af4aa31ee9fdcd65d3d, type: 3}
+  m_Name: MiniGameBank
+  m_EditorClassIdentifier: 
+  GameBank:
+  - {fileID: 5205109001117507003, guid: ef698d4e9557cd14dbc5770833ba666b, type: 3}
+  - {fileID: 6891743480671891591, guid: ca650ba5ffb5e9c4d8e5e5b7a7fdaeae, type: 3}
+  - {fileID: 2266623309687070485, guid: 67427fb2e7a156040a46de5c04e05297, type: 3}
+  - {fileID: 7980881531806890130, guid: 3fcac724025ce3b469c5cebcf81e9f4b, type: 3}
+  - {fileID: 2924888216615747985, guid: 5e47560e7e3d57e49b8f29f7f43d2c73, type: 3}

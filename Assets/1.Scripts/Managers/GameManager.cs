@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
         { yield return null; }
 
         MGM.Init(this);
-        MGM.WarmUpMiniGames();
+        MGM.LoadLoop();
         while (!MGM.IsReady())
         { yield return null; }
 
