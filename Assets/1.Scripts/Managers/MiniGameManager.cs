@@ -8,17 +8,16 @@ using System.Collections.Generic;
 public class MiniGameManager : MonoBehaviour, IManager
 {
     [Header("MGM Set")]
-    public int postGameLatchInMs = 1000;
     public List<GameObject> prefab_miniGames;
     [Header("Internals")]
     public List<MiniGame> miniGames;
-    //public float currGameClock;
     public GameClock gameClock;
     public int miniGamesDifficulty;
     int currIndex = -1;
     public UnityEvent<float> OnHPLossCB;
     public UnityEvent<int> OnScoreGainCB;
     public UnityEvent OnLoopComplete;
+    public UnityEvent<bool> ShowPostGameUICB;
     public LayerManager2D LM2D;
     float gameStartTime;
     PlayerController PC;
@@ -55,7 +54,6 @@ public class MiniGameManager : MonoBehaviour, IManager
             as_mg.MGM = this;
             as_mg.PC = PC;
             as_mg.PG = PG;
-            as_mg.gameClock = GameData.Get.gameSettings.MiniGameTime;
             miniGames.Add(as_mg);
             new_mg.SetActive(false);
         }
@@ -66,10 +64,9 @@ public class MiniGameManager : MonoBehaviour, IManager
         miniGames[currIndex].gameObject.SetActive(true);
         miniGames[currIndex].IsInPostGame = false;
         miniGames[currIndex].Init();
+        ShowPostGameUICB.Invoke(false);
 
         miniGames[currIndex].Play();
-        // currGameClock = miniGames[currIndex].gameClock;
-        // gameStartTime = Time.time;
         gameClock.Reset();
     }
 
@@ -90,13 +87,14 @@ public class MiniGameManager : MonoBehaviour, IManager
         }
         gameClock.Freeze(true);
         miniGames[currIndex].IsInPostGame = true;
+        ShowPostGameUICB.Invoke(true);
         OnScoreGainCB.Invoke(1);
         DelayedNext();
     }
 
     async void DelayedNext()
     {
-        await Task.Delay(postGameLatchInMs);
+        await Task.Delay(GameData.GetSettings.PostMiniGameLatchInMs);
         Next();
     }
 
@@ -116,7 +114,7 @@ public class MiniGameManager : MonoBehaviour, IManager
 
     public void RaiseDifficulty()
     {
-        if (miniGamesDifficulty >= GameData.Get.gameSettings.MaxMiniGameDifficulty)
+        if (miniGamesDifficulty >= GameData.GetSettings.MaxMiniGameDifficulty)
             return;
         miniGamesDifficulty++;
     }

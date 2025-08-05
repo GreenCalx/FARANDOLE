@@ -9,7 +9,6 @@ public class MiniGame : MonoBehaviour, IMiniGame
     public bool IsActiveMiniGame;
     // Might want to implement a full FSM..
     public bool IsInPostGame;
-    public float gameClock = 5f;
 
     public virtual void Init()
     {

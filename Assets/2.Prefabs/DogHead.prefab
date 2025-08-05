@@ -141,6 +141,7 @@ MonoBehaviour:
   SR: {fileID: 6377746750821080866}
   idleSprite: {fileID: 1122011520763072041, guid: f8ad2c0f53ddeb04f92f1a0b1090a897, type: 3}
   tapSprite: {fileID: 7260491879129262532, guid: 4a4441b679e07144eab55f50a85784dd, type: 3}
+  onWinSprite: {fileID: -7272982623699810399, guid: a8f01bfb6433e3b4c9f309ba98d680cd, type: 3}
   tapAnimDuration: 0.2
 --- !u!50 &31922092679153987
 Rigidbody2D:

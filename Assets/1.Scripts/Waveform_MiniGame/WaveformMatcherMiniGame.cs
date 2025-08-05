@@ -28,6 +28,7 @@ public class WaveformMatcherMiniGame : MiniGame
     public Transform controlledWaveformPoint;
     public Material LRTargetMat;
     public Material LRControllerMat;
+    public Material LROnMatchMat;
 
     Waveshape target;
     LineRenderer targetLR;
@@ -73,7 +74,7 @@ public class WaveformMatcherMiniGame : MiniGame
 
         controlled = new Waveshape(freqCentroid, ampCentroid);
         controlledLR = GOBuilder.Create()
-                    .WithName("TargetWaveform")
+                    .WithName("ControlledWaveform")
                     .WithParent(transform)
                     .WithPosition(Vector3.zero)
                     .WithLineRenderer(LRControllerMat)
@@ -105,6 +106,12 @@ public class WaveformMatcherMiniGame : MiniGame
     {
         MGM.WinMiniGame();
         PC.RemovePositionTracker(xyController);
+
+        controlled.freq = target.freq;
+        controlled.amp = target.amp;
+        targetLR.material       = LROnMatchMat;
+        controlledLR.material   = LROnMatchMat;
+        DrawControlled();
     }
     public override void Lose()
     {
@@ -119,7 +126,7 @@ public class WaveformMatcherMiniGame : MiniGame
 
     void Update()
     {
-        if (!IsActiveMiniGame)
+        if (!IsActiveMiniGame || IsInPostGame)
             return;
 
         controlled.freq = Utils.Remap(xyController.XY.x, -1f, 1f, minFreqByDiff, maxFreqByDiff);

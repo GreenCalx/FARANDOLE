@@ -7,6 +7,7 @@ public class GameSettingsSO : ScriptableObject
     public float PlayerHP = 10f;
 
     [Header("GameLoop Tweaks")]
+    public int PostMiniGameLatchInMs = 500;
     public float MiniGameTime = 5f;
     public int MaxMiniGameDifficulty = 3;
     public int miniGameLevelUpThreshold = 2;

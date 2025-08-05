@@ -11,6 +11,7 @@ public class DogHead : MonoBehaviour, ITapTracker
     public SpriteRenderer SR;
     public Sprite idleSprite;
     public Sprite tapSprite;
+    public Sprite onWinSprite;
     public float tapAnimDuration = 0.1f;
     Coroutine tapAnimCo;
     Vector3 baseScale;
@@ -23,6 +24,11 @@ public class DogHead : MonoBehaviour, ITapTracker
         SR.sprite = idleSprite;
         baseScale = SR.transform.localScale;
         animScale = baseScale * 0.9f;
+    }
+
+    public void StopAnim()
+    {
+        StopCoroutine(tapAnimCo);
     }
     public void OnTap(Vector2 iVec2)
     {

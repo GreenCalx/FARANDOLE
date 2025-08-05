@@ -54,6 +54,7 @@ public class GameManager : MonoBehaviour
         MGM.OnHPLossCB.AddListener(playerData.LoseHP);
         MGM.OnScoreGainCB.AddListener(playerData.AddScore);
         MGM.OnLoopComplete.AddListener(LevelUp);
+        MGM.ShowPostGameUICB.AddListener(UI.ShowSuccessArea);
     }
 
     void RemoveCallbacks()
@@ -61,6 +62,7 @@ public class GameManager : MonoBehaviour
         MGM.OnHPLossCB.RemoveListener(playerData.LoseHP);
         MGM.OnScoreGainCB.RemoveListener(playerData.AddScore);
         MGM.OnLoopComplete.RemoveListener(LevelUp);
+        MGM.ShowPostGameUICB.RemoveListener(UI.ShowSuccessArea);
     }
 
     void StartGame()
