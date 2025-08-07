@@ -4,6 +4,7 @@ using System.Linq;
 
 public class DartMiniGame : MiniGame
 {
+    [Header("DartMiniGame")]
     public DartThrower gun;
     List<GameObject> balloons;
     public int n_balloons = 3;

@@ -169,8 +169,6 @@ MonoBehaviour:
   - {fileID: 6891743480671891591, guid: ca650ba5ffb5e9c4d8e5e5b7a7fdaeae, type: 3}
   - {fileID: 2266623309687070485, guid: 67427fb2e7a156040a46de5c04e05297, type: 3}
   - {fileID: 5205109001117507003, guid: ef698d4e9557cd14dbc5770833ba666b, type: 3}
-  miniGames: []
-  currGameClock: 0
   miniGamesDifficulty: 0
   OnHPLossCB:
     m_PersistentCalls:
@@ -181,7 +179,12 @@ MonoBehaviour:
   OnLoopComplete:
     m_PersistentCalls:
       m_Calls: []
+  ShowPostGameUICB:
+    m_PersistentCalls:
+      m_Calls: []
   LM2D: {fileID: 0}
+  PC: {fileID: 0}
+  PG: {fileID: 0}
 --- !u!1 &423414020
 GameObject:
   m_ObjectHideFlags: 0
@@ -1002,6 +1005,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameSettings: {fileID: 11400000, guid: 55846b72a52e9754f9b3893e872a06b4, type: 2}
+  gameBank: {fileID: 11400000, guid: 26aa58725297ac6448b9c3a3b00aa7c9, type: 2}
 --- !u!1001 &6872624366841792069
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1177,6 +1181,10 @@ PrefabInstance:
     - target: {fileID: 3444349891774788956, guid: df5d7df267dc5bc4ba1454afb1ad01cf, type: 3}
       propertyPath: m_Name
       value: MiniGameUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 6108271561865946349, guid: df5d7df267dc5bc4ba1454afb1ad01cf, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6367907849115618033, guid: df5d7df267dc5bc4ba1454afb1ad01cf, type: 3}
       propertyPath: m_Camera

@@ -1,3 +1,6 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -8,8 +11,18 @@ public enum SCREEN_ORIENTATION
     BOTH = 2
 }
 
+public enum GAMETYPE_TAG
+{
+    ANY = 0,
+    AGILITY = 1,
+    REFLEX = 2,
+    BRAIN = 3,
+    SCIENCE = 4
+}
+
 public class MiniGame : MonoBehaviour, IMiniGame
 {
+    [Header("MiniGame")]
     public MiniGameManager MGM;
     public PlayerController PC;
     public PlaygroundManager PG;
@@ -17,7 +30,8 @@ public class MiniGame : MonoBehaviour, IMiniGame
     // Might want to implement a full FSM..
     public bool IsInPostGame;
     public SCREEN_ORIENTATION orientationRequirement = SCREEN_ORIENTATION.PORTRAIT;
-    
+    public List<GAMETYPE_TAG> tags;
+
     public virtual void Init()
     {
 

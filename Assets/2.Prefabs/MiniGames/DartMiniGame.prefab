@@ -98,7 +98,9 @@ MonoBehaviour:
   PC: {fileID: 0}
   PG: {fileID: 0}
   IsActiveMiniGame: 0
-  gameClock: 5
+  IsInPostGame: 0
+  orientationRequirement: 0
+  tags: 
   gun: {fileID: 1031838066754603115}
   n_balloons: 3
   prefab_Balloon: {fileID: 980553201171756042, guid: 2590b816f7e5b0f41a347f51dc8ec656, type: 3}

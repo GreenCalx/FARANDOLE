@@ -7,6 +7,8 @@ using System.Collections.Generic;
 
 public class MiniGameManager : MonoBehaviour, IManager
 {
+    [Header("Debug MiniGame")]
+    public GameObject MiniGameToTest = null;
     [Header("MGM Set")]
     public List<GameObject> prefab_miniGames;
     [Header("Internals")]
@@ -44,6 +46,15 @@ public class MiniGameManager : MonoBehaviour, IManager
 
     public void LoadLoop()
     {
+        if (MiniGameToTest != null)
+        {
+            prefab_miniGames.Clear();
+            prefab_miniGames.Add(MiniGameToTest);
+        }
+        else
+        { // Random seed
+            prefab_miniGames = GameData.GetMGBank.GetRandom(5);
+        }
         MGLoop = new MiniGameLoop(this, prefab_miniGames);
     }
 

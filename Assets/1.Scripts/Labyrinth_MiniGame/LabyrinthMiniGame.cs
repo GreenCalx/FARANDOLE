@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public class LabyrinthMiniGame : MiniGame
 {
+    [Header("LabyrinthMiniGame")]
     public TorqueRotater rotater;
     public GameObject prefab_ballToEscape;
     GameObject inst_ballToEscape;
