@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -96,6 +97,7 @@ public class GameManager : MonoBehaviour
 
         // Mini Game Reset
         MGM.Init(this);
+        MGM.LoadLoop();
 
         /// playground reset mat
         PG.RefreshMatFromDiff(MGM.miniGamesDifficulty);
@@ -119,23 +121,25 @@ public class GameManager : MonoBehaviour
             return;
         playerData.timeScale = timeScaleCurve.Evaluate(playerData.loopLevel);
         Time.timeScale = playerData.timeScale;
-        
     }
 
     void GameOver()
     {
         Time.timeScale = 1f;
+
         StopGame();
         inst_UIGameOver = Instantiate(prefab_UIGameOver).GetComponent<UIGameOver>();
-        inst_UIGameOver.scoreLbl.text = playerData.score.ToString();
         inst_UIGameOver.TryAgainBtn.onClick.AddListener(() => RestartGame());
+        inst_UIGameOver.MenuBtn.onClick.AddListener(() => ExitToTitle());
+
+        PostGameScoreProcessing();
     }
 
     void RefreshUI()
     {
-        UI.miniGameClock.text    = MGM.gameClock.GetRemainingTime().ToString("#0.0");
-        UI.hpClock.text          = playerData.HP.ToString("#0.0");
-        UI.score.text            = playerData.score.ToString();
+        UI.miniGameClock.text = MGM.gameClock.GetRemainingTime().ToString("#0.0");
+        UI.hpClock.text = playerData.HP.ToString("#0.0");
+        UI.score.text = playerData.score.ToString();
     }
 
     void Update()
@@ -152,6 +156,32 @@ public class GameManager : MonoBehaviour
         if (playerData.HP <= 0)
         {
             GameOver();
+        }
+    }
+
+    public void ExitToTitle()
+    {
+        SceneManager.LoadScene("Title", LoadSceneMode.Single);
+    }
+
+    public void PostGameScoreProcessing()
+    {
+        LoopHighScore lhs = MGM.GetLoopHighScore();
+        if (UserData.IsNewHighScore(lhs))
+        {
+            UserData.AddHighScore(lhs);
+            // <!> load all high score beforehand to avoid overwriting prev data
+            UserData.SaveHighScores();
+
+            inst_UIGameOver.newHighScoreDisplayValue.text = playerData.score.ToString();
+            inst_UIGameOver.scoreDisplayHandle.gameObject.SetActive(false);
+            inst_UIGameOver.newHighScoreDisplayHandle.gameObject.SetActive(true);
+        }
+        else
+        {
+            inst_UIGameOver.scoreDisplayValue.text = playerData.score.ToString();
+            inst_UIGameOver.scoreDisplayHandle.gameObject.SetActive(true);
+            inst_UIGameOver.newHighScoreDisplayHandle.gameObject.SetActive(false);
         }
     }
 }

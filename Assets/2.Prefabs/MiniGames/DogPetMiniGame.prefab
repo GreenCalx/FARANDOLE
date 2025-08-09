@@ -283,12 +283,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29764bef2e6748f418fdf3062d2f082f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ID: 1
   MGM: {fileID: 0}
   PC: {fileID: 0}
   PG: {fileID: 0}
   IsActiveMiniGame: 0
-  gameClock: 5
+  IsInPostGame: 0
+  orientationRequirement: 0
+  tags: 
   prefab_dogHead: {fileID: 2552087635930286327, guid: c4141d031335370439c23e6e7c103037, type: 3}
-  idleSprite: {fileID: 1122011520763072041, guid: f8ad2c0f53ddeb04f92f1a0b1090a897, type: 3}
-  tapSprite: {fileID: 7260491879129262532, guid: 4a4441b679e07144eab55f50a85784dd, type: 3}
   UIworld_petCounter: {fileID: 5601667270289216680}

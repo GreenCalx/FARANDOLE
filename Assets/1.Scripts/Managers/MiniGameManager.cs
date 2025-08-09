@@ -16,7 +16,7 @@ public class MiniGameManager : MonoBehaviour, IManager
     public MiniGameLoop MGLoop;
     public GameClock gameClock;
     public int miniGamesDifficulty;
-    //int currIndex = -1;
+    
     public UnityEvent<float> OnHPLossCB;
     public UnityEvent<int> OnScoreGainCB;
     public UnityEvent OnLoopComplete;
@@ -25,17 +25,19 @@ public class MiniGameManager : MonoBehaviour, IManager
     float gameStartTime;
     public PlayerController PC;
     public PlaygroundManager PG;
+    public PlayerData PData;
 
     #region IManager
     public void Init(GameManager iGameManager)
     {
         gameClock = new GameClock();
         miniGamesDifficulty = 1;
-        
+
         OnHPLossCB = new UnityEvent<float>();
         PC = iGameManager.PC;
         PG = iGameManager.PG;
         LM2D = iGameManager.LM2D;
+        PData = iGameManager.playerData;
     }
     
     public bool IsReady()
@@ -113,6 +115,17 @@ public class MiniGameManager : MonoBehaviour, IManager
         if (miniGamesDifficulty >= GameData.GetSettings.MaxMiniGameDifficulty)
             return;
         miniGamesDifficulty++;
+    }
+
+    public LoopHighScore GetLoopHighScore()
+    {
+        int loopSize = GameData.GetSettings.loopSize;
+        byte[] gameIDs = new byte[loopSize];
+        for (int i = 0; i < loopSize; i++)
+        {
+            gameIDs[i] = MGLoop.At(i).ID;
+        }
+        return new LoopHighScore(GameData.Get.currentGameMode , gameIDs, PData.score);
     }
 
     void Update()

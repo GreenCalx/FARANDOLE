@@ -22,7 +22,9 @@ public enum GAMETYPE_TAG
 
 public class MiniGame : MonoBehaviour, IMiniGame
 {
-    [Header("MiniGame")]
+    [Header("MiniGame Mand")]
+    public byte ID;
+    [Header("MiniGame Internal View")]
     public MiniGameManager MGM;
     public PlayerController PC;
     public PlaygroundManager PG;

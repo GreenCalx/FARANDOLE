@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RotSpeed: 4
+  invertTorque: 1
   targetRB: {fileID: 7618993489830231932}
   visualSlider: {fileID: 4987230476453652537}
   maxAngularVelocity: 100
@@ -96,11 +97,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b984651b2bda0264c98ce128be45f7d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ID: 2
   MGM: {fileID: 0}
   PC: {fileID: 0}
   PG: {fileID: 0}
   IsActiveMiniGame: 0
-  gameClock: 5
+  IsInPostGame: 0
+  orientationRequirement: 0
+  tags: 
   rotater: {fileID: 2312872446023885790}
   prefab_ballToEscape: {fileID: 1958836028515407600, guid: 97bb8463a4040664c8ac9daf02530754, type: 3}
   inst_movingLabyrinth: {fileID: 8487501759319076828}

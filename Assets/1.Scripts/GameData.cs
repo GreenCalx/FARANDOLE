@@ -22,6 +22,21 @@ public class GameData : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(this.gameObject);
+
+            LoadUserData();
+        }
+    }
+
+    void LoadUserData()
+    {
+        UserData.Init();
+        if (!UserData.LoadHighScores())
+        {
+            Debug.Log("No save file found.");
+        }
+        else
+        {
+            Debug.Log("Save file loaded.");
         }
     }
 

@@ -39,6 +39,11 @@ public class MiniGameLoop : IEnumerator<MiniGame>
         index = 0;
         miniGame = inst_miniGames[index];
     }
+
+    public MiniGame At(int i)
+    {
+        return inst_miniGames[i];
+    }
     void IDisposable.Dispose()
     {
 
