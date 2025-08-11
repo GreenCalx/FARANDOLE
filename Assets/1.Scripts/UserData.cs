@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections;
@@ -113,6 +114,16 @@ public static class UserData
         fs = null;
         return true;
     }
+
+    public static bool DeleteHighScoresData()
+    {
+        updateFilePath(ref filePath);
+        if (!File.Exists(filePath))
+        { return false; }
+
+        File.Delete(filePath);
+        return !File.Exists(filePath);
+    }
     #endregion
 
     #region DATAUTILS
@@ -128,14 +139,18 @@ public static class UserData
         bool isSameLoop = false;
         foreach (LoopHighScore lhs in userHighScores.highScores)
         {
-            if (lhs.gameMode == iNewLHS.gameMode)
+            if (lhs.gameMode != iNewLHS.gameMode)
                 continue;
             if (lhs.ids.Length != iNewLHS.ids.Length)
                 continue;
             // try match ids
+            List<byte> A = new List<byte>(lhs.ids);
+            List<byte> B = new List<byte>(iNewLHS.ids);
+            A = A.OrderBy(e => e).ToList();
+            B = B.OrderBy(e => e).ToList();
             for (int i = 0; i < lhs.ids.Length; i++)
             {
-                if (lhs.ids[i] != iNewLHS.ids[i])
+                if (A[i] != B[i])
                 {
                     isSameLoop = false;
                     break;

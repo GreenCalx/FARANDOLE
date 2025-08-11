@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections.Generic;
 using static Utils;
 
@@ -46,6 +47,12 @@ public class GOBuilder
     public GOBuilder WithParent(Transform iParent)
     {
         GO.transform.parent = iParent;
+        return this;
+    }
+
+    public GOBuilder WithParent(RectTransform iParent)
+    {
+        GO.transform.SetParent(iParent);
         return this;
     }
 

@@ -51,8 +51,8 @@ public static class Utils
             ioCurve.SmoothTangents(key_idx, 0f);
         }
     }
-    
-        public static T GetComp<T>(GameObject iGO)
+
+    public static T GetComp<T>(GameObject iGO)
     {
         T comp = iGO.GetComponent<T>();
         if (comp != null)
@@ -84,7 +84,7 @@ public static class Utils
 
     public static float Remap(float iVal, float iOldMin, float iOldMax, float iNewMin, float iNewMax)
     {
-        return iNewMin + ((iVal-iOldMin) / (iOldMax - iOldMin)) * (iNewMax - iNewMin);
+        return iNewMin + ((iVal - iOldMin) / (iOldMax - iOldMin)) * (iNewMax - iNewMin);
     }
 
     public static bool IsNaN(Vector3 iVec)
@@ -100,5 +100,18 @@ public static class Utils
 
         Array.Copy(iSourceArr, 0, left, 0, index);
         Array.Copy(iSourceArr, index, right, 0, rlen);
+    }
+
+    public static void Shuffle<T>(this IList<T> iList)
+    {
+        int n = iList.Count;
+        int last = n - 1;
+        for (int i = 0; i < last; i++)
+        {
+            int rand = UnityEngine.Random.Range(i, n);
+            T prev = iList[i];
+            iList[i] = iList[rand];
+            iList[rand] = prev;
+        }
     }
 }

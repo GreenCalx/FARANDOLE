@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using static Utils;
 
 [CreateAssetMenu(fileName = "MiniGameBankSO", menuName = "Scriptable Objects/MiniGameBankSO")]
 public class MiniGameBankSO : ScriptableObject
@@ -58,7 +59,9 @@ public class MiniGameBankSO : ScriptableObject
         int poolSize = iPool.Count;
         if (iNumber >= poolSize)
         {
-            return iPool; // less item in bank than requested number, just give all we can.
+            List<GameObject> shuffled = new List<GameObject>(iPool);
+            shuffled.Shuffle(); // less item in bank than requested number, just give all we can.
+            return shuffled;
         }
 
         List<GameObject> retval = new List<GameObject>(iNumber);
