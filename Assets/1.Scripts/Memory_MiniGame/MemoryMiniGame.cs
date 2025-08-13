@@ -81,6 +81,10 @@ public class MemoryMiniGame : MiniGame
 
     public void TurnCard(int index)
     {
+        if (!cards[index].hidden)
+        {
+            return;
+        }
         if (selectedCard == null)
         {
             selectedCard = cards[index];
