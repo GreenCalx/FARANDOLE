@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public interface IPositionTracker
+public interface IPositionTracker : ITracker
 {
     public void OnPositionChanged(Vector2 iVec2);
 

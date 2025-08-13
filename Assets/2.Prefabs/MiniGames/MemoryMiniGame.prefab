@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &290077520304868199
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8511375742377149974}
+  - component: {fileID: 5335929509785141131}
+  m_Layer: 0
+  m_Name: MemoryMiniGame
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8511375742377149974
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 290077520304868199}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5335929509785141131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 290077520304868199}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca5ab5e81d9edc844a1fd1ca86fd9fd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ID: 0
+  MGM: {fileID: 0}
+  PC: {fileID: 0}
+  PG: {fileID: 0}
+  IsActiveMiniGame: 0
+  IsInPostGame: 0
+  orientationRequirement: 2
+  tags: 
+  prefabs_card:
+  - {fileID: 1942787962436337013, guid: 48ee0c6328031924ab09687166ff993f, type: 3}
+  - {fileID: 3836405946255295576, guid: efd258069367ec34ca945d64c87d2279, type: 3}
+  - {fileID: 6542617203354596722, guid: a3166fc12eeb9634181d8abeced5028d, type: 3}
+  - {fileID: 6550312204150314515, guid: e60b8082636ce0d49b4da38cae65bc5e, type: 3}
+  prefab_pivot: {fileID: 8908472888210908571, guid: e2e0809a9e4d6974592849aeeb44b27f, type: 3}
+  pivot: {fileID: 0}
+  cards: []
+  cardsCounts: 04000000060000000600000008000000
+  rotsSpeeds:
+  - 10
+  - 20
+  - 30
+  - 40
+  distFromCenter: 2

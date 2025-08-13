@@ -69,14 +69,19 @@ public class PlayerController : MonoBehaviour
         Vector2 tapPos = GetWorldPos(iTouch.screenPosition);
         try
         {
-            tapTrackers.ForEach(e => e.OnTap(tapPos));
+            tapTrackers.ForEach(e =>
+            {
+                if (e.enabled)
+                    e.OnTap(tapPos);
+            }
+            );
         }
         catch (InvalidOperationException ioe)
         {
             Debug.LogError("InvalidOperationException On PlayerController::Tap. Might happening in minigame switch.");
             Debug.LogError(ioe.ToString());
         }
-        
+
     }
 
     public void ClearAllTrackers()
@@ -90,7 +95,7 @@ public class PlayerController : MonoBehaviour
     {
         foreach (EnhancedTouch.Touch touch in EnhancedTouch.Touch.activeTouches)
         {
-            if ((touch.phase==UnityEngine.InputSystem.TouchPhase.Ended) && (touch.tapCount >= 1))
+            if ((touch.phase == UnityEngine.InputSystem.TouchPhase.Ended) && (touch.tapCount >= 1))
             {
                 Tap(touch);
             }
@@ -106,6 +111,7 @@ public class PlayerController : MonoBehaviour
         if (!positionTrackers.Contains(iTracker))
         {
             positionTrackers.Add(iTracker);
+            iTracker.enabled = true;
         }
     }
 
@@ -121,6 +127,7 @@ public class PlayerController : MonoBehaviour
         if (!tapTrackers.Contains(iTracker))
         {
             tapTrackers.Add(iTracker);
+            iTracker.enabled = true;
         }
     }
     public void RemoveTapTracker(ITapTracker iTracker)
@@ -128,6 +135,13 @@ public class PlayerController : MonoBehaviour
         if (tapTrackers.Contains(iTracker))
         {
             tapTrackers.Remove(iTracker);
+        }
+    }
+    public void EnableTapTracker(ITapTracker iTracker, bool bol)
+    {
+        if (tapTrackers.Contains(iTracker))
+        {
+            iTracker.enabled = bol;
         }
     }
 }
