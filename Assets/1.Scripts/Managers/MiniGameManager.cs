@@ -125,7 +125,10 @@ public class MiniGameManager : MonoBehaviour, IManager
         {
             gameIDs[i] = MGLoop.At(i).ID;
         }
-        return new LoopHighScore(GameData.Get.currentGameMode , gameIDs, PData.score);
+        // TODO : Fetch time from server to ensure that
+        // the datetime is right as the current impl depends on 
+        // the device time ( which can be modified )
+        return new LoopHighScore(GameData.Get.currentGameMode, gameIDs, PData.score, DateTime.Now);
     }
 
     void Update()

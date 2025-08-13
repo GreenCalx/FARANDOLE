@@ -302,6 +302,10 @@ MonoBehaviour:
   score: {fileID: 6775397029589778282}
   scoreUIVisuals: {fileID: 1218609111905608876}
   scoreUIText: {fileID: 8306165285330837944}
+  loopLevel0Sprite: {fileID: 21300000, guid: 3d013bd1bbb7f9940a3572a3cc2dec04, type: 3}
+  loopLevel1Sprite: {fileID: 21300000, guid: 488b0b869bef90d47aaca17fae17ca8e, type: 3}
+  loopLevel2Sprite: {fileID: 21300000, guid: 830d799e1de980e418ea632f724d365d, type: 3}
+  loopLevel3Sprite: {fileID: 21300000, guid: dd2e3289628bce24ab671ea23c99fa5b, type: 3}
   successArea: {fileID: 6037309496197500894}
 --- !u!1 &4060541443488368335
 GameObject:

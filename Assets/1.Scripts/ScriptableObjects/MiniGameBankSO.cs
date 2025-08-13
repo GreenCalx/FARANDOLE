@@ -30,8 +30,8 @@ public class MiniGameBankSO : ScriptableObject
 
     public List<GameObject> GetDaily(int iNumber)
     {
-        // TODO : impl
-        return new List<GameObject>(0);
+        // TODO : Fetch remote seed here
+        return GetRandomSelectionFromPool(GameBank, iNumber);
     }
 
     public List<GameObject> GetByTags(int iNumber, List<GAMETYPE_TAG> iTags)
@@ -74,8 +74,8 @@ public class MiniGameBankSO : ScriptableObject
             {
                 selected = UnityEngine.Random.Range(0, poolSize);
             }
-            pickedGames[i] = selected;
-            retval[i] = iPool[selected];
+            pickedGames.Add(selected);
+            retval.Add(iPool[selected]);
         }
         return retval;
     }

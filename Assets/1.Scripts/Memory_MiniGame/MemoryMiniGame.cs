@@ -51,7 +51,7 @@ public class MemoryMiniGame : MiniGame
             cards[i].index = i;
             PC.AddTapTracker(cards[i]);
         }
-
+        pairs = 0;
 
     }
     public override void Play()

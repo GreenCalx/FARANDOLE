@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour
         { yield return null; }
 
         UI.Init();
+        UI.RefreshLoopLevelSprite(MGM.miniGamesDifficulty);
 
         StartGame();
     }
@@ -103,6 +104,9 @@ public class GameManager : MonoBehaviour
         PG.RefreshMatFromDiff(MGM.miniGamesDifficulty);
         PG.RefreshMatFromLoopLevel(playerData.loopLevel);
 
+        // UI Reset
+        UI.RefreshLoopLevelSprite(MGM.miniGamesDifficulty);
+
         // Start game again
         StartGame();
     }
@@ -113,6 +117,7 @@ public class GameManager : MonoBehaviour
         {
             MGM.RaiseDifficulty();
             PG.RefreshMatFromDiff(MGM.miniGamesDifficulty);
+            UI.RefreshLoopLevelSprite(MGM.miniGamesDifficulty);
         }
         PG.RefreshMatFromLoopLevel(playerData.loopLevel);
 
@@ -167,8 +172,11 @@ public class GameManager : MonoBehaviour
     public void PostGameScoreProcessing()
     {
         LoopHighScore lhs = MGM.GetLoopHighScore();
-        if (UserData.IsNewHighScore(lhs))
+        LoopHighScore replacedHS = null;
+        if (UserData.IsNewHighScore(lhs, out replacedHS))
         {
+            if (replacedHS != null)
+                UserData.RemoveHighScore(replacedHS);
             UserData.AddHighScore(lhs);
             // <!> load all high score beforehand to avoid overwriting prev data
             UserData.SaveHighScores();

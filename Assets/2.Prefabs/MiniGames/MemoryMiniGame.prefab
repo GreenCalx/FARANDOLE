@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca5ab5e81d9edc844a1fd1ca86fd9fd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID: 0
+  ID: 5
   MGM: {fileID: 0}
   PC: {fileID: 0}
   PG: {fileID: 0}
@@ -58,7 +58,6 @@ MonoBehaviour:
   - {fileID: 6542617203354596722, guid: a3166fc12eeb9634181d8abeced5028d, type: 3}
   - {fileID: 6550312204150314515, guid: e60b8082636ce0d49b4da38cae65bc5e, type: 3}
   prefab_pivot: {fileID: 8908472888210908571, guid: e2e0809a9e4d6974592849aeeb44b27f, type: 3}
-  pivot: {fileID: 0}
   cards: []
   cardsCounts: 04000000060000000600000008000000
   rotsSpeeds:

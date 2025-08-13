@@ -106,7 +106,7 @@ public static class UserData
             EntityData ed = (EntityData)o;
             if (ed != null)
             {
-                ed.OnLoad(UnityEngine.Object.Instantiate<GameObject>(Resources.Load<GameObject>(ed.ResourcesPath)));        
+                ed.OnLoad(UnityEngine.Object.Instantiate<GameObject>(Resources.Load<GameObject>(ed.ResourcesPath)));
             }
         }
         load_datas.Clear();
@@ -131,8 +131,10 @@ public static class UserData
     {
         userHighScores = new UserHighScores();
     }
-    public static bool IsNewHighScore(LoopHighScore iNewLHS)
+    public static bool IsNewHighScore(LoopHighScore iNewLHS, out LoopHighScore oPrevHS)
     {
+        oPrevHS = null;
+        
         if (userHighScores.highScores == null)
             return true; // ??
 
@@ -148,6 +150,7 @@ public static class UserData
             List<byte> B = new List<byte>(iNewLHS.ids);
             A = A.OrderBy(e => e).ToList();
             B = B.OrderBy(e => e).ToList();
+            isSameLoop = true;
             for (int i = 0; i < lhs.ids.Length; i++)
             {
                 if (A[i] != B[i])
@@ -155,11 +158,14 @@ public static class UserData
                     isSameLoop = false;
                     break;
                 }
-                isSameLoop = true;
             }
             if (isSameLoop)
             {
-                return iNewLHS.score > lhs.score;
+                if (iNewLHS.score > lhs.score)
+                {
+                    oPrevHS = lhs;
+                    return true;
+                }
             }
         }
         // its a first high score for those game ids
@@ -169,6 +175,10 @@ public static class UserData
     public static void AddHighScore(LoopHighScore iLHS)
     {
         userHighScores.AddHighScore(iLHS);
+    }
+    public static void RemoveHighScore(LoopHighScore iLHS)
+    {
+        userHighScores.RemoveHighScore(iLHS);
     }
     #endregion
 }

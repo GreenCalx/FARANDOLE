@@ -16,4 +16,12 @@ public class UserHighScores
             highScores = new List<LoopHighScore>();
         highScores.Add(iLHS);
     }
+    public void RemoveHighScore(LoopHighScore iLHS)
+    {
+        if (highScores == null)
+            return;
+        if (!highScores.Contains(iLHS))
+            return;
+        highScores.Remove(iLHS);
+    }
 }
