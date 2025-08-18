@@ -35,7 +35,7 @@ public class UIHighScores : MonoBehaviour
             UIHighScoreBlock uihsb = GOBuilder.Create(prefab_scoreBlocks)
                                 .WithName("HighScoreBlock")
                                 .WithParent(handle_blockLayout)
-                                .Build().GetComponent<UIHighScoreBlock>();
+                                .BuildAs<UIHighScoreBlock>();
             inst_scoreBlocks.Add(uihsb);
             uihsb.associatedLHS = lhs;
         }

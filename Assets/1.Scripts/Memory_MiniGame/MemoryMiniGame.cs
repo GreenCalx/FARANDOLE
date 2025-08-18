@@ -35,7 +35,7 @@ public class MemoryMiniGame : MiniGame
                     .WithName("pivot")
                     .WithParent(transform)
                     .WithPosition(transform.position)
-                    .Build().GetComponent<Pivot>();
+                    .BuildAs<Pivot>();
 
         pivot.rotSpeed = rotsSpeeds[MGM.miniGamesDifficulty];
 
@@ -46,7 +46,7 @@ public class MemoryMiniGame : MiniGame
                             .WithName("card" + i)
                             .WithParent(pivot.transform)
                             .WithPosition(transform.position + distFromCenter * new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0))
-                            .Build().GetComponent<Card>();
+                            .BuildAs<Card>();
 
             cards[i].tapCB.AddListener(TurnCard);
             cards[i].index = i;

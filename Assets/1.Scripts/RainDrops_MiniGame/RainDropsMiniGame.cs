@@ -31,7 +31,7 @@ public class RainDropsMiniGame : MiniGame
                     .WithParent(transform)
                     .WithPosition(handle_startLine.position)
                     .WithLineRenderer(pathLRMat)
-                    .Build().GetComponent<LineRenderer>();
+                    .BuildAs<LineRenderer>();
         pathLR.startWidth = LRWidth;
         pathLR.endWidth = LRWidth;
         pathLR.positionCount = 2;
@@ -46,7 +46,7 @@ public class RainDropsMiniGame : MiniGame
                         .WithName("AutoWalker")
                         .WithParent(transform)
                         .WithPosition(handle_startLine.position)
-                        .Build().GetComponent<AutoWalker>();
+                        .BuildAs<AutoWalker>();
         inst_walker.from = handle_startLine.position;
         inst_walker.to = handle_endLine.position;
         inst_walker.OnReachCB.AddListener(() => { if (SuccessCheck()) { Win(); } });
@@ -111,7 +111,7 @@ public class RainDropsMiniGame : MiniGame
                                     .WithName("RainDrop " + inst_rainDrops.Count + 1)
                                     .WithParent(transform)
                                     .WithPosition(spawnPos)
-                                    .Build().GetComponent<AutoWalkDelayer>();
+                                    .BuildAs<AutoWalkDelayer>();
         newDrop.OnDestroyCB.AddListener(() => inst_rainDrops.Remove(newDrop));
         MGM.LM2D.PlaceAbove(newDrop.transform, inst_walker.transform);
         inst_rainDrops.Add(newDrop);
