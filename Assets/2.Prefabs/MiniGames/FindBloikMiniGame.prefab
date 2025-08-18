@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8511375742377149974}
-  - component: {fileID: 5335929509785141131}
+  - component: {fileID: 8864810381404222840}
   m_Layer: 0
-  m_Name: MemoryMiniGame
+  m_Name: FindBloikMiniGame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5335929509785141131
+--- !u!114 &8864810381404222840
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,28 +41,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 290077520304868199}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca5ab5e81d9edc844a1fd1ca86fd9fd4, type: 3}
+  m_Script: {fileID: 11500000, guid: ba29f1ec27f1eb24c8b6685b0a859986, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID: 5
+  ID: 0
   MGM: {fileID: 0}
   PC: {fileID: 0}
   PG: {fileID: 0}
   IsActiveMiniGame: 0
   IsInPostGame: 0
-  orientationRequirement: 2
+  orientationRequirement: 0
   tags: 
-  prefabs_card:
-  - {fileID: 1942787962436337013, guid: 48ee0c6328031924ab09687166ff993f, type: 3}
-  - {fileID: 3836405946255295576, guid: efd258069367ec34ca945d64c87d2279, type: 3}
-  - {fileID: 6542617203354596722, guid: a3166fc12eeb9634181d8abeced5028d, type: 3}
-  - {fileID: 6550312204150314515, guid: e60b8082636ce0d49b4da38cae65bc5e, type: 3}
-  prefab_pivot: {fileID: 8908472888210908571, guid: e2e0809a9e4d6974592849aeeb44b27f, type: 3}
-  cards: []
-  cardsCounts: 04000000060000000600000006000000
-  rotsSpeeds:
-  - 10
-  - 20
-  - 35
-  - 65
-  distFromCenter: 2
+  prefabs_unoStickers: {fileID: 4801012445247314565, guid: 8a6b77a5fe9e94a4cb3dc8f5b0598871, type: 3}
+  prefab_bloikSticker: {fileID: 1163066599452052819, guid: f302cd2c99655fc419c55935f4c2a388, type: 3}
+  numberOfDecoySticker: 140000001e000000230000002d000000
+  unoStickers: []
+  maxStickerSpeed:
+  - 1
+  - 1.5
+  - 1.8
+  - 2
+  minStickerSpeed:
+  - 0.5
+  - 0.7
+  - 0.9
+  - 1
+  bloikSticker: {fileID: 0}
+  stickersHit: 
+  spawnMargin: 0.5

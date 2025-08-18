@@ -22,6 +22,7 @@ public class MemoryMiniGame : MiniGame
     public override void Init()
     {
         cardsCount = cardsCounts[MGM.miniGamesDifficulty];
+
         cards = new Card[cardsCount];
 
         int[] randomPos = { 1, 2, 3, 4, 5, 6 };
