@@ -19,7 +19,7 @@ public class FindBloik_MiniGame : MiniGame
     public int[] stickersHit;
 
     public float spawnMargin = 0.1f; //Avoid getting stuck
-    int lastHitIndex = -1;
+    int lastHitisBloik = -1;
 
     public override void Init()
     {
@@ -33,7 +33,6 @@ public class FindBloik_MiniGame : MiniGame
                         UnityEngine.Random.Range(PG.bounds.min.x + spawnMargin, PG.bounds.max.x- spawnMargin),
                         UnityEngine.Random.Range(PG.bounds.min.y + spawnMargin, PG.bounds.max.y - spawnMargin)))
                     .Build().GetComponent<BouncySticker>();
-        bloikSticker.index = -1;
         bloikSticker.tapCB.AddListener(StickerHit);
         bloikSticker.speed = UnityEngine.Random.Range(minStickerSpeed[MGM.miniGamesDifficulty], maxStickerSpeed[MGM.miniGamesDifficulty]);
 
@@ -48,9 +47,6 @@ public class FindBloik_MiniGame : MiniGame
                 UnityEngine.Random.Range(PG.bounds.min.x + spawnMargin, PG.bounds.max.x- spawnMargin),
                 UnityEngine.Random.Range(PG.bounds.min.y + spawnMargin, PG.bounds.max.y- spawnMargin)))
             .Build().GetComponent<BouncySticker>();
-            PC.AddTapTracker(unoStickers[i]);
-            unoStickers[i].tapCB.AddListener(StickerHit);
-            unoStickers[i].index = i;
             unoStickers[i].speed = UnityEngine.Random.Range(minStickerSpeed[MGM.miniGamesDifficulty], maxStickerSpeed[MGM.miniGamesDifficulty]);
         }
     }
@@ -85,16 +81,9 @@ public class FindBloik_MiniGame : MiniGame
         return false;
     }
 
-    public void StickerHit(int index)
+    public void StickerHit()
     {
-        if (index == -1)
-        {
-            Win();
-        }
-        else
-        {
-            lastHitIndex = index;
-        }
+        Win();
     }
 
 
@@ -103,19 +92,11 @@ public class FindBloik_MiniGame : MiniGame
     {
         foreach (var sticker in unoStickers)
         {
-            PC.RemoveTapTracker(sticker);
             Destroy(sticker.gameObject);
         }
         PC.RemoveTapTracker(bloikSticker);
         Destroy(bloikSticker.gameObject);
     }
 
-    void Update()
-    {
-        if (lastHitIndex != -1)
-        {
-            //Fail
-            lastHitIndex = -1;
-        }
-    }
+
 }

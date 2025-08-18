@@ -4,7 +4,7 @@ using UnityEngine.Events;
 
 public class BouncySticker : MonoBehaviour, ITapTracker
 {
-    public UnityEvent<int> tapCB;
+    public UnityEvent tapCB;
     public List<Sprite> availableSticker;
 
     public float speed = 5f;
@@ -14,8 +14,8 @@ public class BouncySticker : MonoBehaviour, ITapTracker
     public Collider2D stickerCollider;
 
     public Vector2 dir;
-    public int index;
 
+    private bool stopped = false;
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -50,12 +50,21 @@ public class BouncySticker : MonoBehaviour, ITapTracker
     {
         if (stickerCollider.bounds.Contains(iVec))
         {
-            tapCB.Invoke(index);
+            tapCB.Invoke();
         }
     }
 
     public void Stop()
     {
         rb.linearVelocity = new Vector2(0, 0);
+        stopped = true;
+    }
+
+    private void Update()
+    {
+        if (rb.linearVelocity.magnitude < 0.05 && !stopped)
+        {
+            do { dir = Random.insideUnitCircle; } while (dir.x < 0.05f && dir.y < 0.05f); //des fois les stickers se coince dans les coins
+        }
     }
 }
