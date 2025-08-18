@@ -13,6 +13,7 @@ public class GOBuilder
     public static GOBuilder Create(GameObject iPrefab) => new GOBuilder(iPrefab);
 
     public GameObject Build() => GO;
+    public T BuildAs<T>() => GO.GetComponent<T>();
 
     public GOBuilder WithName(string iName)
     {
@@ -120,4 +121,6 @@ public class GOBuilder
         LR.material = iMat;
         return this;
     }
+
+
 }

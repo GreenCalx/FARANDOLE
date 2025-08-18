@@ -15,7 +15,7 @@ public class DogPetMiniGame : MiniGame
         inst_dogHead = GOBuilder.Create(prefab_dogHead)
                         .WithName("DogHead")
                         .WithPosition(Vector3.zero)
-                        .Build().GetComponent<DogHead>();
+                        .BuildAs<DogHead>();
         inst_dogHead.tapCB.AddListener(RegisterPetting);
         pettings = 0;
         UpdateMGUI();

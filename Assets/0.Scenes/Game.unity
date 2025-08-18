@@ -163,6 +163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80b8b58d2f403e84aa6ce22d65c5011f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MiniGameToTest: {fileID: 0}
   prefab_miniGames:
   - {fileID: 7980881531806890130, guid: 3fcac724025ce3b469c5cebcf81e9f4b, type: 3}
   - {fileID: 2924888216615747985, guid: 5e47560e7e3d57e49b8f29f7f43d2c73, type: 3}
@@ -309,6 +310,59 @@ MonoBehaviour:
   blendDistance: 0
   weight: 1
   priority: 1
+--- !u!1 &875231275
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 875231277}
+  - component: {fileID: 875231276}
+  m_Layer: 0
+  m_Name: PaperFolderMiniGame
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &875231276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 875231275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc7ff0e13c31d7743869514e9d1a21c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ID: 0
+  MGM: {fileID: 0}
+  PC: {fileID: 0}
+  PG: {fileID: 0}
+  IsActiveMiniGame: 0
+  IsInPostGame: 0
+  orientationRequirement: 0
+  tags: 
+--- !u!4 &875231277
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 875231275}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1820923021}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1078912652
 GameObject:
   m_ObjectHideFlags: 0
@@ -915,6 +969,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1820923020
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1820923021}
+  - component: {fileID: 1820923022}
+  m_Layer: 0
+  m_Name: FoldPaper
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1820923021
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1820923020}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 875231277}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1820923022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1820923020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf8c7221fe4bf8442b5cbb69cb3edd94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1867276673
 GameObject:
   m_ObjectHideFlags: 0
@@ -1004,6 +1102,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dd5653dcff0b304ea5cf7eb66c6c545, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentGameMode: 0
+  gameModes: {fileID: 0}
   gameSettings: {fileID: 11400000, guid: 55846b72a52e9754f9b3893e872a06b4, type: 2}
   gameBank: {fileID: 11400000, guid: 26aa58725297ac6448b9c3a3b00aa7c9, type: 2}
 --- !u!1001 &6872624366841792069
@@ -1259,3 +1359,4 @@ SceneRoots:
   - {fileID: 1286062458}
   - {fileID: 2091017523}
   - {fileID: 486451912}
+  - {fileID: 875231277}

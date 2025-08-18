@@ -67,8 +67,7 @@ public class WaveformMatcherMiniGame : MiniGame
                     .WithParent(transform)
                     .WithPosition(Vector3.zero)
                     .WithLineRenderer(LRTargetMat)
-                    .Build()
-                    .GetComponent<LineRenderer>();
+                    .BuildAs<LineRenderer>();
         targetLR.startWidth = 0.05f;
         targetLR.endWidth = 0.05f;
 
@@ -78,8 +77,7 @@ public class WaveformMatcherMiniGame : MiniGame
                     .WithParent(transform)
                     .WithPosition(Vector3.zero)
                     .WithLineRenderer(LRControllerMat)
-                    .Build()
-                    .GetComponent<LineRenderer>();
+                    .BuildAs<LineRenderer>();
         controlledLR.startWidth = 0.05f;
         controlledLR.endWidth = 0.05f;
 
