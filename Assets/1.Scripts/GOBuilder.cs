@@ -83,11 +83,14 @@ public class GOBuilder
         return this;
     }
 
-    public GOBuilder WithMeshFilter(Mesh iMesh, bool iUnwrap = true)
+    public GOBuilder WithMeshFilter(Mesh iMesh = null, bool iUnwrap = true)
     {
+        MeshFilter mf = GO.AddComponent<MeshFilter>();
+        if (iMesh == null)
+            return this;
+
         if (iUnwrap)
             UnwrapMesh(iMesh);
-        MeshFilter mf = GO.AddComponent<MeshFilter>();
         mf.mesh = iMesh;
         return this;
     }
@@ -121,6 +124,5 @@ public class GOBuilder
         LR.material = iMat;
         return this;
     }
-
 
 }

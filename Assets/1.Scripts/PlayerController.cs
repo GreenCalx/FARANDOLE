@@ -18,8 +18,9 @@ public class PlayerController : MonoBehaviour
     List<ITapTracker> tapTrackers;
     List<ISwipeTracker> swipeTrackers;
 
-    Vector2 swipeWorldOrigin;
-    bool swiperRegistered;
+    Vector2 firstTouchWorldPos;
+    Vector2 lastTouchWorldPos;
+
     void Start()
     {
         positionTrackers = new List<IPositionTracker>();
@@ -47,16 +48,16 @@ public class PlayerController : MonoBehaviour
 
     void FingerDown(EnhancedTouch.Finger finger)
     {
-        Vector2 newPos = GetWorldPos(finger.screenPosition);
-        swipeWorldOrigin = newPos;
-        swiperRegistered = false;
-        positionTrackers.ForEach(e => e.OnStartTracking(newPos));
+        firstTouchWorldPos = GetWorldPos(finger.screenPosition);
+        positionTrackers.ForEach(e => e.OnStartTracking(firstTouchWorldPos));
     }
 
     void FingerUp(EnhancedTouch.Finger finger)
     {
-        Vector2 newPos = GetWorldPos(finger.screenPosition);
-        positionTrackers.ForEach(e => e.OnStopTracking(newPos));
+        lastTouchWorldPos = GetWorldPos(finger.screenPosition);
+        positionTrackers.ForEach(e => e.OnStopTracking(lastTouchWorldPos));
+        if (HaveSwipers())
+            Swipe();
     }
 
     void Drag(Touch iTouch)
@@ -85,34 +86,16 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    void Swipe(Touch iTouch)
+    void Swipe()
     {
-        if (swipeTrackers.Count == 0)
-            return;
+        Vector2 swipeDir = lastTouchWorldPos - firstTouchWorldPos;
+        if (swipeDir.magnitude < 0.01f)
+             return; // min swipe length requirement
 
-        if (swiperRegistered)
-            return;
-
-        Vector2 swipeDir = GetWorldPos(iTouch.screenPosition) - swipeWorldOrigin;
-        if (swipeDir.magnitude < 0.05f)
-            return;
-
-        float angle = Mathf.Atan2(swipeDir.y, swipeDir.x);
-        if ((angle < 45f)&&(angle > 315f))
-        {
-            swipeTrackers.ForEach( e => e.OnHorizontalSwipe(1f));
-        } else if ((angle < 135f)&&(angle > 45f))
-        {
-            swipeTrackers.ForEach( e => e.OnVerticalSwipe(1f));
-        } else if ((angle < 225f)&&(angle > 135f))
-        {
-            swipeTrackers.ForEach( e => e.OnHorizontalSwipe(-1f));
-        } else if ((angle < 315f)&&(angle > 225f)) {
-            swipeTrackers.ForEach( e => e.OnVerticalSwipe(-1f));
-        } else {
-            Debug.LogError("Unknown swipe direction for angle : " + angle);
-        }
-        swiperRegistered = true;
+        if (Mathf.Abs(swipeDir.x) >= Mathf.Abs(swipeDir.y))
+            swipeTrackers.ForEach(e => e.OnHorizontalSwipe(swipeDir.x));
+        else
+            swipeTrackers.ForEach(e => e.OnVerticalSwipe(swipeDir.y));
     }
 
     public void ClearAllTrackers()
@@ -130,15 +113,19 @@ public class PlayerController : MonoBehaviour
             if ((touch.phase == UnityEngine.InputSystem.TouchPhase.Ended) && (touch.tapCount >= 1))
             {
                 Tap(touch);
+               // Swipe(touch);
             }
             if (touch.phase == UnityEngine.InputSystem.TouchPhase.Moved)
             {
-                Swipe(touch);
                 Drag(touch);
             }
         }
     }
 
+    bool HavePositionTrackers()
+    {
+        return ((positionTrackers != null) && (positionTrackers.Count > 0));
+    }
     public void AddPositionTracker(IPositionTracker iTracker)
     {
         if (!positionTrackers.Contains(iTracker))
@@ -154,6 +141,11 @@ public class PlayerController : MonoBehaviour
         {
             positionTrackers.Remove(iTracker);
         }
+    }
+
+    bool HaveTappers()
+    {
+        return ((tapTrackers != null) && (tapTrackers.Count > 0));
     }
     public void AddTapTracker(ITapTracker iTracker)
     {
@@ -176,6 +168,11 @@ public class PlayerController : MonoBehaviour
         {
             iTracker.enabled = bol;
         }
+    }
+
+    bool HaveSwipers()
+    {
+        return ((swipeTrackers != null) && (swipeTrackers.Count > 0));
     }
 
     public void AddSwipeTracker(ISwipeTracker iTracker)
