@@ -149,8 +149,8 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.Escape))
-            Application.Quit();
+        // if (Input.GetKey(KeyCode.Escape))
+        //     Application.Quit();
 
         if (!GameStarted)
             return;

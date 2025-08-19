@@ -1,0 +1,5 @@
+Oauth SHA1 :
+keytool -keystore F:\UNITY\FARANDOLE\FARANDOLE\Keystore\user.keystore -list -v
+
+ClientID:
+keytool -exportcert -alias androiddebugkey -keystore F:\UNITY\FARANDOLE\FARANDOLE\Keystore\user.keystore -list -v

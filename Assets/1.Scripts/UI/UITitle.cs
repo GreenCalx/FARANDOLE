@@ -23,6 +23,23 @@ public class UITitle : MonoBehaviour
     
     [Header("Others")]
     public string GameScene = "Game";
+
+    public void DisableAll()
+    {
+        handle_titleBtns.gameObject.SetActive(false);
+        handle_gameModesBtns.gameObject.SetActive(false);
+        handle_UIHighScores.gameObject.SetActive(false);
+        handle_backBtn.gameObject.SetActive(false);
+    }
+
+    public void EnableHome()
+    {
+        handle_titleBtns.gameObject.SetActive(true);
+        handle_gameModesBtns.gameObject.SetActive(false);
+        handle_UIHighScores.gameObject.SetActive(false);
+        handle_backBtn.gameObject.SetActive(false);
+    }
+
     void Start()
     {
         playBtn?.onClick.AddListener(() => ShowGameModes());
@@ -35,10 +52,7 @@ public class UITitle : MonoBehaviour
 
         backBtn?.onClick.AddListener(() => BackToTitle());
 
-        handle_titleBtns.gameObject.SetActive(true);
-        handle_gameModesBtns.gameObject.SetActive(false);
-        handle_UIHighScores.gameObject.SetActive(false);
-        handle_backBtn.gameObject.SetActive(false);
+        DisableAll();
     }
 
     void ShowGameModes()

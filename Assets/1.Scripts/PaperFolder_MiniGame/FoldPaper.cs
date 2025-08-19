@@ -24,26 +24,30 @@ public class FoldPaper : MonoBehaviour, ISwipeTracker
         if (iXVal > 0f)
         {
             Debug.Log("Swipe Right");
-            foreach (FoldPaperCell cell in paperCells.Where(e => e.position.x >= half_w))
+            foreach (FoldPaperCell cell in paperCells.Where(e => e.position.x < half_w))
             {
                 if (cell == null)
                     continue;
                 //Destroy(cell.gameObject);
                 //cell.RotateCellAround(GetCenter(), Vector3.up, 180f);
-                cell.RotateCellAround(Vector3.up, 180f);
+                cell.RotateCellAround(Vector3.up, -180f);
+                cell.transform.localPosition = cell.transform.position + new Vector3(0f, 0f, 0.1f);
             }
         }
         else
         {
             Debug.Log("Swipe Left");
-            foreach (FoldPaperCell cell in paperCells.Where(e => e.position.x < half_w))
+            foreach (FoldPaperCell cell in paperCells.Where(e => e.position.x >= half_w))
             {
                 if (cell == null)
                     continue;
                 //cell.RotateCellAround(GetCenter(), Vector3.up, -180f);
+
                 cell.RotateCellAround(Vector3.up, -180f);
+                cell.transform.localPosition = cell.transform.position + new Vector3(0f, 0f, 0.1f);
             }
         }
+
         paper_w >>= 1;
         //CreatePaperMesh();
         Recenter();
@@ -57,25 +61,28 @@ public class FoldPaper : MonoBehaviour, ISwipeTracker
         if (iYVal > 0f)
         {
             Debug.Log("Swipe Up");
-            foreach (FoldPaperCell cell in paperCells.Where(e => e.position.y >= half_h))
+            foreach (FoldPaperCell cell in paperCells.Where(e => e.position.y < half_h))
             {
                 if (cell == null)
                     continue;
                 //cell.RotateCellAround(GetCenter(), Vector3.right, 180f);
                 cell.RotateCellAround(Vector3.right, 180f);
+                cell.transform.localPosition = cell.transform.position + new Vector3(0f, 0f, 0.1f);
             }
         }
         else
         {
             Debug.Log("Swipe Down");
-            foreach (FoldPaperCell cell in paperCells.Where(e => e.position.y < half_h))
+            foreach (FoldPaperCell cell in paperCells.Where(e => e.position.y >= half_h))
             {
                 if (cell == null)
                     continue;
                 //cell.RotateCellAround(GetCenter(), Vector3.right, -180f);
                 cell.RotateCellAround(Vector3.right, -180f);
+                cell.transform.localPosition = cell.transform.position + new Vector3(0f, 0f, 0.1f);
             }
         }
+        
         paper_h >>= 1;
         //CreatePaperMesh();
         Recenter();
@@ -112,6 +119,10 @@ public class FoldPaper : MonoBehaviour, ISwipeTracker
                     new Vector2(i*step_w, j*step_h),      // uvmin
                     new Vector2((i+1)*step_w, (j+1)*step_h)       // uvmax
                     );
+                // Adjust cell pivot
+                // by rotating accordingly
+                Debug.DrawRay(newPaperCell.transform.position, Vector3.forward * 5f, Color.red, 20f);
+
                 paperCells.Add(newPaperCell);
             }
         }
