@@ -88,7 +88,7 @@ public class PlaygroundManager : MonoBehaviour, IManager
         go_fg = GOBuilder.Create()
                             .WithName("PlaygroundForground")
                             .WithParent(transform)
-                            .WithLocalPosition(Vector3.zero)
+                            .WithLocalPosition(new Vector3(0f,0f,-1f))
                             .WithMeshFilter(FG_Mesh, true)
                             .WithRenderer(diff1Mat)
                             .Build();
@@ -98,7 +98,7 @@ public class PlaygroundManager : MonoBehaviour, IManager
         go_playfield = GOBuilder.Create()
                             .WithName("PlayField")
                             .WithParent(transform)
-                            .WithLocalPosition(Vector3.zero)
+                            .WithLocalPosition(new Vector3(0f,0f,1f))
                             .WithMeshFilter(Playfield_Mesh, true)
                             .WithRenderer(playFieldMat)
                             .Build();

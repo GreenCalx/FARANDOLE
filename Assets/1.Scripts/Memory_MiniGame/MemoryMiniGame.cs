@@ -45,7 +45,7 @@ public class MemoryMiniGame : MiniGame
             cards[i] = GOBuilder.Create(prefabs_card[i / 2])
                             .WithName("card" + i)
                             .WithParent(pivot.transform)
-                            .WithPosition(transform.position + distFromCenter * new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0))
+                            .WithPosition(transform.position + distFromCenter * new Vector3(Mathf.Cos(angle), Mathf.Sin(angle)))
                             .BuildAs<Card>();
 
             cards[i].tapCB.AddListener(TurnCard);

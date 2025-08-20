@@ -65,4 +65,4 @@ MonoBehaviour:
   - 20
   - 35
   - 65
-  distFromCenter: 2
+  distFromCenter: 1.5
