@@ -23,6 +23,20 @@ public class PlaygroundManager : MonoBehaviour, IManager
     MeshRenderer FG_MR, PF_MR;
     Coroutine AnimationCoroutine;
     LayerManager2D LM2D;
+    public float height
+    {
+        get
+        {
+            return bounds.size.y;
+        }
+    }
+    public float width
+    {
+        get
+        {
+            return bounds.size.x;
+        }
+    }
     // public string postProcessLayer = "PostFX";
     // public PostProcessProfile ref_postProcessProfile;
     // GameObject LocalPostFX;
@@ -79,7 +93,7 @@ public class PlaygroundManager : MonoBehaviour, IManager
                             .WithRenderer(diff1Mat)
                             .Build();
         FG_MR = go_fg.GetComponent<MeshRenderer>();
-        
+
 
         go_playfield = GOBuilder.Create()
                             .WithName("PlayField")
@@ -99,7 +113,7 @@ public class PlaygroundManager : MonoBehaviour, IManager
 
     void OnDestroy()
     {
-        if (AnimationCoroutine!=null)
+        if (AnimationCoroutine != null)
         {
             StopCoroutine(AnimationCoroutine);
             AnimationCoroutine = null;
@@ -111,19 +125,19 @@ public class PlaygroundManager : MonoBehaviour, IManager
         if (FG_MR == null)
             return;
         switch (iDifficultyLevel)
-            {
-                case 1:
-                    FG_MR.material = diff1Mat;
-                    break;
-                case 2:
-                    FG_MR.material = diff2Mat;
-                    break;
-                case 3:
-                    FG_MR.material = diff3Mat;
-                    break;
-                default:
-                    break;
-            }
+        {
+            case 1:
+                FG_MR.material = diff1Mat;
+                break;
+            case 2:
+                FG_MR.material = diff2Mat;
+                break;
+            case 3:
+                FG_MR.material = diff3Mat;
+                break;
+            default:
+                break;
+        }
     }
 
     public void RefreshMatFromLoopLevel(int iLoopLevel)
@@ -143,17 +157,17 @@ public class PlaygroundManager : MonoBehaviour, IManager
         {
             if (phase == 0)
             {
-                FG_MR.material.SetTextureOffset("_MainTex",phase0);
+                FG_MR.material.SetTextureOffset("_MainTex", phase0);
                 phase++;
             }
             else if (phase == 1)
             {
-                FG_MR.material.SetTextureOffset("_MainTex",phase1);
+                FG_MR.material.SetTextureOffset("_MainTex", phase1);
                 phase = 0;
             }
             yield return new WaitForSeconds(currAnimationDeltaTime);
         }
-        
+
     }
 
     public bool IsWorldPosOOB(Vector2 iWorldPos)
@@ -165,5 +179,15 @@ public class PlaygroundManager : MonoBehaviour, IManager
     {
         Vector3 proj = Camera.main.ScreenToWorldPoint(iScreenPos);
         return bounds.Contains(proj);
+    }
+
+    public float GetYPosFromHeightFrac(float iFrac)
+    {
+        return bounds.min.y + (height * iFrac);
+    }
+
+    public float GetXPosFromWidthFrac(float iFrac)
+    {
+        return bounds.min.x + (width * iFrac);
     }
 }

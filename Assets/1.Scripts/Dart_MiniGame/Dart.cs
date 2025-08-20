@@ -19,10 +19,16 @@ public class Dart : Throwable
 
     void OnCollisionEnter2D(Collision2D iCol)
     {
+        ObjectTarget target = iCol.gameObject.GetComponent<ObjectTarget>();
+        if (target != null)
+            return;
         Destroy(gameObject);
     }
     void OnCollisionStay2D(Collision2D iCol)
     {
+        ObjectTarget target = iCol.gameObject.GetComponent<ObjectTarget>();
+        if (target != null)
+            return;
         Destroy(gameObject);
     }
 }

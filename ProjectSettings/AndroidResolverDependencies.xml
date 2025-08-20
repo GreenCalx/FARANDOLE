@@ -8,7 +8,7 @@
   </files>
   <settings>
     <setting name="androidAbis" value="arm64-v8a,armeabi-v7a" />
-    <setting name="bundleId" value="com.XLS.com.unity.mobile2D" />
+    <setting name="bundleId" value="com.XLS.farandole" />
     <setting name="explodeAars" value="True" />
     <setting name="gradleBuildEnabled" value="True" />
     <setting name="gradlePropertiesTemplateEnabled" value="True" />

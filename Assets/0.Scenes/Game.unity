@@ -163,9 +163,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80b8b58d2f403e84aa6ce22d65c5011f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MiniGameToTest: {fileID: 0}
+  MiniGameToTest: {fileID: 5205109001117507003, guid: ef698d4e9557cd14dbc5770833ba666b, type: 3}
   prefab_miniGames:
-  - {fileID: 2266623309687070485, guid: 67427fb2e7a156040a46de5c04e05297, type: 3}
+  - {fileID: 5205109001117507003, guid: ef698d4e9557cd14dbc5770833ba666b, type: 3}
   - {fileID: 6891743480671891591, guid: ca650ba5ffb5e9c4d8e5e5b7a7fdaeae, type: 3}
   miniGamesDifficulty: 0
   OnHPLossCB:

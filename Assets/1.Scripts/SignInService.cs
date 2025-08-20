@@ -12,6 +12,7 @@ public class SignInService : MonoBehaviour
     // TODO : bad security maybe, just for quick testing atm.
     bool signedIn = false;
     bool retry = false;
+    bool kill = false;
 
     public void Start()
     {
@@ -21,6 +22,11 @@ public class SignInService : MonoBehaviour
         WaitSignIn();
     }
 
+    void Destroy()
+    {
+        kill = true;
+    }
+
     public void OfflineMode()
     {
         signedIn = true;
@@ -28,13 +34,13 @@ public class SignInService : MonoBehaviour
 
     async void WaitSignIn()
     {
+        PlayGamesPlatform.Activate();
         await SignIn();
         OnSignIn.Invoke();
     }
     async Task SignIn()
     {
-        
-        while (!signedIn)
+        while (!signedIn && !kill)
         {
             if (retry)
             {

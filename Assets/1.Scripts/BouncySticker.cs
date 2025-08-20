@@ -64,6 +64,7 @@ public class BouncySticker : MonoBehaviour, ITapTracker
     {
         if (rb.linearVelocity.magnitude < 0.05 && !stopped)
         {
+            // TODO : too expensive in update
             do { dir = Random.insideUnitCircle; } while (dir.x < 0.05f && dir.y < 0.05f); //des fois les stickers se coince dans les coins
         }
     }

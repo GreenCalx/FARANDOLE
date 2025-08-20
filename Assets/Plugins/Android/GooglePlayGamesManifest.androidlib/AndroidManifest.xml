@@ -18,7 +18,7 @@
 
                   <!-- Required for Nearby Connections API -->
              <meta-data android:name="com.google.android.gms.nearby.connection.SERVICE_ID"
-                  android:value="com.XLS.com.unity.mobile2D" />
+                  android:value="com.XLS.farandole" />
 
 
         <!-- The space in these forces it to be interpreted as a string vs. int -->
