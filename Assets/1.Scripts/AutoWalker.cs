@@ -6,6 +6,7 @@ using UnityEngine.Events;
 public class AutoWalker : MonoBehaviour, ITapTracker
 {
     [Header("Tweaks")]
+    public SpriteRenderer handle_Renderer;
     public float walkDuration = 3f;
     public bool ReverseBehaviour = false;
     public UnityEvent<bool> OnAutoWalkToggleCB;

@@ -29,20 +29,21 @@ public class Balloon : ObjectTarget
 
     public void InitPhysxPosition(Vector3 iPos)
     {
-            self_attachedPhysxBody.transform.position = iPos;
+        self_attachedPhysxBody.transform.position = iPos;
         UpdatePosition();
-
-            Vector3 rand = Random.insideUnitSphere;
-            Vector2 dir = new Vector2(rand.x, rand.y);
-            self_attachedPhysxBody.AddForce(dir * initPushStr);
+        Vector3 rand = Random.insideUnitSphere;
+        Vector2 dir = new Vector2(rand.x, rand.y);
+        self_attachedPhysxBody.AddForce(dir * initPushStr);
     }
 
-    public void InitSortOrder(int iSortOrder)
+    public void InitSortOrder(LayerManager2D iLM2D)
     {
         // face.transform.position = new Vector3(face.transform.position.x, face.transform.position.y, zDepth);
         // body.transform.position = new Vector3(body.transform.position.x, body.transform.position.y, zDepth + zDepth/2f);
-        body.sortingOrder = iSortOrder;
-        face.sortingOrder = iSortOrder+1;
+        //body.sortingOrder = iSortOrder;
+        //face.sortingOrder = iSortOrder+1;
+        iLM2D.PlaceObject(body);
+        iLM2D.PlaceObject(face);
     }
 
     public void ExplodeAnim()

@@ -134,12 +134,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d68d15fbf6893f54aaaaab43139cea67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  handle_Renderer: {fileID: 1988993029350909508}
   walkDuration: 2.5
   ReverseBehaviour: 0
   OnAutoWalkToggleCB:
     m_PersistentCalls:
       m_Calls: []
   OnReachCB:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPreDelayedyCB:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPostDelayedCB:
     m_PersistentCalls:
       m_Calls: []
   AutoWalk: 0

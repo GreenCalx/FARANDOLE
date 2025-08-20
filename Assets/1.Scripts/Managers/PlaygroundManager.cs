@@ -105,8 +105,8 @@ public class PlaygroundManager : MonoBehaviour, IManager
         PF_MR = go_playfield.GetComponent<MeshRenderer>();
         bounds = PF_MR.bounds;
 
-        LM2D.PlaceTop(go_fg.transform);
-        LM2D.PlaceBot(go_playfield.transform);
+        LM2D.PlaceForgroundRoot(go_fg.GetComponent<Renderer>());
+        LM2D.PlaceBackgroundRoot(go_playfield.GetComponent<Renderer>());
 
         AnimationCoroutine = StartCoroutine(AnimateCo());
     }

@@ -6,6 +6,7 @@ using UnityEngine.Events;
 
 public class AutoWalkDelayer : MonoBehaviour
 {
+    public SpriteRenderer handle_Renderer;
     public float delayTime = 0.5f;
     public Sprite OnTriggerSprite;
     public float delayBeforeEnablingRB2D = 0.25f;

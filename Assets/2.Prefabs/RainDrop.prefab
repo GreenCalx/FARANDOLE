@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d49f618185e09f946a70fcfe8c1f7c4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  handle_Renderer: {fileID: 7604196053483323464}
   delayTime: 0.5
   OnTriggerSprite: {fileID: 21300000, guid: 22a94c00dd92a494bb852ab6548732a8, type: 3}
   delayBeforeEnablingRB2D: 0.25

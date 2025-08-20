@@ -17,7 +17,6 @@ public class DartMiniGame : MiniGame
 
         int n_spawns = n_balloons * MGM.miniGamesDifficulty;
         balloons = new List<GameObject>(n_spawns);
-        int sortingOrder = 0;
         for (int i = 0; i < n_spawns; i++)
         {
             balloons.Add(Instantiate(prefab_Balloon));
@@ -32,8 +31,7 @@ public class DartMiniGame : MiniGame
                     randPos.x,
                     randPos.y
                 ));
-                asBalloon.InitSortOrder(sortingOrder);
-                sortingOrder += 2;
+                asBalloon.InitSortOrder(MGM.LM2D);
             }
             ObjectTarget asTarget = balloons[i].GetComponentInChildren<ObjectTarget>();
             if (asTarget != null)

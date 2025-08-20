@@ -61,8 +61,9 @@ public class RainDropsMiniGame : MiniGame
 
         inst_rainDrops = new List<AutoWalkDelayer>();
 
-        MGM.LM2D.Place(inst_walker.transform, 2);
-        MGM.LM2D.PlaceUnder(pathLR.transform, inst_walker.transform);
+        MGM.LM2D.PlaceObject(pathLR);
+        MGM.LM2D.PlaceObject(inst_walker.handle_Renderer);
+        
     }
     public override void Play()
     {
@@ -113,7 +114,7 @@ public class RainDropsMiniGame : MiniGame
                                     .WithPosition(spawnPos)
                                     .BuildAs<AutoWalkDelayer>();
         newDrop.OnDestroyCB.AddListener(() => inst_rainDrops.Remove(newDrop));
-        MGM.LM2D.PlaceAbove(newDrop.transform, inst_walker.transform);
+        MGM.LM2D.PlaceObject(newDrop.handle_Renderer);
         inst_rainDrops.Add(newDrop);
     }
 }
