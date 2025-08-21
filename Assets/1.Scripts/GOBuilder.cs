@@ -91,6 +91,7 @@ public class GOBuilder
 
         if (iUnwrap)
             UnwrapMesh(iMesh);
+        iMesh.Optimize();
         mf.mesh = iMesh;
         return this;
     }

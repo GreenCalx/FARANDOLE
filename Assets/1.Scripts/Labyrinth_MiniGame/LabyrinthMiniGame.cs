@@ -43,10 +43,14 @@ public class LabyrinthMiniGame : MiniGame
         if (selectedLayoutPrefab == null)
             return;
 
-        GameObject createdLayout = Instantiate(selectedLayoutPrefab);
-        createdLayout.transform.parent = inst_movingLabyrinth.transform;
+        // GameObject createdLayout = Instantiate(selectedLayoutPrefab);
+        // createdLayout.transform.parent = inst_movingLabyrinth.transform;
 
-        selectedLayout = createdLayout.GetComponent<LabyrinthLayout>();
+        // selectedLayout = createdLayout.GetComponent<LabyrinthLayout>();
+
+        selectedLayout = GOBuilder.Create(selectedLayoutPrefab)
+                        .WithParent(inst_movingLabyrinth.transform)
+                        .BuildAs<LabyrinthLayout>();
     }
     public override void Init()
     {
