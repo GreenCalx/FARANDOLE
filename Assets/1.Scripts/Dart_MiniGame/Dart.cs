@@ -22,13 +22,16 @@ public class Dart : Throwable
         ObjectTarget target = iCol.gameObject.GetComponent<ObjectTarget>();
         if (target != null)
             return;
-        Destroy(gameObject);
+        //Destroy(gameObject);
+        RB2D.linearVelocity = Vector2.zero;
+        RB2D.angularVelocity = 0f;
     }
     void OnCollisionStay2D(Collision2D iCol)
     {
         ObjectTarget target = iCol.gameObject.GetComponent<ObjectTarget>();
         if (target != null)
             return;
-        Destroy(gameObject);
+
+        //Destroy(gameObject);
     }
 }

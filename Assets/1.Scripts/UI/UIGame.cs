@@ -6,6 +6,7 @@ public class UIGame : MonoBehaviour, IDynamicUI
 {
     public TextMeshProUGUI miniGameClock;
     public TextMeshProUGUI hpClock;
+    public TextMeshProUGUI miniGameDesc;
 
     public RectTransform infoArea;
     [Header("Score")]

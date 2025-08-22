@@ -1,8 +1,9 @@
 using UnityEngine;
-
+using System.Collections.Generic;
 public class ObjectThrower<T> : MonoBehaviour, IPositionTracker where T : Throwable
 {
     [Header("ObjectThrower Generics")]
+    public float shootingLatch = 0.2f;
     public float shootingForce = 10f;
     public float aimLRLengthMul = 5f;
     public Material aimLRMat;
@@ -10,13 +11,15 @@ public class ObjectThrower<T> : MonoBehaviour, IPositionTracker where T : Throwa
     protected T inst_Bullet;
     protected Vector2 dir;
     LineRenderer aimLR;
+    List<T> thrownObjects = new List<T>();
+    float lastShootTime = -1f;
     public Vector2 position
     {
         get { return new Vector2(transform.position.x, transform.position.y); }
     }
     public bool IsAiming
     {
-        get { return (aimLR!=null)&&(aimLR.enabled); }
+        get { return (aimLR != null) && (aimLR.enabled); }
     }
     public void OnPositionChanged(Vector2 iVec2)
     {
@@ -31,6 +34,10 @@ public class ObjectThrower<T> : MonoBehaviour, IPositionTracker where T : Throwa
     {
         if (IsAiming)
             return;
+        if (lastShootTime > 0)
+            if ((Time.time - lastShootTime) < shootingLatch)
+                return;
+
         InstantiateBullet();
 
         dir = iVec2 - position;
@@ -49,10 +56,19 @@ public class ObjectThrower<T> : MonoBehaviour, IPositionTracker where T : Throwa
         dir = Vector2.zero;
     }
 
+    protected virtual void OnPostShoot()
+    {
+
+    }
+
     public void Shoot()
     {
         aimLR.enabled = false;
         inst_Bullet.RB2D.AddForce(shootingForce * dir, ForceMode2D.Impulse);
+
+        OnPostShoot();
+
+        lastShootTime = Time.time;
         inst_Bullet = null;
     }
 
@@ -69,7 +85,7 @@ public class ObjectThrower<T> : MonoBehaviour, IPositionTracker where T : Throwa
 
     void Aim()
     {
-        aimLR.SetPosition(1, transform.position + new Vector3(dir.x* shootingForce, dir.y* shootingForce, 0f));
+        aimLR.SetPosition(1, transform.position + new Vector3(dir.x * shootingForce, dir.y * shootingForce, 0f));
     }
 
     void BuildLR()
@@ -98,5 +114,14 @@ public class ObjectThrower<T> : MonoBehaviour, IPositionTracker where T : Throwa
         GameObject newGO = Instantiate(prefab_Bullet);
         inst_Bullet = newGO.GetComponent<T>();
         inst_Bullet.transform.position = transform.position;
+        thrownObjects.Add(inst_Bullet);
+    }
+
+    void OnDestroy()
+    {
+        foreach (T o in thrownObjects)
+        {
+            Destroy(o.gameObject);
+        }
     }
 }

@@ -35,7 +35,7 @@ public class FindBloik_MiniGame : MiniGame
                     .Build().GetComponent<BouncySticker>();
         bloikSticker.tapCB.AddListener(StickerHit);
         bloikSticker.speed = UnityEngine.Random.Range(minStickerSpeed[MGM.miniGamesDifficulty], maxStickerSpeed[MGM.miniGamesDifficulty]);
-
+        MGM.LM2D.PlaceObject(bloikSticker.sr);
         PC.AddTapTracker(bloikSticker);
 
         for (int i = 0; i < n_spawns; i++)
@@ -44,10 +44,11 @@ public class FindBloik_MiniGame : MiniGame
             .WithName("unoStickers" + i)
             .WithParent(transform)
             .WithPosition(new Vector2(
-                UnityEngine.Random.Range(PG.bounds.min.x + spawnMargin, PG.bounds.max.x- spawnMargin),
-                UnityEngine.Random.Range(PG.bounds.min.y + spawnMargin, PG.bounds.max.y- spawnMargin)))
+                UnityEngine.Random.Range(PG.bounds.min.x + spawnMargin, PG.bounds.max.x - spawnMargin),
+                UnityEngine.Random.Range(PG.bounds.min.y + spawnMargin, PG.bounds.max.y - spawnMargin)))
             .Build().GetComponent<BouncySticker>();
             unoStickers[i].speed = UnityEngine.Random.Range(minStickerSpeed[MGM.miniGamesDifficulty], maxStickerSpeed[MGM.miniGamesDifficulty]);
+            MGM.LM2D.PlaceObject(unoStickers[i].sr);
         }
     }
 

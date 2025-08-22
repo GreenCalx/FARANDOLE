@@ -1,9 +1,10 @@
 using UnityEngine;
 using System.Collections.Generic;
-
+using UnityEngine.Events;
 public class LabyrinthMiniGame : MiniGame
 {
     [Header("LabyrinthMiniGame")]
+    public FinishLine finishLine;
     public TorqueRotater rotater;
     public GameObject prefab_ballToEscape;
     GameObject inst_ballToEscape;
@@ -43,11 +44,6 @@ public class LabyrinthMiniGame : MiniGame
         if (selectedLayoutPrefab == null)
             return;
 
-        // GameObject createdLayout = Instantiate(selectedLayoutPrefab);
-        // createdLayout.transform.parent = inst_movingLabyrinth.transform;
-
-        // selectedLayout = createdLayout.GetComponent<LabyrinthLayout>();
-
         selectedLayout = GOBuilder.Create(selectedLayoutPrefab)
                         .WithParent(inst_movingLabyrinth.transform)
                         .BuildAs<LabyrinthLayout>();
@@ -64,6 +60,8 @@ public class LabyrinthMiniGame : MiniGame
 
         inst_asBall = inst_ballToEscape.GetComponent<RollingBall>();
         inst_asBall.MG = this;
+        inst_asBall.OnFinishCB = new UnityEvent();
+        inst_asBall.OnFinishCB.AddListener(() => finishLine.ExplodeAt(inst_asBall.transform.position));
 
         rotater.Init();
         PC.AddPositionTracker(rotater);
@@ -75,6 +73,7 @@ public class LabyrinthMiniGame : MiniGame
     public override void Stop()
     {
         ClearLayout();
+        finishLine.ResetParticles();
         inst_movingLabyrinth.transform.rotation = Quaternion.identity;
         inst_movingLabyrinth.Reset();
 

@@ -46,10 +46,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 898538a941e0a6a45861119513dd91b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shootingLatch: 0.25
   shootingForce: 20
   aimLRLengthMul: 5
   aimLRMat: {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
   prefab_Bullet: {fileID: 6334826713646054735, guid: dddd63e630eeae24b8e88cc1169cb1f8, type: 3}
+  torqueForce: 60
 --- !u!1 &871997950433809462
 GameObject:
   m_ObjectHideFlags: 0

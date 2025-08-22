@@ -10,7 +10,7 @@ public class BouncySticker : MonoBehaviour, ITapTracker
     public float speed = 5f;
 
     private Rigidbody2D rb;
-    private SpriteRenderer sr;
+    public SpriteRenderer sr;
     public Collider2D stickerCollider;
 
     public Vector2 dir;

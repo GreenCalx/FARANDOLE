@@ -10,6 +10,7 @@ public class DartMiniGame : MiniGame
     public int n_balloons = 3;
     public GameObject prefab_Balloon;
     DartThrower inst_gun;
+
     public override void Init()
     {
         if (balloons != null && balloons.Count > 0)

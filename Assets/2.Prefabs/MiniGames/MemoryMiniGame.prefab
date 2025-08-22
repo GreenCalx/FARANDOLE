@@ -59,7 +59,7 @@ MonoBehaviour:
   - {fileID: 6550312204150314515, guid: e60b8082636ce0d49b4da38cae65bc5e, type: 3}
   prefab_pivot: {fileID: 8908472888210908571, guid: e2e0809a9e4d6974592849aeeb44b27f, type: 3}
   cards: []
-  cardsCounts: 04000000060000000600000006000000
+  cardsCounts: 04000000040000000600000006000000
   rotsSpeeds:
   - 10
   - 20
