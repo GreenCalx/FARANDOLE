@@ -31,6 +31,11 @@ public class GameClock
         frozen = iState;
     }
 
+    public float GetElapsedTime()
+    {
+        return lastTick - miniGameStartTime;
+    }
+
     public float GetRemainingTime()
     {
         return Mathf.Clamp(miniGameMaxTime - (lastTick - miniGameStartTime), 0f, miniGameMaxTime);

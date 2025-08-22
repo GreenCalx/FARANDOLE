@@ -21,6 +21,9 @@ public class UIGame : MonoBehaviour, IDynamicUI
 
     [Header("Success")]
     public RectTransform successArea;
+    public TextMeshProUGUI successTimeTxt;
+    public Color successTimePositiveColor;
+    public Color successTimeNegativeColor;
 
     public void Refresh()
     {
@@ -74,8 +77,23 @@ public class UIGame : MonoBehaviour, IDynamicUI
         score.enabled = iState;
     }
 
-    public void ShowSuccessArea(bool iState)
+    public void ShowSuccessArea(bool iState, float iTime = 0f)
     {
-        successArea.gameObject.SetActive(iState) ;
+        successArea.gameObject.SetActive(iState);
+
+        string successTimeStr = "";
+        if (iTime >= 0f)
+        {
+            successTimeTxt.color = successTimePositiveColor;
+            successTimeStr += "+";
+        }
+        else
+        {
+            successTimeTxt.color = successTimeNegativeColor;
+            //successTimeStr += "-";
+        }
+
+        successTimeStr += iTime.ToString("#0.0");
+        successTimeTxt.text = successTimeStr;
     }
 }

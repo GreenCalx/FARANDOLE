@@ -20,9 +20,8 @@ public class MiniGameManager : MonoBehaviour, IManager
     public UnityEvent<float> OnHPLossCB;
     public UnityEvent<int> OnScoreGainCB;
     public UnityEvent OnLoopComplete;
-    public UnityEvent<bool> ShowPostGameUICB;
+    public UnityEvent<bool, float> ShowPostGameUICB;
     public LayerManager2D LM2D;
-    float gameStartTime;
     public PlayerController PC;
     public PlaygroundManager PG;
     public PlayerData PData;
@@ -65,7 +64,7 @@ public class MiniGameManager : MonoBehaviour, IManager
         MGLoop.Current.gameObject.SetActive(true);
         MGLoop.Current.IsInPostGame = false;
         MGLoop.Current.Init();
-        ShowPostGameUICB.Invoke(false);
+        ShowPostGameUICB.Invoke(false, GameData.Get.gameSettings.MiniGameTime - gameClock.GetElapsedTime());
 
         MGLoop.Current.Play();
         gameClock.Reset();
@@ -88,7 +87,7 @@ public class MiniGameManager : MonoBehaviour, IManager
         }
         gameClock.Freeze(true);
         MGLoop.Current.IsInPostGame = true;
-        ShowPostGameUICB.Invoke(true);
+        ShowPostGameUICB.Invoke(true, GameData.Get.gameSettings.MiniGameTime - gameClock.GetElapsedTime());
         OnScoreGainCB.Invoke(1);
         DelayedNext();
     }
