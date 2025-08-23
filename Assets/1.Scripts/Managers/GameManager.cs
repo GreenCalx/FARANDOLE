@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
         { yield return null; }
 
         UI.Init();
-        UI.RefreshLoopLevelSprite(MGM.miniGamesDifficulty);
+        UI.RefreshLoopLevelText(MGM.miniGamesDifficulty);
 
         StartGame();
     }
@@ -56,6 +56,7 @@ public class GameManager : MonoBehaviour
         MGM.OnHPLossCB.AddListener(playerData.LoseHP);
         MGM.OnScoreGainCB.AddListener(playerData.AddScore);
         MGM.OnLoopComplete.AddListener(LevelUp);
+        MGM.OnMiniGameComplete.AddListener(OnMiniGameCompletion);
         MGM.ShowPostGameUICB.AddListener(UI.ShowSuccessArea);
     }
 
@@ -64,6 +65,7 @@ public class GameManager : MonoBehaviour
         MGM.OnHPLossCB.RemoveListener(playerData.LoseHP);
         MGM.OnScoreGainCB.RemoveListener(playerData.AddScore);
         MGM.OnLoopComplete.RemoveListener(LevelUp);
+        MGM.OnMiniGameComplete.RemoveListener(OnMiniGameCompletion);
         MGM.ShowPostGameUICB.RemoveListener(UI.ShowSuccessArea);
     }
 
@@ -105,10 +107,18 @@ public class GameManager : MonoBehaviour
         PG.RefreshMatFromLoopLevel(playerData.loopLevel);
 
         // UI Reset
-        UI.RefreshLoopLevelSprite(MGM.miniGamesDifficulty);
+        UI.RefreshLoopLevelText(MGM.miniGamesDifficulty);
 
         // Start game again
         StartGame();
+    }
+
+    public void OnMiniGameCompletion()
+    {
+        // level switch animation
+
+        // UI feedback
+        UI.RefreshLoopStage(MGM.MGLoop.index, MGM.MGLoop.Current.successState);
     }
 
     void LevelUp()
@@ -117,9 +127,10 @@ public class GameManager : MonoBehaviour
         {
             MGM.RaiseDifficulty();
             PG.RefreshMatFromDiff(MGM.miniGamesDifficulty);
-            UI.RefreshLoopLevelSprite(MGM.miniGamesDifficulty);
+            UI.RefreshLoopLevelText(MGM.miniGamesDifficulty);
         }
         PG.RefreshMatFromLoopLevel(playerData.loopLevel);
+        UI.ResetLoopStage();
 
         AnimationCurve timeScaleCurve = GameData.Get.gameSettings.timeScaleOverLoopLevel;
         if (playerData.loopLevel > timeScaleCurve.keys[timeScaleCurve.length - 1].time)

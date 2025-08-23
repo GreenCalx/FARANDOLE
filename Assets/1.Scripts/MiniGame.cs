@@ -19,11 +19,20 @@ public enum GAMETYPE_TAG
     BRAIN = 3,
     SCIENCE = 4
 }
+public enum MiniGameSuccessState
+{
+    NONE = 0,
+    PENDING = 1,
+    PASSED = 2,
+    FAILED = 3
+}
 
 public class MiniGame : MonoBehaviour, IMiniGame
 {
     [Header("MiniGame Mand")]
     public byte ID;
+    public SCREEN_ORIENTATION orientationRequirement = SCREEN_ORIENTATION.PORTRAIT;
+    public List<GAMETYPE_TAG> tags;
     [Header("MiniGame Internal View")]
     public MiniGameManager MGM;
     public PlayerController PC;
@@ -31,12 +40,12 @@ public class MiniGame : MonoBehaviour, IMiniGame
     public bool IsActiveMiniGame;
     // Might want to implement a full FSM..
     public bool IsInPostGame;
-    public SCREEN_ORIENTATION orientationRequirement = SCREEN_ORIENTATION.PORTRAIT;
-    public List<GAMETYPE_TAG> tags;
+    public MiniGameSuccessState successState;
+
 
     public virtual void Init()
     {
-
+        successState = MiniGameSuccessState.NONE;
     }
     public virtual void Play()
     {

@@ -20,11 +20,13 @@ public class MiniGameManager : MonoBehaviour, IManager
     public UnityEvent<float> OnHPLossCB;
     public UnityEvent<int> OnScoreGainCB;
     public UnityEvent OnLoopComplete;
+    public UnityEvent OnMiniGameComplete;
     public UnityEvent<bool, float> ShowPostGameUICB;
     public LayerManager2D LM2D;
     public PlayerController PC;
     public PlaygroundManager PG;
     public PlayerData PData;
+    public UIGame UI;
 
     #region IManager
     public void Init(GameManager iGameManager)
@@ -37,6 +39,7 @@ public class MiniGameManager : MonoBehaviour, IManager
         PG = iGameManager.PG;
         LM2D = iGameManager.LM2D;
         PData = iGameManager.playerData;
+        UI = iGameManager.UI;
     }
     
     public bool IsReady()
@@ -64,7 +67,10 @@ public class MiniGameManager : MonoBehaviour, IManager
         MGLoop.Current.gameObject.SetActive(true);
         MGLoop.Current.IsInPostGame = false;
         MGLoop.Current.Init();
+        MGLoop.Current.successState = MiniGameSuccessState.PENDING;
+
         ShowPostGameUICB.Invoke(false, GameData.Get.gameSettings.MiniGameTime - gameClock.GetElapsedTime());
+        UI.RefreshLoopStage(MGLoop.index, MGLoop.Current.successState);
 
         MGLoop.Current.Play();
         gameClock.Reset();
@@ -87,8 +93,16 @@ public class MiniGameManager : MonoBehaviour, IManager
         }
         gameClock.Freeze(true);
         MGLoop.Current.IsInPostGame = true;
-        ShowPostGameUICB.Invoke(true, GameData.Get.gameSettings.MiniGameTime - gameClock.GetElapsedTime());
+
+        float miniGameDuration = GameData.Get.gameSettings.MiniGameTime - gameClock.GetElapsedTime();
+        MGLoop.Current.successState = (miniGameDuration > GameData.Get.gameSettings.MiniGameTime) ?
+            MiniGameSuccessState.FAILED : MiniGameSuccessState.PASSED;
+
+        ShowPostGameUICB.Invoke(true, miniGameDuration);
+        UI.RefreshLoopStage(MGLoop.index, MGLoop.Current.successState);
+
         OnScoreGainCB.Invoke(1);
+
         DelayedNext();
     }
 
@@ -105,6 +119,10 @@ public class MiniGameManager : MonoBehaviour, IManager
         {
             OnLoopComplete.Invoke();
             MGLoop.Reset();
+        }
+        else
+        {
+            OnMiniGameComplete.Invoke();
         }
         Play();
     }

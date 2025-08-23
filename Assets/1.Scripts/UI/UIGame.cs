@@ -7,8 +7,8 @@ public class UIGame : MonoBehaviour, IDynamicUI
     public TextMeshProUGUI miniGameClock;
     public TextMeshProUGUI hpClock;
     public TextMeshProUGUI miniGameDesc;
-
     public RectTransform infoArea;
+    public UILoopInfo handle_UILoopInfo;
     [Header("Score")]
     public TextMeshProUGUI score;
     public RectTransform scoreUIVisuals;
@@ -37,26 +37,33 @@ public class UIGame : MonoBehaviour, IDynamicUI
         scoreUIText.anchoredPosition += new Vector2(-12.9f, 128f);
     }
 
-    public void RefreshLoopLevelSprite(int iLoopLevel)
+    public void RefreshLoopLevelText(int iLoopLevel)
     {
-        Image img = scoreUIVisuals.GetComponent<Image>();
-        if (img == null)
-            return;
         switch (iLoopLevel)
         {
             case 1:
-                img.sprite = loopLevel1Sprite;
+                handle_UILoopInfo.UpdateLoopLevelText("I");
                 break;
             case 2:
-                img.sprite = loopLevel2Sprite;
+                handle_UILoopInfo.UpdateLoopLevelText("II");
                 break;
             case 3:
-                img.sprite = loopLevel3Sprite;
+                handle_UILoopInfo.UpdateLoopLevelText("III");
                 break;
             default:
-                img.sprite = loopLevel0Sprite;
+                handle_UILoopInfo.UpdateLoopLevelText("D");
                 break;
         }
+    }
+
+    public void RefreshLoopStage(int iIndex, MiniGameSuccessState iState)
+    {
+        handle_UILoopInfo.TurnOnLight(iIndex, iState);
+    }
+
+    public void ResetLoopStage()
+    {
+        handle_UILoopInfo.TurnOffLights();
     }
 
     public void Init()
@@ -67,6 +74,7 @@ public class UIGame : MonoBehaviour, IDynamicUI
 
         ShowMiniGameMode(false);
         ShowSuccessArea(false);
+        handle_UILoopInfo.Init();
         Refresh();
     }
 
