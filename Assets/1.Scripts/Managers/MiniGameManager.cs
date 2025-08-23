@@ -21,6 +21,7 @@ public class MiniGameManager : MonoBehaviour, IManager
     public UnityEvent<int> OnScoreGainCB;
     public UnityEvent OnLoopComplete;
     public UnityEvent OnMiniGameComplete;
+    public UnityEvent OnMiniGameTransitionCB;
     public UnityEvent<bool, float> ShowPostGameUICB;
     public LayerManager2D LM2D;
     public PlayerController PC;
@@ -95,11 +96,12 @@ public class MiniGameManager : MonoBehaviour, IManager
         MGLoop.Current.IsInPostGame = true;
 
         float miniGameDuration = GameData.Get.gameSettings.MiniGameTime - gameClock.GetElapsedTime();
-        MGLoop.Current.successState = (miniGameDuration > GameData.Get.gameSettings.MiniGameTime) ?
+        MGLoop.Current.successState = (gameClock.GetElapsedTime() > GameData.Get.gameSettings.MiniGameTime) ?
             MiniGameSuccessState.FAILED : MiniGameSuccessState.PASSED;
 
         ShowPostGameUICB.Invoke(true, miniGameDuration);
-        UI.RefreshLoopStage(MGLoop.index, MGLoop.Current.successState);
+        OnMiniGameComplete.Invoke();
+        //UI.RefreshLoopStage(MGLoop.index, MGLoop.Current.successState);
 
         OnScoreGainCB.Invoke(1);
 
@@ -109,21 +111,23 @@ public class MiniGameManager : MonoBehaviour, IManager
     async void DelayedNext()
     {
         await Task.Delay(GameData.GetSettings.PostMiniGameLatchInMs);
+
         Next();
     }
 
-    void Next()
+    async void Next()
     {
         Stop();
+        
         if (!MGLoop.MoveNext())
         {
             OnLoopComplete.Invoke();
             MGLoop.Reset();
         }
-        else
-        {
-            OnMiniGameComplete.Invoke();
-        }
+
+        OnMiniGameTransitionCB.Invoke();
+        await Task.Delay(GameData.GetSettings.PreMiniGameLatchInMs);
+
         Play();
     }
 

@@ -9,6 +9,7 @@ public class UIGame : MonoBehaviour, IDynamicUI
     public TextMeshProUGUI miniGameDesc;
     public RectTransform infoArea;
     public UILoopInfo handle_UILoopInfo;
+    public UIDoorAnim handle_UIDoorAnim;
     [Header("Score")]
     public TextMeshProUGUI score;
     public RectTransform scoreUIVisuals;
@@ -35,6 +36,8 @@ public class UIGame : MonoBehaviour, IDynamicUI
 
         scoreUIText.sizeDelta = new Vector2(158.78f, 200f);
         scoreUIText.anchoredPosition += new Vector2(-12.9f, 128f);
+
+        handle_UIDoorAnim.Init();
     }
 
     public void RefreshLoopLevelText(int iLoopLevel)
@@ -83,6 +86,7 @@ public class UIGame : MonoBehaviour, IDynamicUI
         miniGameClock.enabled = iState;
         hpClock.enabled = iState;
         score.enabled = iState;
+        handle_UIDoorAnim.OpenAnim();
     }
 
     public void ShowSuccessArea(bool iState, float iTime = 0f)
@@ -103,5 +107,15 @@ public class UIGame : MonoBehaviour, IDynamicUI
 
         successTimeStr += iTime.ToString("#0.0");
         successTimeTxt.text = successTimeStr;
+    }
+
+    public void InterStageAnimation()
+    {
+        handle_UIDoorAnim.ClapAnim();
+    }
+
+    public void GameStartAnim()
+    {
+        handle_UIDoorAnim.OpenAnim();
     }
 }

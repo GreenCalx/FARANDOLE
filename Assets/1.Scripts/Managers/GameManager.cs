@@ -57,6 +57,7 @@ public class GameManager : MonoBehaviour
         MGM.OnScoreGainCB.AddListener(playerData.AddScore);
         MGM.OnLoopComplete.AddListener(LevelUp);
         MGM.OnMiniGameComplete.AddListener(OnMiniGameCompletion);
+        MGM.OnMiniGameTransitionCB.AddListener(OnMiniGameTransition);
         MGM.ShowPostGameUICB.AddListener(UI.ShowSuccessArea);
     }
 
@@ -66,6 +67,7 @@ public class GameManager : MonoBehaviour
         MGM.OnScoreGainCB.RemoveListener(playerData.AddScore);
         MGM.OnLoopComplete.RemoveListener(LevelUp);
         MGM.OnMiniGameComplete.RemoveListener(OnMiniGameCompletion);
+        MGM.OnMiniGameTransitionCB.RemoveListener(OnMiniGameTransition);
         MGM.ShowPostGameUICB.RemoveListener(UI.ShowSuccessArea);
     }
 
@@ -77,6 +79,7 @@ public class GameManager : MonoBehaviour
             inst_UIGameOver = null;
         }
         InitCallbacks();
+        
         MGM.Play();
         UI.ShowMiniGameMode(true);
         GameStarted = true;
@@ -115,10 +118,13 @@ public class GameManager : MonoBehaviour
 
     public void OnMiniGameCompletion()
     {
-        // level switch animation
-
         // UI feedback
         UI.RefreshLoopStage(MGM.MGLoop.index, MGM.MGLoop.Current.successState);
+    }
+
+    public void OnMiniGameTransition()
+    {
+        UI.InterStageAnimation();
     }
 
     void LevelUp()
