@@ -34,8 +34,9 @@ public class DogPetMiniGame : MiniGame
     public override void Win()
     {
         PC.RemoveTapTracker(inst_dogHead);
-        inst_dogHead.SR.sprite = inst_dogHead.onWinSprite;
         inst_dogHead.StopAnim();
+        inst_dogHead.SR.sprite = inst_dogHead.onWinSprite;
+        inst_dogHead.FadeOutAnim();
         MGM.WinMiniGame();
     }
     public override void Lose()

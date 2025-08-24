@@ -11,14 +11,14 @@ public class UITitle : MonoBehaviour
     public RectTransform handle_UISettings;
     public RectTransform handle_backBtn;
     [Header("Title base buttons")]
-    public Button playBtn;
-    public Button highScoresBtn;
-    public Button settingsBtn;
-    public Button backBtn;
+    public UIButton playBtn;
+    public UIButton highScoresBtn;
+    public UIButton settingsBtn;
+    public UIButton backBtn;
     [Header("Game Modes Buttons")]
-    public Button randomSeedBtn;
-    public Button dailySeedBtn;
-    public Button sprintBtn;
+    public UIButton randomSeedBtn;
+    public UIButton dailySeedBtn;
+    public UIButton sprintBtn;
     [Header("High Scores UI")]
     
     [Header("Others")]
@@ -42,15 +42,15 @@ public class UITitle : MonoBehaviour
 
     void Start()
     {
-        playBtn?.onClick.AddListener(() => ShowGameModes());
-        highScoresBtn?.onClick.AddListener(() => ShowHighScores());
-        settingsBtn?.onClick.AddListener(() => ShowSettings());
+        playBtn?.clickCallback.AddListener(() => ShowGameModes());
+        highScoresBtn?.clickCallback.AddListener(() => ShowHighScores());
+        settingsBtn?.clickCallback.AddListener(() => ShowSettings());
 
-        randomSeedBtn?.onClick.AddListener(() => StartRandomSeed());
-        dailySeedBtn?.onClick.AddListener(() => StartDailySeed());
-        sprintBtn?.onClick.AddListener(() => StartSprint());
+        randomSeedBtn?.clickCallback.AddListener(() => StartRandomSeed());
+        dailySeedBtn?.clickCallback.AddListener(() => StartDailySeed());
+        sprintBtn?.clickCallback.AddListener(() => StartSprint());
 
-        backBtn?.onClick.AddListener(() => BackToTitle());
+        backBtn?.clickCallback.AddListener(() => BackToTitle());
 
         DisableAll();
     }

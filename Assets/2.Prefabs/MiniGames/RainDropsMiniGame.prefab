@@ -110,13 +110,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ID: 3
+  orientationRequirement: 0
+  tags: 
   MGM: {fileID: 0}
   PC: {fileID: 0}
   PG: {fileID: 0}
   IsActiveMiniGame: 0
   IsInPostGame: 0
-  orientationRequirement: 0
-  tags: 
+  successState: 0
   prefab_walker: {fileID: 4773738385027529234, guid: 171dd2d1f34039044bd59fc85fee652a, type: 3}
   prefab_rainDrop: {fileID: 2458555544616029665, guid: 86b86ba1c422c254bbf42cbf57a75b46, type: 3}
   handle_startLine: {fileID: 4505926212035375425}
@@ -225,11 +226,15 @@ PrefabInstance:
     - target: {fileID: 7116723956480292107, guid: b8cb1f366d1fb97439d154490ed3a665, type: 3}
       propertyPath: m_fontAsset
       value: 
-      objectReference: {fileID: 11400000, guid: 359063760e6adad4786cc4134c8a6f38, type: 2}
+      objectReference: {fileID: 11400000, guid: 90ed94fb61b01f848af4a30eddcaf9e9, type: 2}
+    - target: {fileID: 7116723956480292107, guid: b8cb1f366d1fb97439d154490ed3a665, type: 3}
+      propertyPath: m_fontStyle
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7116723956480292107, guid: b8cb1f366d1fb97439d154490ed3a665, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 7471852602778573227, guid: 359063760e6adad4786cc4134c8a6f38, type: 2}
+      objectReference: {fileID: 8686306176258706399, guid: 90ed94fb61b01f848af4a30eddcaf9e9, type: 2}
     - target: {fileID: 7116723956480292107, guid: b8cb1f366d1fb97439d154490ed3a665, type: 3}
       propertyPath: m_hasFontAssetChanged
       value: 0
@@ -237,11 +242,15 @@ PrefabInstance:
     - target: {fileID: 8290951394142740523, guid: b8cb1f366d1fb97439d154490ed3a665, type: 3}
       propertyPath: m_fontAsset
       value: 
-      objectReference: {fileID: 11400000, guid: 359063760e6adad4786cc4134c8a6f38, type: 2}
+      objectReference: {fileID: 11400000, guid: 90ed94fb61b01f848af4a30eddcaf9e9, type: 2}
+    - target: {fileID: 8290951394142740523, guid: b8cb1f366d1fb97439d154490ed3a665, type: 3}
+      propertyPath: m_fontStyle
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8290951394142740523, guid: b8cb1f366d1fb97439d154490ed3a665, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 7471852602778573227, guid: 359063760e6adad4786cc4134c8a6f38, type: 2}
+      objectReference: {fileID: 8686306176258706399, guid: 90ed94fb61b01f848af4a30eddcaf9e9, type: 2}
     - target: {fileID: 8290951394142740523, guid: b8cb1f366d1fb97439d154490ed3a665, type: 3}
       propertyPath: m_hasFontAssetChanged
       value: 0

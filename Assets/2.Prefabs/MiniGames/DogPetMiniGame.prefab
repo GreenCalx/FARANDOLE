@@ -169,8 +169,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 10
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 359063760e6adad4786cc4134c8a6f38, type: 2}
-  m_sharedMaterial: {fileID: 7471852602778573227, guid: 359063760e6adad4786cc4134c8a6f38, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9ae68f842e7f6c0418a80e0781feafb3, type: 2}
+  m_sharedMaterial: {fileID: -8059723878865950534, guid: 9ae68f842e7f6c0418a80e0781feafb3, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -284,12 +284,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ID: 1
+  orientationRequirement: 0
+  tags: 
   MGM: {fileID: 0}
   PC: {fileID: 0}
   PG: {fileID: 0}
   IsActiveMiniGame: 0
   IsInPostGame: 0
-  orientationRequirement: 0
-  tags: 
+  successState: 0
   prefab_dogHead: {fileID: 2552087635930286327, guid: c4141d031335370439c23e6e7c103037, type: 3}
   UIworld_petCounter: {fileID: 5601667270289216680}

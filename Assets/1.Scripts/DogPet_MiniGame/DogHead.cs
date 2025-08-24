@@ -13,6 +13,9 @@ public class DogHead : MonoBehaviour, ITapTracker
     public Sprite tapSprite;
     public Sprite onWinSprite;
     public float tapAnimDuration = 0.1f;
+    [Header("Pop Out Anim")]
+    public ParticleSystem PS;
+    public float torque = 10f;
     Coroutine tapAnimCo;
     Vector3 baseScale;
     Vector3 animScale;
@@ -26,9 +29,19 @@ public class DogHead : MonoBehaviour, ITapTracker
         animScale = baseScale * 0.9f;
     }
 
+    void OnDestroy()
+    {
+        if (tapAnimCo != null)
+        {
+            StopCoroutine(tapAnimCo);
+            tapAnimCo = null;
+        }
+    }
+
     public void StopAnim()
     {
         StopCoroutine(tapAnimCo);
+        tapAnimCo = null;
     }
     public void OnTap(Vector2 iVec2)
     {
@@ -60,12 +73,40 @@ public class DogHead : MonoBehaviour, ITapTracker
         {
             float frac = (Time.time - startTime) / tapAnimDuration;
             if (frac < 0.5f)
-                SR.transform.localScale = Vector3.Lerp(baseScale, animScale, frac*2);
+                SR.transform.localScale = Vector3.Lerp(baseScale, animScale, frac * 2);
             else
                 SR.transform.localScale = Vector3.Lerp(animScale, baseScale, frac);
             yield return null;
         }
         SR.transform.localScale = baseScale;
         SR.sprite = idleSprite;
+    }
+
+    public void FadeOutAnim()
+    {
+        if (tapAnimCo != null)
+            return;
+        tapAnimCo = StartCoroutine(FadeOutAnimCo());
+    }
+
+    IEnumerator FadeOutAnimCo()
+    {
+        float animationDuration = GameData.GetSettings.PostMiniGameLatchInMs / 1000f;
+        Vector3 baseScale = transform.localScale;
+        rb2d.linearVelocity = Vector3.zero;
+        rb2d.constraints = RigidbodyConstraints2D.FreezePosition;
+        // spin
+
+        // shrink to zero scale
+        float startAnimTime = Time.time;
+        float lerpFactor = 1f;
+        while (lerpFactor > 0f)
+        {
+            rb2d.AddTorque(torque, ForceMode2D.Impulse);
+
+            lerpFactor = 1f - ((Time.time - startAnimTime) / animationDuration);
+            transform.localScale = baseScale * lerpFactor;
+            yield return null;
+        }
     }
 }

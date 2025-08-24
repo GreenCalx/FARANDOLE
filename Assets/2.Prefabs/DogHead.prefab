@@ -143,6 +143,8 @@ MonoBehaviour:
   tapSprite: {fileID: 7260491879129262532, guid: 4a4441b679e07144eab55f50a85784dd, type: 3}
   onWinSprite: {fileID: -7272982623699810399, guid: a8f01bfb6433e3b4c9f309ba98d680cd, type: 3}
   tapAnimDuration: 0.2
+  PS: {fileID: 0}
+  torque: 0.14
 --- !u!50 &31922092679153987
 Rigidbody2D:
   serializedVersion: 5

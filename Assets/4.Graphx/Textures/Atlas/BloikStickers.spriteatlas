@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: BloikStickers
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 1122011520763072041, guid: f8ad2c0f53ddeb04f92f1a0b1090a897, type: 3}
+    - {fileID: 7260491879129262532, guid: 4a4441b679e07144eab55f50a85784dd, type: 3}
+    - {fileID: -7272982623699810399, guid: a8f01bfb6433e3b4c9f309ba98d680cd, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+    packedSpriteRenderDataKeys:
+    - 4a4441b679e07144eab55f50a85784dd: 7260491879129262532
+    - a8f01bfb6433e3b4c9f309ba98d680cd: -7272982623699810399
+    - f8ad2c0f53ddeb04f92f1a0b1090a897: 1122011520763072041
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 7260491879129262532, guid: 4a4441b679e07144eab55f50a85784dd, type: 3}
+  - {fileID: -7272982623699810399, guid: a8f01bfb6433e3b4c9f309ba98d680cd, type: 3}
+  - {fileID: 1122011520763072041, guid: f8ad2c0f53ddeb04f92f1a0b1090a897, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - zeik_pet_1
+  - zeik_tongue_0
+  - zeik_idle_0
+  m_RenderDataMap: {}
+  m_Tag: BloikStickers
+  m_IsVariant: 0
