@@ -30,15 +30,6 @@ public class LayerManager2D : MonoBehaviour, IManager
             }
             nextSlot = 1;
         }
-        public void PlaceRoot(Renderer iRenderer)
-        {
-            if (renderers[0] != null)
-            {
-                Debug.LogWarning("Replacing Root in LayerManager2D. Should not happen.");
-            }
-            iRenderer.sortingOrder = min;
-            renderers[0] = iRenderer;
-        }
 
         public void PlaceInReserve(Renderer iRenderer)
         {
@@ -48,6 +39,7 @@ public class LayerManager2D : MonoBehaviour, IManager
                 {
                     iRenderer.sortingOrder = min+i;
                     renderers[i] = iRenderer;
+                    Debug.Log("LM2D Reserved : " + renderers[i].gameObject.name + " sorting order : " + renderers[i].sortingOrder);
                     return;
                 }
             }
@@ -58,6 +50,7 @@ public class LayerManager2D : MonoBehaviour, IManager
         {
             iRenderer.sortingOrder = min + nextSlot;
             renderers[nextSlot] = iRenderer;
+            Debug.Log("LM2D Alloc : " + renderers[nextSlot].gameObject.name + " sorting order : " + renderers[nextSlot].sortingOrder);
             nextSlot++;
         }
     }
@@ -91,19 +84,9 @@ public class LayerManager2D : MonoBehaviour, IManager
         objectLayer.PlaceNew(iRenderer);
     }
 
-    public void PlaceForgroundRoot(Renderer iRenderer)
-    {
-        forgroundLayer.PlaceRoot(iRenderer);
-    }
-
     public void PlaceForgroundReserve(Renderer iRenderer)
     {
         forgroundLayer.PlaceInReserve(iRenderer);
-    }
-
-    public void PlaceBackgroundRoot(Renderer iRenderer)
-    {
-        backgroundLayer.PlaceRoot(iRenderer);
     }
 
     public void PlaceBackgroundReserve(Renderer iRenderer)

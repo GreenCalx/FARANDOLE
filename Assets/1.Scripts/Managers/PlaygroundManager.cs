@@ -135,10 +135,11 @@ public class PlaygroundManager : MonoBehaviour, IManager
         doorAnimation.Init(doorLeft.transform, doorRight.transform, bounds.size.x/2f);
         doorAnimation.ForceOpen();
 
-        LM2D.PlaceForgroundRoot(go_fg.GetComponent<Renderer>());
         LM2D.PlaceForgroundReserve(doorLeft.GetComponent<Renderer>());
         LM2D.PlaceForgroundReserve(doorRight.GetComponent<Renderer>());
-        LM2D.PlaceBackgroundRoot(go_playfield.GetComponent<Renderer>());
+        LM2D.PlaceForgroundReserve(go_fg.GetComponent<Renderer>());
+
+        LM2D.PlaceBackgroundReserve(go_playfield.GetComponent<Renderer>());
 
         ResetAnimation();
     }
