@@ -5,22 +5,24 @@ public class LayerManager2D : MonoBehaviour, IManager
 {
     internal class Layer
     {
-        public Layer(int iMin, int iMax)
+        public Layer(int iMin, int iMax, int iReservedSize = 5)
         {
-            min = iMin;
+            reservedSize = iReservedSize;
+            min = iMin + iReservedSize;
             max = iMax;
             size = Mathf.Abs(Mathf.Abs(iMax) - Mathf.Abs(iMin));
             renderers = new Renderer[size];
-            nextSlot = 1;
+            nextSlot = reservedSize + 1;
         }
         public Renderer[] renderers;
+        public int reservedSize;
         public int min, max;
         public int size;
         public int nextSlot;
 
         public void Clear()
         {
-            int i = 1;
+            int i = reservedSize + 1;
             while (renderers[i] != null)
             {
                 renderers[i] = null;
@@ -37,6 +39,21 @@ public class LayerManager2D : MonoBehaviour, IManager
             iRenderer.sortingOrder = min;
             renderers[0] = iRenderer;
         }
+
+        public void PlaceInReserve(Renderer iRenderer)
+        {
+            for (int i = 0; i < reservedSize; i++)
+            {
+                if (renderers[i] == null)
+                {
+                    iRenderer.sortingOrder = min+i;
+                    renderers[i] = iRenderer;
+                    return;
+                }
+            }
+            Debug.LogWarning("Failed to place in reserve");
+        }
+
         public void PlaceNew(Renderer iRenderer)
         {
             iRenderer.sortingOrder = min + nextSlot;
@@ -79,9 +96,19 @@ public class LayerManager2D : MonoBehaviour, IManager
         forgroundLayer.PlaceRoot(iRenderer);
     }
 
+    public void PlaceForgroundReserve(Renderer iRenderer)
+    {
+        forgroundLayer.PlaceInReserve(iRenderer);
+    }
+
     public void PlaceBackgroundRoot(Renderer iRenderer)
     {
         backgroundLayer.PlaceRoot(iRenderer);
+    }
+
+    public void PlaceBackgroundReserve(Renderer iRenderer)
+    {
+        backgroundLayer.PlaceInReserve(iRenderer);
     }
 
     public void PlaceForground(Renderer iRenderer)

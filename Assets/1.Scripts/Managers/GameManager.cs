@@ -123,16 +123,15 @@ public class GameManager : MonoBehaviour
         UI.RefreshLoopStage(MGM.MGLoop.index, MGM.MGLoop.Current.successState);
     }
 
-    public void OnMiniGameTransition()
+    public async void OnMiniGameTransition()
     {
-        //UI.InterStageAnimation();
-        PG.ClearPlaygroundAnim();
+        // nothing ?
     }
 
     void OnLoopCompletion()
     {
         playerData.loopLevel++;
-        
+
         bool loopSuccess = MGM.MGLoop.IsLoopPassed();
 
         // Animate according to LoopSuccess

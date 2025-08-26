@@ -117,11 +117,15 @@ public class MiniGameManager : MonoBehaviour, IManager
     {
         await Task.Delay(GameData.GetSettings.PostMiniGameLatchInMs);
 
+        OnMiniGameTransitionCB.Invoke();
+        //Stop();
+
         Next();
     }
 
     async void Next()
     {
+        await PG.ClosePlaygroundAnim();
         Stop();
 
         if (!MGLoop.MoveNext())
@@ -130,9 +134,10 @@ public class MiniGameManager : MonoBehaviour, IManager
             MGLoop.Reset();
             await Task.Delay(GameData.GetSettings.LoopCompleteLatchInMs);
         }
-        OnMiniGameTransitionCB.Invoke();
-        await Task.Delay(GameData.GetSettings.PreMiniGameLatchInMs);
 
+        //await Task.Delay(GameData.GetSettings.PreMiniGameLatchInMs);
+
+        await PG.OpenPlaygroundAnim();
         Play();
     }
 

@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.Rendering.PostProcessing;
+using System.Threading.Tasks;
 using static Utils;
 
 public class PlaygroundManager : MonoBehaviour, IManager
@@ -27,6 +28,7 @@ public class PlaygroundManager : MonoBehaviour, IManager
     MeshRenderer FG_MR, PF_MR;
     Coroutine AnimationCoroutine;
     LayerManager2D LM2D;
+    MiniGameManager MGM;
     public float height
     {
         get
@@ -48,6 +50,7 @@ public class PlaygroundManager : MonoBehaviour, IManager
     public void Init(GameManager iGameManager)
     {
         LM2D = iGameManager.LM2D;
+        MGM = iGameManager.MGM;
 
         InitColorGrading();
         BuildPlayground();
@@ -133,6 +136,8 @@ public class PlaygroundManager : MonoBehaviour, IManager
         doorAnimation.ForceOpen();
 
         LM2D.PlaceForgroundRoot(go_fg.GetComponent<Renderer>());
+        LM2D.PlaceForgroundReserve(doorLeft.GetComponent<Renderer>());
+        LM2D.PlaceForgroundReserve(doorRight.GetComponent<Renderer>());
         LM2D.PlaceBackgroundRoot(go_playfield.GetComponent<Renderer>());
 
         ResetAnimation();
@@ -181,7 +186,19 @@ public class PlaygroundManager : MonoBehaviour, IManager
 
     public void ClearPlaygroundAnim()
     {
+        // doorAnimation.OnCloseCB.AddListener(()=> MGM.Stop());
+        // doorAnimation.OnOpenCB.AddListener( ()=> MGM.Play());
         doorAnimation.ClapAnim();
+    }
+
+    public async Task ClosePlaygroundAnim()
+    {
+        await doorAnimation.CloseCo();
+    }
+
+    public async Task OpenPlaygroundAnim()
+    {
+        await doorAnimation.OpenCo();
     }
 
     public void RefreshMatFromDiff(int iDifficultyLevel)

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using System.Threading.Tasks;
 public class DoorAnim : MonoBehaviour
 {
@@ -12,8 +13,12 @@ public class DoorAnim : MonoBehaviour
     private bool InAnimation;
     Vector3 leftClosedPos, rightClosedPos;
     Vector3 leftOpenPos, rightOpenPos;
+    public UnityEvent OnCloseCB, OnOpenCB;
     public void Init(Transform iLeft, Transform iRight, float iXOffset)
     {
+        OnCloseCB = new UnityEvent();
+        OnOpenCB = new UnityEvent();
+
         half_w = Screen.width / 2f;
         animationDuration = 0.5f * GameData.GetSettings.PreMiniGameLatchInMs / 1000f;
         // leftImage.rectTransform.sizeDelta = new Vector2(half_w, leftImage.rectTransform.sizeDelta.y);
@@ -82,7 +87,7 @@ public class DoorAnim : MonoBehaviour
         DoorCloseAnim();
     }
 
-    async Task OpenCo()
+    public async Task OpenCo()
     {
         float startAnimTime = Time.time;
         while (lerpFactor < 1f)
@@ -97,7 +102,7 @@ public class DoorAnim : MonoBehaviour
         ForceOpen();
     }
 
-    async Task CloseCo()
+    public async Task CloseCo()
     {
         float startAnimTime = Time.time;
         while (lerpFactor > 0f)
@@ -116,7 +121,9 @@ public class DoorAnim : MonoBehaviour
     {
         InAnimation = true;
         await CloseCo();
+        OnCloseCB?.Invoke();
         await OpenCo();
+        OnOpenCB?.Invoke();
         InAnimation = false;
     }
 
