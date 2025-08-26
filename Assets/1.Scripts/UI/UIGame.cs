@@ -10,6 +10,7 @@ public class UIGame : MonoBehaviour, IDynamicUI
     public RectTransform infoArea;
     public UILoopInfo handle_UILoopInfo;
     public UIDoorAnim handle_UIDoorAnim;
+    public UILoopCompleteAnimation handle_animLoopSuccess; 
     [Header("Score")]
     public TextMeshProUGUI score;
     public RectTransform scoreUIVisuals;
@@ -21,7 +22,7 @@ public class UIGame : MonoBehaviour, IDynamicUI
 
 
     [Header("Success")]
-    public RectTransform successArea;
+    public UIStageClearAnimation handle_animStageClear;
     public TextMeshProUGUI successTimeTxt;
     public Color successTimePositiveColor;
     public Color successTimeNegativeColor;
@@ -76,7 +77,7 @@ public class UIGame : MonoBehaviour, IDynamicUI
         score.text = "";
 
         ShowMiniGameMode(false);
-        ShowSuccessArea(false);
+        //ShowSuccessArea(false);
         handle_UILoopInfo.Init();
         Refresh();
     }
@@ -89,10 +90,9 @@ public class UIGame : MonoBehaviour, IDynamicUI
         handle_UIDoorAnim.OpenAnim();
     }
 
-    public void ShowSuccessArea(bool iState, float iTime = 0f)
+    public void ShowSuccessArea(float iTime = 0f)
     {
-        successArea.gameObject.SetActive(iState);
-
+        //successArea.gameObject.SetActive(iState);
         string successTimeStr = "";
         if (iTime >= 0f)
         {
@@ -107,6 +107,8 @@ public class UIGame : MonoBehaviour, IDynamicUI
 
         successTimeStr += iTime.ToString("#0.0");
         successTimeTxt.text = successTimeStr;
+        
+        handle_animStageClear.Animate();
     }
 
     public void InterStageAnimation()
@@ -117,5 +119,15 @@ public class UIGame : MonoBehaviour, IDynamicUI
     public void GameStartAnim()
     {
         handle_UIDoorAnim.OpenAnim();
+    }
+
+    public void LoopCompleteAnim(MiniGameSuccessState[] iLoopSuccesses)
+    {
+        Color[] colors = new Color[iLoopSuccesses.Length];
+        for (int i = 0; i < iLoopSuccesses.Length; i++)
+        {
+            colors[i] = (iLoopSuccesses[i] == MiniGameSuccessState.PASSED) ? successTimePositiveColor : successTimeNegativeColor;
+        }
+        handle_animLoopSuccess.Animate(colors);
     }
 }

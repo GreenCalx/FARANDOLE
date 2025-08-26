@@ -126,4 +126,12 @@ public class GOBuilder
         return this;
     }
 
+    public GOBuilder WithSpriteRenderer(Sprite iSprite, Material iMat)
+    {
+        SpriteRenderer SR = GO.AddComponent<SpriteRenderer>();
+        SR.material = iMat;
+        SR.sprite = iSprite;
+        return this;
+    }
+
 }

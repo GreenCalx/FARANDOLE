@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.Rendering.PostProcessing;
 using static Utils;
@@ -14,12 +15,15 @@ public class PlaygroundManager : MonoBehaviour, IManager
     public Material diff2Mat;
     public Material diff3Mat;
     public Material playFieldMat;
+    public Material clearAnimMat;
+    public Sprite clearAnimSprite;
     public Texture2D LoopLevelColorGrading;
     public bool AnimateBG = true;
     public float AnimationDeltaTime = 0.5f;
     private float currAnimationDeltaTime;
     List<Color> loopLevelColors;
     GameObject go_colliders, go_fg, go_playfield;
+    DoorAnim doorAnimation;
     MeshRenderer FG_MR, PF_MR;
     Coroutine AnimationCoroutine;
     LayerManager2D LM2D;
@@ -105,10 +109,55 @@ public class PlaygroundManager : MonoBehaviour, IManager
         PF_MR = go_playfield.GetComponent<MeshRenderer>();
         bounds = PF_MR.bounds;
 
+        Mesh halfWidthMesh = CreateHalfWidthMesh();
+        doorAnimation = GOBuilder.Create()
+                        .WithName("DoorAnimation")
+                        .WithParent(transform)
+                        .WithPosition(new Vector2(0f, bounds.min.y))
+                        .Build().AddComponent<DoorAnim>();
+        GameObject doorLeft = GOBuilder.Create()
+                                .WithName("DoorLeft")
+                                .WithParent(doorAnimation.transform)
+                                .WithLocalPosition(new Vector3(bounds.min.x, 0f))
+                                .WithMeshFilter(halfWidthMesh, false)
+                                .WithRenderer(clearAnimMat)
+                                .Build();
+        GameObject doorRight = GOBuilder.Create()
+                                .WithName("DoorRight")
+                                .WithParent(doorAnimation.transform)
+                                .WithLocalPosition(Vector3.zero)
+                                .WithMeshFilter(halfWidthMesh, false)
+                                .WithRenderer(clearAnimMat)
+                                .Build();
+        doorAnimation.Init(doorLeft.transform, doorRight.transform, bounds.size.x/2f);
+        doorAnimation.ForceOpen();
+
         LM2D.PlaceForgroundRoot(go_fg.GetComponent<Renderer>());
         LM2D.PlaceBackgroundRoot(go_playfield.GetComponent<Renderer>());
 
-        AnimationCoroutine = StartCoroutine(AnimateCo());
+        ResetAnimation();
+    }
+
+    public Mesh CreateHalfWidthMesh()
+    {
+        Mesh m = new Mesh();
+        Color c = Color.black;
+
+        VertexHelper vh = new VertexHelper();
+        float half_w = bounds.size.x / 2f;
+        float h      = bounds.size.y;
+
+        vh.AddVert(new Vector3(0, 0), c, new Vector2(0f, 0f));
+        vh.AddVert(new Vector3(0, h), c, new Vector2(0f, 1f));
+        vh.AddVert(new Vector3(half_w, h), c, new Vector2(1f, 1f));
+        vh.AddVert(new Vector3(half_w, 0), c, new Vector2(1f, 0f));
+
+        vh.AddTriangle(0, 1, 2);
+        vh.AddTriangle(2, 3, 0);
+
+        vh.FillMesh(m);
+
+        return m;
     }
 
     void OnDestroy()
@@ -118,6 +167,21 @@ public class PlaygroundManager : MonoBehaviour, IManager
             StopCoroutine(AnimationCoroutine);
             AnimationCoroutine = null;
         }
+    }
+
+    public void ResetAnimation()
+    {
+        if (AnimationCoroutine != null)
+        {
+            StopCoroutine(AnimationCoroutine);
+            AnimationCoroutine = null;
+        }
+        AnimationCoroutine = StartCoroutine(AnimateCo());
+    }
+
+    public void ClearPlaygroundAnim()
+    {
+        doorAnimation.ClapAnim();
     }
 
     public void RefreshMatFromDiff(int iDifficultyLevel)

@@ -7,7 +7,8 @@
         "Unity.InputSystem.ForUI",
         "Google.Play.Games",
         "Unity.InputSystem",
-        "Unity.Postprocessing.Runtime"
+        "Unity.Postprocessing.Runtime",
+        "UnityUIExtensions"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

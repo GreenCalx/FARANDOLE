@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
     {
         MGM.OnHPLossCB.AddListener(playerData.LoseHP);
         MGM.OnScoreGainCB.AddListener(playerData.AddScore);
-        MGM.OnLoopComplete.AddListener(LevelUp);
+        MGM.OnLoopComplete.AddListener(OnLoopCompletion);
         MGM.OnMiniGameComplete.AddListener(OnMiniGameCompletion);
         MGM.OnMiniGameTransitionCB.AddListener(OnMiniGameTransition);
         MGM.ShowPostGameUICB.AddListener(UI.ShowSuccessArea);
@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour
     {
         MGM.OnHPLossCB.RemoveListener(playerData.LoseHP);
         MGM.OnScoreGainCB.RemoveListener(playerData.AddScore);
-        MGM.OnLoopComplete.RemoveListener(LevelUp);
+        MGM.OnLoopComplete.RemoveListener(OnLoopCompletion);
         MGM.OnMiniGameComplete.RemoveListener(OnMiniGameCompletion);
         MGM.OnMiniGameTransitionCB.RemoveListener(OnMiniGameTransition);
         MGM.ShowPostGameUICB.RemoveListener(UI.ShowSuccessArea);
@@ -103,11 +103,12 @@ public class GameManager : MonoBehaviour
 
         // Mini Game Reset
         MGM.Init(this);
-        MGM.LoadLoop();
+        MGM.ResetLoop();
 
         /// playground reset mat
         PG.RefreshMatFromDiff(MGM.miniGamesDifficulty);
         PG.RefreshMatFromLoopLevel(playerData.loopLevel);
+        PG.ResetAnimation();
 
         // UI Reset
         UI.RefreshLoopLevelText(MGM.miniGamesDifficulty);
@@ -124,17 +125,26 @@ public class GameManager : MonoBehaviour
 
     public void OnMiniGameTransition()
     {
-        UI.InterStageAnimation();
+        //UI.InterStageAnimation();
+        PG.ClearPlaygroundAnim();
     }
 
-    void LevelUp()
+    void OnLoopCompletion()
     {
-        if (++playerData.loopLevel % GameData.Get.gameSettings.miniGameLevelUpThreshold == 0)
+        playerData.loopLevel++;
+        
+        bool loopSuccess = MGM.MGLoop.IsLoopPassed();
+
+        // Animate according to LoopSuccess
+        UI.LoopCompleteAnim(MGM.MGLoop.GetSuccessStates());
+
+        if (loopSuccess)
         {
             MGM.RaiseDifficulty();
             PG.RefreshMatFromDiff(MGM.miniGamesDifficulty);
             UI.RefreshLoopLevelText(MGM.miniGamesDifficulty);
         }
+        
         PG.RefreshMatFromLoopLevel(playerData.loopLevel);
         UI.ResetLoopStage();
 

@@ -22,7 +22,7 @@ public class MiniGameManager : MonoBehaviour, IManager
     public UnityEvent OnLoopComplete;
     public UnityEvent OnMiniGameComplete;
     public UnityEvent OnMiniGameTransitionCB;
-    public UnityEvent<bool, float> ShowPostGameUICB;
+    public UnityEvent<float> ShowPostGameUICB;
     public LayerManager2D LM2D;
     public PlayerController PC;
     public PlaygroundManager PG;
@@ -60,6 +60,11 @@ public class MiniGameManager : MonoBehaviour, IManager
         { // Random seed
             prefab_miniGames = GameData.GetMGBank.GetRandom(5);
         }
+        ResetLoop();
+    }
+
+    public void ResetLoop()
+    {
         MGLoop = new MiniGameLoop(this, prefab_miniGames);
     }
 
@@ -70,7 +75,7 @@ public class MiniGameManager : MonoBehaviour, IManager
         MGLoop.Current.Init();
         MGLoop.Current.successState = MiniGameSuccessState.PENDING;
 
-        ShowPostGameUICB.Invoke(false, GameData.Get.gameSettings.MiniGameTime - gameClock.GetElapsedTime());
+        //ShowPostGameUICB.Invoke(GameData.Get.gameSettings.MiniGameTime - gameClock.GetElapsedTime());
         UI.RefreshLoopStage(MGLoop.index, MGLoop.Current.successState);
 
         MGLoop.Current.Play();
@@ -99,7 +104,7 @@ public class MiniGameManager : MonoBehaviour, IManager
         MGLoop.Current.successState = (gameClock.GetElapsedTime() > GameData.Get.gameSettings.MiniGameTime) ?
             MiniGameSuccessState.FAILED : MiniGameSuccessState.PASSED;
 
-        ShowPostGameUICB.Invoke(true, miniGameDuration);
+        ShowPostGameUICB.Invoke(miniGameDuration);
         OnMiniGameComplete.Invoke();
         //UI.RefreshLoopStage(MGLoop.index, MGLoop.Current.successState);
 
@@ -118,13 +123,13 @@ public class MiniGameManager : MonoBehaviour, IManager
     async void Next()
     {
         Stop();
-        
+
         if (!MGLoop.MoveNext())
         {
             OnLoopComplete.Invoke();
             MGLoop.Reset();
+            await Task.Delay(GameData.GetSettings.LoopCompleteLatchInMs);
         }
-
         OnMiniGameTransitionCB.Invoke();
         await Task.Delay(GameData.GetSettings.PreMiniGameLatchInMs);
 

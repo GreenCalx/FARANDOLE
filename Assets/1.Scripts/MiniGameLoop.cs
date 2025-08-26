@@ -8,7 +8,7 @@ public class MiniGameLoop : IEnumerator<MiniGame>
     public MiniGame Current { get { return miniGame; } }
     object IEnumerator.Current { get { return Current; } }
     MiniGame miniGame;
-    List<MiniGame> inst_miniGames;
+    public List<MiniGame> inst_miniGames;
     public int index = 0;
     public MiniGameLoop(MiniGameManager iMGM, List<GameObject> iPrefabs)
     {
@@ -43,6 +43,30 @@ public class MiniGameLoop : IEnumerator<MiniGame>
     public MiniGame At(int i)
     {
         return inst_miniGames[i];
+    }
+    public bool IsLoopPassed()
+    {
+        bool loopSuccess = true;
+        foreach (MiniGame mg in inst_miniGames)
+        {
+            if (mg.successState != MiniGameSuccessState.PASSED)
+            {
+                loopSuccess = false;
+                break;
+            }
+        }
+        return loopSuccess;
+    }
+
+    public MiniGameSuccessState[] GetSuccessStates()
+    {
+        MiniGameSuccessState[] states = new MiniGameSuccessState[inst_miniGames.Count];
+        for (int i=0; i < inst_miniGames.Count; i++)
+        {
+            states[i] = inst_miniGames[i].successState;
+        }
+
+        return states;
     }
     void IDisposable.Dispose()
     {
