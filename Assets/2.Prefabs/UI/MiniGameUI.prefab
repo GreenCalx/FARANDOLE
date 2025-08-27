@@ -2841,7 +2841,7 @@ MonoBehaviour:
 
 '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 90efd869062234847b32cf3a1415f516, type: 2}
+  m_fontAsset: {fileID: 0}
   m_sharedMaterial: {fileID: 4264124117821011626, guid: 90efd869062234847b32cf3a1415f516, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -3443,12 +3443,12 @@ GameObject:
   - component: {fileID: 1599359539207283817}
   - component: {fileID: 8780630923267732781}
   m_Layer: 0
-  m_Name: o_MiniGameSwitchAnim
+  m_Name: x_obsolete_MiniGameSwitchAnim
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1599359539207283817
 RectTransform:
   m_ObjectHideFlags: 0

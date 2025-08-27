@@ -967,6 +967,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   layerSize: 500
+  zDisplace: 1
 --- !u!1 &2091017522
 GameObject:
   m_ObjectHideFlags: 0

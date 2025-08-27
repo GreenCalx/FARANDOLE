@@ -48,7 +48,8 @@ public class BouncySticker : MonoBehaviour, ITapTracker
 
     public void OnTap(Vector2 iVec)
     {
-        if (stickerCollider.bounds.Contains(iVec))
+        Debug.Log("BouncyTap");
+        if (stickerCollider.bounds.Contains( new Vector3(iVec.x, iVec.y, transform.position.z)))
         {
             tapCB.Invoke();
         }
