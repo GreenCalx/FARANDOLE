@@ -39,6 +39,9 @@ public class UIGame : MonoBehaviour, IDynamicUI
         scoreUIText.anchoredPosition += new Vector2(-12.9f, 128f);
 
         handle_UIDoorAnim.Init();
+
+        handle_animLoopSuccess.passedTextColor = successTimePositiveColor;
+        handle_animLoopSuccess.failedTextColor = successTimeNegativeColor;
     }
 
     public void RefreshLoopLevelText(int iLoopLevel)
