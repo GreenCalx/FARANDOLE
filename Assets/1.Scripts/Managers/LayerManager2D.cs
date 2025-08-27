@@ -5,7 +5,7 @@ public class LayerManager2D : MonoBehaviour, IManager
 {
     internal class Layer
     {
-        public Layer(int iMin, int iMax, int iReservedSize = 5)
+        public Layer(int iMin, int iMax, bool iZDisplace, int iReservedSize = 5)
         {
             reservedSize = iReservedSize;
             min = iMin + iReservedSize;
@@ -13,13 +13,16 @@ public class LayerManager2D : MonoBehaviour, IManager
             size = Mathf.Abs(Mathf.Abs(iMax) - Mathf.Abs(iMin));
             renderers = new Renderer[size];
             nextSlot = reservedSize + 1;
+            zDisplace = iZDisplace;
+            zStep = 1f / size;
         }
         public Renderer[] renderers;
         public int reservedSize;
         public int min, max;
         public int size;
         public int nextSlot;
-
+        public bool zDisplace;
+        public float zStep = 0.02f;
         public void Clear()
         {
             int i = reservedSize + 1;
@@ -37,8 +40,9 @@ public class LayerManager2D : MonoBehaviour, IManager
             {
                 if (renderers[i] == null)
                 {
-                    iRenderer.sortingOrder = min+i;
+                    iRenderer.sortingOrder = min + i;
                     renderers[i] = iRenderer;
+                    TryUpdatePosition(i);
                     Debug.Log("LM2D Reserved : " + renderers[i].gameObject.name + " sorting order : " + renderers[i].sortingOrder);
                     return;
                 }
@@ -50,26 +54,36 @@ public class LayerManager2D : MonoBehaviour, IManager
         {
             iRenderer.sortingOrder = min + nextSlot;
             renderers[nextSlot] = iRenderer;
+            TryUpdatePosition(nextSlot);
             Debug.Log("LM2D Alloc : " + renderers[nextSlot].gameObject.name + " sorting order : " + renderers[nextSlot].sortingOrder);
             nextSlot++;
+        }
+
+        public void TryUpdatePosition(int iIndex)
+        {
+            if (!zDisplace)
+                return;
+            Renderer rend = renderers[iIndex];
+            rend.transform.position = new Vector3(rend.transform.position.x, rend.transform.position.y, -zStep * rend.sortingOrder);
         }
     }
     Layer forgroundLayer;
     Layer backgroundLayer;
     Layer objectLayer;
     public int layerSize = 500;
-    
+    public bool zDisplace = true;
+
     #region IManager
     public void Init(GameManager iGameManager)
     {
         // TODO : Everyone in the same native array for contiguity ?
-        backgroundLayer = new Layer(-layerSize, 0);
-        objectLayer = new Layer(0, layerSize);
-        forgroundLayer = new Layer(layerSize, layerSize * 2);
+        backgroundLayer = new Layer(-layerSize, 0, zDisplace);
+        objectLayer = new Layer(0, layerSize, zDisplace);
+        forgroundLayer = new Layer(layerSize, layerSize * 2, zDisplace);
     }
     public bool IsReady()
     {
-        return (forgroundLayer != null) && (backgroundLayer != null) && (objectLayer!=null);
+        return (forgroundLayer != null) && (backgroundLayer != null) && (objectLayer != null);
     }
     #endregion
 
@@ -104,46 +118,8 @@ public class LayerManager2D : MonoBehaviour, IManager
         backgroundLayer.PlaceNew(iRenderer);
     }
 
-    // public void PlaceAtSame(Transform iToPlace, Transform iRelative)
-    // {
-    //     int relative_depth = SeekTransformLayer(iRelative);
-    //     if (relative_depth < 0)
-    //         return; // failed to find iRelative
-    //     Place(iToPlace, relative_depth);
-    // }
+    public void FullRefresh()
+    {
 
-    // public void PlaceAbove(Transform iToPlace, Transform iRelative)
-    // {
-    //     int relative_depth = SeekTransformLayer(iRelative);
-    //     if (relative_depth < 0)
-    //         return;  // Failed to find iRelative
-
-    //     if (relative_depth == 0)
-    //         PlaceTop(iToPlace); // can't go above top
-    //     else
-    //         Place(iToPlace, relative_depth - 1);
-    // }
-
-    // public void PlaceUnder(Transform iToPlace, Transform iRelative)
-    // {
-    //     int relative_depth = SeekTransformLayer(iRelative);
-    //     if (relative_depth < 0)
-    //         return; // Failed to find iRelative
-
-    //     if (relative_depth == MaxDepth - 1)
-    //         PlaceBot(iToPlace); // can't go under bot
-    //     else
-    //         Place(iToPlace, relative_depth + 1);
-    // }
-
-
-    // int SeekTransformLayer(Transform iT)
-    // {
-    //     for (int i = 0; i < MaxDepth; i++)
-    //     {
-    //         if (layers[i].Contains(iT))
-    //             return i;
-    //     }
-    //     return -1;
-    // }
+    }
 }
