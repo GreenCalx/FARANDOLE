@@ -21,6 +21,8 @@ public class UILoopCompleteAnimation : MonoBehaviour
     public List<Image> lightImages;
     public Animator animator;
     [Header("LoopPassed Text")]
+    public const string OnPassedTextValue = "PASSED";
+    public const string OnFailedTextValue = "FAILED";
     public Color passedTextColor;
     public Color failedTextColor;
     public TextMeshProUGUI loopPassedTxt;
@@ -51,7 +53,7 @@ public class UILoopCompleteAnimation : MonoBehaviour
         animator.SetBool(LoopRankUpBoolParm, iRankUp);
 
         await WaitMainAnimTask(1f); // full anim
-        await AnimateTextTask();
+        await AnimateTextTask(iLoopPassed);
 
         ShowRank();
         await WaitShowRankAnimTask(1f);
@@ -120,16 +122,18 @@ public class UILoopCompleteAnimation : MonoBehaviour
 
 
     }
-    async Task AnimateTextTask()
+    async Task AnimateTextTask(bool iLoopPassed)
     {
         // make transparent
+        loopPassedTxt.text = iLoopPassed ? OnPassedTextValue : OnFailedTextValue;
         loopPassedTxt.color = new Color
         (
-            loopPassedTxt.color.r,
-            loopPassedTxt.color.g,
-            loopPassedTxt.color.b,
+            iLoopPassed ? passedTextColor.r : failedTextColor.r,
+            iLoopPassed ? passedTextColor.g : failedTextColor.g,
+            iLoopPassed ? passedTextColor.b : failedTextColor.b,
             0
         );
+
         loopPassedTxt.ForceMeshUpdate();
 
         // fade in text

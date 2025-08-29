@@ -155,6 +155,9 @@ public class MiniGameManager : MonoBehaviour, IManager
         bool rankedUp = false;
         UI.handle_CurrentRank.text = MGLoop.GetRankStr();
 
+        if (!MGLoop.IsLoopPassed())
+            return false;
+            
         switch (MGLoop.rank)
         {
             case LoopRank.I:
