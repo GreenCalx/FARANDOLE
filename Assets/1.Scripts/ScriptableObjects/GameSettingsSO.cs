@@ -9,7 +9,6 @@ public class GameSettingsSO : ScriptableObject
     [Header("GameLoop Tweaks")]
     public int loopSize = 5;
     public float MiniGameTime = 5f;
-    public int MaxMiniGameDifficulty = 3;
     public int miniGameLevelUpThreshold = 2;
     public float MaxTimeScale = 3f;
     public AnimationCurve timeScaleOverLoopLevel;

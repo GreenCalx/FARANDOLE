@@ -15,7 +15,14 @@ public class MiniGameManager : MonoBehaviour, IManager
     //public List<MiniGame> miniGames; // > TODO : Make 'MGLoop' 
     public MiniGameLoop MGLoop;
     public GameClock gameClock;
-    public int miniGamesDifficulty;
+    public int miniGamesDifficulty
+    {
+        get {
+            if (MGLoop==null)
+                return 0;
+            return ((int)MGLoop.rank)+1;
+            }
+    }
     
     public UnityEvent<float> OnHPLossCB;
     public UnityEvent<int> OnScoreGainCB;
@@ -33,7 +40,6 @@ public class MiniGameManager : MonoBehaviour, IManager
     public void Init(GameManager iGameManager)
     {
         gameClock = new GameClock();
-        miniGamesDifficulty = 1;
 
         OnHPLossCB = new UnityEvent<float>();
         PC = iGameManager.PC;
@@ -132,7 +138,10 @@ public class MiniGameManager : MonoBehaviour, IManager
         {
             OnLoopComplete.Invoke();
             MGLoop.Reset();
-            await UI.LoopCompleteAnim(MGLoop.GetSuccessStates());
+
+            await UI.LoopCompleteAnim(MGLoop.GetSuccessStates(), MGLoop.IsLoopPassed(), TryRankUp());
+
+            UI.RefreshLoopLevelText(MGLoop.GetRankStr());
         }
 
         //await Task.Delay(GameData.GetSettings.PreMiniGameLatchInMs);
@@ -141,11 +150,33 @@ public class MiniGameManager : MonoBehaviour, IManager
         Play();
     }
 
-    public void RaiseDifficulty()
+    public bool TryRankUp()
     {
-        if (miniGamesDifficulty >= GameData.GetSettings.MaxMiniGameDifficulty)
-            return;
-        miniGamesDifficulty++;
+        bool rankedUp = false;
+        UI.handle_CurrentRank.text = MGLoop.GetRankStr();
+
+        switch (MGLoop.rank)
+        {
+            case LoopRank.I:
+                MGLoop.RankUp();
+                rankedUp = true;
+                break;
+            case LoopRank.II:
+                MGLoop.RankUp();
+                rankedUp = true;
+                break;
+            case LoopRank.III:
+                // super loop check
+                break;
+            case LoopRank.S:
+                // master loop check
+                break;
+            default:
+                Debug.LogWarning("tryRankUp:: Unkown loop rank : " + (int)MGLoop.rank);
+                break;
+        }
+        UI.handle_NewRank.text = MGLoop.GetRankStr();
+        return rankedUp;
     }
 
     public LoopHighScore GetLoopHighScore()

@@ -27,6 +27,9 @@ public class UIGame : MonoBehaviour, IDynamicUI
     public TextMeshProUGUI successTimeTxt;
     public Color successTimePositiveColor;
     public Color successTimeNegativeColor;
+    [Header("Loop Complete Animation Handles")]
+    public TextMeshProUGUI handle_CurrentRank;
+    public TextMeshProUGUI handle_NewRank;
 
     public void Refresh()
     {
@@ -45,23 +48,9 @@ public class UIGame : MonoBehaviour, IDynamicUI
         handle_animLoopSuccess.failedTextColor = successTimeNegativeColor;
     }
 
-    public void RefreshLoopLevelText(int iLoopLevel)
+    public void RefreshLoopLevelText(string iRankText)
     {
-        switch (iLoopLevel)
-        {
-            case 1:
-                handle_UILoopInfo.UpdateLoopLevelText("I");
-                break;
-            case 2:
-                handle_UILoopInfo.UpdateLoopLevelText("II");
-                break;
-            case 3:
-                handle_UILoopInfo.UpdateLoopLevelText("III");
-                break;
-            default:
-                handle_UILoopInfo.UpdateLoopLevelText("D");
-                break;
-        }
+        handle_UILoopInfo.UpdateLoopLevelText(iRankText);
     }
 
     public void RefreshLoopStage(int iIndex, MiniGameSuccessState iState)
@@ -125,13 +114,13 @@ public class UIGame : MonoBehaviour, IDynamicUI
         handle_UIDoorAnim.OpenAnim();
     }
 
-    public async Task LoopCompleteAnim(MiniGameSuccessState[] iLoopSuccesses)
+    public async Task LoopCompleteAnim(MiniGameSuccessState[] iLoopSuccesses, bool iLoopPassed, bool iRankUp)
     {
         Color[] colors = new Color[iLoopSuccesses.Length];
         for (int i = 0; i < iLoopSuccesses.Length; i++)
         {
             colors[i] = (iLoopSuccesses[i] == MiniGameSuccessState.PASSED) ? successTimePositiveColor : successTimeNegativeColor;
         }
-        await handle_animLoopSuccess.Animate(colors);
+        await handle_animLoopSuccess.Animate(colors, iLoopPassed, iRankUp);
     }
 }

@@ -228,19 +228,19 @@ public class PlaygroundManager : MonoBehaviour, IManager
         await doorAnimation.OpenCo();
     }
 
-    public void RefreshMatFromDiff(int iDifficultyLevel)
+    public void RefreshMatFromDiff(LoopRank iLoopRank)
     {
         if (FG_MR == null)
             return;
-        switch (iDifficultyLevel)
+        switch (iLoopRank)
         {
-            case 1:
+            case LoopRank.I:
                 FG_MR.material = diff1Mat;
                 break;
-            case 2:
+            case LoopRank.II:
                 FG_MR.material = diff2Mat;
                 break;
-            case 3:
+            case LoopRank.III:
                 FG_MR.material = diff3Mat;
                 break;
             default:

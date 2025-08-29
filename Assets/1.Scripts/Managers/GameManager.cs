@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
         { yield return null; }
 
         UI.Init();
-        UI.RefreshLoopLevelText(MGM.miniGamesDifficulty);
+        UI.RefreshLoopLevelText(MGM.MGLoop.GetRankStr());
 
         StartGame();
     }
@@ -106,12 +106,12 @@ public class GameManager : MonoBehaviour
         MGM.ResetLoop();
 
         /// playground reset mat
-        PG.RefreshMatFromDiff(MGM.miniGamesDifficulty);
+        PG.RefreshMatFromDiff(MGM.MGLoop.rank);
         PG.RefreshMatFromLoopLevel(playerData.loopLevel);
         PG.ResetAnimation();
 
         // UI Reset
-        UI.RefreshLoopLevelText(MGM.miniGamesDifficulty);
+        UI.RefreshLoopLevelText(MGM.MGLoop.GetRankStr());
 
         // Start game again
         StartGame();
@@ -135,13 +135,10 @@ public class GameManager : MonoBehaviour
         bool loopSuccess = MGM.MGLoop.IsLoopPassed();
 
         // Animate according to LoopSuccess
-        //UI.LoopCompleteAnim(MGM.MGLoop.GetSuccessStates());
-
         if (loopSuccess)
         {
-            MGM.RaiseDifficulty();
-            PG.RefreshMatFromDiff(MGM.miniGamesDifficulty);
-            UI.RefreshLoopLevelText(MGM.miniGamesDifficulty);
+            PG.RefreshMatFromDiff(MGM.MGLoop.rank);
+            UI.RefreshLoopLevelText(MGM.MGLoop.GetRankStr());
         }
         
         PG.RefreshMatFromLoopLevel(playerData.loopLevel);

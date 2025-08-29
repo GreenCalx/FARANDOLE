@@ -11,8 +11,13 @@ public class UILoopCompleteAnimation : MonoBehaviour
 {
     public const string LoopPassedTrigger = "LoopPassed";
     public const string LoopHideTrigger = "Hide";
+    public const string LoopShowRankTrigger = "ShowRank";
+    public const string LoopRankUpBoolParm = "RankingUp";
     public const string LoopPassedAnimStateName = "OnLoopPassed";
     public const string LoopHideAnimStateName = "OnLoopHide";
+    public const string LoopHideFromRankUpAnimStateName = "OnLoopHideFromRankUp";
+    public const string LoopShowRankStateName = "OnLoopShowRank";
+    public const string LoopRankUpStateName = "OnLoopRankUp";
     public List<Image> lightImages;
     public Animator animator;
     [Header("LoopPassed Text")]
@@ -34,7 +39,7 @@ public class UILoopCompleteAnimation : MonoBehaviour
         );
         loopPassedTxt.ForceMeshUpdate();
     }
-    public async Task Animate(Color[] iLightColors)
+    public async Task Animate(Color[] iLightColors, bool iLoopPassed, bool iRankUp)
     {
         for (int i = 0; i < iLightColors.Length; i++)
         {
@@ -43,18 +48,49 @@ public class UILoopCompleteAnimation : MonoBehaviour
             lightImages[i].color = iLightColors[i];
         }
         animator.SetTrigger(LoopPassedTrigger);
+        animator.SetBool(LoopRankUpBoolParm, iRankUp);
 
         await WaitMainAnimTask(1f); // full anim
         await AnimateTextTask();
 
+        ShowRank();
+        await WaitShowRankAnimTask(1f);
+        if (iRankUp)
+        {
+            await WaitRankUpAnimTask(1f);
+        }
+
         await Task.Delay(GameData.GetSettings.LoopCompleteAfterAnimDisplayTimeMs);
         Hide();
-        await WaitHideAnimTask(1f); // half anim
-    }
 
+        if (iRankUp)
+            await WaitHideFromRankUpAnimTask(0.5f); // half anim
+        else
+            await WaitHideAnimTask(0.5f); // half anim
+    }
+    public void ShowRank()
+    {
+        animator.SetTrigger(LoopShowRankTrigger);
+    }
     public void Hide()
     {
         animator.SetTrigger(LoopHideTrigger);
+    }
+
+    async Task WaitRankUpAnimTask(float iCompletionFrac)
+    {
+        while (!animator.GetCurrentAnimatorStateInfo(0).IsName(LoopRankUpStateName))
+        { await Task.Yield(); }
+        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < iCompletionFrac)
+        { await Task.Yield(); }
+    }
+
+    async Task WaitShowRankAnimTask(float iCompletionFrac)
+    {
+        while (!animator.GetCurrentAnimatorStateInfo(0).IsName(LoopShowRankStateName))
+        { await Task.Yield(); }
+        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < iCompletionFrac)
+        { await Task.Yield(); }
     }
 
     async Task WaitHideAnimTask(float iCompletionFrac)
@@ -62,14 +98,27 @@ public class UILoopCompleteAnimation : MonoBehaviour
         while (!animator.GetCurrentAnimatorStateInfo(0).IsName(LoopHideAnimStateName))
         { await Task.Yield(); }
         while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < iCompletionFrac)
-        { await Task.Yield(); }        
+        { await Task.Yield(); }
     }
+    async Task WaitHideFromRankUpAnimTask(float iCompletionFrac)
+    {
+        while (!animator.GetCurrentAnimatorStateInfo(0).IsName(LoopHideFromRankUpAnimStateName))
+        { await Task.Yield(); }
+        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < iCompletionFrac)
+        { await Task.Yield(); }
+    }
+
     async Task WaitMainAnimTask(float iCompletionFrac)
     {
         while (!animator.GetCurrentAnimatorStateInfo(0).IsName(LoopPassedAnimStateName))
         { await Task.Yield(); }
         while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < iCompletionFrac)
         { await Task.Yield(); }
+    }
+    async Task AnimateRank()
+    {
+
+
     }
     async Task AnimateTextTask()
     {

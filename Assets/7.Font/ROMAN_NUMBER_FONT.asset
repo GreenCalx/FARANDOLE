@@ -107,18 +107,18 @@ MonoBehaviour:
   m_AtlasPopulationMode: 1
   InternalDynamicOS: 0
   m_GlyphTable:
-  - m_Index: 193
+  - m_Index: 44
     m_Metrics:
-      m_Width: 36.953125
-      m_Height: 9.8125
+      m_Width: 23.515625
+      m_Height: 63.015625
       m_HorizontalBearingX: 0
-      m_HorizontalBearingY: 22.59375
-      m_HorizontalAdvance: 39.15625
+      m_HorizontalBearingY: 62.96875
+      m_HorizontalAdvance: 25.703125
     m_GlyphRect:
-      m_X: 10
+      m_X: 129
       m_Y: 10
-      m_Width: 37
-      m_Height: 11
+      m_Width: 24
+      m_Height: 64
     m_Scale: 1
     m_AtlasIndex: 0
     m_ClassDefinitionType: 0
@@ -137,33 +137,33 @@ MonoBehaviour:
     m_Scale: 1
     m_AtlasIndex: 0
     m_ClassDefinitionType: 0
-  - m_Index: 44
+  - m_Index: 193
     m_Metrics:
-      m_Width: 23.515625
-      m_Height: 63.015625
+      m_Width: 36.953125
+      m_Height: 9.8125
       m_HorizontalBearingX: 0
-      m_HorizontalBearingY: 62.96875
-      m_HorizontalAdvance: 25.703125
+      m_HorizontalBearingY: 22.59375
+      m_HorizontalAdvance: 39.15625
     m_GlyphRect:
-      m_X: 129
+      m_X: 10
       m_Y: 10
-      m_Width: 24
-      m_Height: 64
+      m_Width: 37
+      m_Height: 11
     m_Scale: 1
     m_AtlasIndex: 0
     m_ClassDefinitionType: 0
   m_CharacterTable:
   - m_ElementType: 1
-    m_Unicode: 8230
-    m_GlyphIndex: 193
+    m_Unicode: 73
+    m_GlyphIndex: 44
     m_Scale: 1
   - m_ElementType: 1
     m_Unicode: 95
     m_GlyphIndex: 66
     m_Scale: 1
   - m_ElementType: 1
-    m_Unicode: 73
-    m_GlyphIndex: 44
+    m_Unicode: 8230
+    m_GlyphIndex: 193
     m_Scale: 1
   m_AtlasTextures:
   - {fileID: -6957947550117788825}
@@ -16941,7 +16941,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: ROMANUS Atlas Material
-  m_Shader: {fileID: 4800000, guid: 68e6db2ebdc24f95958faec2be5558d6, type: 3}
+  m_Shader: {fileID: 4800000, guid: fe393ace9b354375a9cb14cdbbc28be4, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -16987,7 +16987,7 @@ Material:
     - _BumpFace: 0
     - _BumpOutline: 0
     - _ColorMask: 15
-    - _CullMode: 0
+    - _CullMode: 2
     - _Diffuse: 0.5
     - _FaceDilate: 0
     - _FaceUVSpeedX: 0

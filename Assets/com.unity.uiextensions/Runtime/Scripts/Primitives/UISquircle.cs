@@ -42,7 +42,6 @@ namespace UnityEngine.UI.Extensions
 
         protected override void OnPopulateMesh(VertexHelper vh)
         {
-
             float dx = 0;
             float dy = 0;
 
