@@ -17,6 +17,7 @@ public class PlaygroundManager : MonoBehaviour, IManager
     public Material diff3Mat;
     public Material playFieldMat;
     public Material clearAnimMat;
+    public Material forgroundFrameMat;
     public Sprite clearAnimSprite;
     public Texture2D LoopLevelColorGrading;
     public bool AnimateBG = true;
@@ -29,6 +30,7 @@ public class PlaygroundManager : MonoBehaviour, IManager
     Coroutine AnimationCoroutine;
     LayerManager2D LM2D;
     MiniGameManager MGM;
+    LineRenderer forgroundFrameLR;
     public float height
     {
         get
@@ -135,13 +137,37 @@ public class PlaygroundManager : MonoBehaviour, IManager
         doorAnimation.Init(doorLeft.transform, doorRight.transform, bounds.size.x/2f);
         doorAnimation.ForceOpen();
 
+        forgroundFrameLR = GOBuilder.Create()
+                                    .WithName("ForgroundFrame")
+                                    .WithParent(transform)
+                                    .WithLocalPosition(Vector3.zero)
+                                    .WithLineRenderer(forgroundFrameMat)
+                                    .BuildAs<LineRenderer>();
+
+
         LM2D.PlaceForgroundReserve(doorLeft.GetComponent<Renderer>());
         LM2D.PlaceForgroundReserve(doorRight.GetComponent<Renderer>());
         LM2D.PlaceForgroundReserve(go_fg.GetComponent<Renderer>());
+        LM2D.PlaceForgroundReserve(forgroundFrameLR.GetComponent<Renderer>());
 
         LM2D.PlaceBackgroundReserve(go_playfield.GetComponent<Renderer>());
 
+        UpdateForgroundFrame();
         ResetAnimation();
+    }
+
+    public void UpdateForgroundFrame()
+    {
+        Vector3[] pos = new Vector3[4];
+        pos[0] = new Vector3(bounds.max.x, bounds.max.y, forgroundFrameLR.transform.position.z);
+        pos[1] = new Vector3(bounds.max.x, bounds.min.y, forgroundFrameLR.transform.position.z);
+        pos[2] = new Vector3(bounds.min.x, bounds.min.y, forgroundFrameLR.transform.position.z);
+        pos[3] = new Vector3(bounds.min.x, bounds.max.y, forgroundFrameLR.transform.position.z);
+        forgroundFrameLR.positionCount = 4;
+        forgroundFrameLR.loop = true;
+        forgroundFrameLR.startWidth = 0.05f;
+        forgroundFrameLR.endWidth = 0.05f;
+        forgroundFrameLR.SetPositions(pos);
     }
 
     public Mesh CreateHalfWidthMesh()
@@ -151,7 +177,7 @@ public class PlaygroundManager : MonoBehaviour, IManager
 
         VertexHelper vh = new VertexHelper();
         float half_w = bounds.size.x / 2f;
-        float h      = bounds.size.y;
+        float h = bounds.size.y;
 
         vh.AddVert(new Vector3(0, 0), c, new Vector2(0f, 0f));
         vh.AddVert(new Vector3(0, h), c, new Vector2(0f, 1f));
@@ -226,6 +252,7 @@ public class PlaygroundManager : MonoBehaviour, IManager
     {
         Color c = (iLoopLevel >= loopLevelColors.Count) ? loopLevelColors[loopLevelColors.Count - 1] : loopLevelColors[iLoopLevel];
         FG_MR.material.SetColor("_Color", c);
+        forgroundFrameLR.material.SetColor("_Color", c);
         currAnimationDeltaTime = AnimationDeltaTime / iLoopLevel;
     }
 

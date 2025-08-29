@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 using TMPro;
 
 public class UIGame : MonoBehaviour, IDynamicUI
@@ -124,13 +125,13 @@ public class UIGame : MonoBehaviour, IDynamicUI
         handle_UIDoorAnim.OpenAnim();
     }
 
-    public void LoopCompleteAnim(MiniGameSuccessState[] iLoopSuccesses)
+    public async Task LoopCompleteAnim(MiniGameSuccessState[] iLoopSuccesses)
     {
         Color[] colors = new Color[iLoopSuccesses.Length];
         for (int i = 0; i < iLoopSuccesses.Length; i++)
         {
             colors[i] = (iLoopSuccesses[i] == MiniGameSuccessState.PASSED) ? successTimePositiveColor : successTimeNegativeColor;
         }
-        handle_animLoopSuccess.Animate(colors);
+        await handle_animLoopSuccess.Animate(colors);
     }
 }

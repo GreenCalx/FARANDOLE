@@ -4,12 +4,15 @@ using UnityEngine.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 
 public class UILoopCompleteAnimation : MonoBehaviour
 {
     public const string LoopPassedTrigger = "LoopPassed";
+    public const string LoopHideTrigger = "Hide";
     public const string LoopPassedAnimStateName = "OnLoopPassed";
+    public const string LoopHideAnimStateName = "OnLoopHide";
     public List<Image> lightImages;
     public Animator animator;
     [Header("LoopPassed Text")]
@@ -17,7 +20,7 @@ public class UILoopCompleteAnimation : MonoBehaviour
     public Color failedTextColor;
     public TextMeshProUGUI loopPassedTxt;
     public int RolloverCharacterSpread = 10;
-    public float FadeSpeed = 20.0f;
+    public int FadeSpeed = 20;
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -31,7 +34,7 @@ public class UILoopCompleteAnimation : MonoBehaviour
         );
         loopPassedTxt.ForceMeshUpdate();
     }
-    public void Animate(Color[] iLightColors)
+    public async Task Animate(Color[] iLightColors)
     {
         for (int i = 0; i < iLightColors.Length; i++)
         {
@@ -41,10 +44,34 @@ public class UILoopCompleteAnimation : MonoBehaviour
         }
         animator.SetTrigger(LoopPassedTrigger);
 
-        StartCoroutine(AnimateTextCo());
+        await WaitMainAnimTask(1f); // full anim
+        await AnimateTextTask();
+
+        await Task.Delay(GameData.GetSettings.LoopCompleteAfterAnimDisplayTimeMs);
+        Hide();
+        await WaitHideAnimTask(1f); // half anim
     }
 
-    IEnumerator AnimateTextCo()
+    public void Hide()
+    {
+        animator.SetTrigger(LoopHideTrigger);
+    }
+
+    async Task WaitHideAnimTask(float iCompletionFrac)
+    {
+        while (!animator.GetCurrentAnimatorStateInfo(0).IsName(LoopHideAnimStateName))
+        { await Task.Yield(); }
+        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < iCompletionFrac)
+        { await Task.Yield(); }        
+    }
+    async Task WaitMainAnimTask(float iCompletionFrac)
+    {
+        while (!animator.GetCurrentAnimatorStateInfo(0).IsName(LoopPassedAnimStateName))
+        { await Task.Yield(); }
+        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < iCompletionFrac)
+        { await Task.Yield(); }
+    }
+    async Task AnimateTextTask()
     {
         // make transparent
         loopPassedTxt.color = new Color
@@ -56,14 +83,11 @@ public class UILoopCompleteAnimation : MonoBehaviour
         );
         loopPassedTxt.ForceMeshUpdate();
 
-        yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).IsName(LoopPassedAnimStateName));
-        yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f);
-
         // fade in text
         TMP_TextInfo textInfo = loopPassedTxt.textInfo;
         Color32[] newVertexColors;
         int currentCharacter = 0;
-        int startingCharacterRange  = currentCharacter;
+        int startingCharacterRange = currentCharacter;
         bool endReached = false;
         int characterCount = textInfo.characterCount;
 
@@ -87,10 +111,6 @@ public class UILoopCompleteAnimation : MonoBehaviour
                     startingCharacterRange++;
                     if (startingCharacterRange == characterCount)
                     {
-                        loopPassedTxt.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
-                        //yield return new WaitForSeconds(1.0f);
-                        loopPassedTxt.ForceMeshUpdate();
-                        //yield return new WaitForSeconds(1.0f);
                         currentCharacter = 0;
                         startingCharacterRange = 0;
 
@@ -101,9 +121,9 @@ public class UILoopCompleteAnimation : MonoBehaviour
             loopPassedTxt.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
             if (currentCharacter + 1 < characterCount)
                 currentCharacter++;
-            yield return new WaitForSeconds(0.25f - FadeSpeed * 0.01f);
+            await Task.Delay(25 - FadeSpeed);
         }
-
+        Debug.Log("Text displayed");
     }
 
 }

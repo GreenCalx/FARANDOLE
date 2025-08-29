@@ -132,7 +132,7 @@ public class MiniGameManager : MonoBehaviour, IManager
         {
             OnLoopComplete.Invoke();
             MGLoop.Reset();
-            await Task.Delay(GameData.GetSettings.LoopCompleteLatchInMs);
+            await UI.LoopCompleteAnim(MGLoop.GetSuccessStates());
         }
 
         //await Task.Delay(GameData.GetSettings.PreMiniGameLatchInMs);

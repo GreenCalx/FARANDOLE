@@ -21,6 +21,6 @@ public class GameSettingsSO : ScriptableObject
     [Header("GameFlow Tweaks")]
     public int PostMiniGameLatchInMs = 500;
     public int PreMiniGameLatchInMs = 500;
-    public int LoopCompleteLatchInMs = 2000;
+    public int LoopCompleteAfterAnimDisplayTimeMs = 1000;
 
 }

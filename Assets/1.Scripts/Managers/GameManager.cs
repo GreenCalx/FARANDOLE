@@ -135,7 +135,7 @@ public class GameManager : MonoBehaviour
         bool loopSuccess = MGM.MGLoop.IsLoopPassed();
 
         // Animate according to LoopSuccess
-        UI.LoopCompleteAnim(MGM.MGLoop.GetSuccessStates());
+        //UI.LoopCompleteAnim(MGM.MGLoop.GetSuccessStates());
 
         if (loopSuccess)
         {
