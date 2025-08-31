@@ -30,6 +30,8 @@ public class UIGame : MonoBehaviour, IDynamicUI
     [Header("Loop Complete Animation Handles")]
     public TextMeshProUGUI handle_CurrentRank;
     public TextMeshProUGUI handle_NewRank;
+    [Header("Launch Game")]
+    public UIButton launchGameBtn;
 
     public void Refresh()
     {

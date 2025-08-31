@@ -10,17 +10,19 @@ public class UITitle : MonoBehaviour
     public RectTransform handle_UIHighScores;
     public RectTransform handle_UISettings;
     public RectTransform handle_backBtn;
+    public RectTransform handle_quitBtn;
     [Header("Title base buttons")]
     public UIButton playBtn;
     public UIButton highScoresBtn;
     public UIButton settingsBtn;
     public UIButton backBtn;
+    public UIButton quitBtn;
     [Header("Game Modes Buttons")]
     public UIButton randomSeedBtn;
     public UIButton dailySeedBtn;
     public UIButton sprintBtn;
     [Header("High Scores UI")]
-    
+
     [Header("Others")]
     public string GameScene = "Game";
 
@@ -30,6 +32,8 @@ public class UITitle : MonoBehaviour
         handle_gameModesBtns.gameObject.SetActive(false);
         handle_UIHighScores.gameObject.SetActive(false);
         handle_backBtn.gameObject.SetActive(false);
+
+        handle_quitBtn.gameObject.SetActive(true);
     }
 
     public void EnableHome()
@@ -38,6 +42,8 @@ public class UITitle : MonoBehaviour
         handle_gameModesBtns.gameObject.SetActive(false);
         handle_UIHighScores.gameObject.SetActive(false);
         handle_backBtn.gameObject.SetActive(false);
+
+        handle_quitBtn.gameObject.SetActive(true);
     }
 
     void Start()
@@ -51,6 +57,7 @@ public class UITitle : MonoBehaviour
         sprintBtn?.clickCallback.AddListener(() => StartSprint());
 
         backBtn?.clickCallback.AddListener(() => BackToTitle());
+        quitBtn?.clickCallback.AddListener(() => QuitGame());
 
         DisableAll();
     }
@@ -60,17 +67,21 @@ public class UITitle : MonoBehaviour
         handle_titleBtns.gameObject.SetActive(false);
         handle_gameModesBtns.gameObject.SetActive(true);
         handle_backBtn.gameObject.SetActive(true);
+        handle_quitBtn.gameObject.SetActive(false);
     }
     void ShowHighScores()
     {
         handle_UIHighScores.gameObject.SetActive(true);
         handle_backBtn.gameObject.SetActive(true);
-
+        handle_quitBtn.gameObject.SetActive(false);
+        handle_titleBtns.gameObject.SetActive(false);
     }
     void ShowSettings()
     {
         handle_backBtn.gameObject.SetActive(true);
         handle_UISettings.gameObject.SetActive(true);
+        handle_quitBtn.gameObject.SetActive(false);
+        handle_titleBtns.gameObject.SetActive(false);
     }
 
     void BackToTitle()
@@ -80,6 +91,8 @@ public class UITitle : MonoBehaviour
         handle_gameModesBtns.gameObject.SetActive(false);
         handle_backBtn.gameObject.SetActive(false);
         handle_UISettings.gameObject.SetActive(false);
+
+        handle_quitBtn.gameObject.SetActive(true);
     }
     void StartRandomSeed()
     {
@@ -95,5 +108,11 @@ public class UITitle : MonoBehaviour
     {
         GameData.Get.PickGameMode(GAME_MODE.SPRINT);
         SceneManager.LoadScene(GameScene, LoadSceneMode.Single);
+    }
+
+    void QuitGame()
+    {
+        if (Application.isPlaying)
+            Application.Quit();
     }
 }

@@ -97,7 +97,7 @@ public class PlaygroundManager : MonoBehaviour, IManager
         go_fg = GOBuilder.Create()
                             .WithName("PlaygroundForground")
                             .WithParent(transform)
-                            .WithLocalPosition(new Vector3(0f,0f,-1f))
+                            .WithLocalPosition(new Vector3(0f, 0f, -1f))
                             .WithMeshFilter(FG_Mesh, true)
                             .WithRenderer(diff1Mat)
                             .Build();
@@ -107,7 +107,7 @@ public class PlaygroundManager : MonoBehaviour, IManager
         go_playfield = GOBuilder.Create()
                             .WithName("PlayField")
                             .WithParent(transform)
-                            .WithLocalPosition(new Vector3(0f,0f,1f))
+                            .WithLocalPosition(new Vector3(0f, 0f, 1f))
                             .WithMeshFilter(Playfield_Mesh, true)
                             .WithRenderer(playFieldMat)
                             .Build();
@@ -134,7 +134,7 @@ public class PlaygroundManager : MonoBehaviour, IManager
                                 .WithMeshFilter(halfWidthMesh, false)
                                 .WithRenderer(clearAnimMat)
                                 .Build();
-        doorAnimation.Init(doorLeft.transform, doorRight.transform, bounds.size.x/2f);
+        doorAnimation.Init(doorLeft.transform, doorRight.transform, bounds.size.x / 2f);
         doorAnimation.ForceOpen();
 
         forgroundFrameLR = GOBuilder.Create()
@@ -226,6 +226,11 @@ public class PlaygroundManager : MonoBehaviour, IManager
     public async Task OpenPlaygroundAnim()
     {
         await doorAnimation.OpenCo();
+    }
+
+    public void ForceDoorClose()
+    {
+        doorAnimation.ForceClose();
     }
 
     public void RefreshMatFromDiff(LoopRank iLoopRank)

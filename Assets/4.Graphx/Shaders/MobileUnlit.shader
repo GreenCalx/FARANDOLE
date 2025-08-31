@@ -4,24 +4,28 @@ Shader "XL/MobileUnlit"
     {
         _Color ("Color", Color) = (1, 1, 1, 1)
         _MainTex ("Texture", 2D) = "white" {}
+        _Brightness ("Brightness", Float) = 1
         [Enum(UnityEngine.Rendering.CullMode)] _CullMode("CullMode", Integer) = 1.
         [Enum(Off,0,On,1)] _ZWrite("ZWrite", Int) = 1
-        _AlphaCutoff("AlphaCutoff", Range(0.0, 1.0)) = 0.5
     }
     SubShader
     {
         Tags {
             "Queue" = "AlphaTest"
-            "RenderType"="Opaque"
+            "IgnoreProjector"="True"
+            "RenderType"="TransparentCutout"
             }
         ZWrite [_ZWrite]
         LOD 100
         Cull [_CullMode]
+        Lighting Off
 
         Pass
         {
+            AlphaToMask On
+
             CGPROGRAM
-            #pragma vertex vert alpha:fade
+            #pragma vertex vert
             #pragma fragment frag
 
             #include "UnityCG.cginc"
@@ -41,6 +45,7 @@ Shader "XL/MobileUnlit"
             sampler2D _MainTex;
             float4 _Color;
             float4 _MainTex_ST;
+            float _Brightness;
             float _AlphaCutoff;
 
             v2f vert (appdata v)
@@ -54,14 +59,16 @@ Shader "XL/MobileUnlit"
 
             fixed4 frag (v2f i) : SV_Target
             {
-
                 fixed4 col = tex2D(_MainTex, i.uv) ;
+                // col.r *= _Color.r * _Brightness;
+                // col.g *= _Color.g * _Brightness;
+                // col.b *= _Color.b * _Brightness;
                 col *= _Color;
-                if (col.a < _AlphaCutoff )
-                    return (0,0,0,0);
+                
                 return col;
             }
             ENDCG
         }
     }
+    Fallback "Mobile/Unlit"
 }

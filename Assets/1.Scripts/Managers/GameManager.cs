@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
         PG.Init(this);
         while (!PG.IsReady())
         { yield return null; }
+        PG.ForceDoorClose();
 
         MGM.Init(this);
         MGM.LoadLoop();
@@ -48,7 +49,8 @@ public class GameManager : MonoBehaviour
         UI.Init();
         UI.RefreshLoopLevelText(MGM.MGLoop.GetRankStr());
 
-        StartGame();
+        //StartGame();
+        UI.launchGameBtn?.clickCallback.AddListener(() => StartGame());
     }
 
     void InitCallbacks()
@@ -73,6 +75,9 @@ public class GameManager : MonoBehaviour
 
     void StartGame()
     {
+        UI.launchGameBtn?.clickCallback.RemoveListener(() => StartGame());
+        UI.launchGameBtn.gameObject.SetActive(false);
+
         if (inst_UIGameOver != null)
         {
             Destroy(inst_UIGameOver.gameObject);
@@ -167,7 +172,7 @@ public class GameManager : MonoBehaviour
     {
         UI.miniGameClock.text = MGM.gameClock.GetRemainingTime().ToString("#0.0");
         UI.hpClock.text = playerData.HP.ToString("#0.0");
-        UI.score.text = playerData.score.ToString();
+        //UI.score.text = playerData.score.ToString();
     }
 
     void Update()

@@ -74,7 +74,7 @@ public class MiniGameManager : MonoBehaviour, IManager
         MGLoop = new MiniGameLoop(this, prefab_miniGames);
     }
 
-    public void Play()
+    public async void Play()
     {
         MGLoop.Current.gameObject.SetActive(true);
         MGLoop.Current.IsInPostGame = false;
@@ -83,6 +83,8 @@ public class MiniGameManager : MonoBehaviour, IManager
 
         //ShowPostGameUICB.Invoke(GameData.Get.gameSettings.MiniGameTime - gameClock.GetElapsedTime());
         UI.RefreshLoopStage(MGLoop.index, MGLoop.Current.successState);
+
+        await PG.OpenPlaygroundAnim();
 
         MGLoop.Current.Play();
         gameClock.Reset();
