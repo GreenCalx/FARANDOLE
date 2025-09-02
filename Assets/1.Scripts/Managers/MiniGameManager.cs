@@ -190,7 +190,7 @@ public class MiniGameManager : MonoBehaviour, IManager
         byte[] gameIDs = new byte[loopSize];
         for (int i = 0; i < loopSize; i++)
         {
-            gameIDs[i] = MGLoop.At(i).ID;
+            gameIDs[i] = MGLoop.At(i).descriptor.ID;
         }
         // TODO : Fetch time from server to ensure that
         // the datetime is right as the current impl depends on 

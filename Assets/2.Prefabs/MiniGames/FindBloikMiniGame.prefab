@@ -149,14 +149,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba29f1ec27f1eb24c8b6685b0a859986, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID: 0
+  descriptor: {fileID: 11400000, guid: d5faa198241d2504db9e769d0b60ef1c, type: 2}
   MGM: {fileID: 0}
   PC: {fileID: 0}
   PG: {fileID: 0}
   IsActiveMiniGame: 0
   IsInPostGame: 0
-  orientationRequirement: 0
-  tags: 
+  successState: 0
   prefabs_unoStickers: {fileID: 4801012445247314565, guid: 8a6b77a5fe9e94a4cb3dc8f5b0598871, type: 3}
   prefab_bloikSticker: {fileID: 1163066599452052819, guid: f302cd2c99655fc419c55935f4c2a388, type: 3}
   numberOfDecoySticker: 140000001e0000002800000032000000

@@ -48,6 +48,7 @@ public class GameManager : MonoBehaviour
 
         UI.Init();
         UI.RefreshLoopLevelText(MGM.MGLoop.GetRankStr());
+        UI.loopPresentationAnim.Show(MGM.MGLoop);
 
         //StartGame();
         UI.launchGameBtn?.clickCallback.AddListener(() => StartGame());
@@ -77,6 +78,7 @@ public class GameManager : MonoBehaviour
     {
         UI.launchGameBtn?.clickCallback.RemoveListener(() => StartGame());
         UI.launchGameBtn.gameObject.SetActive(false);
+        UI.loopPresentationAnim.Hide();
 
         if (inst_UIGameOver != null)
         {

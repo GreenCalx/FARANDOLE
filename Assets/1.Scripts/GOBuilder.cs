@@ -45,6 +45,12 @@ public class GOBuilder
         return this;
     }
 
+    public GOBuilder WithAnchoredPosition(Vector3 iPos)
+    {
+        GO.GetComponent<RectTransform>().anchoredPosition = iPos;
+        return this;
+    }
+
     public GOBuilder WithParent(Transform iParent)
     {
         GO.transform.parent = iParent;

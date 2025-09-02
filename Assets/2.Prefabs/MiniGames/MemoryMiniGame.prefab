@@ -44,14 +44,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca5ab5e81d9edc844a1fd1ca86fd9fd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID: 5
+  descriptor: {fileID: 11400000, guid: fb66528d95a5fe5449d7317cb0d6632b, type: 2}
   MGM: {fileID: 0}
   PC: {fileID: 0}
   PG: {fileID: 0}
   IsActiveMiniGame: 0
   IsInPostGame: 0
-  orientationRequirement: 2
-  tags: 
+  successState: 0
   prefabs_card:
   - {fileID: 1942787962436337013, guid: 48ee0c6328031924ab09687166ff993f, type: 3}
   - {fileID: 3836405946255295576, guid: efd258069367ec34ca945d64c87d2279, type: 3}

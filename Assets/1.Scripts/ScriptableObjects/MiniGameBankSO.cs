@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using static Utils;
@@ -7,7 +8,7 @@ using static Utils;
 [CreateAssetMenu(fileName = "MiniGameBankSO", menuName = "Scriptable Objects/MiniGameBankSO")]
 public class MiniGameBankSO : ScriptableObject
 {
-    public List<GameObject> GameBank;
+    public List<MiniGameSO> GameBank;
 
     public List<GameObject> GetFromGameMode(GAME_MODE iGameMode)
     {
@@ -31,20 +32,20 @@ public class MiniGameBankSO : ScriptableObject
     public List<GameObject> GetDaily(int iNumber)
     {
         // TODO : Fetch remote seed here
-        return GetRandomSelectionFromPool(GameBank, iNumber);
+        return GetRandomSelectionFromPool(GameBank,iNumber);
     }
 
-    public List<GameObject> GetByTags(int iNumber, List<GAMETYPE_TAG> iTags)
+    public List<GameObject> GetByTags(int iNumber, List<MINIGAME_TAGS> iTags)
     {
-        List<GameObject> filtered = new List<GameObject>();
-        foreach (GameObject go in GameBank)
+        List<MiniGameSO> filtered = new List<MiniGameSO>();
+        foreach (MiniGameSO go in GameBank)
         {
-            MiniGame as_mg = go.GetComponent<MiniGame>();
+            MiniGame as_mg = go.prefab_MiniGame.GetComponent<MiniGame>();
             if (as_mg == null)
                 continue;
-            foreach (GAMETYPE_TAG tag in iTags)
+            foreach (MINIGAME_TAGS tag in iTags)
             {
-                if (as_mg.tags.Contains(tag))
+                if (as_mg.descriptor.tags.Contains(tag))
                 {
                     filtered.Add(go);
                     break;
@@ -54,12 +55,12 @@ public class MiniGameBankSO : ScriptableObject
         return GetRandomSelectionFromPool(filtered, iNumber);
     }
 
-    List<GameObject> GetRandomSelectionFromPool(List<GameObject> iPool, int iNumber)
+    List<GameObject> GetRandomSelectionFromPool(List<MiniGameSO> iBankSO, int iNumber)
     {
-        int poolSize = iPool.Count;
+        int poolSize = iBankSO.Count;
         if (iNumber >= poolSize)
         {
-            List<GameObject> shuffled = new List<GameObject>(iPool);
+            List<GameObject> shuffled = iBankSO.Select(e => e.prefab_MiniGame).ToList();
             shuffled.Shuffle(); // less item in bank than requested number, just give all we can.
             return shuffled;
         }
@@ -75,7 +76,7 @@ public class MiniGameBankSO : ScriptableObject
                 selected = UnityEngine.Random.Range(0, poolSize);
             }
             pickedGames.Add(selected);
-            retval.Add(iPool[selected]);
+            retval.Add(iBankSO[selected].prefab_MiniGame);
         }
         return retval;
     }

@@ -32,6 +32,7 @@ public class UIGame : MonoBehaviour, IDynamicUI
     public TextMeshProUGUI handle_NewRank;
     [Header("Launch Game")]
     public UIButton launchGameBtn;
+    public UILoopPresentationAnim loopPresentationAnim;
 
     public void Refresh()
     {
@@ -39,10 +40,10 @@ public class UIGame : MonoBehaviour, IDynamicUI
         infoArea.sizeDelta = new Vector2(0f, Screen.height * GameData.GetSettings.GameUIScreenProportion);
 
         // TODO : compute sizes according to screen.
-        scoreUIVisuals.sizeDelta = new Vector2(256f, 256f);
+        // scoreUIVisuals.sizeDelta = new Vector2(256f, 256f);
 
-        scoreUIText.sizeDelta = new Vector2(158.78f, 200f);
-        scoreUIText.anchoredPosition += new Vector2(-12.9f, 128f);
+        // scoreUIText.sizeDelta = new Vector2(158.78f, 200f);
+        // scoreUIText.anchoredPosition += new Vector2(-12.9f, 128f);
 
         handle_UIDoorAnim.Init();
 
@@ -109,11 +110,6 @@ public class UIGame : MonoBehaviour, IDynamicUI
     public void InterStageAnimation()
     {
         handle_UIDoorAnim.ClapAnim();
-    }
-
-    public void GameStartAnim()
-    {
-        handle_UIDoorAnim.OpenAnim();
     }
 
     public async Task LoopCompleteAnim(MiniGameSuccessState[] iLoopSuccesses, bool iLoopPassed, bool iRankUp)
