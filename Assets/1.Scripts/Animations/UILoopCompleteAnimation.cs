@@ -12,12 +12,15 @@ public class UILoopCompleteAnimation : MonoBehaviour
     public const string LoopPassedTrigger = "LoopPassed";
     public const string LoopHideTrigger = "Hide";
     public const string LoopShowRankTrigger = "ShowRank";
+    public const string LoopHideDepthTrigger = "HideLoopDepth";
     public const string LoopRankUpBoolParm = "RankingUp";
     public const string LoopPassedAnimStateName = "OnLoopPassed";
     public const string LoopHideAnimStateName = "OnLoopHide";
     public const string LoopHideFromRankUpAnimStateName = "OnLoopHideFromRankUp";
     public const string LoopShowRankStateName = "OnLoopShowRank";
     public const string LoopRankUpStateName = "OnLoopRankUp";
+    public const string LoopDepthStateName = "OnLoopDepth";
+    public const string LoopDepthHideStateName = "OnLoopDepthHide";
     public List<Image> lightImages;
     public Animator animator;
     [Header("LoopPassed Text")]
@@ -26,8 +29,11 @@ public class UILoopCompleteAnimation : MonoBehaviour
     public Color passedTextColor;
     public Color failedTextColor;
     public TextMeshProUGUI loopPassedTxt;
+    public TextMeshProUGUI loopDepthValueTxt;
     public int RolloverCharacterSpread = 10;
     public int FadeSpeed = 20;
+    [Header("Callbacks")]
+    public UnityEvent OnBeforeLoopDepth;
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -41,7 +47,7 @@ public class UILoopCompleteAnimation : MonoBehaviour
         );
         loopPassedTxt.ForceMeshUpdate();
     }
-    public async Task Animate(Color[] iLightColors, bool iLoopPassed, bool iRankUp)
+    public async Task Animate(Color[] iLightColors, bool iLoopPassed, bool iRankUp, int iLoopDepth)
     {
         for (int i = 0; i < iLightColors.Length; i++)
         {
@@ -49,6 +55,7 @@ public class UILoopCompleteAnimation : MonoBehaviour
                 break;
             lightImages[i].color = iLightColors[i];
         }
+        loopDepthValueTxt.text = iLoopDepth.ToString();
         animator.SetTrigger(LoopPassedTrigger);
         animator.SetBool(LoopRankUpBoolParm, iRankUp);
 
@@ -69,6 +76,13 @@ public class UILoopCompleteAnimation : MonoBehaviour
             await WaitHideFromRankUpAnimTask(0.5f); // half anim
         else
             await WaitHideAnimTask(0.5f); // half anim
+
+        OnBeforeLoopDepth?.Invoke();
+
+        await WaitShowLoopDepth(1f);
+        //await Task.Delay(GameData.GetSettings.LoopCompleteShowDepthAnimDisplayTimeMs);
+        animator.SetTrigger(LoopHideDepthTrigger);
+        await WaitHideLoopDepth(1f);
     }
     public void ShowRank()
     {
@@ -77,6 +91,22 @@ public class UILoopCompleteAnimation : MonoBehaviour
     public void Hide()
     {
         animator.SetTrigger(LoopHideTrigger);
+    }
+
+    async Task WaitShowLoopDepth(float iCompletionFrac)
+    {
+        while (!animator.GetCurrentAnimatorStateInfo(0).IsName(LoopDepthStateName))
+        { await Task.Yield(); }
+        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < iCompletionFrac)
+        { await Task.Yield(); }
+    }
+
+    async Task WaitHideLoopDepth(float iCompletionFrac)
+    {
+        while (!animator.GetCurrentAnimatorStateInfo(0).IsName(LoopDepthHideStateName))
+        { await Task.Yield(); }
+        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < iCompletionFrac)
+        { await Task.Yield(); }
     }
 
     async Task WaitRankUpAnimTask(float iCompletionFrac)

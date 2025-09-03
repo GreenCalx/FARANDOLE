@@ -140,10 +140,11 @@ public class MiniGameManager : MonoBehaviour, IManager
 
         if (!MGLoop.MoveNext())
         {
+            MGLoop.depth++;
             OnLoopComplete.Invoke();
             MGLoop.Reset();
 
-            await UI.LoopCompleteAnim(MGLoop.GetSuccessStates(), MGLoop.IsLoopPassed(), TryRankUp());
+            await UI.LoopCompleteAnim(MGLoop.GetSuccessStates(), MGLoop.IsLoopPassed(), TryRankUp(), MGLoop.depth);
 
             UI.RefreshLoopLevelText(MGLoop.GetRankStr());
         }

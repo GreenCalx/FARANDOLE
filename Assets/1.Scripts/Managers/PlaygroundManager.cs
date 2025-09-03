@@ -28,6 +28,7 @@ public class PlaygroundManager : MonoBehaviour, IManager
     DoorAnim doorAnimation;
     MeshRenderer FG_MR, PF_MR;
     Coroutine AnimationCoroutine;
+    Coroutine LerpColorCoroutine;
     LayerManager2D LM2D;
     MiniGameManager MGM;
     LineRenderer forgroundFrameLR;
@@ -255,10 +256,36 @@ public class PlaygroundManager : MonoBehaviour, IManager
 
     public void RefreshMatFromLoopLevel(int iLoopLevel)
     {
-        Color c = (iLoopLevel >= loopLevelColors.Count) ? loopLevelColors[loopLevelColors.Count - 1] : loopLevelColors[iLoopLevel];
-        FG_MR.material.SetColor("_Color", c);
-        forgroundFrameLR.material.SetColor("_Color", c);
+        // Color c = (iLoopLevel >= loopLevelColors.Count) ? loopLevelColors[loopLevelColors.Count - 1] : loopLevelColors[iLoopLevel];
+        // FG_MR.material.SetColor("_Color", c);
+        // forgroundFrameLR.material.SetColor("_Color", c);
+        if (LerpColorCoroutine != null)
+        {
+            StopCoroutine(LerpColorCoroutine);
+            LerpColorCoroutine = null;
+        }
+        LerpColorCoroutine = StartCoroutine(LerpColorCo(iLoopLevel));
         currAnimationDeltaTime = AnimationDeltaTime / iLoopLevel;
+    }
+
+    IEnumerator LerpColorCo(int iLoopLevel)
+    {
+        float startTime = Time.time;
+        float frac = 0f;
+
+        Color current = (iLoopLevel > 0) ? loopLevelColors[iLoopLevel - 1] : loopLevelColors[0];
+        Color target = (iLoopLevel >= loopLevelColors.Count) ? loopLevelColors[loopLevelColors.Count - 1] : loopLevelColors[iLoopLevel];
+        Color c = current;
+        while (frac < 1f)
+        {
+            frac = Mathf.Clamp01((Time.time - startTime) / GameData.GetSettings.PlayGroundColorLerpTimeSec);
+            c = Color.Lerp(current, target, frac);
+            FG_MR.material.SetColor("_Color", c);
+            forgroundFrameLR.material.SetColor("_Color", c);
+            yield return null;
+        }
+        FG_MR.material.SetColor("_Color", target);
+        forgroundFrameLR.material.SetColor("_Color", target);
     }
 
     IEnumerator AnimateCo()

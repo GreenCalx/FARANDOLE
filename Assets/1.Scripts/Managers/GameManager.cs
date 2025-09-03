@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviour
     {
         MGM.OnHPLossCB.AddListener(playerData.LoseHP);
         MGM.OnScoreGainCB.AddListener(playerData.AddScore);
-        MGM.OnLoopComplete.AddListener(OnLoopCompletion);
+        UI.OnBeforeLoopDepth.AddListener(OnLoopDepthUpdate);
         MGM.OnMiniGameComplete.AddListener(OnMiniGameCompletion);
         MGM.OnMiniGameTransitionCB.AddListener(OnMiniGameTransition);
         MGM.ShowPostGameUICB.AddListener(UI.ShowSuccessArea);
@@ -68,10 +68,11 @@ public class GameManager : MonoBehaviour
     {
         MGM.OnHPLossCB.RemoveListener(playerData.LoseHP);
         MGM.OnScoreGainCB.RemoveListener(playerData.AddScore);
-        MGM.OnLoopComplete.RemoveListener(OnLoopCompletion);
+        UI.OnBeforeLoopDepth.RemoveListener(OnLoopDepthUpdate);
         MGM.OnMiniGameComplete.RemoveListener(OnMiniGameCompletion);
         MGM.OnMiniGameTransitionCB.RemoveListener(OnMiniGameTransition);
         MGM.ShowPostGameUICB.RemoveListener(UI.ShowSuccessArea);
+        
     }
 
     void StartGame()
@@ -114,7 +115,7 @@ public class GameManager : MonoBehaviour
 
         /// playground reset mat
         PG.RefreshMatFromDiff(MGM.MGLoop.rank);
-        PG.RefreshMatFromLoopLevel(playerData.loopLevel);
+        PG.RefreshMatFromLoopLevel(MGM.MGLoop.depth);
         PG.ResetAnimation();
 
         // UI Reset
@@ -135,10 +136,8 @@ public class GameManager : MonoBehaviour
         // nothing ?
     }
 
-    void OnLoopCompletion()
+    void OnLoopDepthUpdate()
     {
-        playerData.loopLevel++;
-
         bool loopSuccess = MGM.MGLoop.IsLoopPassed();
 
         // Animate according to LoopSuccess
@@ -148,13 +147,13 @@ public class GameManager : MonoBehaviour
             UI.RefreshLoopLevelText(MGM.MGLoop.GetRankStr());
         }
         
-        PG.RefreshMatFromLoopLevel(playerData.loopLevel);
+        PG.RefreshMatFromLoopLevel(MGM.MGLoop.depth);
         UI.ResetLoopStage();
 
         AnimationCurve timeScaleCurve = GameData.Get.gameSettings.timeScaleOverLoopLevel;
-        if (playerData.loopLevel > timeScaleCurve.keys[timeScaleCurve.length - 1].time)
+        if (MGM.MGLoop.depth > timeScaleCurve.keys[timeScaleCurve.length - 1].time)
             return;
-        playerData.timeScale = timeScaleCurve.Evaluate(playerData.loopLevel);
+        playerData.timeScale = timeScaleCurve.Evaluate(MGM.MGLoop.depth);
         Time.timeScale = playerData.timeScale;
     }
 

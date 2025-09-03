@@ -21,5 +21,7 @@ public class GameSettingsSO : ScriptableObject
     public int PostMiniGameLatchInMs = 500;
     public int PreMiniGameLatchInMs = 500;
     public int LoopCompleteAfterAnimDisplayTimeMs = 1000;
+    public int LoopCompleteShowDepthAnimDisplayTimeMs = 500;
+    public float PlayGroundColorLerpTimeSec = 1f;
 
 }

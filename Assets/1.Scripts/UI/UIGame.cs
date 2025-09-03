@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using System.Threading.Tasks;
 using TMPro;
@@ -33,6 +34,8 @@ public class UIGame : MonoBehaviour, IDynamicUI
     [Header("Launch Game")]
     public UIButton launchGameBtn;
     public UILoopPresentationAnim loopPresentationAnim;
+    [Header("Callbacks")]
+    public UnityEvent OnBeforeLoopDepth;
 
     public void Refresh()
     {
@@ -112,13 +115,16 @@ public class UIGame : MonoBehaviour, IDynamicUI
         handle_UIDoorAnim.ClapAnim();
     }
 
-    public async Task LoopCompleteAnim(MiniGameSuccessState[] iLoopSuccesses, bool iLoopPassed, bool iRankUp)
+    public async Task LoopCompleteAnim(MiniGameSuccessState[] iLoopSuccesses, bool iLoopPassed, bool iRankUp, int iLoopDepth)
     {
         Color[] colors = new Color[iLoopSuccesses.Length];
         for (int i = 0; i < iLoopSuccesses.Length; i++)
         {
             colors[i] = (iLoopSuccesses[i] == MiniGameSuccessState.PASSED) ? successTimePositiveColor : successTimeNegativeColor;
         }
-        await handle_animLoopSuccess.Animate(colors, iLoopPassed, iRankUp);
+        handle_animLoopSuccess.OnBeforeLoopDepth = new UnityEvent();
+        handle_animLoopSuccess.OnBeforeLoopDepth.AddListener(()=>OnBeforeLoopDepth?.Invoke());
+        await handle_animLoopSuccess.Animate(colors, iLoopPassed, iRankUp, iLoopDepth);
+        handle_animLoopSuccess.OnBeforeLoopDepth.RemoveListener(()=>OnBeforeLoopDepth?.Invoke());
     }
 }

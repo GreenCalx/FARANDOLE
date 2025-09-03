@@ -43,13 +43,12 @@ public class UILoopPresentationAnim : MonoBehaviour
         foreach (UIMiniGamePresentationLine l in uiLines)
         {
             l.Show();
-            //await Task.Delay(timeBetweenShowLinesInMs);
             while (!l.self_animator.GetCurrentAnimatorStateInfo(0).IsName(ShowLineStateName))
             {
                 await Task.Yield();
                 if (ct.IsCancellationRequested)
                 {
-                    Debug.Log("Cancelled");
+                    //Debug.Log("Cancelled");
                     return;
                 }
             }
@@ -58,11 +57,10 @@ public class UILoopPresentationAnim : MonoBehaviour
                 await Task.Yield();
                 if (ct.IsCancellationRequested)
                 {
-                    Debug.Log("Cancelled");
+                    //Debug.Log("Cancelled");
                     return;
                 }
             }
-            //await Task.Delay(timeBetweenShowLinesInMs);
         }
     }
 

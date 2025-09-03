@@ -20,6 +20,7 @@ public class MiniGameLoop : IEnumerator<MiniGame>
     public List<MiniGame> inst_miniGames;
     public int index = 0;
     public LoopRank rank;
+    public int depth;
     public MiniGameLoop(MiniGameManager iMGM, List<GameObject> iPrefabs)
     {
         inst_miniGames = new List<MiniGame>();
@@ -36,6 +37,7 @@ public class MiniGameLoop : IEnumerator<MiniGame>
             new_mg.SetActive(false);
         }
         rank = LoopRank.I;
+        depth = 0;
         Reset();
     }
     public bool MoveNext()
