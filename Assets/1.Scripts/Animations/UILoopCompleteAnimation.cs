@@ -5,10 +5,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Threading;
 using TMPro;
 
 public class UILoopCompleteAnimation : MonoBehaviour
 {
+    public const string LoopAnimSkipTrigger = "LoopSkip";
     public const string LoopPassedTrigger = "LoopPassed";
     public const string LoopHideTrigger = "Hide";
     public const string LoopShowRankTrigger = "ShowRank";
@@ -34,6 +36,8 @@ public class UILoopCompleteAnimation : MonoBehaviour
     public int FadeSpeed = 20;
     [Header("Callbacks")]
     public UnityEvent OnBeforeLoopDepth;
+    public UnityEvent SkipAnimCB;
+    public CancellationTokenSource cancellationTokenSource;
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -47,8 +51,15 @@ public class UILoopCompleteAnimation : MonoBehaviour
         );
         loopPassedTxt.ForceMeshUpdate();
     }
-    public async Task Animate(Color[] iLightColors, bool iLoopPassed, bool iRankUp, int iLoopDepth)
+
+    public void Skip()
     {
+        animator.SetTrigger(LoopAnimSkipTrigger);
+    }
+    public async Task Animate(Color[] iLightColors, bool iLoopPassed, bool iRankUp, int iLoopDepth, CancellationToken iCT)
+    {
+        CancellationTokenRegistration ctr = iCT.Register(() => Skip());
+
         for (int i = 0; i < iLightColors.Length; i++)
         {
             if (i >= lightImages.Count)
@@ -59,30 +70,46 @@ public class UILoopCompleteAnimation : MonoBehaviour
         animator.SetTrigger(LoopPassedTrigger);
         animator.SetBool(LoopRankUpBoolParm, iRankUp);
 
-        await WaitMainAnimTask(1f); // full anim
-        await AnimateTextTask(iLoopPassed);
+        await WaitMainAnimTask(1f, iCT); // full anim
+        if (iCT.IsCancellationRequested)
+        { OnBeforeLoopDepth?.Invoke(); return; }
+
+        await AnimateTextTask(iLoopPassed, iCT);
+        if (iCT.IsCancellationRequested)
+        { OnBeforeLoopDepth?.Invoke(); return; }
 
         ShowRank();
-        await WaitShowRankAnimTask(1f);
+        await WaitShowRankAnimTask(1f, iCT);
+        if (iCT.IsCancellationRequested)
+        { OnBeforeLoopDepth?.Invoke(); return; }
+
         if (iRankUp)
         {
-            await WaitRankUpAnimTask(1f);
+            await WaitRankUpAnimTask(1f, iCT);
+            if (iCT.IsCancellationRequested)
+            { OnBeforeLoopDepth?.Invoke(); return; }
         }
 
         await Task.Delay(GameData.GetSettings.LoopCompleteAfterAnimDisplayTimeMs);
+        if (iCT.IsCancellationRequested)
+        { Skip(); return; }
         Hide();
 
         if (iRankUp)
-            await WaitHideFromRankUpAnimTask(0.5f); // half anim
+            await WaitHideFromRankUpAnimTask(0.5f, iCT); // half anim
         else
-            await WaitHideAnimTask(0.5f); // half anim
+            await WaitHideAnimTask(0.5f, iCT); // half anim
+        if (iCT.IsCancellationRequested)
+        { OnBeforeLoopDepth?.Invoke(); return; }
 
         OnBeforeLoopDepth?.Invoke();
 
-        await WaitShowLoopDepth(1f);
-        //await Task.Delay(GameData.GetSettings.LoopCompleteShowDepthAnimDisplayTimeMs);
+        await WaitShowLoopDepth(1f, iCT);
+        if (iCT.IsCancellationRequested)
+        { return; }
+
         animator.SetTrigger(LoopHideDepthTrigger);
-        await WaitHideLoopDepth(1f);
+        await WaitHideLoopDepth(1f, iCT);
     }
     public void ShowRank()
     {
@@ -93,66 +120,61 @@ public class UILoopCompleteAnimation : MonoBehaviour
         animator.SetTrigger(LoopHideTrigger);
     }
 
-    async Task WaitShowLoopDepth(float iCompletionFrac)
+    async Task WaitAnimState(string iStateName, float iCompletionFrac, CancellationToken iCT)
     {
-        while (!animator.GetCurrentAnimatorStateInfo(0).IsName(LoopDepthStateName))
-        { await Task.Yield(); }
+        while (!animator.GetCurrentAnimatorStateInfo(0).IsName(iStateName))
+        {
+            if (iCT.IsCancellationRequested)
+                return;
+            await Task.Yield();
+        }
         while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < iCompletionFrac)
-        { await Task.Yield(); }
+        {
+            if (iCT.IsCancellationRequested)
+                return;
+            await Task.Yield();
+        }
     }
 
-    async Task WaitHideLoopDepth(float iCompletionFrac)
+    async Task WaitShowLoopDepth(float iCompletionFrac, CancellationToken iCT)
     {
-        while (!animator.GetCurrentAnimatorStateInfo(0).IsName(LoopDepthHideStateName))
-        { await Task.Yield(); }
-        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < iCompletionFrac)
-        { await Task.Yield(); }
+        // while (!animator.GetCurrentAnimatorStateInfo(0).IsName(LoopDepthStateName))
+        // { await Task.Yield(); }
+        // while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < iCompletionFrac)
+        // { await Task.Yield(); }
+
+        await WaitAnimState(LoopDepthStateName, iCompletionFrac, iCT);
     }
 
-    async Task WaitRankUpAnimTask(float iCompletionFrac)
+    async Task WaitHideLoopDepth(float iCompletionFrac, CancellationToken iCT)
     {
-        while (!animator.GetCurrentAnimatorStateInfo(0).IsName(LoopRankUpStateName))
-        { await Task.Yield(); }
-        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < iCompletionFrac)
-        { await Task.Yield(); }
+        await WaitAnimState(LoopDepthHideStateName, iCompletionFrac, iCT);
     }
 
-    async Task WaitShowRankAnimTask(float iCompletionFrac)
+    async Task WaitRankUpAnimTask(float iCompletionFrac, CancellationToken iCT)
     {
-        while (!animator.GetCurrentAnimatorStateInfo(0).IsName(LoopShowRankStateName))
-        { await Task.Yield(); }
-        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < iCompletionFrac)
-        { await Task.Yield(); }
+        await WaitAnimState(LoopRankUpStateName, iCompletionFrac, iCT);
     }
 
-    async Task WaitHideAnimTask(float iCompletionFrac)
+    async Task WaitShowRankAnimTask(float iCompletionFrac, CancellationToken iCT)
     {
-        while (!animator.GetCurrentAnimatorStateInfo(0).IsName(LoopHideAnimStateName))
-        { await Task.Yield(); }
-        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < iCompletionFrac)
-        { await Task.Yield(); }
-    }
-    async Task WaitHideFromRankUpAnimTask(float iCompletionFrac)
-    {
-        while (!animator.GetCurrentAnimatorStateInfo(0).IsName(LoopHideFromRankUpAnimStateName))
-        { await Task.Yield(); }
-        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < iCompletionFrac)
-        { await Task.Yield(); }
+        await WaitAnimState(LoopShowRankStateName, iCompletionFrac, iCT);
     }
 
-    async Task WaitMainAnimTask(float iCompletionFrac)
+    async Task WaitHideAnimTask(float iCompletionFrac, CancellationToken iCT)
     {
-        while (!animator.GetCurrentAnimatorStateInfo(0).IsName(LoopPassedAnimStateName))
-        { await Task.Yield(); }
-        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < iCompletionFrac)
-        { await Task.Yield(); }
+        await WaitAnimState(LoopHideAnimStateName, iCompletionFrac, iCT);
     }
-    async Task AnimateRank()
+    async Task WaitHideFromRankUpAnimTask(float iCompletionFrac, CancellationToken iCT)
     {
-
-
+        await WaitAnimState(LoopHideFromRankUpAnimStateName, iCompletionFrac, iCT);
     }
-    async Task AnimateTextTask(bool iLoopPassed)
+
+    async Task WaitMainAnimTask(float iCompletionFrac, CancellationToken iCT)
+    {
+        await WaitAnimState(LoopPassedAnimStateName, iCompletionFrac, iCT);
+    }
+    async Task AnimateTextTask(bool iLoopPassed, CancellationToken iCT)
     {
         // make transparent
         loopPassedTxt.text = iLoopPassed ? OnPassedTextValue : OnFailedTextValue;
@@ -177,6 +199,8 @@ public class UILoopCompleteAnimation : MonoBehaviour
         byte fadeSteps = (byte)Mathf.Max(1, 255 / RolloverCharacterSpread);
         while (!endReached)
         {
+            if (iCT.IsCancellationRequested)
+                return;
             for (int i = startingCharacterRange; i < currentCharacter + 1; i++)
             {
                 if (!textInfo.characterInfo[i].isVisible)

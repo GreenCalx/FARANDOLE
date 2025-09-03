@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using System;
 using System.Threading.Tasks;
+using System.Threading;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -35,6 +36,7 @@ public class MiniGameManager : MonoBehaviour, IManager
     public PlaygroundManager PG;
     public PlayerData PData;
     public UIGame UI;
+    CancellationTokenSource LoopCompleteAnimCTS;
 
     #region IManager
     public void Init(GameManager iGameManager)
@@ -144,7 +146,11 @@ public class MiniGameManager : MonoBehaviour, IManager
             OnLoopComplete.Invoke();
             MGLoop.Reset();
 
-            await UI.LoopCompleteAnim(MGLoop.GetSuccessStates(), MGLoop.IsLoopPassed(), TryRankUp(), MGLoop.depth);
+            LoopCompleteAnimCTS = new CancellationTokenSource();
+
+            UI.skipAnimBtn.clickCallback.AddListener(()=>LoopCompleteAnimCTS.Cancel());
+            await UI.LoopCompleteAnim(MGLoop.GetSuccessStates(), MGLoop.IsLoopPassed(), TryRankUp(), MGLoop.depth, LoopCompleteAnimCTS.Token);
+            UI.skipAnimBtn.clickCallback.RemoveListener(()=>LoopCompleteAnimCTS.Cancel());
 
             UI.RefreshLoopLevelText(MGLoop.GetRankStr());
         }
