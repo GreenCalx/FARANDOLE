@@ -21,6 +21,8 @@ public class PlayerController : MonoBehaviour
     Vector2 firstTouchWorldPos;
     Vector2 lastTouchWorldPos;
 
+    bool freezeInputs = false;
+
     void Start()
     {
         positionTrackers = new List<IPositionTracker>();
@@ -28,6 +30,8 @@ public class PlayerController : MonoBehaviour
         swipeTrackers = new List<ISwipeTracker>();
         Touch.onFingerDown += FingerDown;
         Touch.onFingerUp += FingerUp;
+
+        freezeInputs = false;
     }
 
     void Awake()
@@ -48,12 +52,18 @@ public class PlayerController : MonoBehaviour
 
     void FingerDown(EnhancedTouch.Finger finger)
     {
+        if (freezeInputs)
+            return;
+
         firstTouchWorldPos = GetWorldPos(finger.screenPosition);
         positionTrackers.ForEach(e => e.OnStartTracking(firstTouchWorldPos));
     }
 
     void FingerUp(EnhancedTouch.Finger finger)
     {
+        if (freezeInputs)
+            return;
+
         lastTouchWorldPos = GetWorldPos(finger.screenPosition);
         positionTrackers.ForEach(e => e.OnStopTracking(lastTouchWorldPos));
         if (HaveSwipers())
@@ -62,12 +72,18 @@ public class PlayerController : MonoBehaviour
 
     void Drag(Touch iTouch)
     {
+        if (freezeInputs)
+            return;
+
         Vector2 newPos = GetWorldPos(iTouch.screenPosition);
         positionTrackers.ForEach(e => e.OnPositionChanged(newPos));
     }
 
     void Tap(Touch iTouch)
     {
+        if (freezeInputs)
+            return;
+
         Vector2 tapPos = GetWorldPos(iTouch.screenPosition);
         try
         {
@@ -88,6 +104,9 @@ public class PlayerController : MonoBehaviour
 
     void Swipe()
     {
+        if (freezeInputs)
+            return;
+
         Vector2 swipeDir = lastTouchWorldPos - firstTouchWorldPos;
         if (swipeDir.magnitude < 0.01f)
              return; // min swipe length requirement
@@ -106,14 +125,20 @@ public class PlayerController : MonoBehaviour
         swipeTrackers.Clear();
     }
 
+    public void Freeze() { freezeInputs = true; }
+    public void UnFreeze() { freezeInputs = false; }
+
     void Update()
     {
+        if (freezeInputs)
+            return;
+
         foreach (EnhancedTouch.Touch touch in EnhancedTouch.Touch.activeTouches)
         {
             if ((touch.phase == UnityEngine.InputSystem.TouchPhase.Ended) && (touch.tapCount >= 1))
             {
                 Tap(touch);
-               // Swipe(touch);
+                // Swipe(touch);
             }
             if (touch.phase == UnityEngine.InputSystem.TouchPhase.Moved)
             {

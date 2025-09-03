@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Threading.Tasks;
+using System.Threading;
 
 public class UILoopPresentationAnim : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class UILoopPresentationAnim : MonoBehaviour
     public RectTransform handle_lastElemSpawn;
     public int timeBetweenShowLinesInMs = 200;
     List<UIMiniGamePresentationLine> uiLines;
+    public CancellationTokenSource cancellationTokenSource;
 
     public void Show(MiniGameLoop iMGLoop)
     {
@@ -31,27 +33,46 @@ public class UILoopPresentationAnim : MonoBehaviour
 
             index++;
         }
-        ShowLines();
+
+        cancellationTokenSource = new CancellationTokenSource();
+        ShowLines(cancellationTokenSource.Token);
     }
 
-    async Task ShowLines()
+    async Task ShowLines(CancellationToken ct)
     {
         foreach (UIMiniGamePresentationLine l in uiLines)
         {
             l.Show();
             //await Task.Delay(timeBetweenShowLinesInMs);
-            while( !l.self_animator.GetCurrentAnimatorStateInfo(0).IsName(ShowLineStateName) )
-            { await Task.Yield(); }
+            while (!l.self_animator.GetCurrentAnimatorStateInfo(0).IsName(ShowLineStateName))
+            {
+                await Task.Yield();
+                if (ct.IsCancellationRequested)
+                {
+                    Debug.Log("Cancelled");
+                    return;
+                }
+            }
             while (l.self_animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
-                { await Task.Yield(); }
+            {
+                await Task.Yield();
+                if (ct.IsCancellationRequested)
+                {
+                    Debug.Log("Cancelled");
+                    return;
+                }
+            }
             //await Task.Delay(timeBetweenShowLinesInMs);
         }
     }
 
     public void Hide()
     {
+        cancellationTokenSource.Cancel();
         foreach (UIMiniGamePresentationLine l in uiLines)
         {
+            if (!l.IsShown)
+                continue;
             l.Hide();
         }
     }

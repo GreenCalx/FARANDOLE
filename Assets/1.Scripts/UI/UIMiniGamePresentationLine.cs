@@ -9,7 +9,7 @@ public class UIMiniGamePresentationLine : MonoBehaviour
     public TextMeshProUGUI MiniGameDesc;
     public Animator self_animator;
     public readonly string showAnimParm = "show";
-
+    public bool IsShown =  false;
     public void SetFromMiniGameDesc(MiniGameSO iMGDesc)
     {
         MiniGameThumbnail.sprite = iMGDesc.thumbNailImg;
@@ -20,10 +20,12 @@ public class UIMiniGamePresentationLine : MonoBehaviour
     public void Show()
     {
         self_animator.SetBool(showAnimParm, true);
+        IsShown = true;
     }
 
     public void Hide()
     {
         self_animator.SetBool(showAnimParm, false);
+        IsShown = false;
     }
 }

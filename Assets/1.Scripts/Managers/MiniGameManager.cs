@@ -84,7 +84,9 @@ public class MiniGameManager : MonoBehaviour, IManager
         //ShowPostGameUICB.Invoke(GameData.Get.gameSettings.MiniGameTime - gameClock.GetElapsedTime());
         UI.RefreshLoopStage(MGLoop.index, MGLoop.Current.successState);
 
+        PC.Freeze();
         await PG.OpenPlaygroundAnim();
+        PC.UnFreeze();
 
         MGLoop.Current.Play();
         gameClock.Reset();
