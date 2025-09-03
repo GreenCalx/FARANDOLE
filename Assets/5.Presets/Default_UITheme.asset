@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d21e2d08c31820429c4354a8ec04274, type: 3}
+  m_Name: Default_UITheme
+  m_EditorClassIdentifier: 
+  normalBtnColor: {r: 1, g: 1, b: 1, a: 0.8}
+  pressedBtnColor: {r: 0.735849, g: 0.73237807, b: 0.73237807, a: 0.9019608}
+  normalMainBtnColor: {r: 1, g: 1, b: 1, a: 1}
+  pressedMainBtnColor: {r: 0.7157727, g: 0.98039216, b: 0.4862745, a: 1}
+  normalActionBtnColor: {r: 1, g: 0.47771692, b: 0.1372549, a: 1}
+  pressedActionBtnColor: {r: 0.745, g: 0.35643137, b: 0.1022549, a: 0.8}

@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: UIButtonMat
-  m_Shader: {fileID: 4800000, guid: 6f8dafb7291d8ac45855c47261333f90, type: 3}
+  m_Name: UIActionButtonPressedMat
+  m_Shader: {fileID: 4800000, guid: c0182810cbb2ba8408bbcea2a56c3789, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -63,6 +63,8 @@ Material:
     - _CullMode: 0
     m_Floats:
     - _AlphaCutoff: 0
+    - _BlendDst: 0
+    - _BlendSrc: 1
     - _Brightness: 1
     - _BumpScale: 1
     - _Cutoff: 0.5
@@ -74,6 +76,8 @@ Material:
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
+    - _OutlineHeight: 0.8
+    - _OutlineWidth: 0.9
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -81,7 +85,8 @@ Material:
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 0.73, g: 0.60220706, b: 0.36792, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _OutlineColor: {r: 0.525, g: 0.49761644, b: 0.43574998, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

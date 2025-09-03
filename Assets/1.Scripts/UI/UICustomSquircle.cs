@@ -146,7 +146,7 @@ public class UICustomSquircle : UIPrimitiveBase
             }
         }
 #endif
-    
+
     void Update()
     {
         if (ForceDrawing)

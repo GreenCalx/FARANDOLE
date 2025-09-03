@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 public class UILoopPresentationAnim : MonoBehaviour
 {
+    readonly string ShowLineStateName = "MiniGamePresentationLineShow";
     public GameObject prefab_MiniGamePresentationLine;
     public RectTransform handle_firstElemSpawn;
     public RectTransform handle_lastElemSpawn;
@@ -38,9 +39,11 @@ public class UILoopPresentationAnim : MonoBehaviour
         foreach (UIMiniGamePresentationLine l in uiLines)
         {
             l.Show();
-            await Task.Delay(timeBetweenShowLinesInMs);
-            while (l.self_animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
+            //await Task.Delay(timeBetweenShowLinesInMs);
+            while( !l.self_animator.GetCurrentAnimatorStateInfo(0).IsName(ShowLineStateName) )
             { await Task.Yield(); }
+            while (l.self_animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
+                { await Task.Yield(); }
             //await Task.Delay(timeBetweenShowLinesInMs);
         }
     }
