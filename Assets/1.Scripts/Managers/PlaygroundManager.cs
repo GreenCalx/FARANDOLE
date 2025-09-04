@@ -26,11 +26,13 @@ public class PlaygroundManager : MonoBehaviour, IManager
     List<Color> loopLevelColors;
     GameObject go_colliders, go_fg, go_playfield;
     DoorAnim doorAnimation;
+    FinalClapAnim finalClapAnimation;
     MeshRenderer FG_MR, PF_MR;
     Coroutine AnimationCoroutine;
     Coroutine LerpColorCoroutine;
     LayerManager2D LM2D;
     MiniGameManager MGM;
+    AnimationManager ANIM;
     LineRenderer forgroundFrameLR;
     public float height
     {
@@ -54,6 +56,7 @@ public class PlaygroundManager : MonoBehaviour, IManager
     {
         LM2D = iGameManager.LM2D;
         MGM = iGameManager.MGM;
+        ANIM = iGameManager.ANIM;
 
         InitColorGrading();
         BuildPlayground();
@@ -138,6 +141,23 @@ public class PlaygroundManager : MonoBehaviour, IManager
         doorAnimation.Init(doorLeft.transform, doorRight.transform, bounds.size.x / 2f);
         doorAnimation.ForceOpen();
 
+
+        finalClapAnimation = GOBuilder.Create()
+                            .WithName("FinalClapAnimation")
+                            .WithParent(transform)
+                            .WithPosition(new Vector2(bounds.min.x, bounds.min.y))
+                            .Build().AddComponent<FinalClapAnim>();
+        GameObject doorUp = GOBuilder.Create()
+                            .WithName("DoorUp")
+                            .WithParent(finalClapAnimation.transform)
+                            .WithLocalPosition(Vector3.zero)
+                            .WithMeshFilter(CreateFullScreenMesh(), false)
+                            .WithRenderer(clearAnimMat)
+                            .Build();
+        finalClapAnimation.Init(doorUp.transform, bounds.size.y);
+        finalClapAnimation.ForceOpen();
+
+
         forgroundFrameLR = GOBuilder.Create()
                                     .WithName("ForgroundFrame")
                                     .WithParent(transform)
@@ -148,6 +168,7 @@ public class PlaygroundManager : MonoBehaviour, IManager
 
         LM2D.PlaceForgroundReserve(doorLeft.GetComponent<Renderer>());
         LM2D.PlaceForgroundReserve(doorRight.GetComponent<Renderer>());
+        LM2D.PlaceForgroundReserve(doorUp.GetComponent<Renderer>());
         LM2D.PlaceForgroundReserve(go_fg.GetComponent<Renderer>());
         LM2D.PlaceForgroundReserve(forgroundFrameLR.GetComponent<Renderer>());
 
@@ -184,6 +205,28 @@ public class PlaygroundManager : MonoBehaviour, IManager
         vh.AddVert(new Vector3(0, h), c, new Vector2(0f, 1f));
         vh.AddVert(new Vector3(half_w, h), c, new Vector2(1f, 1f));
         vh.AddVert(new Vector3(half_w, 0), c, new Vector2(1f, 0f));
+
+        vh.AddTriangle(0, 1, 2);
+        vh.AddTriangle(2, 3, 0);
+
+        vh.FillMesh(m);
+
+        return m;
+    }
+
+    public Mesh CreateFullScreenMesh()
+    {
+        Mesh m = new Mesh();
+        Color c = Color.black;
+
+        VertexHelper vh = new VertexHelper();
+        float w = bounds.size.x;
+        float h = bounds.size.y;
+
+        vh.AddVert(new Vector3(0, 0), c, new Vector2(0f, 0f));
+        vh.AddVert(new Vector3(0, h), c, new Vector2(0f, 1f));
+        vh.AddVert(new Vector3(w, h), c, new Vector2(1f, 1f));
+        vh.AddVert(new Vector3(w, 0), c, new Vector2(1f, 0f));
 
         vh.AddTriangle(0, 1, 2);
         vh.AddTriangle(2, 3, 0);
@@ -232,6 +275,11 @@ public class PlaygroundManager : MonoBehaviour, IManager
     public void ForceDoorClose()
     {
         doorAnimation.ForceClose();
+    }
+
+    public async Task FinalClap()
+    {
+        finalClapAnimation.CloseAnim();
     }
 
     public void RefreshMatFromDiff(LoopRank iLoopRank)

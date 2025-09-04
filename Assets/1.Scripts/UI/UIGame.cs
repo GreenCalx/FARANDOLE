@@ -1,11 +1,12 @@
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using Cysharp.Threading.Tasks;
 using System.Threading.Tasks;
 using System.Threading;
 using TMPro;
 
-public class UIGame : MonoBehaviour, IDynamicUI
+public class UIGame : MonoBehaviour, IManager, IDynamicUI
 {
     public TextMeshProUGUI miniGameClock;
     public TextMeshProUGUI hpClock;
@@ -38,7 +39,28 @@ public class UIGame : MonoBehaviour, IDynamicUI
     [Header("Callbacks")]
     public UnityEvent OnBeforeLoopDepth;
     public UIButton skipAnimBtn;
-    
+    // Internals
+    bool InitDone = false;
+    AnimationManager ANIM;
+
+    public void Init(GameManager iGameManager)
+    {
+        ANIM = iGameManager.ANIM;
+        miniGameClock.text = "";
+        hpClock.text = "";
+        score.text = "";
+
+        ShowMiniGameMode(false);
+        //ShowSuccessArea(false);
+        handle_UILoopInfo.Init();
+        Refresh();
+        InitDone = true;
+    }
+
+    public bool IsReady()
+    {
+        return InitDone;
+    }
 
     public void Refresh()
     {
@@ -72,17 +94,7 @@ public class UIGame : MonoBehaviour, IDynamicUI
         handle_UILoopInfo.TurnOffLights();
     }
 
-    public void Init()
-    {
-        miniGameClock.text = "";
-        hpClock.text = "";
-        score.text = "";
 
-        ShowMiniGameMode(false);
-        //ShowSuccessArea(false);
-        handle_UILoopInfo.Init();
-        Refresh();
-    }
 
     public void ShowMiniGameMode(bool iState)
     {
@@ -125,9 +137,16 @@ public class UIGame : MonoBehaviour, IDynamicUI
         {
             colors[i] = (iLoopSuccesses[i] == MiniGameSuccessState.PASSED) ? successTimePositiveColor : successTimeNegativeColor;
         }
+        handle_animLoopSuccess.Init(colors, iLoopPassed, iRankUp, iLoopDepth);
         handle_animLoopSuccess.OnBeforeLoopDepth = new UnityEvent();
         handle_animLoopSuccess.OnBeforeLoopDepth.AddListener(()=>OnBeforeLoopDepth?.Invoke());
-        await handle_animLoopSuccess.Animate(colors, iLoopPassed, iRankUp, iLoopDepth, iCT);
+
+        ANIM.TrackAnimator(handle_animLoopSuccess.animator, iCT);
+        ANIM.QueueAnimRange(handle_animLoopSuccess.animator, handle_animLoopSuccess.GetAnimQueue(iCT));
+        await ANIM.PlayAnim(handle_animLoopSuccess.animator);
+        ANIM.StopTrackAnimator(handle_animLoopSuccess.animator);
+        //await handle_animLoopSuccess.Animate(colors, iLoopPassed, iRankUp, iLoopDepth, iCT);
+
         handle_animLoopSuccess.OnBeforeLoopDepth.RemoveListener(()=>OnBeforeLoopDepth?.Invoke());
     }
 }

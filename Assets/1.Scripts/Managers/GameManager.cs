@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using System.Threading;
+using static GOBuilder;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,10 +14,12 @@ public class GameManager : MonoBehaviour
     public GameSceneManager GSM;
     public LayerManager2D LM2D;
     public PlaygroundManager PG;
+    public AnimationManager ANIM;
+    public UIGame UI;
 
     [Header("Extra Refs")]
     public PlayerController PC;
-    public UIGame UI;
+    
     public PlayerData playerData;
     public GameObject prefab_UIGameOver;
     UIGameOver inst_UIGameOver;
@@ -46,7 +50,13 @@ public class GameManager : MonoBehaviour
         while (!GSM.IsReady())
         { yield return null; }
 
-        UI.Init();
+        ANIM.Init(this);
+        while (!ANIM.IsReady())
+        { yield return null; }
+
+        UI.Init(this);
+        while(!UI.IsReady())
+        { yield return null; }
         UI.RefreshLoopLevelText(MGM.MGLoop.GetRankStr());
         UI.loopPresentationAnim.Show(MGM.MGLoop);
 
@@ -162,11 +172,19 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
 
         StopGame();
-        inst_UIGameOver = Instantiate(prefab_UIGameOver).GetComponent<UIGameOver>();
-        inst_UIGameOver.TryAgainBtn.onClick.AddListener(() => RestartGame());
-        inst_UIGameOver.MenuBtn.onClick.AddListener(() => ExitToTitle());
 
-        PostGameScoreProcessing();
+        CancellationTokenSource cts = new CancellationTokenSource();
+
+        inst_UIGameOver = GOBuilder.Create(prefab_UIGameOver).BuildAs<UIGameOver>();
+        inst_UIGameOver.TryAgainBtn.onClick.AddListener(() => {cts.Cancel(); RestartGame(); });
+        inst_UIGameOver.MenuBtn.onClick.AddListener(() => { cts.Cancel(); ExitToTitle(); });
+
+        bool IsHighScore = PostGameScoreProcessing();
+
+        inst_UIGameOver.scoreDisplayValue.text = playerData.score.ToString();
+
+
+        inst_UIGameOver.Animate(IsHighScore, cts.Token);
     }
 
     void RefreshUI()
@@ -198,7 +216,7 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("Title", LoadSceneMode.Single);
     }
 
-    public void PostGameScoreProcessing()
+    public bool PostGameScoreProcessing()
     {
         LoopHighScore lhs = MGM.GetLoopHighScore();
         LoopHighScore replacedHS = null;
@@ -210,15 +228,15 @@ public class GameManager : MonoBehaviour
             // <!> load all high score beforehand to avoid overwriting prev data
             UserData.SaveHighScores();
 
-            inst_UIGameOver.newHighScoreDisplayValue.text = playerData.score.ToString();
-            inst_UIGameOver.scoreDisplayHandle.gameObject.SetActive(false);
-            inst_UIGameOver.newHighScoreDisplayHandle.gameObject.SetActive(true);
+            // inst_UIGameOver.scoreDisplayHandle.gameObject.SetActive(false);
+            // inst_UIGameOver.newHighScoreDisplayHandle.gameObject.SetActive(true);
+            return true;
         }
-        else
-        {
-            inst_UIGameOver.scoreDisplayValue.text = playerData.score.ToString();
-            inst_UIGameOver.scoreDisplayHandle.gameObject.SetActive(true);
-            inst_UIGameOver.newHighScoreDisplayHandle.gameObject.SetActive(false);
-        }
+        return false;
+        // else
+        // {
+        //     inst_UIGameOver.scoreDisplayHandle.gameObject.SetActive(true);
+        //     inst_UIGameOver.newHighScoreDisplayHandle.gameObject.SetActive(false);
+        // }
     }
 }

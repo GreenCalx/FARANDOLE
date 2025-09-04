@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Debug_GameSettings
   m_EditorClassIdentifier: 
   PlayerHP: 60
-  MiniGameTime: 60
-  MaxMiniGameDifficulty: 3
+  loopSize: 5
+  MiniGameTime: 5
   miniGameLevelUpThreshold: 2
   MaxTimeScale: 3
   timeScaleOverLoopLevel:
@@ -52,3 +52,8 @@ MonoBehaviour:
     m_RotationOrder: 4
   GameUIScreenProportion: 0.05
   GameFieldScreenProportion: 0.8
+  PostMiniGameLatchInMs: 500
+  PreMiniGameLatchInMs: 500
+  LoopCompleteAfterAnimDisplayTimeMs: 1000
+  LoopCompleteShowDepthAnimDisplayTimeMs: 500
+  PlayGroundColorLerpTimeSec: 1

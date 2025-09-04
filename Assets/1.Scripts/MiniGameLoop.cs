@@ -93,7 +93,6 @@ public class MiniGameLoop : IEnumerator<MiniGame>
 
     public string GetRankStr()
     {
-        Debug.Log(rank.ToString());
         return rank.ToString();
     }
 }
