@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87a63174ee8c328448bbdd11b0cb13ae, type: 3}
   m_Name: Debug_GameSettings
   m_EditorClassIdentifier: 
-  PlayerHP: 5
+  PlayerHP: 1
   loopSize: 5
-  MiniGameTime: 1
+  MiniGameTime: 3
   miniGameLevelUpThreshold: 2
   MaxTimeScale: 3
   timeScaleOverLoopLevel:

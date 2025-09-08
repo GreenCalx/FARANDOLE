@@ -170,9 +170,6 @@ MonoBehaviour:
   OnHPLossCB:
     m_PersistentCalls:
       m_Calls: []
-  OnScoreGainCB:
-    m_PersistentCalls:
-      m_Calls: []
   OnLoopComplete:
     m_PersistentCalls:
       m_Calls: []
@@ -424,7 +421,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7981446dcea244d43adaa78898984162, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 0}
   startClosed: 0
   lerpFactor: 0
   blind: {fileID: 0}
