@@ -3,6 +3,10 @@ using UnityEngine;
 public class GameClock
 {
     bool frozen = false;
+    public bool IsFrozen
+    {
+        get { return frozen; }
+    }
     public float miniGameStartTime;
     public float miniGameMaxTime;
     public float lastTick;

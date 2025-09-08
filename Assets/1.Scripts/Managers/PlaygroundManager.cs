@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.Rendering.PostProcessing;
+using Cysharp.Threading.Tasks;
 using System.Threading.Tasks;
 using static Utils;
 
@@ -23,10 +24,11 @@ public class PlaygroundManager : MonoBehaviour, IManager
     public bool AnimateBG = true;
     public float AnimationDeltaTime = 0.5f;
     private float currAnimationDeltaTime;
+    public FinalClapAnim finalClapAnimation;
     List<Color> loopLevelColors;
     GameObject go_colliders, go_fg, go_playfield;
     DoorAnim doorAnimation;
-    FinalClapAnim finalClapAnimation;
+
     MeshRenderer FG_MR, PF_MR;
     Coroutine AnimationCoroutine;
     Coroutine LerpColorCoroutine;
@@ -142,15 +144,15 @@ public class PlaygroundManager : MonoBehaviour, IManager
         doorAnimation.ForceOpen();
 
 
-        finalClapAnimation = GOBuilder.Create()
-                            .WithName("FinalClapAnimation")
-                            .WithParent(transform)
-                            .WithPosition(new Vector2(bounds.min.x, bounds.min.y))
-                            .Build().AddComponent<FinalClapAnim>();
+        // finalClapAnimation = GOBuilder.Create()
+        //                     .WithName("FinalClapAnimation")
+        //                     .WithParent(transform)
+        //                     .WithPosition(new Vector2(bounds.min.x, bounds.min.y))
+        //                     .Build().AddComponent<FinalClapAnim>();
         GameObject doorUp = GOBuilder.Create()
                             .WithName("DoorUp")
                             .WithParent(finalClapAnimation.transform)
-                            .WithLocalPosition(Vector3.zero)
+                            .WithPosition(new Vector2(bounds.min.x, bounds.min.y))
                             .WithMeshFilter(CreateFullScreenMesh(), false)
                             .WithRenderer(clearAnimMat)
                             .Build();
@@ -277,9 +279,14 @@ public class PlaygroundManager : MonoBehaviour, IManager
         doorAnimation.ForceClose();
     }
 
-    public async Task FinalClap()
+    public async UniTask FinalClapClose()
     {
         finalClapAnimation.CloseAnim();
+    }
+
+    public async UniTask FinalClapOpen()
+    {
+        finalClapAnimation.OpenAnim();
     }
 
     public void RefreshMatFromDiff(LoopRank iLoopRank)

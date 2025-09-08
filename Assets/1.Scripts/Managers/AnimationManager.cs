@@ -112,20 +112,4 @@ public class AnimationManager : MonoBehaviour, IManager
         } while (!animQ.AnimationDone());
         Debug.Log("Animation OVER");
     }
-
-    public async UniTask WaitAnimState(Animator iAnimator, string iStateName, float iCompletionFrac, CancellationToken iCT)
-    {
-        while (!iAnimator.GetCurrentAnimatorStateInfo(0).IsName(iStateName))
-        {
-            if (iCT.IsCancellationRequested)
-                return;
-            await UniTask.Yield();
-        }
-        while (iAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < iCompletionFrac)
-        {
-            if (iCT.IsCancellationRequested)
-                return;
-            await UniTask.Yield();
-        }
-    }
 }

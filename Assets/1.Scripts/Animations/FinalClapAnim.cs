@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using Cysharp.Threading.Tasks;
 using System.Threading.Tasks;
 using System.Threading;
 public class FinalClapAnim : MonoBehaviour
@@ -8,22 +9,22 @@ public class FinalClapAnim : MonoBehaviour
     [Range(0f, 1f)]
     public float lerpFactor;
     public Transform blind;
-    float animationDuration;
     private bool InAnimation;
     Vector3 blindClosed;
     Vector3 blindOpen;
     public UnityEvent OnCloseCB, OnOpenCB;
-    public Animator animator;
+    readonly string CloseAnimParm = "Close";
+    readonly string OpenAnimParm = "Open";
+    Animator animator;
     public void Init(Transform iBlind, float iYOffset)
     {
+        animator = GetComponent<Animator>();
         OnCloseCB = new UnityEvent();
         OnOpenCB = new UnityEvent();
 
-        animationDuration = 0.5f * GameData.GetSettings.PreMiniGameLatchInMs / 1000f;
-
         blind = iBlind;
         blindClosed = blind.position;
-        blindOpen = new Vector3(blindClosed.x, blindClosed.y - iYOffset);
+        blindOpen = new Vector3(blindClosed.x, blindClosed.y + iYOffset);
 
         if (startClosed)
             ForceClose();
@@ -68,41 +69,38 @@ public class FinalClapAnim : MonoBehaviour
         DoorCloseAnim();
     }
 
-    public async Task OpenCo()
+    public async UniTask OpenCo()
     {
-        float startAnimTime = Time.time;
-        while (lerpFactor < 1f)
+        while ((lerpFactor < 1f)||(animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f))
         {
-            lerpFactor = (Time.time - startAnimTime) / animationDuration;
             blind.transform.position = Vector3.Lerp(blindClosed, blindOpen, lerpFactor);
             await Task.Yield();
         }
-        ForceOpen();
     }
 
-    public async Task CloseCo()
+    public async UniTask CloseCo()
     {
-        float startAnimTime = Time.time;
-        while (lerpFactor > 0f)
+        //float startAnimTime = Time.time;
+        while ((lerpFactor > 0f)||(animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f))
         {
-            lerpFactor = 1f - ((Time.time - startAnimTime) / animationDuration);
             blind.transform.position = Vector3.Lerp(blindClosed, blindOpen, lerpFactor);
             await Task.Yield();
         }
-        ForceClose();
     }
 
-    async void DoorCloseAnim()
+    async UniTaskVoid DoorCloseAnim()
     {
         InAnimation = true;
+        animator.SetTrigger(CloseAnimParm);
         await CloseCo();
         OnCloseCB?.Invoke();
         InAnimation = false;
     }
 
-    async void DoorOpenAnim()
+    async UniTaskVoid DoorOpenAnim()
     {
         InAnimation = true;
+        animator.SetTrigger(OpenAnimParm);
         await OpenCo();
         OnOpenCB?.Invoke();
         InAnimation = false;

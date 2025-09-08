@@ -49,6 +49,10 @@ public class MiniGameLoop : IEnumerator<MiniGame>
     }
     public void Reset()
     {
+        foreach (MiniGame mg in inst_miniGames)
+        {
+            mg.successState = MiniGameSuccessState.PENDING;
+        }
         index = 0;
         miniGame = inst_miniGames[index];
     }

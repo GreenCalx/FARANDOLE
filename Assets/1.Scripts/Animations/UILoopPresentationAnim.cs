@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Cysharp.Threading.Tasks;
 using System.Threading.Tasks;
 using System.Threading;
 
@@ -14,7 +15,7 @@ public class UILoopPresentationAnim : MonoBehaviour
     List<UIMiniGamePresentationLine> uiLines;
     public CancellationTokenSource cancellationTokenSource;
 
-    public void Show(MiniGameLoop iMGLoop)
+    public async UniTask Show(MiniGameLoop iMGLoop)
     {
         uiLines = new List<UIMiniGamePresentationLine>(iMGLoop.inst_miniGames.Count);
         Vector3 first_position = handle_firstElemSpawn.anchoredPosition;
@@ -35,17 +36,17 @@ public class UILoopPresentationAnim : MonoBehaviour
         }
 
         cancellationTokenSource = new CancellationTokenSource();
-        ShowLines(cancellationTokenSource.Token);
+        await ShowLines(cancellationTokenSource.Token);
     }
 
-    async Task ShowLines(CancellationToken ct)
+    async UniTask ShowLines(CancellationToken ct)
     {
         foreach (UIMiniGamePresentationLine l in uiLines)
         {
             l.Show();
             while (!l.self_animator.GetCurrentAnimatorStateInfo(0).IsName(ShowLineStateName))
             {
-                await Task.Yield();
+                await UniTask.Yield();
                 if (ct.IsCancellationRequested)
                 {
                     //Debug.Log("Cancelled");
@@ -54,7 +55,7 @@ public class UILoopPresentationAnim : MonoBehaviour
             }
             while (l.self_animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
             {
-                await Task.Yield();
+                await UniTask.Yield();
                 if (ct.IsCancellationRequested)
                 {
                     //Debug.Log("Cancelled");

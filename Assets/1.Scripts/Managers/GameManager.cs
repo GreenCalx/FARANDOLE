@@ -19,11 +19,10 @@ public class GameManager : MonoBehaviour
 
     [Header("Extra Refs")]
     public PlayerController PC;
-    
     public PlayerData playerData;
     public GameObject prefab_UIGameOver;
     UIGameOver inst_UIGameOver;
-
+    
     void Start()
     {
         StartCoroutine(Init());
@@ -55,7 +54,7 @@ public class GameManager : MonoBehaviour
         { yield return null; }
 
         UI.Init(this);
-        while(!UI.IsReady())
+        while (!UI.IsReady())
         { yield return null; }
         UI.RefreshLoopLevelText(MGM.MGLoop.GetRankStr());
         UI.loopPresentationAnim.Show(MGM.MGLoop);
@@ -67,7 +66,6 @@ public class GameManager : MonoBehaviour
     void InitCallbacks()
     {
         MGM.OnHPLossCB.AddListener(playerData.LoseHP);
-        MGM.OnScoreGainCB.AddListener(playerData.AddScore);
         UI.OnBeforeLoopDepth.AddListener(OnLoopDepthUpdate);
         MGM.OnMiniGameComplete.AddListener(OnMiniGameCompletion);
         MGM.OnMiniGameTransitionCB.AddListener(OnMiniGameTransition);
@@ -77,12 +75,11 @@ public class GameManager : MonoBehaviour
     void RemoveCallbacks()
     {
         MGM.OnHPLossCB.RemoveListener(playerData.LoseHP);
-        MGM.OnScoreGainCB.RemoveListener(playerData.AddScore);
         UI.OnBeforeLoopDepth.RemoveListener(OnLoopDepthUpdate);
         MGM.OnMiniGameComplete.RemoveListener(OnMiniGameCompletion);
         MGM.OnMiniGameTransitionCB.RemoveListener(OnMiniGameTransition);
         MGM.ShowPostGameUICB.RemoveListener(UI.ShowSuccessArea);
-        
+
     }
 
     void StartGame()
@@ -97,7 +94,7 @@ public class GameManager : MonoBehaviour
             inst_UIGameOver = null;
         }
         InitCallbacks();
-        
+
         MGM.Play();
         UI.ShowMiniGameMode(true);
         GameStarted = true;
@@ -127,9 +124,11 @@ public class GameManager : MonoBehaviour
         PG.RefreshMatFromDiff(MGM.MGLoop.rank);
         PG.RefreshMatFromLoopLevel(MGM.MGLoop.depth);
         PG.ResetAnimation();
+        PG.FinalClapOpen();
 
         // UI Reset
         UI.RefreshLoopLevelText(MGM.MGLoop.GetRankStr());
+        UI.ResetLoopStage();
 
         // Start game again
         StartGame();
@@ -148,6 +147,8 @@ public class GameManager : MonoBehaviour
 
     void OnLoopDepthUpdate()
     {
+        playerData.loopHistory.AddSnapshot(MGM.MGLoop);
+
         bool loopSuccess = MGM.MGLoop.IsLoopPassed();
 
         // Animate according to LoopSuccess
@@ -156,7 +157,7 @@ public class GameManager : MonoBehaviour
             PG.RefreshMatFromDiff(MGM.MGLoop.rank);
             UI.RefreshLoopLevelText(MGM.MGLoop.GetRankStr());
         }
-        
+
         PG.RefreshMatFromLoopLevel(MGM.MGLoop.depth);
         UI.ResetLoopStage();
 
@@ -170,26 +171,26 @@ public class GameManager : MonoBehaviour
     void GameOver()
     {
         Time.timeScale = 1f;
+        playerData.loopHistory.AddSnapshot(MGM.MGLoop);
 
         StopGame();
 
         CancellationTokenSource cts = new CancellationTokenSource();
 
         inst_UIGameOver = GOBuilder.Create(prefab_UIGameOver).BuildAs<UIGameOver>();
-        inst_UIGameOver.TryAgainBtn.onClick.AddListener(() => {cts.Cancel(); RestartGame(); });
+        inst_UIGameOver.TryAgainBtn.onClick.AddListener(() => { cts.Cancel(); RestartGame(); });
         inst_UIGameOver.MenuBtn.onClick.AddListener(() => { cts.Cancel(); ExitToTitle(); });
 
         bool IsHighScore = PostGameScoreProcessing();
 
         inst_UIGameOver.scoreDisplayValue.text = playerData.score.ToString();
 
-
-        inst_UIGameOver.Animate(IsHighScore, cts.Token);
+        inst_UIGameOver.Animate(IsHighScore, PG, cts.Token);
     }
 
     void RefreshUI()
     {
-        UI.miniGameClock.text = MGM.gameClock.GetRemainingTime().ToString("#0.0");
+        UI.miniGameClock.text = Mathf.Ceil(MGM.gameClock.GetRemainingTime()).ToString("#0");
         UI.hpClock.text = playerData.HP.ToString("#0.0");
         //UI.score.text = playerData.score.ToString();
     }
@@ -218,7 +219,15 @@ public class GameManager : MonoBehaviour
 
     public bool PostGameScoreProcessing()
     {
-        LoopHighScore lhs = MGM.GetLoopHighScore();
+        int score = playerData.GetLoopScore();
+
+        int loopSize = GameData.GetSettings.loopSize;
+        byte[] gameIDs = new byte[loopSize];
+        for (int i = 0; i < loopSize; i++)
+        {
+            gameIDs[i] = MGM.MGLoop.At(i).descriptor.ID;
+        }
+        LoopHighScore lhs = new LoopHighScore(GameData.Get.currentGameMode, gameIDs, score, DateTime.Now);
         LoopHighScore replacedHS = null;
         if (UserData.IsNewHighScore(lhs, out replacedHS))
         {
@@ -239,4 +248,6 @@ public class GameManager : MonoBehaviour
         //     inst_UIGameOver.newHighScoreDisplayHandle.gameObject.SetActive(false);
         // }
     }
+
+
 }

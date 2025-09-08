@@ -26,9 +26,11 @@ public class UIGameOver : MonoBehaviour
     {
         animator.SetTrigger(GameOverSkipTrigger);
     }
-    public async Task Animate(bool iIsHighScore, CancellationToken iCT)
+    public async Task Animate(bool iIsHighScore, PlaygroundManager iPG, CancellationToken iCT)
     {
         CancellationTokenRegistration ctr = iCT.Register(() => Skip());
+
+        iPG.FinalClapClose();
 
         await WaitClosePlayfield(1f, iCT); // full anim
         if (iCT.IsCancellationRequested)

@@ -3,14 +3,19 @@ using UnityEngine;
 public class PlayerData
 {
     public float HP;
-    public int score;
+    public int score {
+        get
+        {
+            return GetLoopScore();
+        }
+    }
     public float timeScale;
+    public MiniGameLoopHistory loopHistory;
     public PlayerData()
     {
         HP = GameData.Get.gameSettings.PlayerHP;
-        score = 0;
         timeScale = 1f;
-
+        loopHistory = new MiniGameLoopHistory();
     }
 
     public void LoseHP(float iLostHP)
@@ -18,9 +23,13 @@ public class PlayerData
         HP -= iLostHP;
     }
 
-    public void AddScore(int iScore)
+    public int GetLoopScore()
     {
-        score += iScore;
+        int ls = 0;
+        foreach (MiniGameLoopSnapshot snap in loopHistory)
+        {
+            ls += snap.LoopScore;
+        }
+        return ls;
     }
-    
 }

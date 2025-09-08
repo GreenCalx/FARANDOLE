@@ -10,7 +10,7 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
 {
     public TextMeshProUGUI miniGameClock;
     public TextMeshProUGUI hpClock;
-    public TextMeshProUGUI miniGameDesc;
+    public Image timeIndicatorImg;
     public RectTransform infoArea;
     public UILoopInfo handle_UILoopInfo;
     public UIDoorAnim handle_UIDoorAnim;
@@ -24,12 +24,12 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
     public Sprite loopLevel2Sprite;
     public Sprite loopLevel3Sprite;
 
-
     [Header("Success")]
     public UIStageClearAnimation handle_animStageClear;
     public TextMeshProUGUI successTimeTxt;
     public Color successTimePositiveColor;
     public Color successTimeNegativeColor;
+    public Color frozenTimeColor;
     [Header("Loop Complete Animation Handles")]
     public TextMeshProUGUI handle_CurrentRank;
     public TextMeshProUGUI handle_NewRank;
@@ -46,9 +46,10 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
     public void Init(GameManager iGameManager)
     {
         ANIM = iGameManager.ANIM;
-        miniGameClock.text = "";
-        hpClock.text = "";
+        miniGameClock.text = GameData.GetSettings.MiniGameTime.ToString("#0");
+        hpClock.text = GameData.GetSettings.PlayerHP.ToString("#0.0");
         score.text = "";
+        timeIndicatorImg.color = frozenTimeColor;
 
         ShowMiniGameMode(false);
         //ShowSuccessArea(false);
@@ -64,8 +65,8 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
 
     public void Refresh()
     {
-        infoArea.anchoredPosition = new Vector2(0f, -GameData.GetSettings.GameUIScreenProportion * Screen.height);
-        infoArea.sizeDelta = new Vector2(0f, Screen.height * GameData.GetSettings.GameUIScreenProportion);
+        // infoArea.anchoredPosition = new Vector2(0f, -GameData.GetSettings.GameUIScreenProportion * Screen.height);
+        // infoArea.sizeDelta = new Vector2(0f, Screen.height * GameData.GetSettings.GameUIScreenProportion);
 
         // TODO : compute sizes according to screen.
         // scoreUIVisuals.sizeDelta = new Vector2(256f, 256f);
@@ -89,12 +90,26 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         handle_UILoopInfo.TurnOnLight(iIndex, iState);
     }
 
+    public void RefreshTimeIndicator(GameClock iGameClock)
+    {
+        if (iGameClock.IsFrozen)
+        {
+            timeIndicatorImg.color = frozenTimeColor;
+        }
+        else if (iGameClock.MiniGameTimeExpired())
+        {
+            timeIndicatorImg.color = successTimeNegativeColor;
+        }
+        else
+        {
+            timeIndicatorImg.color = successTimePositiveColor;
+        }
+    }
+
     public void ResetLoopStage()
     {
         handle_UILoopInfo.TurnOffLights();
     }
-
-
 
     public void ShowMiniGameMode(bool iState)
     {

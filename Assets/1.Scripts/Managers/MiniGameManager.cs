@@ -26,7 +26,6 @@ public class MiniGameManager : MonoBehaviour, IManager
     }
     
     public UnityEvent<float> OnHPLossCB;
-    public UnityEvent<int> OnScoreGainCB;
     public UnityEvent OnLoopComplete;
     public UnityEvent OnMiniGameComplete;
     public UnityEvent OnMiniGameTransitionCB;
@@ -120,8 +119,6 @@ public class MiniGameManager : MonoBehaviour, IManager
         OnMiniGameComplete.Invoke();
         //UI.RefreshLoopStage(MGLoop.index, MGLoop.Current.successState);
 
-        OnScoreGainCB.Invoke(1);
-
         DelayedNext();
     }
 
@@ -144,15 +141,17 @@ public class MiniGameManager : MonoBehaviour, IManager
         {
             MGLoop.depth++;
             OnLoopComplete.Invoke();
-            MGLoop.Reset();
+
 
             LoopCompleteAnimCTS = new CancellationTokenSource();
 
-            UI.skipAnimBtn.clickCallback.AddListener(()=>LoopCompleteAnimCTS.Cancel());
+            UI.skipAnimBtn.clickCallback.AddListener(() => LoopCompleteAnimCTS.Cancel());
             await UI.LoopCompleteAnim(MGLoop.GetSuccessStates(), MGLoop.IsLoopPassed(), TryRankUp(), MGLoop.depth, LoopCompleteAnimCTS.Token);
-            UI.skipAnimBtn.clickCallback.RemoveListener(()=>LoopCompleteAnimCTS.Cancel());
+            UI.skipAnimBtn.clickCallback.RemoveListener(() => LoopCompleteAnimCTS.Cancel());
 
             UI.RefreshLoopLevelText(MGLoop.GetRankStr());
+            
+            MGLoop.Reset();
         }
 
         //await Task.Delay(GameData.GetSettings.PreMiniGameLatchInMs);
@@ -213,12 +212,15 @@ public class MiniGameManager : MonoBehaviour, IManager
             return;
 
         gameClock.Tick();
-            
+
         if (gameClock.MiniGameTimeExpired())
         {
             // Lose hp
             OnHPLossCB.Invoke(Time.deltaTime);
         }
+        // TODO : Fire event upon critical gameclock changes
+        // aka make this part of UI a clock listener.
+        UI.RefreshTimeIndicator(gameClock);
     }
 
 }

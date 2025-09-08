@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using TMPro;
 
-public class UILoopCompleteAnimation : MonoBehaviour, IAnimationQueue
+public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
 {
     public const string LoopAnimSkipTrigger = "LoopSkip";
     public const string LoopPassedTrigger = "LoopPassed";
@@ -25,7 +25,7 @@ public class UILoopCompleteAnimation : MonoBehaviour, IAnimationQueue
     public const string LoopDepthStateName = "OnLoopDepth";
     public const string LoopIdleStateName = "IDLE";
     public List<Image> lightImages;
-    public Animator animator;
+
     [Header("LoopPassed Text")]
     public const string OnPassedTextValue = "PASSED";
     public const string OnFailedTextValue = "FAILED";
@@ -38,12 +38,10 @@ public class UILoopCompleteAnimation : MonoBehaviour, IAnimationQueue
     [Header("Callbacks")]
     public UnityEvent OnBeforeLoopDepth;
     public UnityEvent SkipAnimCB;
-    public CancellationTokenSource cancellationTokenSource;
+
     // internals
     bool LoopPassed = false;
     bool RankUp = false;
-
-    bool RequestMainLoopAnim = false;
 
     void Start()
     {
@@ -63,8 +61,6 @@ public class UILoopCompleteAnimation : MonoBehaviour, IAnimationQueue
     {
         animator.SetTrigger(LoopAnimSkipTrigger);
     }
-
-
 
     public void Init(Color[] iLightColors, bool iLoopPassed, bool iRankUp, int iLoopDepth)
     {
@@ -87,7 +83,6 @@ public class UILoopCompleteAnimation : MonoBehaviour, IAnimationQueue
         // Animation loop
         Func<UniTask> step1 = async () =>
         {
-            Debug.Log("Step1");
             await UniTask.SwitchToMainThread();
             animator.SetTrigger(LoopPassedTrigger);
             animator.SetBool(LoopRankUpBoolParm, RankUp);
@@ -99,7 +94,6 @@ public class UILoopCompleteAnimation : MonoBehaviour, IAnimationQueue
 
         Func<UniTask> step2 = async () =>
         {
-            Debug.Log("Step2");
             await UniTask.SwitchToMainThread();
             await AnimateTextTask(LoopPassed, iCT);
             if (iCT.IsCancellationRequested)
@@ -109,9 +103,8 @@ public class UILoopCompleteAnimation : MonoBehaviour, IAnimationQueue
         
         Func<UniTask> step3 = async () =>
         {
-            Debug.Log("Step3");
             await UniTask.SwitchToMainThread();
-            ShowRank();
+            animator.SetTrigger(LoopShowRankTrigger);
             await WaitShowRankAnimTask(1f, iCT);
             if (iCT.IsCancellationRequested)
             { OnBeforeLoopDepth?.Invoke(); return; }
@@ -122,7 +115,6 @@ public class UILoopCompleteAnimation : MonoBehaviour, IAnimationQueue
         {
             Func<UniTask> step4 = async () =>
             {
-                Debug.Log("Step4");
                 await UniTask.SwitchToMainThread();
                 await WaitRankUpAnimTask(1f, iCT);
                 if (iCT.IsCancellationRequested)
@@ -133,7 +125,6 @@ public class UILoopCompleteAnimation : MonoBehaviour, IAnimationQueue
 
         Func<UniTask> step5 = async () =>
         {
-            Debug.Log("Step5");
             await UniTask.SwitchToMainThread();
             await Task.Delay(GameData.GetSettings.LoopCompleteAfterAnimDisplayTimeMs);
             if (iCT.IsCancellationRequested)
@@ -143,9 +134,8 @@ public class UILoopCompleteAnimation : MonoBehaviour, IAnimationQueue
 
         Func<UniTask> step6 = async () =>
         {
-            Debug.Log("Step6");
             await UniTask.SwitchToMainThread();
-            Hide();
+            animator.SetTrigger(LoopHideTrigger);
             if (RankUp)
                 await WaitHideFromRankUpAnimTask(0.5f, iCT); // half anim
             else
@@ -157,7 +147,6 @@ public class UILoopCompleteAnimation : MonoBehaviour, IAnimationQueue
 
         Func<UniTask> step7 = async () =>
         {
-            Debug.Log("Step7");
             await UniTask.SwitchToMainThread();
             OnBeforeLoopDepth?.Invoke();
             await WaitShowLoopDepth(1f, iCT);
@@ -168,7 +157,6 @@ public class UILoopCompleteAnimation : MonoBehaviour, IAnimationQueue
 
         Func<UniTask> step8 = async () =>
         {
-            Debug.Log("Step8");
             await UniTask.SwitchToMainThread();
             animator.SetTrigger(LoopHideDepthTrigger);
             await WaitBackToIdle(1f, iCT);
@@ -177,38 +165,9 @@ public class UILoopCompleteAnimation : MonoBehaviour, IAnimationQueue
 
         return q;
     }
-    public void ShowRank()
-    {
-        animator.SetTrigger(LoopShowRankTrigger);
-    }
-    public void Hide()
-    {
-        animator.SetTrigger(LoopHideTrigger);
-    }
-
-    async UniTask WaitAnimState(string iStateName, float iCompletionFrac, CancellationToken iCT)
-    {
-        while (!animator.GetCurrentAnimatorStateInfo(0).IsName(iStateName))
-        {
-            if (iCT.IsCancellationRequested)
-                return;
-            await Task.Yield();
-        }
-        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < iCompletionFrac)
-        {
-            if (iCT.IsCancellationRequested)
-                return;
-            await Task.Yield();
-        }
-    }
 
     async UniTask WaitShowLoopDepth(float iCompletionFrac, CancellationToken iCT)
     {
-        // while (!animator.GetCurrentAnimatorStateInfo(0).IsName(LoopDepthStateName))
-        // { await Task.Yield(); }
-        // while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < iCompletionFrac)
-        // { await Task.Yield(); }
-
         await WaitAnimState(LoopDepthStateName, iCompletionFrac, iCT);
     }
 
@@ -299,7 +258,6 @@ public class UILoopCompleteAnimation : MonoBehaviour, IAnimationQueue
             Debug.Log(currentCharacter);
             await UniTask.Delay(25 - FadeSpeed);
         }
-        Debug.Log("Text displayed");
     }
 
 }
