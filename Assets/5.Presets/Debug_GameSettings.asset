@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerHP: 1
   loopSize: 5
-  MiniGameTime: 3
+  MiniGameTime: 9
   miniGameLevelUpThreshold: 2
   MaxTimeScale: 3
   timeScaleOverLoopLevel:
@@ -50,6 +50,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  titleScreenFadeoutTime: 3
   GameUIScreenProportion: 0.05
   GameFieldScreenProportion: 0.8
   PostMiniGameLatchInMs: 500

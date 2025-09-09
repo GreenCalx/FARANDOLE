@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
     public PlayerController PC;
     public PlayerData playerData;
     public GameObject prefab_UIGameOver;
+    [Header("Audio Refs")]
+    public GameBGM gameBGM;
     UIGameOver inst_UIGameOver;
     
     void Start()
@@ -70,6 +72,7 @@ public class GameManager : MonoBehaviour
         MGM.OnMiniGameComplete.AddListener(OnMiniGameCompletion);
         MGM.OnMiniGameTransitionCB.AddListener(OnMiniGameTransition);
         MGM.ShowPostGameUICB.AddListener(UI.ShowSuccessArea);
+        MGM.OnNewRankCB.AddListener((iRank) => gameBGM.RefreshRank(iRank));
     }
 
     void RemoveCallbacks()
@@ -79,7 +82,7 @@ public class GameManager : MonoBehaviour
         MGM.OnMiniGameComplete.RemoveListener(OnMiniGameCompletion);
         MGM.OnMiniGameTransitionCB.RemoveListener(OnMiniGameTransition);
         MGM.ShowPostGameUICB.RemoveListener(UI.ShowSuccessArea);
-
+        MGM.OnNewRankCB.RemoveListener((iRank) => gameBGM.RefreshRank(iRank));
     }
 
     void StartGame()
@@ -166,6 +169,8 @@ public class GameManager : MonoBehaviour
             return;
         playerData.timeScale = timeScaleCurve.Evaluate(MGM.MGLoop.depth);
         Time.timeScale = playerData.timeScale;
+
+        gameBGM.RefreshSpeed(playerData.timeScale);
     }
 
     void GameOver()

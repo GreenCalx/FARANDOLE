@@ -5,11 +5,12 @@ using System.Collections.Generic;
 
 public enum LoopRank
 {
-    I = 0,
-    II = 1,
-    III = 2,
-    S = 3,
-    M = 4
+    Z = 0,
+    I = 1,
+    II = 2,
+    III = 3,
+    S = 4,
+    M = 5
 }
 
 public class MiniGameLoop : IEnumerator<MiniGame>
@@ -36,7 +37,7 @@ public class MiniGameLoop : IEnumerator<MiniGame>
             inst_miniGames.Add(as_mg);
             new_mg.SetActive(false);
         }
-        rank = LoopRank.I;
+        rank = LoopRank.Z;
         depth = 0;
         Reset();
     }

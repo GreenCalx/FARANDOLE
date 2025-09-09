@@ -9,7 +9,8 @@
         "Unity.InputSystem",
         "Unity.Postprocessing.Runtime",
         "UnityUIExtensions",
-        "UniTask"
+        "UniTask",
+        "FMODUnity"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -305,6 +305,7 @@ public class PlaygroundManager : MonoBehaviour, IManager
                 FG_MR.material = diff3Mat;
                 break;
             default:
+                FG_MR.material = diff1Mat;
                 break;
         }
     }

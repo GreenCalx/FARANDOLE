@@ -14,6 +14,7 @@ public class GameSettingsSO : ScriptableObject
     public AnimationCurve timeScaleOverLoopLevel;
 
     [Header("UI Tweaks")]
+    public float titleScreenFadeoutTime = 1f;
     public float GameUIScreenProportion = 0.05f;
     public float GameFieldScreenProportion = 0.8f;
 
