@@ -16,13 +16,14 @@ public class GameManager : MonoBehaviour
     public PlaygroundManager PG;
     public AnimationManager ANIM;
     public UIGame UI;
+    public AudioManager AUDIO;
 
     [Header("Extra Refs")]
     public PlayerController PC;
     public PlayerData playerData;
     public GameObject prefab_UIGameOver;
     [Header("Audio Refs")]
-    public GameBGM gameBGM;
+    
     UIGameOver inst_UIGameOver;
     
     void Start()
@@ -55,6 +56,10 @@ public class GameManager : MonoBehaviour
         while (!ANIM.IsReady())
         { yield return null; }
 
+        AUDIO.Init(this);
+        while (!AUDIO.IsReady())
+        { yield return null; }
+
         UI.Init(this);
         while (!UI.IsReady())
         { yield return null; }
@@ -72,7 +77,7 @@ public class GameManager : MonoBehaviour
         MGM.OnMiniGameComplete.AddListener(OnMiniGameCompletion);
         MGM.OnMiniGameTransitionCB.AddListener(OnMiniGameTransition);
         MGM.ShowPostGameUICB.AddListener(UI.ShowSuccessArea);
-        MGM.OnNewRankCB.AddListener((iRank) => gameBGM.RefreshRank(iRank));
+        //MGM.OnNewRankCB.AddListener((iRank) => AUDIO.gameBGM.RefreshRank(iRank));
     }
 
     void RemoveCallbacks()
@@ -82,7 +87,7 @@ public class GameManager : MonoBehaviour
         MGM.OnMiniGameComplete.RemoveListener(OnMiniGameCompletion);
         MGM.OnMiniGameTransitionCB.RemoveListener(OnMiniGameTransition);
         MGM.ShowPostGameUICB.RemoveListener(UI.ShowSuccessArea);
-        MGM.OnNewRankCB.RemoveListener((iRank) => gameBGM.RefreshRank(iRank));
+        //MGM.OnNewRankCB.RemoveListener((iRank) => AUDIO.gameBGM.RefreshRank(iRank));
     }
 
     void StartGame()
@@ -170,7 +175,7 @@ public class GameManager : MonoBehaviour
         playerData.timeScale = timeScaleCurve.Evaluate(MGM.MGLoop.depth);
         Time.timeScale = playerData.timeScale;
 
-        gameBGM.RefreshSpeed(playerData.timeScale);
+        AUDIO.gameBGM.RefreshSpeed(playerData.timeScale);
     }
 
     void GameOver()

@@ -163,7 +163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80b8b58d2f403e84aa6ce22d65c5011f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MiniGameToTest: {fileID: 0}
+  MiniGameToTest: {fileID: 5205109001117507003, guid: ef698d4e9557cd14dbc5770833ba666b, type: 3}
   prefab_miniGames:
   - {fileID: 6891743480671891591, guid: ca650ba5ffb5e9c4d8e5e5b7a7fdaeae, type: 3}
   - {fileID: 5205109001117507003, guid: ef698d4e9557cd14dbc5770833ba666b, type: 3}
@@ -357,6 +357,51 @@ MonoBehaviour:
   blendDistance: 0
   weight: 1
   priority: 1
+--- !u!1 &511711247
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 511711248}
+  - component: {fileID: 511711249}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &511711248
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 511711247}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1338338512}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &511711249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 511711247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5bb4a35fd2527a498bb2e0ccd7c4370, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameBGM: {fileID: 1370517311}
 --- !u!1 &741548457
 GameObject:
   m_ObjectHideFlags: 0
@@ -769,6 +814,7 @@ Transform:
   - {fileID: 1078912653}
   - {fileID: 1867276674}
   - {fileID: 428005667}
+  - {fileID: 511711248}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1338338513
@@ -790,9 +836,9 @@ MonoBehaviour:
   PG: {fileID: 1286062459}
   ANIM: {fileID: 428005668}
   UI: {fileID: 1179377327}
+  AUDIO: {fileID: 511711249}
   PC: {fileID: 423414022}
   prefab_UIGameOver: {fileID: 3859541571594947970, guid: fe330f1dcdb5601439ab2fd4c3ee81c0, type: 3}
-  gameBGM: {fileID: 1370517311}
 --- !u!1 &1370517308
 GameObject:
   m_ObjectHideFlags: 0
@@ -841,11 +887,11 @@ MonoBehaviour:
   CollisionTag: 
   EventReference:
     Guid:
-      Data1: -52039776
-      Data2: 1113777878
-      Data3: 1207390638
-      Data4: -1150847040
-    Path: event:/MainGameBGM
+      Data1: 303892751
+      Data2: 1328156971
+      Data3: -2086748779
+      Data4: 1675620416
+    Path: event:/MainGameBGM2
   Event: 
   EventPlayTrigger: 1
   EventStopTrigger: 2

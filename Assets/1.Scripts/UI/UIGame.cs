@@ -42,10 +42,14 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
     // Internals
     bool InitDone = false;
     AnimationManager ANIM;
+    AudioManager AUDIO;
+    MiniGameManager MGM;
 
     public void Init(GameManager iGameManager)
     {
         ANIM = iGameManager.ANIM;
+        AUDIO = iGameManager.AUDIO;
+        MGM = iGameManager.MGM;
         miniGameClock.text = GameData.GetSettings.MiniGameTime.ToString("#0");
         hpClock.text = GameData.GetSettings.PlayerHP.ToString("#0.0");
         score.text = "";
@@ -156,6 +160,11 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         handle_animLoopSuccess.OnBeforeLoopDepth = new UnityEvent();
         handle_animLoopSuccess.OnBeforeLoopDepth.AddListener(()=>OnBeforeLoopDepth?.Invoke());
 
+        float newRank = (float)MGM.MGLoop.rank;
+        float prevRank = MGM.MGLoop.rank > 0 ? newRank - 1f : 0f;
+        handle_animLoopSuccess.OnNewRankDisplayedCB = new UnityEvent();
+        handle_animLoopSuccess.OnNewRankDisplayedCB.AddListener(() => AUDIO.LerpRank(prevRank, newRank));
+
         ANIM.TrackAnimator(handle_animLoopSuccess.animator, iCT);
         ANIM.QueueAnimRange(handle_animLoopSuccess.animator, handle_animLoopSuccess.GetAnimQueue(iCT));
         await ANIM.PlayAnim(handle_animLoopSuccess.animator);
@@ -163,5 +172,6 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         //await handle_animLoopSuccess.Animate(colors, iLoopPassed, iRankUp, iLoopDepth, iCT);
 
         handle_animLoopSuccess.OnBeforeLoopDepth.RemoveListener(()=>OnBeforeLoopDepth?.Invoke());
+        handle_animLoopSuccess.OnNewRankDisplayedCB.RemoveListener(()=> AUDIO.LerpRank(prevRank, newRank));
     }
 }

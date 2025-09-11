@@ -24,5 +24,6 @@ public class GameSettingsSO : ScriptableObject
     public int LoopCompleteAfterAnimDisplayTimeMs = 1000;
     public int LoopCompleteShowDepthAnimDisplayTimeMs = 500;
     public float PlayGroundColorLerpTimeSec = 1f;
+    public float BGMRankLerpTimeSec = 1f;
 
 }

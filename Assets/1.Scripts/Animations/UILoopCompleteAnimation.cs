@@ -38,6 +38,7 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
     [Header("Callbacks")]
     public UnityEvent OnBeforeLoopDepth;
     public UnityEvent SkipAnimCB;
+    public UnityEvent OnNewRankDisplayedCB;
 
     // internals
     bool LoopPassed = false;
@@ -88,7 +89,12 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
             animator.SetBool(LoopRankUpBoolParm, RankUp);
             await WaitMainAnimTask(1f, iCT); // full anim
             if (iCT.IsCancellationRequested)
-            { OnBeforeLoopDepth?.Invoke(); return; }
+            {
+                OnBeforeLoopDepth?.Invoke();
+                if (RankUp)
+                    OnNewRankDisplayedCB?.Invoke();
+                return;
+            }
         };
         q.Enqueue(step1);
 
@@ -97,7 +103,12 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
             await UniTask.SwitchToMainThread();
             await AnimateTextTask(LoopPassed, iCT);
             if (iCT.IsCancellationRequested)
-            { OnBeforeLoopDepth?.Invoke(); return; }
+            {
+                OnBeforeLoopDepth?.Invoke();
+                if (RankUp)
+                    OnNewRankDisplayedCB?.Invoke();
+                return;
+            }
         };
         q.Enqueue(step2);
         
@@ -107,7 +118,12 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
             animator.SetTrigger(LoopShowRankTrigger);
             await WaitShowRankAnimTask(1f, iCT);
             if (iCT.IsCancellationRequested)
-            { OnBeforeLoopDepth?.Invoke(); return; }
+            {
+                OnBeforeLoopDepth?.Invoke();
+                if (RankUp)
+                    OnNewRankDisplayedCB?.Invoke();
+                return;
+            }
         };
         q.Enqueue(step3);
 
@@ -118,7 +134,12 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
                 await UniTask.SwitchToMainThread();
                 await WaitRankUpAnimTask(1f, iCT);
                 if (iCT.IsCancellationRequested)
-                { OnBeforeLoopDepth?.Invoke(); return; }
+                {
+                    OnBeforeLoopDepth?.Invoke();
+                    OnNewRankDisplayedCB?.Invoke();
+                    return;
+                }
+                OnNewRankDisplayedCB?.Invoke();
             };
             q.Enqueue(step4);
         }

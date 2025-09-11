@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87a63174ee8c328448bbdd11b0cb13ae, type: 3}
   m_Name: Debug_GameSettings
   m_EditorClassIdentifier: 
-  PlayerHP: 1
+  PlayerHP: 60
   loopSize: 5
   MiniGameTime: 9
   miniGameLevelUpThreshold: 2
@@ -30,23 +30,23 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0.08620094
     - serializedVersion: 3
-      time: 59.672173
-      value: 2.6353383
-      inSlope: 0.018223904
-      outSlope: 0.018223904
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 100
-      value: 3
-      inSlope: 0.0034876778
-      outSlope: 0.0034876778
+      time: 8
+      value: 2.25
+      inSlope: 0.22034901
+      outSlope: 0.22034901
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.120959945
-      outWeight: 0
+      inWeight: 0.33333334
+      outWeight: 0.06294966
+    - serializedVersion: 3
+      time: 16
+      value: 3
+      inSlope: 0.032551806
+      outSlope: 0.032551806
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.1061151
+      outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
