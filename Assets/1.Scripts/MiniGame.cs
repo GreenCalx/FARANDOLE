@@ -4,21 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public enum SCREEN_ORIENTATION
-{
-    PORTRAIT = 0,
-    LANDSCAPE = 1,
-    BOTH = 2
-}
-
-public enum GAMETYPE_TAG
-{
-    ANY = 0,
-    AGILITY = 1,
-    REFLEX = 2,
-    BRAIN = 3,
-    SCIENCE = 4
-}
 public enum MiniGameSuccessState
 {
     NONE = 0,
@@ -30,9 +15,7 @@ public enum MiniGameSuccessState
 public class MiniGame : MonoBehaviour, IMiniGame
 {
     [Header("MiniGame Mand")]
-    public byte ID;
-    public SCREEN_ORIENTATION orientationRequirement = SCREEN_ORIENTATION.PORTRAIT;
-    public List<GAMETYPE_TAG> tags;
+    public MiniGameSO descriptor;
     [Header("MiniGame Internal View")]
     public MiniGameManager MGM;
     public PlayerController PC;

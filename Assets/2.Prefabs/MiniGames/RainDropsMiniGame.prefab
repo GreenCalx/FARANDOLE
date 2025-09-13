@@ -109,9 +109,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 203780e130af9aa4582c13d7500b80d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID: 3
-  orientationRequirement: 0
-  tags: 
+  descriptor: {fileID: 11400000, guid: 49bbfab5fab911945ad17d4c79218f79, type: 2}
   MGM: {fileID: 0}
   PC: {fileID: 0}
   PG: {fileID: 0}

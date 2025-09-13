@@ -3,6 +3,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+public enum LoopRank
+{
+    Z = 0,
+    I = 1,
+    II = 2,
+    III = 3,
+    S = 4,
+    M = 5
+}
+
 public class MiniGameLoop : IEnumerator<MiniGame>
 {
     public MiniGame Current { get { return miniGame; } }
@@ -10,6 +20,8 @@ public class MiniGameLoop : IEnumerator<MiniGame>
     MiniGame miniGame;
     public List<MiniGame> inst_miniGames;
     public int index = 0;
+    public LoopRank rank;
+    public int depth;
     public MiniGameLoop(MiniGameManager iMGM, List<GameObject> iPrefabs)
     {
         inst_miniGames = new List<MiniGame>();
@@ -25,6 +37,8 @@ public class MiniGameLoop : IEnumerator<MiniGame>
             inst_miniGames.Add(as_mg);
             new_mg.SetActive(false);
         }
+        rank = LoopRank.Z;
+        depth = 0;
         Reset();
     }
     public bool MoveNext()
@@ -36,6 +50,10 @@ public class MiniGameLoop : IEnumerator<MiniGame>
     }
     public void Reset()
     {
+        foreach (MiniGame mg in inst_miniGames)
+        {
+            mg.successState = MiniGameSuccessState.PENDING;
+        }
         index = 0;
         miniGame = inst_miniGames[index];
     }
@@ -46,22 +64,20 @@ public class MiniGameLoop : IEnumerator<MiniGame>
     }
     public bool IsLoopPassed()
     {
-        bool loopSuccess = true;
         foreach (MiniGame mg in inst_miniGames)
         {
             if (mg.successState != MiniGameSuccessState.PASSED)
             {
-                loopSuccess = false;
-                break;
+                return false;
             }
         }
-        return loopSuccess;
+        return true;
     }
 
     public MiniGameSuccessState[] GetSuccessStates()
     {
         MiniGameSuccessState[] states = new MiniGameSuccessState[inst_miniGames.Count];
-        for (int i=0; i < inst_miniGames.Count; i++)
+        for (int i = 0; i < inst_miniGames.Count; i++)
         {
             states[i] = inst_miniGames[i].successState;
         }
@@ -71,5 +87,17 @@ public class MiniGameLoop : IEnumerator<MiniGame>
     void IDisposable.Dispose()
     {
 
+    }
+
+    public void RankUp()
+    {
+        if (rank == LoopRank.M)
+            return;
+        rank = (LoopRank)((int)rank + 1);
+    }
+
+    public string GetRankStr()
+    {
+        return rank.ToString();
     }
 }

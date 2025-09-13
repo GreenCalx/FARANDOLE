@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using System;
 using System.Threading.Tasks;
+using System.Threading;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -15,25 +16,32 @@ public class MiniGameManager : MonoBehaviour, IManager
     //public List<MiniGame> miniGames; // > TODO : Make 'MGLoop' 
     public MiniGameLoop MGLoop;
     public GameClock gameClock;
-    public int miniGamesDifficulty;
+    public int miniGamesDifficulty
+    {
+        get {
+            if (MGLoop==null)
+                return 0;
+            return (int)MGLoop.rank;
+            }
+    }
     
     public UnityEvent<float> OnHPLossCB;
-    public UnityEvent<int> OnScoreGainCB;
     public UnityEvent OnLoopComplete;
     public UnityEvent OnMiniGameComplete;
     public UnityEvent OnMiniGameTransitionCB;
     public UnityEvent<float> ShowPostGameUICB;
+    public UnityEvent<LoopRank> OnNewRankCB;
     public LayerManager2D LM2D;
     public PlayerController PC;
     public PlaygroundManager PG;
     public PlayerData PData;
     public UIGame UI;
+    CancellationTokenSource LoopCompleteAnimCTS;
 
     #region IManager
     public void Init(GameManager iGameManager)
     {
         gameClock = new GameClock();
-        miniGamesDifficulty = 1;
 
         OnHPLossCB = new UnityEvent<float>();
         PC = iGameManager.PC;
@@ -66,10 +74,14 @@ public class MiniGameManager : MonoBehaviour, IManager
     public void ResetLoop()
     {
         MGLoop = new MiniGameLoop(this, prefab_miniGames);
+        MGLoop.rank = LoopRank.Z;
     }
 
-    public void Play()
+    public async void Play()
     {
+        // Z -> I
+        TryRankUp();
+
         MGLoop.Current.gameObject.SetActive(true);
         MGLoop.Current.IsInPostGame = false;
         MGLoop.Current.Init();
@@ -77,6 +89,10 @@ public class MiniGameManager : MonoBehaviour, IManager
 
         //ShowPostGameUICB.Invoke(GameData.Get.gameSettings.MiniGameTime - gameClock.GetElapsedTime());
         UI.RefreshLoopStage(MGLoop.index, MGLoop.Current.successState);
+        
+        PC.Freeze();
+        await PG.OpenPlaygroundAnim();
+        PC.UnFreeze();
 
         MGLoop.Current.Play();
         gameClock.Reset();
@@ -108,8 +124,6 @@ public class MiniGameManager : MonoBehaviour, IManager
         OnMiniGameComplete.Invoke();
         //UI.RefreshLoopStage(MGLoop.index, MGLoop.Current.successState);
 
-        OnScoreGainCB.Invoke(1);
-
         DelayedNext();
     }
 
@@ -130,9 +144,18 @@ public class MiniGameManager : MonoBehaviour, IManager
 
         if (!MGLoop.MoveNext())
         {
+            MGLoop.depth++;
             OnLoopComplete.Invoke();
+
+            LoopCompleteAnimCTS = new CancellationTokenSource();
+
+            UI.skipAnimBtn.clickCallback.AddListener(() => LoopCompleteAnimCTS.Cancel());
+            await UI.LoopCompleteAnim(MGLoop.GetSuccessStates(), MGLoop.IsLoopPassed(), TryRankUp(), MGLoop.depth, LoopCompleteAnimCTS.Token);
+            UI.skipAnimBtn.clickCallback.RemoveListener(() => LoopCompleteAnimCTS.Cancel());
+
+            UI.RefreshLoopLevelText(MGLoop.GetRankStr());
+            
             MGLoop.Reset();
-            await Task.Delay(GameData.GetSettings.LoopCompleteLatchInMs);
         }
 
         //await Task.Delay(GameData.GetSettings.PreMiniGameLatchInMs);
@@ -141,11 +164,47 @@ public class MiniGameManager : MonoBehaviour, IManager
         Play();
     }
 
-    public void RaiseDifficulty()
+    public bool TryRankUp()
     {
-        if (miniGamesDifficulty >= GameData.GetSettings.MaxMiniGameDifficulty)
-            return;
-        miniGamesDifficulty++;
+        bool rankedUp = false;
+        UI.handle_CurrentRank.text = MGLoop.GetRankStr();
+            
+        switch (MGLoop.rank)
+        {
+            case LoopRank.Z:
+                MGLoop.RankUp();
+                UI.RefreshLoopLevelText(MGLoop.GetRankStr());
+                rankedUp = true;
+                break;
+            case LoopRank.I:
+                if (!MGLoop.IsLoopPassed())
+                    return false;
+                MGLoop.RankUp();
+                rankedUp = true;
+                break;
+            case LoopRank.II:
+                if (!MGLoop.IsLoopPassed())
+                    return false;
+                MGLoop.RankUp();
+                rankedUp = true;
+                break;
+            case LoopRank.III:
+                if (!MGLoop.IsLoopPassed())
+                    return false;
+                // super loop check
+                break;
+            case LoopRank.S:
+                // master loop check
+                break;
+            default:
+                Debug.LogWarning("tryRankUp:: Unkown loop rank : " + (int)MGLoop.rank);
+                break;
+        }
+        if (rankedUp)
+            OnNewRankCB?.Invoke(MGLoop.rank);
+
+        UI.handle_NewRank.text = MGLoop.GetRankStr();
+        return rankedUp;
     }
 
     public LoopHighScore GetLoopHighScore()
@@ -154,7 +213,7 @@ public class MiniGameManager : MonoBehaviour, IManager
         byte[] gameIDs = new byte[loopSize];
         for (int i = 0; i < loopSize; i++)
         {
-            gameIDs[i] = MGLoop.At(i).ID;
+            gameIDs[i] = MGLoop.At(i).descriptor.ID;
         }
         // TODO : Fetch time from server to ensure that
         // the datetime is right as the current impl depends on 
@@ -168,12 +227,15 @@ public class MiniGameManager : MonoBehaviour, IManager
             return;
 
         gameClock.Tick();
-            
+
         if (gameClock.MiniGameTimeExpired())
         {
             // Lose hp
             OnHPLossCB.Invoke(Time.deltaTime);
         }
+        // TODO : Fire event upon critical gameclock changes
+        // aka make this part of UI a clock listener.
+        UI.RefreshTimeIndicator(gameClock);
     }
 
 }

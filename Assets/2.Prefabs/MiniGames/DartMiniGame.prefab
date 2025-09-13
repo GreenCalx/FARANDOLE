@@ -44,14 +44,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64e6abe5937e8ae4d9c06c6c9e98b74d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID: 0
+  descriptor: {fileID: 11400000, guid: 301c97c72abc44c4fa0b5ad706ef517b, type: 2}
   MGM: {fileID: 0}
   PC: {fileID: 0}
   PG: {fileID: 0}
   IsActiveMiniGame: 0
   IsInPostGame: 0
-  orientationRequirement: 0
-  tags: 
+  successState: 0
   prefab_gun: {fileID: 653498583214564742, guid: a878bb01b767c4649b8d4ff2fa8162fb, type: 3}
   n_balloons: 3
   prefab_Balloon: {fileID: 980553201171756042, guid: 2590b816f7e5b0f41a347f51dc8ec656, type: 3}

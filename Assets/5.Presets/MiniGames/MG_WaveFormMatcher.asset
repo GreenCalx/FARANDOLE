@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f772bfecd73e0a64ca2b7000d99e16b6, type: 3}
+  m_Name: MG_WaveFormMatcher
+  m_EditorClassIdentifier: 
+  ID: 5
+  name: Waveform Matcher
+  goal: Overlap perfectly the two waveforms
+  thumbNailImg: {fileID: 21300000, guid: 360e54c7122c64a469bfceef52bc353c, type: 3}
+  prefab_MiniGame: {fileID: 2924888216615747985, guid: 5e47560e7e3d57e49b8f29f7f43d2c73, type: 3}
+  tags: 0400000003000000
+  orientationRequirement: 0

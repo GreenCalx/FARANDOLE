@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f772bfecd73e0a64ca2b7000d99e16b6, type: 3}
+  m_Name: MG_Tears
+  m_EditorClassIdentifier: 
+  ID: 4
+  name: Tear Dodger
+  goal: Reach the exit fast enough
+  thumbNailImg: {fileID: 21300000, guid: 1e69fb6ff73b1d549a3a1bb6f12b9eca, type: 3}
+  prefab_MiniGame: {fileID: 7980881531806890130, guid: 3fcac724025ce3b469c5cebcf81e9f4b, type: 3}
+  tags: 02000000
+  orientationRequirement: 0

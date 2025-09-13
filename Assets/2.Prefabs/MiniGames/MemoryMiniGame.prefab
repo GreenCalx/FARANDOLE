@@ -44,14 +44,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca5ab5e81d9edc844a1fd1ca86fd9fd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID: 5
+  descriptor: {fileID: 11400000, guid: fb66528d95a5fe5449d7317cb0d6632b, type: 2}
   MGM: {fileID: 0}
   PC: {fileID: 0}
   PG: {fileID: 0}
   IsActiveMiniGame: 0
   IsInPostGame: 0
-  orientationRequirement: 2
-  tags: 
+  successState: 0
   prefabs_card:
   - {fileID: 1942787962436337013, guid: 48ee0c6328031924ab09687166ff993f, type: 3}
   - {fileID: 3836405946255295576, guid: efd258069367ec34ca945d64c87d2279, type: 3}
@@ -59,10 +58,10 @@ MonoBehaviour:
   - {fileID: 6550312204150314515, guid: e60b8082636ce0d49b4da38cae65bc5e, type: 3}
   prefab_pivot: {fileID: 8908472888210908571, guid: e2e0809a9e4d6974592849aeeb44b27f, type: 3}
   cards: []
-  cardsCounts: 04000000040000000600000006000000
+  cardsCounts: 04000000040000000400000006000000
   rotsSpeeds:
+  - 0
   - 10
-  - 20
-  - 35
-  - 65
+  - 30
+  - 10
   distFromCenter: 1.5

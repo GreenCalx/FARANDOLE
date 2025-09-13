@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 using System;
+using Cysharp.Threading.Tasks;
 using System.Threading.Tasks;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
@@ -22,7 +23,7 @@ public class SignInService : MonoBehaviour
         WaitSignIn();
     }
 
-    void Destroy()
+    void OnDestroy()
     {
         kill = true;
     }
@@ -32,13 +33,13 @@ public class SignInService : MonoBehaviour
         signedIn = true;
     }
 
-    async void WaitSignIn()
+    async UniTaskVoid WaitSignIn()
     {
         PlayGamesPlatform.Activate();
         await SignIn();
         OnSignIn.Invoke();
     }
-    async Task SignIn()
+    async UniTask SignIn()
     {
         while (!signedIn && !kill)
         {

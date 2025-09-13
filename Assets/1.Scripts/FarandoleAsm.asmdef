@@ -8,7 +8,9 @@
         "Google.Play.Games",
         "Unity.InputSystem",
         "Unity.Postprocessing.Runtime",
-        "UnityUIExtensions"
+        "UnityUIExtensions",
+        "UniTask",
+        "FMODUnity"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using System.Threading;
+using static GOBuilder;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,14 +14,18 @@ public class GameManager : MonoBehaviour
     public GameSceneManager GSM;
     public LayerManager2D LM2D;
     public PlaygroundManager PG;
+    public AnimationManager ANIM;
+    public UIGame UI;
+    public AudioManager AUDIO;
 
     [Header("Extra Refs")]
     public PlayerController PC;
-    public UIGame UI;
     public PlayerData playerData;
     public GameObject prefab_UIGameOver;
+    [Header("Audio Refs")]
+    
     UIGameOver inst_UIGameOver;
-
+    
     void Start()
     {
         StartCoroutine(Init());
@@ -35,6 +41,7 @@ public class GameManager : MonoBehaviour
         PG.Init(this);
         while (!PG.IsReady())
         { yield return null; }
+        PG.ForceDoorClose();
 
         MGM.Init(this);
         MGM.LoadLoop();
@@ -45,41 +52,57 @@ public class GameManager : MonoBehaviour
         while (!GSM.IsReady())
         { yield return null; }
 
-        UI.Init();
-        UI.RefreshLoopLevelText(MGM.miniGamesDifficulty);
+        ANIM.Init(this);
+        while (!ANIM.IsReady())
+        { yield return null; }
 
-        StartGame();
+        AUDIO.Init(this);
+        while (!AUDIO.IsReady())
+        { yield return null; }
+
+        UI.Init(this);
+        while (!UI.IsReady())
+        { yield return null; }
+        UI.RefreshLoopLevelText(MGM.MGLoop.GetRankStr());
+        UI.loopPresentationAnim.Show(MGM.MGLoop);
+
+        //StartGame();
+        UI.launchGameBtn?.clickCallback.AddListener(() => StartGame());
     }
 
     void InitCallbacks()
     {
         MGM.OnHPLossCB.AddListener(playerData.LoseHP);
-        MGM.OnScoreGainCB.AddListener(playerData.AddScore);
-        MGM.OnLoopComplete.AddListener(OnLoopCompletion);
+        UI.OnBeforeLoopDepth.AddListener(OnLoopDepthUpdate);
         MGM.OnMiniGameComplete.AddListener(OnMiniGameCompletion);
         MGM.OnMiniGameTransitionCB.AddListener(OnMiniGameTransition);
         MGM.ShowPostGameUICB.AddListener(UI.ShowSuccessArea);
+        //MGM.OnNewRankCB.AddListener((iRank) => AUDIO.gameBGM.RefreshRank(iRank));
     }
 
     void RemoveCallbacks()
     {
         MGM.OnHPLossCB.RemoveListener(playerData.LoseHP);
-        MGM.OnScoreGainCB.RemoveListener(playerData.AddScore);
-        MGM.OnLoopComplete.RemoveListener(OnLoopCompletion);
+        UI.OnBeforeLoopDepth.RemoveListener(OnLoopDepthUpdate);
         MGM.OnMiniGameComplete.RemoveListener(OnMiniGameCompletion);
         MGM.OnMiniGameTransitionCB.RemoveListener(OnMiniGameTransition);
         MGM.ShowPostGameUICB.RemoveListener(UI.ShowSuccessArea);
+        //MGM.OnNewRankCB.RemoveListener((iRank) => AUDIO.gameBGM.RefreshRank(iRank));
     }
 
     void StartGame()
     {
+        UI.launchGameBtn?.clickCallback.RemoveListener(() => StartGame());
+        UI.launchGameBtn.gameObject.SetActive(false);
+        UI.loopPresentationAnim.Hide();
+
         if (inst_UIGameOver != null)
         {
             Destroy(inst_UIGameOver.gameObject);
             inst_UIGameOver = null;
         }
         InitCallbacks();
-        
+
         MGM.Play();
         UI.ShowMiniGameMode(true);
         GameStarted = true;
@@ -106,12 +129,14 @@ public class GameManager : MonoBehaviour
         MGM.ResetLoop();
 
         /// playground reset mat
-        PG.RefreshMatFromDiff(MGM.miniGamesDifficulty);
-        PG.RefreshMatFromLoopLevel(playerData.loopLevel);
+        PG.RefreshMatFromDiff(MGM.MGLoop.rank);
+        PG.RefreshMatFromLoopLevel(MGM.MGLoop.depth);
         PG.ResetAnimation();
+        PG.FinalClapOpen();
 
         // UI Reset
-        UI.RefreshLoopLevelText(MGM.miniGamesDifficulty);
+        UI.RefreshLoopLevelText(MGM.MGLoop.GetRankStr());
+        UI.ResetLoopStage();
 
         // Start game again
         StartGame();
@@ -128,49 +153,56 @@ public class GameManager : MonoBehaviour
         // nothing ?
     }
 
-    void OnLoopCompletion()
+    void OnLoopDepthUpdate()
     {
-        playerData.loopLevel++;
+        playerData.loopHistory.AddSnapshot(MGM.MGLoop);
 
         bool loopSuccess = MGM.MGLoop.IsLoopPassed();
 
         // Animate according to LoopSuccess
-        UI.LoopCompleteAnim(MGM.MGLoop.GetSuccessStates());
-
         if (loopSuccess)
         {
-            MGM.RaiseDifficulty();
-            PG.RefreshMatFromDiff(MGM.miniGamesDifficulty);
-            UI.RefreshLoopLevelText(MGM.miniGamesDifficulty);
+            PG.RefreshMatFromDiff(MGM.MGLoop.rank);
+            UI.RefreshLoopLevelText(MGM.MGLoop.GetRankStr());
         }
-        
-        PG.RefreshMatFromLoopLevel(playerData.loopLevel);
+
+        PG.RefreshMatFromLoopLevel(MGM.MGLoop.depth);
         UI.ResetLoopStage();
 
         AnimationCurve timeScaleCurve = GameData.Get.gameSettings.timeScaleOverLoopLevel;
-        if (playerData.loopLevel > timeScaleCurve.keys[timeScaleCurve.length - 1].time)
+        if (MGM.MGLoop.depth > timeScaleCurve.keys[timeScaleCurve.length - 1].time)
             return;
-        playerData.timeScale = timeScaleCurve.Evaluate(playerData.loopLevel);
+        playerData.timeScale = timeScaleCurve.Evaluate(MGM.MGLoop.depth);
         Time.timeScale = playerData.timeScale;
+
+        AUDIO.gameBGM.RefreshSpeed(playerData.timeScale);
     }
 
     void GameOver()
     {
         Time.timeScale = 1f;
+        playerData.loopHistory.AddSnapshot(MGM.MGLoop);
 
         StopGame();
-        inst_UIGameOver = Instantiate(prefab_UIGameOver).GetComponent<UIGameOver>();
-        inst_UIGameOver.TryAgainBtn.onClick.AddListener(() => RestartGame());
-        inst_UIGameOver.MenuBtn.onClick.AddListener(() => ExitToTitle());
 
-        PostGameScoreProcessing();
+        CancellationTokenSource cts = new CancellationTokenSource();
+
+        inst_UIGameOver = GOBuilder.Create(prefab_UIGameOver).BuildAs<UIGameOver>();
+        inst_UIGameOver.TryAgainBtn.onClick.AddListener(() => { cts.Cancel(); RestartGame(); });
+        inst_UIGameOver.MenuBtn.onClick.AddListener(() => { cts.Cancel(); ExitToTitle(); });
+
+        bool IsHighScore = PostGameScoreProcessing();
+
+        inst_UIGameOver.scoreDisplayValue.text = playerData.score.ToString();
+
+        inst_UIGameOver.Animate(IsHighScore, PG, cts.Token);
     }
 
     void RefreshUI()
     {
-        UI.miniGameClock.text = MGM.gameClock.GetRemainingTime().ToString("#0.0");
+        UI.miniGameClock.text = Mathf.Ceil(MGM.gameClock.GetRemainingTime()).ToString("#0");
         UI.hpClock.text = playerData.HP.ToString("#0.0");
-        UI.score.text = playerData.score.ToString();
+        //UI.score.text = playerData.score.ToString();
     }
 
     void Update()
@@ -195,9 +227,17 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("Title", LoadSceneMode.Single);
     }
 
-    public void PostGameScoreProcessing()
+    public bool PostGameScoreProcessing()
     {
-        LoopHighScore lhs = MGM.GetLoopHighScore();
+        int score = playerData.GetLoopScore();
+
+        int loopSize = GameData.GetSettings.loopSize;
+        byte[] gameIDs = new byte[loopSize];
+        for (int i = 0; i < loopSize; i++)
+        {
+            gameIDs[i] = MGM.MGLoop.At(i).descriptor.ID;
+        }
+        LoopHighScore lhs = new LoopHighScore(GameData.Get.currentGameMode, gameIDs, score, DateTime.Now);
         LoopHighScore replacedHS = null;
         if (UserData.IsNewHighScore(lhs, out replacedHS))
         {
@@ -207,15 +247,17 @@ public class GameManager : MonoBehaviour
             // <!> load all high score beforehand to avoid overwriting prev data
             UserData.SaveHighScores();
 
-            inst_UIGameOver.newHighScoreDisplayValue.text = playerData.score.ToString();
-            inst_UIGameOver.scoreDisplayHandle.gameObject.SetActive(false);
-            inst_UIGameOver.newHighScoreDisplayHandle.gameObject.SetActive(true);
+            // inst_UIGameOver.scoreDisplayHandle.gameObject.SetActive(false);
+            // inst_UIGameOver.newHighScoreDisplayHandle.gameObject.SetActive(true);
+            return true;
         }
-        else
-        {
-            inst_UIGameOver.scoreDisplayValue.text = playerData.score.ToString();
-            inst_UIGameOver.scoreDisplayHandle.gameObject.SetActive(true);
-            inst_UIGameOver.newHighScoreDisplayHandle.gameObject.SetActive(false);
-        }
+        return false;
+        // else
+        // {
+        //     inst_UIGameOver.scoreDisplayHandle.gameObject.SetActive(true);
+        //     inst_UIGameOver.newHighScoreDisplayHandle.gameObject.SetActive(false);
+        // }
     }
+
+
 }

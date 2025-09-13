@@ -43,11 +43,11 @@ public class LayerManager2D : MonoBehaviour, IManager
                     iRenderer.sortingOrder = min + i;
                     renderers[i] = iRenderer;
                     TryUpdatePosition(i);
-                    Debug.Log("LM2D Reserved : " + renderers[i].gameObject.name + " sorting order : " + renderers[i].sortingOrder);
+                    //Debug.Log("LM2D Reserved : " + renderers[i].gameObject.name + " sorting order : " + renderers[i].sortingOrder);
                     return;
                 }
             }
-            Debug.LogWarning("Failed to place in reserve");
+            //Debug.LogWarning("Failed to place in reserve");
         }
 
         public void PlaceNew(Renderer iRenderer)
@@ -55,7 +55,7 @@ public class LayerManager2D : MonoBehaviour, IManager
             iRenderer.sortingOrder = min + nextSlot;
             renderers[nextSlot] = iRenderer;
             TryUpdatePosition(nextSlot);
-            Debug.Log("LM2D Alloc : " + renderers[nextSlot].gameObject.name + " sorting order : " + renderers[nextSlot].sortingOrder);
+            //Debug.Log("LM2D Alloc : " + renderers[nextSlot].gameObject.name + " sorting order : " + renderers[nextSlot].sortingOrder);
             nextSlot++;
         }
 

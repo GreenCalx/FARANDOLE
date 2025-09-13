@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.Rendering.PostProcessing;
+using Cysharp.Threading.Tasks;
 using System.Threading.Tasks;
 using static Utils;
 
@@ -17,18 +18,24 @@ public class PlaygroundManager : MonoBehaviour, IManager
     public Material diff3Mat;
     public Material playFieldMat;
     public Material clearAnimMat;
+    public Material forgroundFrameMat;
     public Sprite clearAnimSprite;
     public Texture2D LoopLevelColorGrading;
     public bool AnimateBG = true;
     public float AnimationDeltaTime = 0.5f;
     private float currAnimationDeltaTime;
+    public FinalClapAnim finalClapAnimation;
     List<Color> loopLevelColors;
     GameObject go_colliders, go_fg, go_playfield;
     DoorAnim doorAnimation;
+
     MeshRenderer FG_MR, PF_MR;
     Coroutine AnimationCoroutine;
+    Coroutine LerpColorCoroutine;
     LayerManager2D LM2D;
     MiniGameManager MGM;
+    AnimationManager ANIM;
+    LineRenderer forgroundFrameLR;
     public float height
     {
         get
@@ -51,6 +58,7 @@ public class PlaygroundManager : MonoBehaviour, IManager
     {
         LM2D = iGameManager.LM2D;
         MGM = iGameManager.MGM;
+        ANIM = iGameManager.ANIM;
 
         InitColorGrading();
         BuildPlayground();
@@ -95,7 +103,7 @@ public class PlaygroundManager : MonoBehaviour, IManager
         go_fg = GOBuilder.Create()
                             .WithName("PlaygroundForground")
                             .WithParent(transform)
-                            .WithLocalPosition(new Vector3(0f,0f,-1f))
+                            .WithLocalPosition(new Vector3(0f, 0f, -1f))
                             .WithMeshFilter(FG_Mesh, true)
                             .WithRenderer(diff1Mat)
                             .Build();
@@ -105,7 +113,7 @@ public class PlaygroundManager : MonoBehaviour, IManager
         go_playfield = GOBuilder.Create()
                             .WithName("PlayField")
                             .WithParent(transform)
-                            .WithLocalPosition(new Vector3(0f,0f,1f))
+                            .WithLocalPosition(new Vector3(0f, 0f, 1f))
                             .WithMeshFilter(Playfield_Mesh, true)
                             .WithRenderer(playFieldMat)
                             .Build();
@@ -132,16 +140,58 @@ public class PlaygroundManager : MonoBehaviour, IManager
                                 .WithMeshFilter(halfWidthMesh, false)
                                 .WithRenderer(clearAnimMat)
                                 .Build();
-        doorAnimation.Init(doorLeft.transform, doorRight.transform, bounds.size.x/2f);
+        doorAnimation.Init(doorLeft.transform, doorRight.transform, bounds.size.x / 2f);
         doorAnimation.ForceOpen();
+
+
+        // finalClapAnimation = GOBuilder.Create()
+        //                     .WithName("FinalClapAnimation")
+        //                     .WithParent(transform)
+        //                     .WithPosition(new Vector2(bounds.min.x, bounds.min.y))
+        //                     .Build().AddComponent<FinalClapAnim>();
+        GameObject doorUp = GOBuilder.Create()
+                            .WithName("DoorUp")
+                            .WithParent(finalClapAnimation.transform)
+                            .WithPosition(new Vector2(bounds.min.x, bounds.min.y))
+                            .WithMeshFilter(CreateFullScreenMesh(), false)
+                            .WithRenderer(clearAnimMat)
+                            .Build();
+        finalClapAnimation.Init(doorUp.transform, bounds.size.y);
+        finalClapAnimation.ForceOpen();
+
+
+        forgroundFrameLR = GOBuilder.Create()
+                                    .WithName("ForgroundFrame")
+                                    .WithParent(transform)
+                                    .WithLocalPosition(Vector3.zero)
+                                    .WithLineRenderer(forgroundFrameMat)
+                                    .BuildAs<LineRenderer>();
+
 
         LM2D.PlaceForgroundReserve(doorLeft.GetComponent<Renderer>());
         LM2D.PlaceForgroundReserve(doorRight.GetComponent<Renderer>());
+        LM2D.PlaceForgroundReserve(doorUp.GetComponent<Renderer>());
         LM2D.PlaceForgroundReserve(go_fg.GetComponent<Renderer>());
+        LM2D.PlaceForgroundReserve(forgroundFrameLR.GetComponent<Renderer>());
 
         LM2D.PlaceBackgroundReserve(go_playfield.GetComponent<Renderer>());
 
+        UpdateForgroundFrame();
         ResetAnimation();
+    }
+
+    public void UpdateForgroundFrame()
+    {
+        Vector3[] pos = new Vector3[4];
+        pos[0] = new Vector3(bounds.max.x, bounds.max.y, forgroundFrameLR.transform.position.z);
+        pos[1] = new Vector3(bounds.max.x, bounds.min.y, forgroundFrameLR.transform.position.z);
+        pos[2] = new Vector3(bounds.min.x, bounds.min.y, forgroundFrameLR.transform.position.z);
+        pos[3] = new Vector3(bounds.min.x, bounds.max.y, forgroundFrameLR.transform.position.z);
+        forgroundFrameLR.positionCount = 4;
+        forgroundFrameLR.loop = true;
+        forgroundFrameLR.startWidth = 0.05f;
+        forgroundFrameLR.endWidth = 0.05f;
+        forgroundFrameLR.SetPositions(pos);
     }
 
     public Mesh CreateHalfWidthMesh()
@@ -151,12 +201,34 @@ public class PlaygroundManager : MonoBehaviour, IManager
 
         VertexHelper vh = new VertexHelper();
         float half_w = bounds.size.x / 2f;
-        float h      = bounds.size.y;
+        float h = bounds.size.y;
 
         vh.AddVert(new Vector3(0, 0), c, new Vector2(0f, 0f));
         vh.AddVert(new Vector3(0, h), c, new Vector2(0f, 1f));
         vh.AddVert(new Vector3(half_w, h), c, new Vector2(1f, 1f));
         vh.AddVert(new Vector3(half_w, 0), c, new Vector2(1f, 0f));
+
+        vh.AddTriangle(0, 1, 2);
+        vh.AddTriangle(2, 3, 0);
+
+        vh.FillMesh(m);
+
+        return m;
+    }
+
+    public Mesh CreateFullScreenMesh()
+    {
+        Mesh m = new Mesh();
+        Color c = Color.black;
+
+        VertexHelper vh = new VertexHelper();
+        float w = bounds.size.x;
+        float h = bounds.size.y;
+
+        vh.AddVert(new Vector3(0, 0), c, new Vector2(0f, 0f));
+        vh.AddVert(new Vector3(0, h), c, new Vector2(0f, 1f));
+        vh.AddVert(new Vector3(w, h), c, new Vector2(1f, 1f));
+        vh.AddVert(new Vector3(w, 0), c, new Vector2(1f, 0f));
 
         vh.AddTriangle(0, 1, 2);
         vh.AddTriangle(2, 3, 0);
@@ -202,31 +274,74 @@ public class PlaygroundManager : MonoBehaviour, IManager
         await doorAnimation.OpenCo();
     }
 
-    public void RefreshMatFromDiff(int iDifficultyLevel)
+    public void ForceDoorClose()
+    {
+        doorAnimation.ForceClose();
+    }
+
+    public async UniTask FinalClapClose()
+    {
+        finalClapAnimation.CloseAnim();
+    }
+
+    public async UniTask FinalClapOpen()
+    {
+        finalClapAnimation.OpenAnim();
+    }
+
+    public void RefreshMatFromDiff(LoopRank iLoopRank)
     {
         if (FG_MR == null)
             return;
-        switch (iDifficultyLevel)
+        switch (iLoopRank)
         {
-            case 1:
+            case LoopRank.I:
                 FG_MR.material = diff1Mat;
                 break;
-            case 2:
+            case LoopRank.II:
                 FG_MR.material = diff2Mat;
                 break;
-            case 3:
+            case LoopRank.III:
                 FG_MR.material = diff3Mat;
                 break;
             default:
+                FG_MR.material = diff1Mat;
                 break;
         }
     }
 
     public void RefreshMatFromLoopLevel(int iLoopLevel)
     {
-        Color c = (iLoopLevel >= loopLevelColors.Count) ? loopLevelColors[loopLevelColors.Count - 1] : loopLevelColors[iLoopLevel];
-        FG_MR.material.SetColor("_Color", c);
+        // Color c = (iLoopLevel >= loopLevelColors.Count) ? loopLevelColors[loopLevelColors.Count - 1] : loopLevelColors[iLoopLevel];
+        // FG_MR.material.SetColor("_Color", c);
+        // forgroundFrameLR.material.SetColor("_Color", c);
+        if (LerpColorCoroutine != null)
+        {
+            StopCoroutine(LerpColorCoroutine);
+            LerpColorCoroutine = null;
+        }
+        LerpColorCoroutine = StartCoroutine(LerpColorCo(iLoopLevel));
         currAnimationDeltaTime = AnimationDeltaTime / iLoopLevel;
+    }
+
+    IEnumerator LerpColorCo(int iLoopLevel)
+    {
+        float startTime = Time.time;
+        float frac = 0f;
+
+        Color current = (iLoopLevel > 0) ? loopLevelColors[iLoopLevel - 1] : loopLevelColors[0];
+        Color target = (iLoopLevel >= loopLevelColors.Count) ? loopLevelColors[loopLevelColors.Count - 1] : loopLevelColors[iLoopLevel];
+        Color c = current;
+        while (frac < 1f)
+        {
+            frac = Mathf.Clamp01((Time.time - startTime) / GameData.GetSettings.PlayGroundColorLerpTimeSec);
+            c = Color.Lerp(current, target, frac);
+            FG_MR.material.SetColor("_Color", c);
+            forgroundFrameLR.material.SetColor("_Color", c);
+            yield return null;
+        }
+        FG_MR.material.SetColor("_Color", target);
+        forgroundFrameLR.material.SetColor("_Color", target);
     }
 
     IEnumerator AnimateCo()
