@@ -133,13 +133,13 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
             {
                 await UniTask.SwitchToMainThread();
                 await WaitRankUpAnimTask(1f, iCT);
+                OnNewRankDisplayedCB?.Invoke();
                 if (iCT.IsCancellationRequested)
                 {
                     OnBeforeLoopDepth?.Invoke();
-                    OnNewRankDisplayedCB?.Invoke();
                     return;
                 }
-                OnNewRankDisplayedCB?.Invoke();
+                
             };
             q.Enqueue(step4);
         }

@@ -58,3 +58,4 @@ MonoBehaviour:
   LoopCompleteAfterAnimDisplayTimeMs: 1000
   LoopCompleteShowDepthAnimDisplayTimeMs: 500
   PlayGroundColorLerpTimeSec: 1
+  BGMRankLerpTimeSec: 0
