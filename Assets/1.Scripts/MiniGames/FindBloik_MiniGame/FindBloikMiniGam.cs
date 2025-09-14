@@ -19,7 +19,7 @@ public class FindBloik_MiniGame : MiniGame
     public int[] stickersHit;
 
     public float spawnMargin = 0.1f; //Avoid getting stuck
-    int lastHitisBloik = -1;
+
 
     public override void Init()
     {
