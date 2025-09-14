@@ -963,6 +963,7 @@ MonoBehaviour:
   transitionImage: {fileID: 1924862025}
   bgmEmitter: {fileID: 2007130989}
   intensityGainTimeStep: 10
+  titleAnimations: {fileID: 923880907}
 --- !u!114 &504428400
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2268,7 +2269,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1de5c1c09f284b499813ffad2e45b97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  titleMat: {fileID: 0}
+  image: {fileID: 923880905}
 --- !u!1 &936088745
 GameObject:
   m_ObjectHideFlags: 0

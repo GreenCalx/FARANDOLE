@@ -31,6 +31,9 @@ public class UITitle : MonoBehaviour
     readonly string IntensityBGMParm = "Intensity";
     readonly string ExitMenuParm = "State";
     float elapsedTime;
+    [Header("Animations")]
+    public TitleAnim titleAnimations;
+    //
     readonly string GameScene = "Game";
 
     public void DisableAll()
@@ -117,10 +120,13 @@ public class UITitle : MonoBehaviour
     void StartRandomSeed()
     {
         bgmEmitter.SetParameter(ExitMenuParm, 1);
+        titleAnimations.ExitAnim();
         DelayedLaunch(GAME_MODE.RANDOM_SEED);
     }
     void StartDailySeed()
     {
+        bgmEmitter.SetParameter(ExitMenuParm, 1);
+        titleAnimations.ExitAnim();
         DelayedLaunch(GAME_MODE.DAILY_SEED);
     }
     void StartSprint()

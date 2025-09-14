@@ -5,6 +5,7 @@ Shader "XL/MobileVoronoi"
         _MainTex ("Texture", 2D) = "white" {}
         _CellScale("CellScale", float) = 6.0
         _TimeScale("TimeScale",float) = 1.0
+        _MinDist("MinDist",float) = 1.0
 
         _InnerCellColor("InnerCellColor", Color) = (1, 1, 1, 1)
         _OutCellColor("OutCellColor", Color) = (0, 1, 1, 1)
@@ -38,6 +39,7 @@ Shader "XL/MobileVoronoi"
             float4 _MainTex_ST;
             float _CellScale;
             float _TimeScale;
+            float _MinDist;
             float4 _InnerCellColor;
             float4 _OutCellColor;
             float4 _Tint;
@@ -73,7 +75,7 @@ Shader "XL/MobileVoronoi"
 				uv *= _CellScale; //Scaling amount (larger number more cells can be seen)
 				float2 iuv = floor(uv); //gets integer values no floating point
 				float2 fuv = frac(uv); // gets only the fractional part
-				float minDist = 1.0;  // minimun distance
+				float minDist = _MinDist;  // minimun distance
 				for (int y = -1; y <= 1; y++)
 				{
 					for (int x = -1; x <= 1; x++)
