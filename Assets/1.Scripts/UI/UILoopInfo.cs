@@ -45,7 +45,7 @@ public class UILoopInfo : MonoBehaviour
         handle_UILoopInfo.transform.RotateAround(handle_UILoopInfo.transform.position, Vector3.forward, 90f);
     }
 
-    public void UpdateLoopLevelText(string iText)
+    public void UpdateLoopRankText(string iText)
     {
         if (loopDifficultyTxt == null)
             return;

@@ -12,9 +12,11 @@ public class AudioManager : MonoBehaviour, IManager
     GameManager GM;
     public GameBGM gameBGM;
     readonly string rankLerpParm = "MiniGameRankLerp";
+    bool lerpingBGM;
     public void Init(GameManager iGameManager)
     {
         GM = iGameManager;
+        lerpingBGM = false;
     }
     public bool IsReady()
     {
@@ -25,7 +27,13 @@ public class AudioManager : MonoBehaviour, IManager
     {
         if (Mathf.Approximately(iRankFrom, iRankTo))
             return;
-        LerpRankTsk(iRankFrom, iRankTo);
+        if (lerpingBGM)
+            return;
+            
+        if (GameData.GetSettings.BGMRankLerpTimeSec == 0)
+            gameBGM.RefreshRankLerp(iRankTo);
+        else
+            LerpRankTsk(iRankFrom, iRankTo);
     }
 
     async UniTaskVoid LerpRankTsk(float iRankFrom, float iRankTo)
@@ -35,14 +43,17 @@ public class AudioManager : MonoBehaviour, IManager
 
     async UniTask LerpBGM(float iRankFrom, float iRankTo)
     {
+        lerpingBGM = true;
         float startTime = Time.time;
         float frac = 0f;
         while (frac < 1f)
         {
-            frac = (Time.time - startTime) / GameData.GetSettings.BGMRankLerpTimeSec;
+            frac = (Time.realtimeSinceStartup - startTime) / GameData.GetSettings.BGMRankLerpTimeSec;
             gameBGM.RefreshRankLerp(Utils.Lerp(iRankFrom, iRankTo, frac));
+            await UniTask.Yield();
         }
         gameBGM.RefreshRankLerp(iRankTo);
+        lerpingBGM = false;
     }
 
 }

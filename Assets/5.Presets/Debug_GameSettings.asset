@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87a63174ee8c328448bbdd11b0cb13ae, type: 3}
   m_Name: Debug_GameSettings
   m_EditorClassIdentifier: 
-  PlayerHP: 60
+  PlayerHP: 4
   loopSize: 5
-  MiniGameTime: 9
+  loopPassThreshold: 3
+  MiniGameTime: 4
   miniGameLevelUpThreshold: 2
   MaxTimeScale: 3
   timeScaleOverLoopLevel:
@@ -53,8 +54,12 @@ MonoBehaviour:
   titleScreenFadeoutTime: 3
   GameUIScreenProportion: 0.05
   GameFieldScreenProportion: 0.8
+  LoopPefectColor: {r: 0.9528302, g: 0.7278503, b: 0.013483422, a: 1}
+  LoopPassedColor: {r: 0.48593804, g: 0.9811321, b: 0.6148211, a: 1}
+  LoopFailedColor: {r: 1, g: 0, b: 0.4448824, a: 1}
   PostMiniGameLatchInMs: 500
   PreMiniGameLatchInMs: 500
   LoopCompleteAfterAnimDisplayTimeMs: 1000
   LoopCompleteShowDepthAnimDisplayTimeMs: 500
   PlayGroundColorLerpTimeSec: 1
+  BGMRankLerpTimeSec: 1

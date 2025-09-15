@@ -62,7 +62,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _BumpScale: 1
-    - _CellScale: 12.92
+    - _CellScale: 12.31
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
@@ -70,6 +70,7 @@ Material:
     - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _Metallic: 0
+    - _MinDist: 1
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
@@ -85,6 +86,6 @@ Material:
     - _InnerCellColor: {r: 0.12588999, g: 0.14380956, b: 0.21698111, a: 1}
     - _OutCellColor: {r: 0.010946958, g: 0.05660379, b: 0.035297267, a: 1}
     - _OutlineCellColor: {r: 0.23462805, g: 0.2302866, b: 0.23584908, a: 1}
-    - _Tint: {r: 0.7735849, g: 0.7735849, b: 0.7735849, a: 1}
+    - _Tint: {r: 0.6603774, g: 0.6603774, b: 0.6603774, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

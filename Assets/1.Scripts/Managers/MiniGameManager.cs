@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 using System;
+using Cysharp.Threading.Tasks;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Collections;
@@ -30,7 +31,6 @@ public class MiniGameManager : MonoBehaviour, IManager
     public UnityEvent OnMiniGameComplete;
     public UnityEvent OnMiniGameTransitionCB;
     public UnityEvent<float> ShowPostGameUICB;
-    public UnityEvent<LoopRank> OnNewRankCB;
     public LayerManager2D LM2D;
     public PlayerController PC;
     public PlaygroundManager PG;
@@ -77,11 +77,9 @@ public class MiniGameManager : MonoBehaviour, IManager
         MGLoop.rank = LoopRank.Z;
     }
 
-    public async void Play()
+    public async UniTaskVoid Play()
     {
         // Z -> I
-        TryRankUp();
-
         MGLoop.Current.gameObject.SetActive(true);
         MGLoop.Current.IsInPostGame = false;
         MGLoop.Current.Init();
@@ -96,6 +94,13 @@ public class MiniGameManager : MonoBehaviour, IManager
 
         MGLoop.Current.Play();
         gameClock.Reset();
+    }
+
+    public void Start()
+    {
+        MGLoop.RankUpdate();
+        UI.RefreshLoopRankText(MGLoop.GetRankStr());
+        Play();
     }
 
     public void Stop()
@@ -150,10 +155,15 @@ public class MiniGameManager : MonoBehaviour, IManager
             LoopCompleteAnimCTS = new CancellationTokenSource();
 
             UI.skipAnimBtn.clickCallback.AddListener(() => LoopCompleteAnimCTS.Cancel());
-            await UI.LoopCompleteAnim(MGLoop.GetSuccessStates(), MGLoop.IsLoopPassed(), TryRankUp(), MGLoop.depth, LoopCompleteAnimCTS.Token);
-            UI.skipAnimBtn.clickCallback.RemoveListener(() => LoopCompleteAnimCTS.Cancel());
+            
+            UI.handle_CurrentRank.text = MGLoop.GetRankStr();
+            MGLoop.RankUpdate();
+            if (MGLoop.IsRankUpdateRequested)
+                UI.handle_NewRank.text = MGLoop.GetRankStr();
 
-            UI.RefreshLoopLevelText(MGLoop.GetRankStr());
+            await UI.LoopCompleteAnim(MGLoop, LoopCompleteAnimCTS.Token);
+
+            UI.skipAnimBtn.clickCallback.RemoveListener(() => LoopCompleteAnimCTS.Cancel());
             
             MGLoop.Reset();
         }
@@ -162,49 +172,6 @@ public class MiniGameManager : MonoBehaviour, IManager
 
         await PG.OpenPlaygroundAnim();
         Play();
-    }
-
-    public bool TryRankUp()
-    {
-        bool rankedUp = false;
-        UI.handle_CurrentRank.text = MGLoop.GetRankStr();
-            
-        switch (MGLoop.rank)
-        {
-            case LoopRank.Z:
-                MGLoop.RankUp();
-                UI.RefreshLoopLevelText(MGLoop.GetRankStr());
-                rankedUp = true;
-                break;
-            case LoopRank.I:
-                if (!MGLoop.IsLoopPassed())
-                    return false;
-                MGLoop.RankUp();
-                rankedUp = true;
-                break;
-            case LoopRank.II:
-                if (!MGLoop.IsLoopPassed())
-                    return false;
-                MGLoop.RankUp();
-                rankedUp = true;
-                break;
-            case LoopRank.III:
-                if (!MGLoop.IsLoopPassed())
-                    return false;
-                // super loop check
-                break;
-            case LoopRank.S:
-                // master loop check
-                break;
-            default:
-                Debug.LogWarning("tryRankUp:: Unkown loop rank : " + (int)MGLoop.rank);
-                break;
-        }
-        if (rankedUp)
-            OnNewRankCB?.Invoke(MGLoop.rank);
-
-        UI.handle_NewRank.text = MGLoop.GetRankStr();
-        return rankedUp;
     }
 
     public LoopHighScore GetLoopHighScore()

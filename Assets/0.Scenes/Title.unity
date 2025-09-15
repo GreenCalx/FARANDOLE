@@ -963,6 +963,7 @@ MonoBehaviour:
   transitionImage: {fileID: 1924862025}
   bgmEmitter: {fileID: 2007130989}
   intensityGainTimeStep: 10
+  titleAnimations: {fileID: 923880907}
 --- !u!114 &504428400
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2191,6 +2192,7 @@ GameObject:
   - component: {fileID: 923880904}
   - component: {fileID: 923880906}
   - component: {fileID: 923880905}
+  - component: {fileID: 923880907}
   m_Layer: 5
   m_Name: BG
   m_TagString: Untagged
@@ -2255,6 +2257,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 923880903}
   m_CullTransparentMesh: 1
+--- !u!114 &923880907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 923880903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1de5c1c09f284b499813ffad2e45b97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  image: {fileID: 923880905}
 --- !u!1 &936088745
 GameObject:
   m_ObjectHideFlags: 0

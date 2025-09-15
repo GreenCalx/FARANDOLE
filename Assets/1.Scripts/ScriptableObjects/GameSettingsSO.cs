@@ -8,6 +8,8 @@ public class GameSettingsSO : ScriptableObject
 
     [Header("GameLoop Tweaks")]
     public int loopSize = 5;
+    [Tooltip("Inclusive")]
+    public int loopPassThreshold = 3;
     public float MiniGameTime = 5f;
     public int miniGameLevelUpThreshold = 2;
     public float MaxTimeScale = 3f;
@@ -17,6 +19,9 @@ public class GameSettingsSO : ScriptableObject
     public float titleScreenFadeoutTime = 1f;
     public float GameUIScreenProportion = 0.05f;
     public float GameFieldScreenProportion = 0.8f;
+    public Color LoopPefectColor = Color.yellow;
+    public Color LoopPassedColor = Color.green;
+    public Color LoopFailedColor = Color.red;
 
     [Header("GameFlow Tweaks")]
     public int PostMiniGameLatchInMs = 500;

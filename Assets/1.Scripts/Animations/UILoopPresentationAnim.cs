@@ -67,7 +67,7 @@ public class UILoopPresentationAnim : MonoBehaviour
 
     public void Hide()
     {
-        cancellationTokenSource.Cancel();
+        cancellationTokenSource?.Cancel();
         foreach (UIMiniGamePresentationLine l in uiLines)
         {
             if (!l.IsShown)
