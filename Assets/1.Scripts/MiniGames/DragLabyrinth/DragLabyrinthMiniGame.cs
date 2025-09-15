@@ -10,11 +10,13 @@ public class DragLabyrinthMiniGame : MiniGame
     GameObject inst_ballToEscape;
     RollingBall inst_asBall;
     Dragable    inst_asDragable;
+
     public Labyrinth inst_Labyrinth;
     public List<GameObject> diff1Layouts;
     public List<GameObject> diff2Layouts;
     public List<GameObject> diff3Layouts;
     LabyrinthLayout selectedLayout;
+
 
     public void ClearLayout()
     {
