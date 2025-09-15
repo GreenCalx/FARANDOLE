@@ -54,7 +54,9 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         hpClock.text = GameData.GetSettings.PlayerHP.ToString("#0.0");
         score.text = "";
         timeIndicatorImg.color = frozenTimeColor;
-
+        successTimePositiveColor = GameData.GetSettings.LoopPassedColor;
+        successTimeNegativeColor = GameData.GetSettings.LoopFailedColor;
+        
         ShowMiniGameMode(false);
         //ShowSuccessArea(false);
         handle_UILoopInfo.Init();
@@ -80,13 +82,13 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
 
         handle_UIDoorAnim.Init();
 
-        handle_animLoopSuccess.passedTextColor = successTimePositiveColor;
-        handle_animLoopSuccess.failedTextColor = successTimeNegativeColor;
+        //handle_animLoopSuccess.passedTextColor = successTimePositiveColor;
+        //handle_animLoopSuccess.failedTextColor = successTimeNegativeColor;
     }
 
-    public void RefreshLoopLevelText(string iRankText)
+    public void RefreshLoopRankText(string iRankText)
     {
-        handle_UILoopInfo.UpdateLoopLevelText(iRankText);
+        handle_UILoopInfo.UpdateLoopRankText(iRankText);
     }
 
     public void RefreshLoopStage(int iIndex, MiniGameSuccessState iState)
@@ -149,21 +151,25 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         handle_UIDoorAnim.ClapAnim();
     }
 
-    public async Task LoopCompleteAnim(MiniGameSuccessState[] iLoopSuccesses, bool iLoopPassed, bool iRankUp, int iLoopDepth, CancellationToken iCT)
+    public async Task LoopCompleteAnim(MiniGameLoop iMGLoop, CancellationToken iCT)
     {
-        Color[] colors = new Color[iLoopSuccesses.Length];
-        for (int i = 0; i < iLoopSuccesses.Length; i++)
+        MiniGameSuccessState[] arr_states = iMGLoop.GetSuccessStates();
+        Color[] colors = new Color[arr_states.Length];
+        for (int i = 0; i < arr_states.Length; i++)
         {
-            colors[i] = (iLoopSuccesses[i] == MiniGameSuccessState.PASSED) ? successTimePositiveColor : successTimeNegativeColor;
+            colors[i] = (arr_states[i] == MiniGameSuccessState.PASSED) ? successTimePositiveColor : successTimeNegativeColor;
         }
-        handle_animLoopSuccess.Init(colors, iLoopPassed, iRankUp, iLoopDepth);
+
+        handle_animLoopSuccess.Init(colors, iMGLoop);
         handle_animLoopSuccess.OnBeforeLoopDepth = new UnityEvent();
         handle_animLoopSuccess.OnBeforeLoopDepth.AddListener(()=>OnBeforeLoopDepth?.Invoke());
 
-        float newRank = (float)MGM.MGLoop.rank;
-        float prevRank = MGM.MGLoop.rank > 0 ? newRank - 1f : 0f;
+        float newRank = (float)iMGLoop.rank;
+        float prevRank = iMGLoop.rank > 0 ? newRank - 1f : 0f;
         handle_animLoopSuccess.OnNewRankDisplayedCB = new UnityEvent();
-        handle_animLoopSuccess.OnNewRankDisplayedCB.AddListener(() => AUDIO.LerpRank(prevRank, newRank));
+        handle_animLoopSuccess.OnNewRankDisplayedCB.AddListener(
+            () => { AUDIO.LerpRank(prevRank, newRank); RefreshLoopRankText(iMGLoop.GetRankStr()); }
+            );
 
         ANIM.TrackAnimator(handle_animLoopSuccess.animator, iCT);
         ANIM.QueueAnimRange(handle_animLoopSuccess.animator, handle_animLoopSuccess.GetAnimQueue(iCT));
@@ -172,6 +178,6 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         //await handle_animLoopSuccess.Animate(colors, iLoopPassed, iRankUp, iLoopDepth, iCT);
 
         handle_animLoopSuccess.OnBeforeLoopDepth.RemoveListener(()=>OnBeforeLoopDepth?.Invoke());
-        handle_animLoopSuccess.OnNewRankDisplayedCB.RemoveListener(()=> AUDIO.LerpRank(prevRank, newRank));
+        handle_animLoopSuccess.OnNewRankDisplayedCB.RemoveListener(()=> { AUDIO.LerpRank(prevRank, newRank); RefreshLoopRankText(iMGLoop.GetRankStr()); });
     }
 }

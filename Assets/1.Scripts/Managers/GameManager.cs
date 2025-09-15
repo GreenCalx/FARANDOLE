@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour
         UI.Init(this);
         while (!UI.IsReady())
         { yield return null; }
-        UI.RefreshLoopLevelText(MGM.MGLoop.GetRankStr());
+        UI.RefreshLoopRankText(MGM.MGLoop.GetRankStr());
         UI.loopPresentationAnim.Show(MGM.MGLoop);
 
         //StartGame();
@@ -77,7 +77,6 @@ public class GameManager : MonoBehaviour
         MGM.OnMiniGameComplete.AddListener(OnMiniGameCompletion);
         MGM.OnMiniGameTransitionCB.AddListener(OnMiniGameTransition);
         MGM.ShowPostGameUICB.AddListener(UI.ShowSuccessArea);
-        //MGM.OnNewRankCB.AddListener((iRank) => AUDIO.gameBGM.RefreshRank(iRank));
     }
 
     void RemoveCallbacks()
@@ -87,7 +86,6 @@ public class GameManager : MonoBehaviour
         MGM.OnMiniGameComplete.RemoveListener(OnMiniGameCompletion);
         MGM.OnMiniGameTransitionCB.RemoveListener(OnMiniGameTransition);
         MGM.ShowPostGameUICB.RemoveListener(UI.ShowSuccessArea);
-        //MGM.OnNewRankCB.RemoveListener((iRank) => AUDIO.gameBGM.RefreshRank(iRank));
     }
 
     void StartGame()
@@ -103,7 +101,7 @@ public class GameManager : MonoBehaviour
         }
         InitCallbacks();
 
-        MGM.Play();
+        MGM.Start();
         UI.ShowMiniGameMode(true);
         GameStarted = true;
     }
@@ -135,7 +133,7 @@ public class GameManager : MonoBehaviour
         PG.FinalClapOpen();
 
         // UI Reset
-        UI.RefreshLoopLevelText(MGM.MGLoop.GetRankStr());
+        UI.RefreshLoopRankText(MGM.MGLoop.GetRankStr());
         UI.ResetLoopStage();
 
         // Start game again
@@ -163,7 +161,6 @@ public class GameManager : MonoBehaviour
         if (loopSuccess)
         {
             PG.RefreshMatFromDiff(MGM.MGLoop.rank);
-            UI.RefreshLoopLevelText(MGM.MGLoop.GetRankStr());
         }
 
         PG.RefreshMatFromLoopLevel(MGM.MGLoop.depth);

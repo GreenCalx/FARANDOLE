@@ -11,11 +11,10 @@ public class TitleAnim : MonoBehaviour
     float initImageScale,
             initCellScale,
             initTimeScale,
-            initTint,
             initMinDist;
     Color initInnerCellColor;
     Color initOutCellColor;
-            
+    Color initTint;
     const string sParmCellScale = "_CellScale";
     const string sParmTimeScale = "_TimeScale";
     const string sParmMinDist = "_MinDist";
@@ -33,13 +32,13 @@ public class TitleAnim : MonoBehaviour
         initTimeScale = titleMat.GetFloat(sParmTimeScale);
         initInnerCellColor = titleMat.GetColor(sParmInnerCellColor);
         initOutCellColor = titleMat.GetColor(sParmOutCellColor);
-        initTint = titleMat.GetFloat(sParmTint);
+        initTint = titleMat.GetColor(sParmTint);
         initMinDist = titleMat.GetFloat(sParmMinDist);
         initImageScale = image.rectTransform.localScale.x;
 
     }
 
-    void OnDisable()
+    void OnDestroy()
     {
         if (cts!=null)
             cts.Cancel();
