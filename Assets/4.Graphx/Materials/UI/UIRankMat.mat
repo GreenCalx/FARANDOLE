@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: UIRankMat
-  m_Shader: {fileID: 4800000, guid: 6f8dafb7291d8ac45855c47261333f90, type: 3}
+  m_Shader: {fileID: 4800000, guid: ca6e32ca5fe19b64ebdb49a82d9bf85e, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []

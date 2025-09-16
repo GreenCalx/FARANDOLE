@@ -9,9 +9,12 @@ public class GameSettingsSO : ScriptableObject
     [Header("GameLoop Tweaks")]
     public int loopSize = 5;
     [Tooltip("Inclusive")]
-    public int loopPassThreshold = 3;
+    public float percentOfLoopSizeToPass = 0.5f;
+    public int loopPassThreshold
+    {
+        get { return (int)Mathf.Floor((float)loopSize / 2f); }
+    }
     public float MiniGameTime = 5f;
-    public int miniGameLevelUpThreshold = 2;
     public float MaxTimeScale = 3f;
     public AnimationCurve timeScaleOverLoopLevel;
 

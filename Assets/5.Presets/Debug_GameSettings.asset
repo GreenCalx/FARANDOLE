@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerHP: 5
   loopSize: 5
-  loopPassThreshold: 3
+  percentOfLoopSizeToPass: 0.5
   MiniGameTime: 5
-  miniGameLevelUpThreshold: 2
+  miniGameLevelUpThreshold: 1
   MaxTimeScale: 3
   timeScaleOverLoopLevel:
     serializedVersion: 2

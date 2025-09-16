@@ -61,6 +61,7 @@ public class MiniGameManager : MonoBehaviour, IManager
     {
         if (MiniGameToTest != null)
         {
+            Debug.LogWarning("MINI GAME TEST : Be sure to have a loopSize of 1 in the settings");
             prefab_miniGames.Clear();
             prefab_miniGames.Add(MiniGameToTest);
         }
