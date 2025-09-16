@@ -22,6 +22,7 @@ public class GameSettingsSO : ScriptableObject
     public Color LoopPefectColor = Color.yellow;
     public Color LoopPassedColor = Color.green;
     public Color LoopFailedColor = Color.red;
+    public LoopRankSO RankSettings;
 
     [Header("GameFlow Tweaks")]
     public int PostMiniGameLatchInMs = 500;

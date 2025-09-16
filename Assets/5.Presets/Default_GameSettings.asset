@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerHP: 10
   loopSize: 5
+  loopPassThreshold: 3
   MiniGameTime: 5
   miniGameLevelUpThreshold: 2
   MaxTimeScale: 3
@@ -53,8 +54,13 @@ MonoBehaviour:
   titleScreenFadeoutTime: 3
   GameUIScreenProportion: 0.1
   GameFieldScreenProportion: 0.8
+  LoopPefectColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  LoopPassedColor: {r: 0, g: 1, b: 0, a: 1}
+  LoopFailedColor: {r: 1, g: 0, b: 0, a: 1}
+  RankSettings: {fileID: 11400000, guid: 6a32a64a12bcf2d4abaea25fad902b82, type: 2}
   PostMiniGameLatchInMs: 500
   PreMiniGameLatchInMs: 500
   LoopCompleteAfterAnimDisplayTimeMs: 1000
   LoopCompleteShowDepthAnimDisplayTimeMs: 500
   PlayGroundColorLerpTimeSec: 1
+  BGMRankLerpTimeSec: 1

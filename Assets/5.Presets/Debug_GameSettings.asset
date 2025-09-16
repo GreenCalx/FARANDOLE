@@ -57,6 +57,7 @@ MonoBehaviour:
   LoopPefectColor: {r: 0.9528302, g: 0.7278503, b: 0.013483422, a: 1}
   LoopPassedColor: {r: 0.48593804, g: 0.9811321, b: 0.6148211, a: 1}
   LoopFailedColor: {r: 1, g: 0, b: 0.4448824, a: 1}
+  RankSettings: {fileID: 11400000, guid: 6a32a64a12bcf2d4abaea25fad902b82, type: 2}
   PostMiniGameLatchInMs: 500
   PreMiniGameLatchInMs: 500
   LoopCompleteAfterAnimDisplayTimeMs: 1000

@@ -121,8 +121,8 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
         Func<UniTask> step1 = async () =>
         {
             await UniTask.SwitchToMainThread();
-            animator.SetTrigger(LoopPassedTrigger);
             animator.SetBool(LoopRankUpBoolParm, MGLoop.IsRankUpdateRequested);
+            animator.SetTrigger(LoopPassedTrigger);
             await WaitMainAnimTask(1f, iCT); // full anim
             if (iCT.IsCancellationRequested)
             {
@@ -131,13 +131,14 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
                     OnNewRankDisplayedCB?.Invoke();
                 return;
             }
+            animator.SetTrigger(LoopShowRankTrigger);
         };
         q.Enqueue(step1);
 
         Func<UniTask> step2 = async () =>
         {
             await UniTask.SwitchToMainThread();
-            animator.SetTrigger(LoopShowRankTrigger);
+
             await WaitShowRankAnimTask(1f, iCT);
             if (iCT.IsCancellationRequested)
             {
@@ -146,13 +147,15 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
                     OnNewRankDisplayedCB?.Invoke();
                 return;
             }
+            animator.SetTrigger(LoopShowSuccessTrigger);
+            
         };
         q.Enqueue(step2);
 
         Func<UniTask> step3 = async () =>
         {
             await UniTask.SwitchToMainThread();
-            animator.SetTrigger(LoopShowSuccessTrigger);
+
             CancellationTokenSource ctsTextAnim = new CancellationTokenSource();
             loopPassedTextAnim.Animate(ctsTextAnim.Token, iCT);
             await WaitShowSuccessAnimTask(1f, iCT);
@@ -180,15 +183,15 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
                     OnBeforeLoopDepth?.Invoke();
                     return;
                 }
-
             };
             q.Enqueue(step4);
         }
 
         Func<UniTask> step5 = async () =>
         {
-            await UniTask.SwitchToMainThread();
             await Task.Delay(GameData.GetSettings.LoopCompleteAfterAnimDisplayTimeMs);
+            await UniTask.SwitchToMainThread();
+            animator.SetTrigger(LoopHideTrigger);
             if (iCT.IsCancellationRequested)
             { OnBeforeLoopDepth?.Invoke(); return; }
         };
@@ -197,11 +200,11 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
         Func<UniTask> step6 = async () =>
         {
             await UniTask.SwitchToMainThread();
-            animator.SetTrigger(LoopHideTrigger);
+
             if (MGLoop.IsRankUpdateRequested)
-                await WaitHideFromRankUpAnimTask(0.5f, iCT); // half anim
+                await WaitHideFromRankUpAnimTask(1f, iCT); // half anim
             else
-                await WaitHideAnimTask(0.5f, iCT); // half anim
+                await WaitHideAnimTask(1f, iCT); // half anim
             if (iCT.IsCancellationRequested)
             { OnBeforeLoopDepth?.Invoke(); return; }
         };
@@ -214,13 +217,13 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
             await WaitShowLoopDepth(1f, iCT);
             if (iCT.IsCancellationRequested)
             { return; }
+            animator.SetTrigger(LoopHideDepthTrigger);
         };
         q.Enqueue(step7);
 
         Func<UniTask> step8 = async () =>
         {
             await UniTask.SwitchToMainThread();
-            animator.SetTrigger(LoopHideDepthTrigger);
             await WaitBackToIdle(1f, iCT);
         };
         q.Enqueue(step8);
@@ -267,52 +270,3 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
     }
     
 }
-    // async UniTask AnimateTextTask(MiniGameLoop iMGLoop, CancellationToken iCT)
-    // {
-    //     // make transparent
-    //     loopPassedTxt.transform.parent.gameObject.SetActive(true);
-
-    //     // fade in text
-    //     TMP_TextInfo textInfo = loopPassedTxt.textInfo;
-    //     Color32[] newVertexColors;
-    //     int currentCharacter = 0;
-    //     int startingCharacterRange = currentCharacter;
-    //     bool endReached = false;
-    //     int characterCount = textInfo.characterCount;
-
-    //     byte fadeSteps = (byte)Mathf.Max(1, 255 / RolloverCharacterSpread);
-    //     while (!endReached)
-    //     {
-    //         if (iCT.IsCancellationRequested)
-    //             return;
-    //         for (int i = startingCharacterRange; i < currentCharacter + 1; i++)
-    //         {
-    //             if (!textInfo.characterInfo[i].isVisible)
-    //                 continue;
-    //             int materialIndex = textInfo.characterInfo[i].materialReferenceIndex;
-    //             newVertexColors = textInfo.meshInfo[materialIndex].colors32;
-    //             int vertexIndex = textInfo.characterInfo[i].vertexIndex;
-    //             byte alpha = (byte)Mathf.Clamp(newVertexColors[vertexIndex + 0].a + fadeSteps, 0, 255);
-    //             newVertexColors[vertexIndex + 0].a = alpha;
-    //             newVertexColors[vertexIndex + 1].a = alpha;
-    //             newVertexColors[vertexIndex + 2].a = alpha;
-    //             newVertexColors[vertexIndex + 3].a = alpha;
-    //             if (alpha == 255)
-    //             {
-    //                 startingCharacterRange++;
-    //                 if (startingCharacterRange == characterCount)
-    //                 {
-    //                     currentCharacter = 0;
-    //                     startingCharacterRange = 0;
-
-    //                     endReached = true;
-    //                 }
-    //             }
-    //         }
-    //         loopPassedTxt.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
-    //         if (currentCharacter + 1 < characterCount)
-    //             currentCharacter++;
-    //         await UniTask.Delay(25 - FadeSpeed);
-    //     }
-    // }
-    //}
