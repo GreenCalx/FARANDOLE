@@ -10,11 +10,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -2979126593439281272, guid: 5a3aab14e58c90046baf5fde2130fce6, type: 3}
       propertyPath: dragForce
-      value: 1.3
+      value: 4.41
       objectReference: {fileID: 0}
     - target: {fileID: -2979126593439281272, guid: 5a3aab14e58c90046baf5fde2130fce6, type: 3}
       propertyPath: DragWithVelocity
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -2979126593439281272, guid: 5a3aab14e58c90046baf5fde2130fce6, type: 3}
       propertyPath: maxVelocityRange

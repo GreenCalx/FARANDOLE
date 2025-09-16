@@ -16,7 +16,7 @@ MonoBehaviour:
   loopSize: 5
   loopPassThreshold: 3
   MiniGameTime: 4
-  miniGameLevelUpThreshold: 2
+  miniGameLevelUpThreshold: 0
   MaxTimeScale: 3
   timeScaleOverLoopLevel:
     serializedVersion: 2

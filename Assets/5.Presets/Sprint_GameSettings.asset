@@ -14,9 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerHP: 5
   loopSize: 2
-  PostMiniGameLatchInMs: 250
+  loopPassThreshold: 3
   MiniGameTime: 5
-  MaxMiniGameDifficulty: 3
   miniGameLevelUpThreshold: 1
   MaxTimeScale: 5
   timeScaleOverLoopLevel:
@@ -52,5 +51,15 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  titleScreenFadeoutTime: 1
   GameUIScreenProportion: 0.05
   GameFieldScreenProportion: 0.8
+  LoopPefectColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  LoopPassedColor: {r: 0, g: 1, b: 0, a: 1}
+  LoopFailedColor: {r: 1, g: 0, b: 0, a: 1}
+  PostMiniGameLatchInMs: 250
+  PreMiniGameLatchInMs: 500
+  LoopCompleteAfterAnimDisplayTimeMs: 1000
+  LoopCompleteShowDepthAnimDisplayTimeMs: 500
+  PlayGroundColorLerpTimeSec: 1
+  BGMRankLerpTimeSec: 1

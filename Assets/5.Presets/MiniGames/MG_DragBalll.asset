@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f772bfecd73e0a64ca2b7000d99e16b6, type: 3}
+  m_Name: MG_DragBalll
+  m_EditorClassIdentifier: 
+  ID: 8
+  name: DragBall
+  goal: Drag the ball outside the box
+  thumbNailImg: {fileID: 21300000, guid: 5f84ee867ef9ec742b5c7f46a299cb85, type: 3}
+  prefab_MiniGame: {fileID: 2266623309687070485, guid: b5b8eac1938e1384e85eab4e8998b613, type: 3}
+  tags: 01000000
+  orientationRequirement: 0
