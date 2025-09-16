@@ -33,6 +33,8 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
     [Header("Loop Complete Animation Handles")]
     public TextMeshProUGUI handle_CurrentRank;
     public TextMeshProUGUI handle_NewRank;
+    public Image handle_CurrentRankImg;
+    public Image handle_NewRankImg;
     [Header("Launch Game")]
     public UIButton launchGameBtn;
     public UILoopPresentationAnim loopPresentationAnim;

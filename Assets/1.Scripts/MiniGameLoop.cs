@@ -107,12 +107,12 @@ public class MiniGameLoop : IEnumerator<MiniGame>
     public void RankUpdate()
     {
         rankUpdateRequest = false;
-    
+
         switch (rank)
         {
             case LoopRank.Z:
                 RankUp();
-                rankUpdateRequest = true;
+
                 break;
             case LoopRank.I:
                 if (!IsLoopPassed())
@@ -120,7 +120,6 @@ public class MiniGameLoop : IEnumerator<MiniGame>
                 else if (IsLoopPerfect())
                 {
                     RankUp();
-                    rankUpdateRequest = true;
                 }
 
                 break;
@@ -128,29 +127,28 @@ public class MiniGameLoop : IEnumerator<MiniGame>
                 if (!IsLoopPassed())
                 {
                     RankDown();
-                    rankUpdateRequest = true;
                 }
                 else if (IsLoopPerfect())
                 {
                     RankUp();
-                    rankUpdateRequest = true;
                 }
                 break;
             case LoopRank.III:
                 if (!IsLoopPassed())
                 {
                     RankDown();
-                    rankUpdateRequest = true;
                 }
                 // super loop check
                 break;
             case LoopRank.S:
                 // master loop check
-                break;
+                return;
             default:
                 Debug.LogWarning("tryRankUp:: Unkown loop rank : " + (int)rank);
                 break;
         }
+        
+        rankUpdateRequest = true;
     }
 
     public void RankUp()

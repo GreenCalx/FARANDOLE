@@ -53,7 +53,7 @@ public class MiniGameManager : MonoBehaviour, IManager
     
     public bool IsReady()
     {
-        return true;
+        return MGLoop!=null;
     }
     #endregion
 
@@ -61,6 +61,7 @@ public class MiniGameManager : MonoBehaviour, IManager
     {
         if (MiniGameToTest != null)
         {
+            Debug.LogWarning("MINI GAME TEST : Be sure to have a loopSize of 1 in the settings");
             prefab_miniGames.Clear();
             prefab_miniGames.Add(MiniGameToTest);
         }
@@ -152,15 +153,21 @@ public class MiniGameManager : MonoBehaviour, IManager
             MGLoop.depth++;
             OnLoopComplete.Invoke();
 
+            // Cancel animation init
             LoopCompleteAnimCTS = new CancellationTokenSource();
-
             UI.skipAnimBtn.clickCallback.AddListener(() => LoopCompleteAnimCTS.Cancel());
             
+            // Rank update
             UI.handle_CurrentRank.text = MGLoop.GetRankStr();
+            UI.handle_CurrentRankImg.sprite = GameData.GetSettings.RankSettings.GetImageFromRank(MGLoop.rank);
             MGLoop.RankUpdate();
             if (MGLoop.IsRankUpdateRequested)
+            {
                 UI.handle_NewRank.text = MGLoop.GetRankStr();
-
+                UI.handle_NewRankImg.sprite = GameData.GetSettings.RankSettings.GetImageFromRank(MGLoop.rank);
+            }
+                
+            // play animation
             await UI.LoopCompleteAnim(MGLoop, LoopCompleteAnimCTS.Token);
 
             UI.skipAnimBtn.clickCallback.RemoveListener(() => LoopCompleteAnimCTS.Cancel());
