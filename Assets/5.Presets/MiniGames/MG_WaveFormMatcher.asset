@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 5
   name: Waveform Matcher
-  goal: Overlap perfectly the two waveforms
+  goal: Overlap the two waveforms
   thumbNailImg: {fileID: 21300000, guid: 360e54c7122c64a469bfceef52bc353c, type: 3}
   prefab_MiniGame: {fileID: 2924888216615747985, guid: 5e47560e7e3d57e49b8f29f7f43d2c73, type: 3}
   tags: 0400000003000000
