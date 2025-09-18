@@ -79,7 +79,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 046554a5cde705f4b80b7119db0f3471, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  descriptor: {fileID: 0}
+  descriptor: {fileID: 11400000, guid: 924e8e2f6a36213448967cef3f3eb132, type: 2}
   MGM: {fileID: 0}
   PC: {fileID: 0}
   PG: {fileID: 0}
