@@ -153,43 +153,4 @@ public class GOBuilder
         return this;
     }
 
-    public GOBuilder WithRandomPositionInBoundsNoOverlap(Bounds bounds, float spawnMargin = 0)
-    {
-        bool hasOverlap;
-        int safetyCounter = 0;
-        Collider2D cd = GO.GetComponent<Collider2D>();
-        if (cd == null)
-        {
-            throw new Exception("Object spawn at random has no collider");
-        }
-        List<Collider2D> colliders = new List<Collider2D>(5);
-        do
-        {
-            Vector2 newPos = new Vector3(
-                UnityEngine.Random.Range(bounds.min.x + spawnMargin, bounds.max.x - spawnMargin),
-                UnityEngine.Random.Range(bounds.min.y + spawnMargin, bounds.max.y - spawnMargin),
-                0
-            );
-
-            GO.transform.position = newPos;
-
-            int count = Physics2D.OverlapCollider(cd, colliders);
-
-            hasOverlap = false;
-
-            for (int i = 0; i < count; i++)
-            {
-                Debug.Log("checkcolliders");
-                if (colliders[i] != null && colliders[i].gameObject != GO)
-                {
-                    hasOverlap = true;
-                    break;
-                }
-            }
-
-            safetyCounter++;
-
-        } while (hasOverlap && safetyCounter < 20); // 20 tentatives max
-        return this;
-    }
 }
