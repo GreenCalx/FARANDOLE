@@ -10,28 +10,32 @@ public class Counting_MiniGame : MiniGame
     public GameObject prefabs_dice;
     public GameObject prefab_poolBall;
 
-    public float spawnMargin;
+    private float spawnMargin;
     public int[] numberCounterObjects;
     private CounterObject[] counterObjects;
     private int counter = 1;
+    private Vector2[] counterObjectsPositions;
 
     public override void Init()
     {
         int n_spawns = numberCounterObjects[MGM.miniGamesDifficulty - 1];
         counterObjects = new CounterObject[n_spawns];
+        counterObjectsPositions = new Vector2[n_spawns];
         counter = 1;
         for (int i = 0; i < n_spawns; i++)
         {
             counterObjects[i] = GOBuilder.Create(prefabs_dice)
             .WithName("counter" + i)
             .WithParent(transform)
-            .WithRandomPositionInBoundsNoOverlap(PG.bounds, 0.5f)
+            .WithPosition(counterObjectsPositions[i])
             .Build().GetComponent<CounterObject>();
             counterObjects[i].Setup(i);
             //MGM.LM2D.PlaceObject(counterObjects[i].sr);
             PC.AddTapTracker(counterObjects[i]);
             counterObjects[i].tapCB.AddListener(diceSelected);
         }
+        spawnMargin = counterObjects[0].sr.bounds.max.x - counterObjects[0].sr.bounds.min.x;
+        PositionAtRandomNoOverlap();
     }
 
     public override void Play()
@@ -66,7 +70,7 @@ public class Counting_MiniGame : MiniGame
     {
         if (count == counter)
         {
-            counterObjects[count-1].Selected();
+            counterObjects[count - 1].Selected();
             counter++;
             if (counter > numberCounterObjects[MGM.miniGamesDifficulty - 1])
             {
@@ -88,5 +92,34 @@ public class Counting_MiniGame : MiniGame
         }
     }
 
+    public void PositionAtRandomNoOverlap()
+    {
+        bool hasOverlap;
+        int safetyCounter = 0;
+
+        for (int i = 0; i < counterObjects.Length; i++)
+        {
+            do
+            {
+                hasOverlap = false;
+                counterObjects[i].gameObject.transform.position = new Vector3(
+                    UnityEngine.Random.Range(PG.bounds.min.x + spawnMargin, PG.bounds.max.x - spawnMargin),
+                    UnityEngine.Random.Range(PG.bounds.min.y + spawnMargin, PG.bounds.max.y - spawnMargin),
+                    0
+                );
+
+                for (int j = 0; j < i; j++)
+                {
+                    if ((counterObjects[i].transform.position - counterObjects[j].transform.position).magnitude < spawnMargin)
+                    {
+                        hasOverlap = true;
+                    }
+                }
+
+                safetyCounter++;
+
+            } while (hasOverlap && safetyCounter < 20); // 20 tentatives max
+        }
+    }
 
 }
