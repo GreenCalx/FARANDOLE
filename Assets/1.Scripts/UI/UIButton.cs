@@ -14,17 +14,17 @@ public class UIButton : Button, IPointerUpHandler, IPointerDownHandler, IPointer
     public UnityEvent clickCallback;
 
     bool clickCancelled = false;
-    Image self_img;
+    Image ui_img;
     public UnityEvent OnPressed;
-    public UICustomSquircle image;
+    UICustomSquircle squircle_img;
     UITag tag;
     bool pressed = false;
 
     void Start()
     {
-        self_img = GetComponent<Image>();
+        ui_img = GetComponent<Image>();
         btn_animator = GetComponent<Animator>();
-        image = GetComponent<UICustomSquircle>();
+        squircle_img = GetComponent<UICustomSquircle>();
         tag = GetComponent<UITag>();
         pressed = false;
         UpdateImage();
@@ -38,23 +38,44 @@ public class UIButton : Button, IPointerUpHandler, IPointerDownHandler, IPointer
     // IMaterialModifier
     public void UpdateImage()
     {
-        if (image==null)
-            image = GetComponent<UICustomSquircle>();
-            
+        if (squircle_img != null)
+            UpdateSquircleImage();
+        if (ui_img != null)
+            UpdateUIImage();
+    }
+
+    void UpdateUIImage()
+    {
         switch (tag.tag)
         {
             case EUITag.MainBtn:
-                image.color = pressed ? GameData.GetUITheme.pressedMainBtnColor : GameData.GetUITheme.normalMainBtnColor;
+                ui_img.color = pressed ? GameData.GetUITheme.pressedMainBtnColor : GameData.GetUITheme.normalMainBtnColor;
                 break;
             case EUITag.ActionBtn:
-                image.color = pressed ? GameData.GetUITheme.pressedActionBtnColor : GameData.GetUITheme.normalActionBtnColor;
+                ui_img.color = pressed ? GameData.GetUITheme.pressedActionBtnColor : GameData.GetUITheme.normalActionBtnColor;
                 break;
             default:
-                image.color = pressed ? GameData.GetUITheme.pressedBtnColor : GameData.GetUITheme.normalBtnColor;
+                ui_img.color = pressed ? GameData.GetUITheme.pressedBtnColor : GameData.GetUITheme.normalBtnColor;
                 break;
         }
-        
-        image.SetVerticesDirty();
+        ui_img.SetVerticesDirty();
+    }
+
+    void UpdateSquircleImage()
+    {
+        switch (tag.tag)
+        {
+            case EUITag.MainBtn:
+                squircle_img.color = pressed ? GameData.GetUITheme.pressedMainBtnColor : GameData.GetUITheme.normalMainBtnColor;
+                break;
+            case EUITag.ActionBtn:
+                squircle_img.color = pressed ? GameData.GetUITheme.pressedActionBtnColor : GameData.GetUITheme.normalActionBtnColor;
+                break;
+            default:
+                squircle_img.color = pressed ? GameData.GetUITheme.pressedBtnColor : GameData.GetUITheme.normalBtnColor;
+                break;
+        }
+        squircle_img.SetVerticesDirty();
     }
 
     // IPointerDownHandler

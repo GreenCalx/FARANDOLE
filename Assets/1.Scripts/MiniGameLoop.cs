@@ -75,7 +75,15 @@ public class MiniGameLoop : IEnumerator<MiniGame>
             if (mg.successState == MiniGameSuccessState.PASSED)
                 n_passed++;
         }
-        return n_passed >= GameData.GetSettings.loopPassThreshold; ;
+        if (inst_miniGames.Count == 1)
+        {
+            return n_passed == 1;
+        }
+        else
+        {
+            return n_passed >= GameData.GetSettings.loopPassThreshold; ;    
+        }
+        
     }
 
     public bool IsLoopPerfect()
@@ -110,71 +118,59 @@ public class MiniGameLoop : IEnumerator<MiniGame>
         rankUpdateRequest = false;
 
         switch (rank)
-        {
-            case LoopRank.Z:
-                RankUp();
-                break;
-            case LoopRank.I:
-                if (!IsLoopPassed())
-                    return;
-                else if (IsLoopPerfect())
-                {
-                    RankUp();
-                }
-                break;
-            case LoopRank.II:
-                if (!IsLoopPassed())
-                {
-                    RankDown();
-                    break;
-                }
-                else if (IsLoopPerfect())
-                {
+            {
+                case LoopRank.Z:
                     RankUp();
                     break;
-                }
-                return;
-                
-            case LoopRank.III:
+                case LoopRank.I:
+                    if (IsLoopPerfect())
+                        RankUp();
+                    break;
+                case LoopRank.II:
+                    if (!IsLoopPassed())
+                        RankDown();
+                    else if (IsLoopPerfect())
+                        RankUp();
+                    break;
+                case LoopRank.III:
 
-                if (!IsLoopPassed())
-                {
-                    RankDown();
+                    if (!IsLoopPassed())
+                        RankDown();
+                    else if (IsLoopPerfect())
+                    {
+                        // super loop check
+                        return;
+                    }
                     break;
-                }
-                else if (IsLoopPerfect())
-                {
-                    // super loop check
-                    return;
-                }
-                return;
-            case LoopRank.S:
-                // master loop check
-                return;
-            default:
-                Debug.LogWarning("tryRankUp:: Unkown loop rank : " + (int)rank);
-                return;
-        }
-        
-        rankUpdateRequest = true;
+                case LoopRank.S:
+                    // master loop check
+                    break;
+                default:
+                    Debug.LogWarning("tryRankUp:: Unkown loop rank : " + (int)rank);
+                    break;
+            }
     }
 
     public void RankUp()
     {
         int vrank = (int)rank;
         int l = Enum.GetNames(typeof(LoopRank)).Length;
-        if (vrank >= l-1)
+        if (vrank >= l - 1)
             return;
         rank = (LoopRank)(vrank + 1);
+        
+        rankUpdateRequest = true;
     }
 
     public void RankDown()
     {
         int vrank = (int)rank;
-        if (vrank>1)
+        if (vrank > 1)
         {
             rank = (LoopRank)(vrank - 1);
         }
+        
+        rankUpdateRequest = true;
     }
 
     public string GetRankStr()

@@ -5,7 +5,7 @@ Shader "XL/MobileUnlit"
         _Color ("Color", Color) = (1, 1, 1, 1)
         _MainTex ("Texture", 2D) = "white" {}
         _Brightness ("Brightness", Float) = 1
-        [Enum(UnityEngine.Rendering.CullMode)] _CullMode("CullMode", Integer) = 1.
+        [Enum(UnityEngine.Rendering.CullMode)] _CullMode("CullMode", Int) = 0.
         [Enum(Off,0,On,1)] _ZWrite("ZWrite", Int) = 1
     }
     SubShader

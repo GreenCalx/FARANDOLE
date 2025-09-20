@@ -40,6 +40,11 @@ public class GameClock
         return lastTick - miniGameStartTime;
     }
 
+    public float GetSeconds()
+    {
+        return GetElapsedTime() % 1;
+    }
+
     public float GetRemainingTime()
     {
         return Mathf.Clamp(miniGameMaxTime - (lastTick - miniGameStartTime), 0f, miniGameMaxTime);

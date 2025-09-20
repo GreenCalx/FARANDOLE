@@ -1,0 +1,10 @@
+fileFormatVersion: 2
+guid: 39cd41d8ca92456dbb37f87b7de14c4e
+timeCreated: 1701269432
+AssetOrigin:
+  serializedVersion: 1
+  productId: 253197
+  packageName: Animate UI Materials
+  packageVersion: 1.3.0
+  assetPath: Assets/Plugins/Animate UI Materials/Editor/CustomMaterialEditor.cs
+  uploadId: 766200

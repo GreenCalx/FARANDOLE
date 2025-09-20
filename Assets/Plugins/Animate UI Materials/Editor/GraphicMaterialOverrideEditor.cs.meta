@@ -1,0 +1,10 @@
+fileFormatVersion: 2
+guid: 2ea82f5a694c494db5eb813e0232cd6d
+timeCreated: 1682064216
+AssetOrigin:
+  serializedVersion: 1
+  productId: 253197
+  packageName: Animate UI Materials
+  packageVersion: 1.3.0
+  assetPath: Assets/Plugins/Animate UI Materials/Editor/GraphicMaterialOverrideEditor.cs
+  uploadId: 766200

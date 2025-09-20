@@ -10,7 +10,8 @@
         "Unity.Postprocessing.Runtime",
         "UnityUIExtensions",
         "UniTask",
-        "FMODUnity"
+        "FMODUnity",
+        "Assembly-GraphicMaterialOverride"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

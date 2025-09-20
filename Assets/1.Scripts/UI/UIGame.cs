@@ -8,9 +8,11 @@ using TMPro;
 
 public class UIGame : MonoBehaviour, IManager, IDynamicUI
 {
+    [Header("Player UI")]
     public TextMeshProUGUI miniGameClock;
     public TextMeshProUGUI hpClock;
     public Image timeIndicatorImg;
+    public RotateAlongTimeAnim timeNeedleAnim;
     public RectTransform infoArea;
     public UILoopInfo handle_UILoopInfo;
     public UIDoorAnim handle_UIDoorAnim;
@@ -19,10 +21,6 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
     public TextMeshProUGUI score;
     public RectTransform scoreUIVisuals;
     public RectTransform scoreUIText;
-    public Sprite loopLevel0Sprite;
-    public Sprite loopLevel1Sprite;
-    public Sprite loopLevel2Sprite;
-    public Sprite loopLevel3Sprite;
 
     [Header("Success")]
     public UIStageClearAnimation handle_animStageClear;
@@ -58,6 +56,7 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         timeIndicatorImg.color = frozenTimeColor;
         successTimePositiveColor = GameData.GetSettings.LoopPassedColor;
         successTimeNegativeColor = GameData.GetSettings.LoopFailedColor;
+        timeNeedleAnim.Init(MGM.gameClock);
         
         ShowMiniGameMode(false);
         //ShowSuccessArea(false);

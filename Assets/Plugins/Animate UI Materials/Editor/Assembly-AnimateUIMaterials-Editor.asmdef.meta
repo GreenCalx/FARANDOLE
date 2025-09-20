@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 4cc83c889fcb65645bc6aae95a9ff24e
+AssemblyDefinitionImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 253197
+  packageName: Animate UI Materials
+  packageVersion: 1.3.0
+  assetPath: Assets/Plugins/Animate UI Materials/Editor/Assembly-AnimateUIMaterials-Editor.asmdef
+  uploadId: 766200
