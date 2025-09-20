@@ -4,7 +4,7 @@ public class RotateAlongTimeAnim : MonoBehaviour
 {
     public GameClock clock;
     [Header("Tweaks")]
-    public int rotStep = 1;
+    public float offsetAngle = 90;
 
     bool init = false;
     Quaternion initRot;
@@ -26,7 +26,7 @@ public class RotateAlongTimeAnim : MonoBehaviour
             return;
         if (!clock.IsFrozen)
         {
-            current_angle = Utils.Lerp(360f, 0f, clock.GetSeconds());
+            current_angle = initRot.z + Utils.Lerp(360f, 0f, clock.GetSeconds());
             transform.Rotate(0f, 0f, current_angle - last_angle);
             last_angle = current_angle;
         }

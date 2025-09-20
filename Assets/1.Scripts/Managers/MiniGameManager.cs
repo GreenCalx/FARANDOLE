@@ -69,12 +69,19 @@ public class MiniGameManager : MonoBehaviour, IManager
         { // Random seed
             prefab_miniGames = GameData.GetMGBank.GetRandom(5);
         }
-        ResetLoop();
+        BuildLoop();
     }
 
-    public void ResetLoop()
+    public void BuildLoop()
     {
         MGLoop = new MiniGameLoop(this, prefab_miniGames);
+    }
+
+    public void Reset()
+    {
+        gameClock = new GameClock();
+        
+        MGLoop.Reset();
         MGLoop.rank = LoopRank.Z;
     }
 
@@ -197,6 +204,7 @@ public class MiniGameManager : MonoBehaviour, IManager
 
     void Update()
     {
+        UI.RefreshTimeIndicator(gameClock);
         if (MGLoop.Current.IsInPostGame)
             return;
 
@@ -209,7 +217,6 @@ public class MiniGameManager : MonoBehaviour, IManager
         }
         // TODO : Fire event upon critical gameclock changes
         // aka make this part of UI a clock listener.
-        UI.RefreshTimeIndicator(gameClock);
     }
 
 }
