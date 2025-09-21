@@ -22,7 +22,6 @@ public class PlaygroundManager : MonoBehaviour, IManager
     public Sprite clearAnimSprite;
     public Texture2D LoopLevelColorGrading;
     public bool AnimateBG = true;
-    public float AnimationDeltaTime = 0.5f;
     private float currAnimationDeltaTime;
     public FinalClapAnim finalClapAnimation;
     List<Color> loopLevelColors;
@@ -321,7 +320,7 @@ public class PlaygroundManager : MonoBehaviour, IManager
             LerpColorCoroutine = null;
         }
         LerpColorCoroutine = StartCoroutine(LerpColorCo(iLoopLevel));
-        currAnimationDeltaTime = AnimationDeltaTime / iLoopLevel;
+        //currAnimationDeltaTime = AnimationDeltaTime / iLoopLevel;
     }
 
     IEnumerator LerpColorCo(int iLoopLevel)
@@ -346,22 +345,20 @@ public class PlaygroundManager : MonoBehaviour, IManager
 
     IEnumerator AnimateCo()
     {
-        currAnimationDeltaTime = AnimationDeltaTime;
+        
         short phase = 0;
         Vector2 phase0 = Vector2.zero;
         Vector2 phase1 = new Vector2(0.5f, 0f);
+        Vector2[] phases = { phase0, phase1 };
+        currAnimationDeltaTime = 1f / (float)phases.Length;
+
+        Vector2 currPhase = Vector2.zero;
         while (AnimateBG)
         {
-            if (phase == 0)
-            {
-                FG_MR.material.SetTextureOffset("_MainTex", phase0);
-                phase++;
-            }
-            else if (phase == 1)
-            {
-                FG_MR.material.SetTextureOffset("_MainTex", phase1);
-                phase = 0;
-            }
+            currPhase = phases[phase];
+            FG_MR.material.SetTextureOffset("_MainTex", currPhase);
+            if (phase++ >= phases.Length - 1)
+            { phase = 0; }
             yield return new WaitForSeconds(currAnimationDeltaTime);
         }
 
