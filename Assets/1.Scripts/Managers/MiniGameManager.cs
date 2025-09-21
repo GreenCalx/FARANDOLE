@@ -77,11 +77,11 @@ public class MiniGameManager : MonoBehaviour, IManager
         MGLoop = new MiniGameLoop(this, prefab_miniGames);
     }
 
-    public void Reset()
+    public void Restart()
     {
-        gameClock = new GameClock();
+        gameClock.Reset();
         
-        MGLoop.Reset();
+        MGLoop.Restart();
         MGLoop.rank = LoopRank.Z;
     }
 
@@ -113,6 +113,7 @@ public class MiniGameManager : MonoBehaviour, IManager
 
     public void Stop()
     {
+        gameClock.Freeze(true);
         MGLoop.Current.Stop();
         MGLoop.Current.gameObject.SetActive(false);
         PC.ClearAllTrackers();

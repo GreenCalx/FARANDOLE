@@ -123,8 +123,7 @@ public class GameManager : MonoBehaviour
         playerData = new PlayerData();
 
         // Mini Game Reset
-        //MGM.Init(this);
-        MGM.ResetLoop();
+        MGM.Restart();
 
         /// playground reset mat
         PG.RefreshMatFromDiff(MGM.MGLoop.rank);

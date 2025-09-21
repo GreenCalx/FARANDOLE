@@ -30,7 +30,7 @@ public class RotateAlongTimeAnim : MonoBehaviour
             transform.Rotate(0f, 0f, current_angle - last_angle);
             last_angle = current_angle;
         }
-        else
-            transform.rotation = initRot;
+        // else
+        //     transform.rotation = initRot;
     }
 }

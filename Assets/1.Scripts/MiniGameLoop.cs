@@ -41,9 +41,8 @@ public class MiniGameLoop : IEnumerator<MiniGame>
             inst_miniGames.Add(as_mg);
             new_mg.SetActive(false);
         }
-        rank = LoopRank.Z;
-        depth = 0;
-        Reset();
+
+        Restart();
     }
     public bool MoveNext()
     {
@@ -51,6 +50,13 @@ public class MiniGameLoop : IEnumerator<MiniGame>
             return false;
         miniGame = inst_miniGames[index];
         return true;
+    }
+
+    public void Restart()
+    {
+        depth = 0;
+        rank = LoopRank.Z;
+        Reset();
     }
     public void Reset()
     {
@@ -61,6 +67,7 @@ public class MiniGameLoop : IEnumerator<MiniGame>
         index = 0;
         miniGame = inst_miniGames[index];
         rankUpdateRequest = false;
+        
     }
 
     public MiniGame At(int i)
