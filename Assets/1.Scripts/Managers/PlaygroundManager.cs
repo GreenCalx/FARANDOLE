@@ -335,33 +335,25 @@ public class PlaygroundManager : MonoBehaviour, IManager
         {
             frac = Mathf.Clamp01((Time.time - startTime) / GameData.GetSettings.PlayGroundColorLerpTimeSec);
             c = Color.Lerp(current, target, frac);
-            FG_MR.material.SetColor("_Color", c);
+            FG_MR.material.SetColor("_Tint", c);
             forgroundFrameLR.material.SetColor("_Color", c);
             yield return null;
         }
-        FG_MR.material.SetColor("_Color", target);
+        FG_MR.material.SetColor("_Tint", target);
         forgroundFrameLR.material.SetColor("_Color", target);
     }
 
     IEnumerator AnimateCo()
     {
-        
         short phase = 0;
-        Vector2 phase0 = Vector2.zero;
-        Vector2 phase1 = new Vector2(0.5f, 0f);
-        Vector2[] phases = { phase0, phase1 };
-        currAnimationDeltaTime = 1f / (float)phases.Length;
-
-        Vector2 currPhase = Vector2.zero;
+        currAnimationDeltaTime = 0.5f;
         while (AnimateBG)
         {
-            currPhase = phases[phase];
-            FG_MR.material.SetTextureOffset("_MainTex", currPhase);
-            if (phase++ >= phases.Length - 1)
+            FG_MR.material.SetInt("_InvertColors", phase);
+            if (phase++ > 1)
             { phase = 0; }
             yield return new WaitForSeconds(currAnimationDeltaTime);
         }
-
     }
 
     public bool IsWorldPosOOB(Vector2 iWorldPos)
