@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
 using UnityEngine.Events;
 
+using DG.Tweening;
 public class Cowboy : MonoBehaviour, ITapTracker
 {
     public enum State
@@ -28,21 +29,41 @@ public class Cowboy : MonoBehaviour, ITapTracker
     public float maxDistractedTime;
 
     public float deathAnimDuration;
+
+    public float patrolTime;
     private Vector3 baseScale;
     public Collider2D hitbox;
-     [HideInInspector] public float difficultyTimeCoef;
+    [HideInInspector] public float difficultyTimeCoef = 1;
 
     private float nextStateTime;
 
     private State currentState = State.Iddle;
     public bool stopPropagation => true;
-    public int GetDisplayPriority(){ return cowboySR.sortingOrder; }
+    public int GetDisplayPriority() { return cowboySR.sortingOrder; }
     void Start()
     {
         SetState(State.Iddle);
         baseScale = transform.localScale;
     }
 
+    public void SetMovement(float minBound, float maxBound)
+    {
+        float startX = Random.Range(minBound, maxBound);
+
+        transform.position = new Vector3(startX, transform.position.y, transform.position.z);
+        bool startGoingLeft = Random.value > 0.5f;
+        float firstDestination = startGoingLeft ? minBound : maxBound;
+        float secondDestination = startGoingLeft ? maxBound : minBound;
+
+        transform.DOMoveX(firstDestination, patrolTime * Mathf.Abs(startX - firstDestination)/ (maxBound - minBound))
+                 .SetEase(Ease.Linear)
+                 .OnComplete(() =>
+                 {
+                     transform.DOMoveX(secondDestination, patrolTime)
+                              .SetEase(Ease.Linear)
+                              .SetLoops(-1, LoopType.Yoyo); // boucle infinie
+                 });
+    }
     void FixedUpdate()
     {
         nextStateTime -= Time.fixedDeltaTime;
@@ -64,7 +85,7 @@ public class Cowboy : MonoBehaviour, ITapTracker
         else if (currentState == State.Hit)
         {
             float frac = nextStateTime / deathAnimDuration;
-            transform.localScale = Vector3.Slerp(Vector3.zero,baseScale, frac);
+            transform.localScale = Vector3.Slerp(Vector3.zero, baseScale, frac);
         }
     }
 
@@ -120,7 +141,7 @@ public class Cowboy : MonoBehaviour, ITapTracker
     public async void DestroySelf()
     {
         await UniTask.WaitForSeconds(deathAnimDuration);
-        if(this.gameObject != null)
+        if (this.gameObject != null)
             Destroy(this.gameObject);
     }
 
