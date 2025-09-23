@@ -19,6 +19,8 @@ public class DogHead : MonoBehaviour, ITapTracker
     Coroutine tapAnimCo;
     Vector3 baseScale;
     Vector3 animScale;
+    public bool stopPropagation => true;
+    public int GetDisplayPriority(){ return 0; }
 
     void Start()
     {
@@ -43,12 +45,14 @@ public class DogHead : MonoBehaviour, ITapTracker
         StopCoroutine(tapAnimCo);
         tapAnimCo = null;
     }
-    public void OnTap(Vector2 iVec2)
+    public bool OnTap(Vector2 iVec2)
     {
         if (Vector3.Distance(transform.position, new Vector3(iVec2.x, iVec2.y, 0f)) < tapRadius)
         {
             tapCB.Invoke();
+            return true;
         }
+        return false;
     }
     public void TapEffect(int iMGDifficulty)
     {

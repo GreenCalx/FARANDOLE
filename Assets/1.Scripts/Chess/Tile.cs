@@ -2,6 +2,8 @@
 using UnityEngine;
 public class Tile : MonoBehaviour, ITapTracker
 {
+    public bool stopPropagation => true;
+
     public int x, y;
     private ChessBoard board;
     private Knight occupant;
@@ -35,14 +37,17 @@ public class Tile : MonoBehaviour, ITapTracker
         }
     }
 
-    public void OnTap(Vector2 touch)
+    public bool OnTap(Vector2 touch)
     {
         if (col.bounds.Contains(touch))
         {
             board.TileTouched(this);
+            return true;
         }
+        return false;
     }
 
+    public int GetDisplayPriority(){ return 0; }
     public void SetOccupant(Knight k) { occupant = k; }
     public void ClearOccupant() { occupant = null; }
     public bool IsOccupied() { return occupant != null; }

@@ -18,7 +18,7 @@ public class ChessMinigame : MiniGame
             .WithName("board")
             .WithParent(this.transform)
             .Build().GetComponent<ChessBoard>();
-        board.Init();
+        board.Init(MGM.miniGamesDifficulty);
         Tile[,] tiles = board.GetTiles();
         foreach (Tile t in tiles)
         {

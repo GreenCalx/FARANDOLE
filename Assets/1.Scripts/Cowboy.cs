@@ -35,7 +35,8 @@ public class Cowboy : MonoBehaviour, ITapTracker
     private float nextStateTime;
 
     private State currentState = State.Iddle;
-
+    public bool stopPropagation => true;
+    public int GetDisplayPriority(){ return cowboySR.sortingOrder; }
     void Start()
     {
         SetState(State.Iddle);
@@ -98,7 +99,7 @@ public class Cowboy : MonoBehaviour, ITapTracker
         await UniTask.WaitForSeconds(waitTime / difficultyTimeCoef);
     }
 
-    public void OnTap(Vector2 pos)
+    public bool OnTap(Vector2 pos)
     {
         if (hitbox.bounds.Contains(pos))
         {
@@ -111,7 +112,9 @@ public class Cowboy : MonoBehaviour, ITapTracker
             {
                 SetState(State.Dodge);
             }
+            return true;
         }
+        return false;
     }
 
     public async void DestroySelf()

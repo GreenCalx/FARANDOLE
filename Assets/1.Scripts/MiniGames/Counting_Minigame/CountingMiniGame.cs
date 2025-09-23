@@ -34,7 +34,7 @@ public class Counting_MiniGame : MiniGame
             PC.AddTapTracker(counterObjects[i]);
             counterObjects[i].tapCB.AddListener(diceSelected);
         }
-        spawnMargin = counterObjects[0].sr.bounds.max.x - counterObjects[0].sr.bounds.min.x;
+        spawnMargin = (counterObjects[0].sr.bounds.max.x - counterObjects[0].sr.bounds.min.x)/2;
         PositionAtRandomNoOverlap();
     }
 
@@ -118,7 +118,7 @@ public class Counting_MiniGame : MiniGame
 
                 safetyCounter++;
 
-            } while (hasOverlap && safetyCounter < 20); // 20 tentatives max
+            } while (hasOverlap && safetyCounter < 5); // 50 tentatives max
         }
     }
 

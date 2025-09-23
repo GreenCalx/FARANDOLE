@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 using EnhancedTouch = UnityEngine.InputSystem.EnhancedTouch;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 using static Utils;
+using System.Linq;
 public class PlayerController : MonoBehaviour
 {
     // public RectTransform ui_tracked;
@@ -16,13 +17,14 @@ public class PlayerController : MonoBehaviour
     InputAction touchPressAction;
     List<IPositionTracker> positionTrackers;
     List<ITapTracker> tapTrackers;
+    List<ITapTracker> sortedTapTrackers;
     List<ISwipeTracker> swipeTrackers;
-
+    
     Vector2 firstTouchWorldPos;
     Vector2 lastTouchWorldPos;
 
     bool freezeInputs = false;
-
+    bool tapTrackersModified = false;
     void Start()
     {
         positionTrackers = new List<IPositionTracker>();
@@ -87,19 +89,26 @@ public class PlayerController : MonoBehaviour
         Vector2 tapPos = GetWorldPos(iTouch.screenPosition);
         try
         {
-            tapTrackers.ForEach(e =>
+            if (tapTrackersModified)
             {
-                if (e.enabled)
-                    e.OnTap(tapPos);
+                tapTrackers = tapTrackers
+                .Where(e => e.enabled)
+                .OrderByDescending(e => e.GetDisplayPriority())
+                .ToList();
             }
-            );
+            foreach (ITapTracker tracker in tapTrackers)
+            {
+                if (tracker.OnTap(tapPos) && tracker.stopPropagation)
+                {
+                    return;
+                }
+            }   
         }
         catch (InvalidOperationException ioe)
         {
             Debug.LogError("InvalidOperationException On PlayerController::Tap. Might happening in minigame switch.");
             Debug.LogError(ioe.ToString());
         }
-
     }
 
     void Swipe()
@@ -178,6 +187,7 @@ public class PlayerController : MonoBehaviour
         {
             tapTrackers.Add(iTracker);
             iTracker.enabled = true;
+            tapTrackersModified = true;
         }
     }
     public void RemoveTapTracker(ITapTracker iTracker)
@@ -185,6 +195,7 @@ public class PlayerController : MonoBehaviour
         if (tapTrackers.Contains(iTracker))
         {
             tapTrackers.Remove(iTracker);
+            tapTrackersModified = true;
         }
     }
     public void EnableTapTracker(ITapTracker iTracker, bool bol)

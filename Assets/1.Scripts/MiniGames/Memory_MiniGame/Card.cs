@@ -23,7 +23,9 @@ public class Card : MonoBehaviour, ITapTracker
     public float shrinkAnimDuration = 0.25f;
     public ParticleSystem winParticles;
     
-    
+    public bool stopPropagation => true;
+    public int GetDisplayPriority(){ return 0; }
+
     void Start()
     {
         hidden = true;
@@ -33,12 +35,14 @@ public class Card : MonoBehaviour, ITapTracker
     }
 
 
-    public void OnTap(Vector2 iVec2)
+    public bool OnTap(Vector2 iVec2)
     {
         if (cardCollider.bounds.Contains(iVec2))
         {
             tapCB.Invoke(index);
+            return true;
         }
+        return false;
     }
 
     public void TapEffect()

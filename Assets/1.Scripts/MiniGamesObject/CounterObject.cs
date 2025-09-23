@@ -13,6 +13,8 @@ public class CounterObject : MonoBehaviour, ITapTracker
 
     public float shrinkAnimDuration = 0.5f;
     public ParticleSystem selectedParticles;
+    public bool stopPropagation => true;
+    public int GetDisplayPriority(){ return sr.sortingOrder; }
     void Start()
     {
         selectedParticles = GetComponent<ParticleSystem>(); 
@@ -30,15 +32,17 @@ public class CounterObject : MonoBehaviour, ITapTracker
         else
         {
             sr.sprite = countSprite[index];
+            sr.sortingOrder = 10-index;
         }
     }
-    public void OnTap(Vector2 vector2)
+    public bool OnTap(Vector2 vector2)
     {
         if (counterCollider.bounds.Contains(vector2))
         {
-            Debug.Log("tap");
             tapCB.Invoke(count);
+            return true;
         }
+        return false;
     }
 
     public void Selected()

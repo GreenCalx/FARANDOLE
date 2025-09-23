@@ -23,36 +23,36 @@ public class ChessBoard : MonoBehaviour
 
     private Tile[,] tiles;
 
-    private Knight playerKnight;
+    private Knight playerPiece;
     private List<Knight> knights = new List<Knight>();
     private List<Tile> legalMoves;
-
+    private int knightSpawnMargin;
     private int enemyCounter = 0;
 
-
-    public void Init()
+    private int diff;
+    public void Init(int difficulty)
     {
+        difficultyParameters(difficulty);
         GenerateBoard();
-        PlaceInitialKnights();
-        SelectChessPiece(playerKnight);
+        PlaceInitialPieces();
+        SelectChessPiece(playerPiece);
     }
-
 
     public void Restart()
     {
         foreach (var k in knights) if (k != null) Destroy(k.gameObject);
         knights.Clear();
 
-        if (playerKnight != null)
-            Destroy(playerKnight.gameObject);
+        if (playerPiece != null)
+            Destroy(playerPiece.gameObject);
 
         if (tiles != null)
         {
             foreach (var t in tiles) if (t != null) Destroy(t.gameObject);
         }
         GenerateBoard();
-        PlaceInitialKnights();
-        SelectChessPiece(playerKnight);
+        PlaceInitialPieces();
+        SelectChessPiece(playerPiece);
     }
 
     void GenerateBoard()
@@ -78,22 +78,66 @@ public class ChessBoard : MonoBehaviour
     }
 
 
-    void PlaceInitialKnights()
+    void difficultyParameters(int difficulty)
     {
-        enemyCounter = 1;
-        int px, py, x, y = -1;
-        px = Random.Range(0, boardSize);
-        py = Random.Range(0, boardSize);
-        do {
-            x = Random.Range(0, boardSize);
-            y = Random.Range(0, boardSize);      
+        if (difficulty == 1)
+        {
+            knightSpawnMargin = 1;
+            boardSize = 6;
+            enemyCounter = 1;
         }
-        while(px != x && py != y )
-;
-        SpawnKnight(px, py, PlayerColor.White);
-        SpawnKnight(x, y, PlayerColor.Black);
+        if (difficulty == 2)
+        {
+            knightSpawnMargin = 1;
+            boardSize = 7;
+            enemyCounter = 1;
+        }
+        if (difficulty == 3)
+        {
+            knightSpawnMargin = 0;
+            boardSize = 8;
+            enemyCounter = 1;
+        }
+        if (difficulty == 4)
+        {
+            knightSpawnMargin = 2;
+            boardSize = 8;
+            enemyCounter = 2;
+        }
+        if (difficulty == 5)
+        {
+            knightSpawnMargin = 0;
+            boardSize = 8;
+            enemyCounter = 2;
+        }
     }
 
+    void PlaceInitialPieces(){
+        int[] positions = new int[2+enemyCounter * 2];
+
+        positions[0] = Random.Range(0, boardSize);
+        positions[1] = Random.Range(0, boardSize);
+        SpawnKnight(positions[0], positions[1], PlayerColor.White);
+        for (int i = 1; i < 1 + enemyCounter; i++)
+        {
+            do
+            {
+                positions[2 * i] = Random.Range(knightSpawnMargin, boardSize - knightSpawnMargin);
+                positions[2 * i + 1] = Random.Range(knightSpawnMargin, boardSize - knightSpawnMargin);
+            } while (containsPositon(positions, positions[2 * i], positions[2 * i + 1], i));
+            SpawnKnight(positions[2 * i], positions[2 * i + 1], PlayerColor.Black);
+        }
+
+    }
+    
+    private bool containsPositon(int[] pos, int x, int y, int numberOfPlacedPieces) {
+        for (int i = 0; i < numberOfPlacedPieces; i++) {
+            if (x == pos[i] && y == pos[i + 1]) {
+                return true;
+            }
+        }
+    return false;
+    }
 
     Knight SpawnKnight(int x, int y, PlayerColor color)
     {
@@ -107,7 +151,7 @@ public class ChessBoard : MonoBehaviour
 
         if (color == PlayerColor.White)
         {
-            playerKnight = knight;
+            playerPiece = knight;
         }
         knight.Init(x, y, color, this);
         knight.SetSprite(color == PlayerColor.White ? whiteKnightSprite : blackKnightSprite);
@@ -126,13 +170,13 @@ public class ChessBoard : MonoBehaviour
 
     public void MoveKnight(Tile to)
     {
-        Tile from = GetTile(playerKnight.x, playerKnight.y);
+        Tile from = GetTile(playerPiece.x, playerPiece.y);
         if (to == null) return;
 
         if (to.IsOccupied())
         {
             Knight other = to.GetOccupant();
-            if (other != null && other.Color != playerKnight.Color)
+            if (other != null && other.Color != playerPiece.Color)
             {
                 knights.Remove(other);
                 Destroy(other.gameObject);
@@ -146,11 +190,11 @@ public class ChessBoard : MonoBehaviour
 
 
         from.ClearOccupant();
-        playerKnight.SetPosition(to.x, to.y);
-        to.SetOccupant(playerKnight);
+        playerPiece.SetPosition(to.x, to.y);
+        to.SetOccupant(playerPiece);
 
         CheckWinCondition();
-        SelectChessPiece(playerKnight);
+        SelectChessPiece(playerPiece);
     }
 
     void SelectChessPiece(ChessPiece piece)
@@ -184,5 +228,5 @@ public class ChessBoard : MonoBehaviour
         }
     }
     
-    public Tile[,] GetTiles(){ return tiles; }
+    public Tile[,] GetTiles() { return tiles; }
 }

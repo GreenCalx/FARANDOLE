@@ -15,7 +15,7 @@ MonoBehaviour:
   ID: 11
   name: Knight Chess
   goal: Destroy all black Knights
-  thumbNailImg: {fileID: 7603346453981358217, guid: be46881a26d999947a8484581f00952b, type: 3}
+  thumbNailImg: {fileID: -4421537415268300880, guid: e7e97f26a75250d41ba2f6cb8601a0ac, type: 3}
   prefab_MiniGame: {fileID: 8063128649422412875, guid: 07ecc451338969848bf4dac8f9e9191b, type: 3}
   tags: 0100000003000000
   orientationRequirement: 2

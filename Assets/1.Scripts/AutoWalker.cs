@@ -20,6 +20,9 @@ public class AutoWalker : MonoBehaviour, ITapTracker
     float elapsedTime;
     Coroutine DelayedCo;
     public bool isDelayed = false;
+    public bool stopPropagation => true;
+    public int GetDisplayPriority(){ return 0; }
+
     void Start()
     {
         if (ReverseBehaviour)
@@ -29,13 +32,14 @@ public class AutoWalker : MonoBehaviour, ITapTracker
         transform.position = from;
         elapsedTime = 0f;
     }
-    public void OnTap(Vector2 iVec2)
+    public bool OnTap(Vector2 iVec2)
     {
         if (isDelayed)
-            return;
-        
+            return false;
+
         AutoWalk = !AutoWalk;
         OnAutoWalkToggleCB.Invoke(AutoWalk);
+        return true;
     }
 
     void Update()

@@ -16,6 +16,8 @@ public class BouncySticker : MonoBehaviour, ITapTracker
     public Vector2 dir;
 
     private bool stopped = false;
+    public bool stopPropagation => true;
+    public int GetDisplayPriority(){ return 0; }
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -46,12 +48,14 @@ public class BouncySticker : MonoBehaviour, ITapTracker
         }
     }
 
-    public void OnTap(Vector2 iVec)
+    public bool OnTap(Vector2 iVec)
     {
-        if (stickerCollider.bounds.Contains( new Vector3(iVec.x, iVec.y, transform.position.z)))
+        if (stickerCollider.bounds.Contains(new Vector3(iVec.x, iVec.y, transform.position.z)))
         {
             tapCB.Invoke();
+            return true;
         }
+        return false;
     }
 
     public void Stop()
