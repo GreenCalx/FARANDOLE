@@ -7,13 +7,17 @@ using System.Threading.Tasks;
 using static Utils;
 public class DynamicPatternCrossfader : MonoBehaviour
 {
+    [Header("Tweaks")]
+    public float fading_duration = 1f;
+
+    [Header("Internals")]
+public Material renderedMat;
     readonly string shadParmLerp = "_LerpPatternAB";
     [Range(0f, 1f)]
     public float crossfader = 0f;
     public DynamicPatternSO patternA;
     public DynamicPatternSO patternB;
-    [Header("Internals")]
-    public Material renderedMat;
+    
     private bool _faderLock = false;
 
     public void Init(Material iTargetMat, DynamicPatternSO iPatternA, DynamicPatternSO iPatternB)
@@ -54,13 +58,13 @@ public class DynamicPatternCrossfader : MonoBehaviour
     async UniTaskVoid GoToA()
     {
         renderedMat.SetInt("_PatternA", (int)patternA.pattern);
-        await CrossfadeTask(1f, 0f, 1f);
+        await CrossfadeTask(1f, 0f, fading_duration);
     }
 
     async UniTaskVoid GoToB()
     {
         renderedMat.SetInt("_PatternB", (int)patternB.pattern);
-        await CrossfadeTask(0f, 1f, 1f);
+        await CrossfadeTask(0f, 1f, fading_duration);
     }
 
     async UniTask CrossfadeTask(float from, float to, float duration)
