@@ -840,6 +840,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1286062458}
   - component: {fileID: 1286062459}
+  - component: {fileID: 1286062460}
   m_Layer: 6
   m_Name: Playground
   m_TagString: Untagged
@@ -880,9 +881,10 @@ MonoBehaviour:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
   compositeCollider: {fileID: 1431966741}
-  diff1Mat: {fileID: 2100000, guid: 85f130548d231f148be3b875de155db5, type: 2}
-  diff2Mat: {fileID: 2100000, guid: 54ccdd3a171e55c43be1575b9ddef680, type: 2}
-  diff3Mat: {fileID: 2100000, guid: 08a1bc3d7255ddb499e5a8ed6f4216f7, type: 2}
+  diff1Pattern: {fileID: 11400000, guid: d55dfaed82ef78046aed37696cfe035b, type: 2}
+  diff2Pattern: {fileID: 11400000, guid: c8152ed6644d30c43887c2642f867aa4, type: 2}
+  diff3Pattern: {fileID: 11400000, guid: 2d148bf1b03b946409e7e2c4497b73d7, type: 2}
+  forgroundMat: {fileID: 2100000, guid: 85f130548d231f148be3b875de155db5, type: 2}
   playFieldMat: {fileID: 2100000, guid: 10297d9c3a9557e43a58da2bfeefbfb0, type: 2}
   clearAnimMat: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   forgroundFrameMat: {fileID: 2100000, guid: 093ee1af864a9bc40a1c5cf0c81b1639, type: 2}
@@ -890,6 +892,23 @@ MonoBehaviour:
   LoopLevelColorGrading: {fileID: 2800000, guid: 646f8794914852640ae82f11d8f46b30, type: 3}
   AnimateBG: 1
   finalClapAnimation: {fileID: 741548460}
+  PGPatternFader: {fileID: 1286062460}
+--- !u!114 &1286062460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1286062457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52ba7d8a6a2d0104da03356e8d0a36db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  crossfader: 0
+  patternA: {fileID: 0}
+  patternB: {fileID: 0}
+  renderedMat: {fileID: 0}
 --- !u!1 &1338338511
 GameObject:
   m_ObjectHideFlags: 0

@@ -13,9 +13,10 @@ public class PlaygroundManager : MonoBehaviour, IManager
 {
     public Bounds bounds;
     public CompositeCollider2D compositeCollider;
-    public Material diff1Mat;
-    public Material diff2Mat;
-    public Material diff3Mat;
+    public DynamicPatternSO diff1Pattern;
+    public DynamicPatternSO diff2Pattern;
+    public DynamicPatternSO diff3Pattern;
+    public Material forgroundMat;
     public Material playFieldMat;
     public Material clearAnimMat;
     public Material forgroundFrameMat;
@@ -24,6 +25,7 @@ public class PlaygroundManager : MonoBehaviour, IManager
     public bool AnimateBG = true;
     private float currAnimationDeltaTime;
     public FinalClapAnim finalClapAnimation;
+    public DynamicPatternCrossfader PGPatternFader;
     List<Color> loopLevelColors;
     GameObject go_colliders, go_fg, go_playfield;
     DoorAnim doorAnimation;
@@ -61,6 +63,7 @@ public class PlaygroundManager : MonoBehaviour, IManager
 
         InitColorGrading();
         BuildPlayground();
+        InitRendering();
     }
     public bool IsReady()
     {
@@ -80,6 +83,11 @@ public class PlaygroundManager : MonoBehaviour, IManager
         {
             loopLevelColors.Add(colors[i]);
         }
+    }
+
+    void InitRendering()
+    {
+        PGPatternFader.Init(FG_MR.material, diff1Pattern, diff2Pattern);
     }
 
     void BuildPlayground()
@@ -104,7 +112,7 @@ public class PlaygroundManager : MonoBehaviour, IManager
                             .WithParent(transform)
                             .WithLocalPosition(new Vector3(0f, 0f, -1f))
                             .WithMeshFilter(FG_Mesh, true)
-                            .WithRenderer(diff1Mat)
+                            .WithRenderer(forgroundMat)
                             .Build();
         FG_MR = go_fg.GetComponent<MeshRenderer>();
 
@@ -295,16 +303,16 @@ public class PlaygroundManager : MonoBehaviour, IManager
         switch (iLoopRank)
         {
             case LoopRank.I:
-                FG_MR.material = diff1Mat;
+                PGPatternFader.FadeToNewPattern(diff1Pattern);
                 break;
             case LoopRank.II:
-                FG_MR.material = diff2Mat;
+                PGPatternFader.FadeToNewPattern(diff2Pattern);
                 break;
             case LoopRank.III:
-                FG_MR.material = diff3Mat;
+                PGPatternFader.FadeToNewPattern(diff3Pattern);
                 break;
             default:
-                FG_MR.material = diff1Mat;
+                PGPatternFader.FadeToNewPattern(diff1Pattern);
                 break;
         }
     }
