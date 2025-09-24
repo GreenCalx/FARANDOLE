@@ -14,11 +14,9 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
     public Image timeIndicatorImg;
     public RotateAlongTimeAnim timeNeedleAnim;
     public RectTransform infoArea;
-    public UILoopInfo handle_UILoopInfo;
     public UIDoorAnim handle_UIDoorAnim;
     public UILoopCompleteAnimation handle_animLoopSuccess; 
     [Header("Score")]
-    public TextMeshProUGUI score;
     public RectTransform scoreUIVisuals;
     public RectTransform scoreUIText;
 
@@ -52,7 +50,6 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         MGM = iGameManager.MGM;
         miniGameClock.text = GameData.GetSettings.MiniGameTime.ToString("#0");
         hpClock.text = GameData.GetSettings.PlayerHP.ToString("#0.0");
-        score.text = "";
         timeIndicatorImg.color = frozenTimeColor;
         successTimePositiveColor = GameData.GetSettings.LoopPassedColor;
         successTimeNegativeColor = GameData.GetSettings.LoopFailedColor;
@@ -60,7 +57,7 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         
         ShowMiniGameMode(false);
         //ShowSuccessArea(false);
-        handle_UILoopInfo.Init();
+
         Refresh();
         InitDone = true;
     }
@@ -87,16 +84,6 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         //handle_animLoopSuccess.failedTextColor = successTimeNegativeColor;
     }
 
-    public void RefreshLoopRankText(string iRankText)
-    {
-        handle_UILoopInfo.UpdateLoopRankText(iRankText);
-    }
-
-    public void RefreshLoopStage(int iIndex, MiniGameSuccessState iState)
-    {
-        handle_UILoopInfo.TurnOnLight(iIndex, iState);
-    }
-
     public void RefreshTimeIndicator(GameClock iGameClock)
     {
         if (iGameClock.IsFrozen)
@@ -113,16 +100,12 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         }
     }
 
-    public void ResetLoopStage()
-    {
-        handle_UILoopInfo.TurnOffLights();
-    }
+
 
     public void ShowMiniGameMode(bool iState)
     {
         miniGameClock.enabled = iState;
         hpClock.enabled = iState;
-        score.enabled = iState;
         handle_UIDoorAnim.OpenAnim();
     }
 
@@ -169,7 +152,7 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         float prevRank = iMGLoop.rank > 0 ? newRank - 1f : 0f;
         handle_animLoopSuccess.OnNewRankDisplayedCB = new UnityEvent();
         handle_animLoopSuccess.OnNewRankDisplayedCB.AddListener(
-            () => { AUDIO.LerpRank(prevRank, newRank); RefreshLoopRankText(iMGLoop.GetRankStr()); }
+            () => { AUDIO.LerpRank(prevRank, newRank); }
             );
 
         ANIM.TrackAnimator(handle_animLoopSuccess.animator, iCT);
@@ -179,6 +162,6 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         //await handle_animLoopSuccess.Animate(colors, iLoopPassed, iRankUp, iLoopDepth, iCT);
 
         handle_animLoopSuccess.OnBeforeLoopDepth.RemoveListener(()=>OnBeforeLoopDepth?.Invoke());
-        handle_animLoopSuccess.OnNewRankDisplayedCB.RemoveListener(()=> { AUDIO.LerpRank(prevRank, newRank); RefreshLoopRankText(iMGLoop.GetRankStr()); });
+        handle_animLoopSuccess.OnNewRankDisplayedCB.RemoveListener(()=> { AUDIO.LerpRank(prevRank, newRank); });
     }
 }

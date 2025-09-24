@@ -1,8 +1,9 @@
 Shader "XL/MobileDynamicPattern"
 {
     Properties
-    {
-        
+    { 
+        _LerpPatternAB("LerpPatternAB", Float) = 0
+
         _ColorPattern1 ("ColorPattern1", Color) = (0, 0, 0, 1)
         _ColorPattern2 ("ColorPattern2", Color) = (1, 1, 1, 1)
         _Tint ("Tint", Color) = (1, 1, 1, 1)
@@ -10,9 +11,10 @@ Shader "XL/MobileDynamicPattern"
         [Enum(UnityEngine.Rendering.CullMode)] _CullMode("CullMode", Int) = 0.
         [Enum(Off,0,On,1)] _ZWrite("ZWrite", Int) = 1
 
-        [Enum(Checker,0,Boxes,1)] _Pattern("Pattern", Int) = 1
+        [Enum(Checker,0,Boxes,1)] _PatternA("PatternA", Int) = 1
+        [Enum(Checker,0,Boxes,1)] _PatternB("PatternB", Int) = 0
         [Enum(Off,0,On,1)] _InvertColors("InvertColors", Int) = 0
-        _Tiling("Tiling",Int) = 4
+        _Tiling("Tiling",Float) = 4
         _BoxSize("BoxSize", Float) = 0.7
         _Angle("Angle", Float) = 0.25
         [ShowAsVector2] _Offset("Offset", Vector) = (0,0,0,0)
@@ -90,7 +92,7 @@ Shader "XL/MobileDynamicPattern"
             #pragma vertex vert
             #pragma fragment frag
 
-
+            float _LerpPatternAB;
             float4 _Tint;
             float4 _ColorPattern1;
             float4 _ColorPattern2;
@@ -101,7 +103,8 @@ Shader "XL/MobileDynamicPattern"
             float _Tiling;
             float2 _Offset;
 
-            fixed _Pattern;
+            fixed _PatternA;
+            fixed _PatternB;
             fixed _InvertColors;
 
             v2f vert (appdata v)
@@ -112,18 +115,33 @@ Shader "XL/MobileDynamicPattern"
                 return o;
             }
 
+            float get_pattern_color(v2f i, float2 _st)
+            {
+                float checker_col   = checker(i.uv, _Tiling);
+                float box_col       = box(_st, float2(_BoxSize,_BoxSize),0.01);
+
+                float patA_col = 0;
+                if (_PatternA == 0)
+                    patA_col = checker_col; 
+                else if (_PatternA == 1)
+                    patA_col = box_col; 
+
+                float patB_col = 0;
+                if (_PatternB == 0)
+                    patB_col = checker_col; 
+                else if (_PatternB == 1)
+                    patB_col = box_col; 
+
+                return lerp(patA_col, patB_col, _LerpPatternAB);
+            }
+
             float4 frag (v2f i) : SV_Target
             {
                 float2 st = tile(i.uv + _Offset, _Tiling);
                 //st = rotate2D(st, PI*0.25);
                 st = rotate2D(st,PI*_Angle);
                 
-                float patterncol = 1.0;
-                if (_Pattern == 0)
-                    patterncol = checker(i.uv, _Tiling);
-                else if (_Pattern == 1)
-                    patterncol = box(st, float2(_BoxSize,_BoxSize),0.01);
-
+                float patterncol = get_pattern_color(i, st);
                 float4 col = float4(
                     patterncol, patterncol, patterncol, 1.0
                     );

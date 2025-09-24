@@ -67,7 +67,7 @@ public class MiniGameManager : MonoBehaviour, IManager
         }
         else
         { // Random seed
-            prefab_miniGames = GameData.GetMGBank.GetRandom(5);
+            prefab_miniGames = GameData.GetMGBank.GetRandom(GameData.GetSettings.loopSize);
         }
         BuildLoop();
     }
@@ -94,7 +94,6 @@ public class MiniGameManager : MonoBehaviour, IManager
         MGLoop.Current.successState = MiniGameSuccessState.PENDING;
 
         //ShowPostGameUICB.Invoke(GameData.Get.gameSettings.MiniGameTime - gameClock.GetElapsedTime());
-        UI.RefreshLoopStage(MGLoop.index, MGLoop.Current.successState);
         
         PC.Freeze();
         await PG.OpenPlaygroundAnim();
@@ -107,7 +106,6 @@ public class MiniGameManager : MonoBehaviour, IManager
     public void Start()
     {
         MGLoop.RankUpdate();
-        UI.RefreshLoopRankText(MGLoop.GetRankStr());
         Play();
     }
 

@@ -86,19 +86,22 @@ Material:
     - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _InvertColors: 0
+    - _LerpPatternAB: 0
     - _LightingEnabled: 0
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _Pattern: 1
+    - _PatternA: 1
+    - _PatternB: 0
     - _SmoothnessTextureChannel: 0
     - _SoftParticlesEnabled: 0
     - _SoftParticlesFarFadeDistance: 1
     - _SoftParticlesNearFadeDistance: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _Tiling: 2.95
+    - _Tiling: 1.12
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
