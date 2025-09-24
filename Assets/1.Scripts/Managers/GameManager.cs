@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using System.Threading;
+using Cysharp.Threading.Tasks;
 using static GOBuilder;
 
 public class GameManager : MonoBehaviour
@@ -63,7 +64,6 @@ public class GameManager : MonoBehaviour
         UI.Init(this);
         while (!UI.IsReady())
         { yield return null; }
-        UI.RefreshLoopRankText(MGM.MGLoop.GetRankStr());
         UI.loopPresentationAnim.Show(MGM.MGLoop);
 
         //StartGame();
@@ -88,11 +88,11 @@ public class GameManager : MonoBehaviour
         MGM.ShowPostGameUICB.RemoveListener(UI.ShowSuccessArea);
     }
 
-    void StartGame()
+    async UniTaskVoid StartGame()
     {
         UI.launchGameBtn?.clickCallback.RemoveListener(() => StartGame());
         UI.launchGameBtn.gameObject.SetActive(false);
-        UI.loopPresentationAnim.Hide();
+        await UI.loopPresentationAnim.Hide();
 
         if (inst_UIGameOver != null)
         {
@@ -131,18 +131,13 @@ public class GameManager : MonoBehaviour
         PG.ResetAnimation();
         PG.FinalClapOpen();
 
-        // UI Reset
-        UI.RefreshLoopRankText(MGM.MGLoop.GetRankStr());
-        UI.ResetLoopStage();
-
         // Start game again
         StartGame();
     }
 
     public void OnMiniGameCompletion()
     {
-        // UI feedback
-        UI.RefreshLoopStage(MGM.MGLoop.index, MGM.MGLoop.Current.successState);
+
     }
 
     public async void OnMiniGameTransition()
@@ -163,7 +158,6 @@ public class GameManager : MonoBehaviour
         }
 
         PG.RefreshMatFromLoopLevel(MGM.MGLoop.depth);
-        UI.ResetLoopStage();
 
         AnimationCurve timeScaleCurve = GameData.Get.gameSettings.timeScaleOverLoopLevel;
         if (MGM.MGLoop.depth > timeScaleCurve.keys[timeScaleCurve.length - 1].time)

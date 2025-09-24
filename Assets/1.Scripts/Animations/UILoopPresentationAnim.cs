@@ -4,75 +4,104 @@ using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
 using System.Threading.Tasks;
 using System.Threading;
+using UnityEngine.UI.Extensions;
 
-public class UILoopPresentationAnim : MonoBehaviour
+public class UILoopPresentationAnim : ManagedAnimation
 {
-    readonly string ShowLineStateName = "MiniGamePresentationLineShow";
-    public GameObject prefab_MiniGamePresentationLine;
-    public RectTransform handle_firstElemSpawn;
-    public RectTransform handle_lastElemSpawn;
+    [Header("UILoopPresentationAnim")]
+    public GameObject prefab_MiniGamePresentationImage;
+    public RectTransform handle_LoopShow;
+    public UILineRenderer handle_LR;
     public int timeBetweenShowLinesInMs = 200;
-    List<UIMiniGamePresentationLine> uiLines;
-    public CancellationTokenSource cancellationTokenSource;
-
+    List<UIMiniGamePresentationImage> uiImages;
+    
+    public float radius = 50f;
+    public int LR_resolution = 2;
     public async UniTask Show(MiniGameLoop iMGLoop)
     {
-        uiLines = new List<UIMiniGamePresentationLine>(iMGLoop.inst_miniGames.Count);
-        Vector3 first_position = handle_firstElemSpawn.anchoredPosition;
-        Vector3 last_position = handle_lastElemSpawn.anchoredPosition;
-        float frac = 1f / iMGLoop.inst_miniGames.Count;
+        cancellationTokenSource = new CancellationTokenSource();
+        await DefaultShow(cancellationTokenSource.Token);
+
+        uiImages = new List<UIMiniGamePresentationImage>(iMGLoop.inst_miniGames.Count);
+
         int index = 0;
+        float angle_step = Mathf.PI * 2f / GameData.GetSettings.loopSize;
+        float angle = 0f;
+        Vector3 pos = Vector3.zero;
+
+        int lr_index = 0;
+        float lr_angle_step = angle_step / LR_resolution;
+        // We're not showing the last joint that makes the full loop
+        int n_points = (GameData.GetSettings.loopSize * LR_resolution) - (LR_resolution-1);
+        handle_LR.Points = new Vector2[n_points];
+        float lr_angle = 0f;
+        Vector3 lr_pos = Vector3.zero;
+
         foreach (MiniGame mg in iMGLoop.inst_miniGames)
         {
-            Vector3 pos = Vector3.Lerp(first_position, last_position, index * frac);
-            UIMiniGamePresentationLine newLine = GOBuilder.Create(prefab_MiniGamePresentationLine)
-                                                .WithParent(transform)
-                                                .WithAnchoredPosition(pos)
-                                                .BuildAs<UIMiniGamePresentationLine>();
-            newLine.SetFromMiniGameDesc(mg.descriptor);
-            uiLines.Add(newLine);
+            angle = index * angle_step;
+            pos = new Vector3(
+                radius * Mathf.Cos(angle),
+                radius * Mathf.Sin(angle),
+                0f);
 
+            UIMiniGamePresentationImage newImg = GOBuilder.Create(prefab_MiniGamePresentationImage)
+                                                .WithParent(handle_LoopShow.transform)
+                                                .WithAnchoredPosition(pos)
+                                                .BuildAs<UIMiniGamePresentationImage>();
+            newImg.SetFromMiniGameDesc(mg.descriptor);
+            uiImages.Add(newImg);
+
+
+            lr_index = index * LR_resolution;
+            // Add point on self coordinates
+            lr_angle = lr_index * lr_angle_step;
+            lr_pos = new Vector3(
+                    radius * Mathf.Cos(lr_angle),
+                    radius * Mathf.Sin(lr_angle),
+                    0f);
+            handle_LR.Points[lr_index] = lr_pos;
+            if (index >= iMGLoop.inst_miniGames.Count - 1)
+            {
+                // don't finish the loop
+                continue;
+            }
+            // Add resolution points continuing the LR curve
+            for (int i = 1; i < LR_resolution; i++)
+            {
+                lr_angle = (lr_index + i) * lr_angle_step;
+                lr_pos = new Vector3(
+                    radius * Mathf.Cos(lr_angle),
+                    radius * Mathf.Sin(lr_angle),
+                    0f);
+                handle_LR.Points[lr_index + i] = lr_pos;
+            }
             index++;
         }
 
-        cancellationTokenSource = new CancellationTokenSource();
-        await ShowLines(cancellationTokenSource.Token);
+        //handle_LoopShow.transform.RotateAround(handle_LoopShow.transform.position, Vector3.forward, -45f);
+        await ShowLoop();
     }
 
-    async UniTask ShowLines(CancellationToken ct)
+    async UniTask ShowLoop()
     {
-        foreach (UIMiniGamePresentationLine l in uiLines)
+        cancellationTokenSource = new CancellationTokenSource();
+        foreach (UIMiniGamePresentationImage l in uiImages)
         {
-            l.Show();
-            while (!l.self_animator.GetCurrentAnimatorStateInfo(0).IsName(ShowLineStateName))
-            {
-                await UniTask.Yield();
-                if (ct.IsCancellationRequested)
-                {
-                    //Debug.Log("Cancelled");
-                    return;
-                }
-            }
-            while (l.self_animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
-            {
-                await UniTask.Yield();
-                if (ct.IsCancellationRequested)
-                {
-                    //Debug.Log("Cancelled");
-                    return;
-                }
-            }
+            await l.DefaultShow(cancellationTokenSource.Token);
         }
     }
 
-    public void Hide()
+    public async UniTask Hide()
     {
         cancellationTokenSource?.Cancel();
-        foreach (UIMiniGamePresentationLine l in uiLines)
+        cancellationTokenSource = new CancellationTokenSource();
+        foreach (UIMiniGamePresentationImage l in uiImages)
         {
             if (!l.IsShown)
                 continue;
-            l.Hide();
+            l.DefaultHide(cancellationTokenSource.Token);
         }
+        await DefaultHide(cancellationTokenSource.Token);
     }
 }

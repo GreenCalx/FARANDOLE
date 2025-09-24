@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Debug_GameSettings
   m_EditorClassIdentifier: 
   PlayerHP: 4
-  loopSize: 5
+  loopSize: 8
   percentOfLoopSizeToPass: 0.5
   MiniGameTime: 6
   MaxTimeScale: 3

@@ -11,11 +11,15 @@ Shader "XL/MobileUnlitTransparent"
     }
     SubShader
     {
-        Tags {"RenderQueue" = "Transparent"  "RenderType"="Transparent"}
+        Tags {
+            "RenderQueue" = "Transparent"  
+            "RenderType"="Transparent"
+            }
         Blend [_BlendSrc] [_BlendDst]
         ZWrite [_ZWrite]
         LOD 100
         Cull [_CullMode]
+        Lighting Off
 
         Pass
         {
