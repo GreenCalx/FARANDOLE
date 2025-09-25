@@ -266,6 +266,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6122347551000143432}
+  - component: {fileID: 9018796940828872127}
+  - component: {fileID: 1771930105913439776}
   m_Layer: 5
   m_Name: UILoopRank
   m_TagString: Untagged
@@ -294,6 +296,46 @@ RectTransform:
   m_AnchoredPosition: {x: 255, y: -181.5}
   m_SizeDelta: {x: 256, y: 256}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!95 &9018796940828872127
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4541439056278336586}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2ed20b29a2e25a54cbcfe75f5ee6206d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1771930105913439776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4541439056278336586}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b8f8f1c5d279894f81ff39bfebae68e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 9018796940828872127}
+  IsShown: 0
+  currentRankText: {fileID: 366280597507842356}
+  newRankText: {fileID: 4972224823737320137}
+  currentRankImage: {fileID: 5232297040872550077}
+  newRankImage: {fileID: 8654511750568190512}
 --- !u!1 &6518834642935856599
 GameObject:
   m_ObjectHideFlags: 0

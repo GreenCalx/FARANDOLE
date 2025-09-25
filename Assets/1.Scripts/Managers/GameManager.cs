@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
         UI.Init(this);
         while (!UI.IsReady())
         { yield return null; }
-        UI.loopPresentationAnim.Show(MGM.MGLoop);
+        UI.PresentLoop();
 
         //StartGame();
         UI.launchGameBtn?.clickCallback.AddListener(() => StartGame());
@@ -92,7 +92,7 @@ public class GameManager : MonoBehaviour
     {
         UI.launchGameBtn?.clickCallback.RemoveListener(() => StartGame());
         UI.launchGameBtn.gameObject.SetActive(false);
-        await UI.loopPresentationAnim.Hide();
+        await UI.HideLoopPresentation();
 
         if (inst_UIGameOver != null)
         {

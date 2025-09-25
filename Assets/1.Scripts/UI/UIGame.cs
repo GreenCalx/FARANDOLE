@@ -16,9 +16,6 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
     public RectTransform infoArea;
     public UIDoorAnim handle_UIDoorAnim;
     public UILoopCompleteAnimation handle_animLoopSuccess; 
-    [Header("Score")]
-    public RectTransform scoreUIVisuals;
-    public RectTransform scoreUIText;
 
     [Header("Success")]
     public UIStageClearAnimation handle_animStageClear;
@@ -26,14 +23,13 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
     public Color successTimePositiveColor;
     public Color successTimeNegativeColor;
     public Color frozenTimeColor;
-    [Header("Loop Complete Animation Handles")]
-    public TextMeshProUGUI handle_CurrentRank;
-    public TextMeshProUGUI handle_NewRank;
-    public Image handle_CurrentRankImg;
-    public Image handle_NewRankImg;
+    [Header("Loop Presentation")]
+    public GameObject prefab_loopPresentationAnim;
+    public UILoopPresentationAnim inst_loopPresentationAnim;
+
     [Header("Launch Game")]
     public UIButton launchGameBtn;
-    public UILoopPresentationAnim loopPresentationAnim;
+    
     [Header("Callbacks")]
     public UnityEvent OnBeforeLoopDepth;
     public UIButton skipAnimBtn;
@@ -54,10 +50,16 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         successTimePositiveColor = GameData.GetSettings.LoopPassedColor;
         successTimeNegativeColor = GameData.GetSettings.LoopFailedColor;
         timeNeedleAnim.Init(MGM.gameClock);
+
+        inst_loopPresentationAnim = GOBuilder.Create(prefab_loopPresentationAnim)
+                                    .WithParent(transform)
+                                    .WithAnchoredPosition(Vector3.zero)
+                                    .BuildAs<UILoopPresentationAnim>();
+        inst_loopPresentationAnim.Init(MGM.MGLoop);
         
         ShowMiniGameMode(false);
         //ShowSuccessArea(false);
-
+        
         Refresh();
         InitDone = true;
     }
@@ -101,6 +103,15 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
     }
 
 
+    public void PresentLoop()
+    {
+        inst_loopPresentationAnim.Show(MGM.MGLoop);
+    }
+
+    public async UniTask HideLoopPresentation()
+    {
+        await inst_loopPresentationAnim.Hide();
+    }
 
     public void ShowMiniGameMode(bool iState)
     {
@@ -137,14 +148,7 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
 
     public async Task LoopCompleteAnim(MiniGameLoop iMGLoop, CancellationToken iCT)
     {
-        MiniGameSuccessState[] arr_states = iMGLoop.GetSuccessStates();
-        Color[] colors = new Color[arr_states.Length];
-        for (int i = 0; i < arr_states.Length; i++)
-        {
-            colors[i] = (arr_states[i] == MiniGameSuccessState.PASSED) ? successTimePositiveColor : successTimeNegativeColor;
-        }
-
-        handle_animLoopSuccess.Init(colors, iMGLoop);
+        handle_animLoopSuccess.Init(iMGLoop, inst_loopPresentationAnim);
         handle_animLoopSuccess.OnBeforeLoopDepth = new UnityEvent();
         handle_animLoopSuccess.OnBeforeLoopDepth.AddListener(()=>OnBeforeLoopDepth?.Invoke());
 

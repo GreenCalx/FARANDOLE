@@ -74,6 +74,7 @@ public class MiniGameLoop : IEnumerator<MiniGame>
     {
         return inst_miniGames[i];
     }
+    
     public bool IsLoopPassed()
     {
         int n_passed = 0;
@@ -88,9 +89,9 @@ public class MiniGameLoop : IEnumerator<MiniGame>
         }
         else
         {
-            return n_passed >= GameData.GetSettings.loopPassThreshold; ;    
+            return n_passed >= GameData.GetSettings.loopPassThreshold; ;
         }
-        
+
     }
 
     public bool IsLoopPerfect()
@@ -103,6 +104,18 @@ public class MiniGameLoop : IEnumerator<MiniGame>
             }
         }
         return true;
+    }
+
+    public MiniGameSuccessState GetSuccessState(MiniGameSO iMGDesc)
+    {
+        foreach (MiniGame mg in inst_miniGames)
+        {
+            if (mg.descriptor == iMGDesc)
+            {
+                return mg.successState;
+            }
+        }
+        return MiniGameSuccessState.NONE;
     }
 
     public MiniGameSuccessState[] GetSuccessStates()
