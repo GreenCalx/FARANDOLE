@@ -5,6 +5,7 @@ using System.Threading;
 using TMPro;
 public class UIRankMedalAnim : ManagedAnimation
 {
+    readonly string HideFlippedState = "HideFlipped";
     readonly string RankUpState = "RankUp";
     readonly string RankDownState = "RankDown";
     readonly string RankUpTrigger = "RankUp";
@@ -25,6 +26,17 @@ public class UIRankMedalAnim : ManagedAnimation
         await WaitAnimState(RankDownState, 1f, iCT);
     }
 
+    public override async UniTask DefaultHide(CancellationToken iCT)
+    {
+        animator.SetBool(DefaultShowAnimParm, false);
+        await UniTask.WhenAny(
+            WaitAnimState(DefaultHideStateName, 1f, iCT),
+            WaitAnimState(HideFlippedState, 1f, iCT)
+        );
+        
+        IsShown = false;
+    }
+
     public void UpdateCurrentRank(MiniGameLoop iMGLoop)
     {
         currentRankText.text = iMGLoop.GetRankStr();
@@ -36,4 +48,6 @@ public class UIRankMedalAnim : ManagedAnimation
         newRankText.text = iMGLoop.GetRankStr();
         newRankImage.sprite = GameData.GetSettings.RankSettings.GetImageFromRank(iMGLoop.rank);
     }
+
+
 }

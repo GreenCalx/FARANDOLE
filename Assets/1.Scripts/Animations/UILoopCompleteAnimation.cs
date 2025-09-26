@@ -134,12 +134,15 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
         Func<UniTask> step2 = async () =>
         {
             await UniTask.SwitchToMainThread();
-            await loopPresentationAnim.Show(MGLoop);
+            await
+            UniTask.WhenAll(
+                loopPresentationAnim.Show(MGLoop, iCT),
+                WaitShowLoopAnimTask(1f, iCT)
+                );
             await loopPresentationAnim.ShowLights(MGLoop, true);
-            await WaitShowLoopAnimTask(1f, iCT);
-            if (iCT.IsCancellationRequested) 
+            if (iCT.IsCancellationRequested)
             {
-                OnBeforeLoopDepth?.Invoke();
+                OnBeforeLoopDepth?.Invoke();    
                 if (MGLoop.IsRankUpdateRequested)
                     OnNewRankDisplayedCB?.Invoke();
                 return;
@@ -173,7 +176,6 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
             Func<UniTask> step4 = async () =>
             {
                 await UniTask.SwitchToMainThread();
-                //await WaitRankUpAnimTask(1f, iCT);
                 await loopPresentationAnim.rankMedalAnimation.RankUp(iCT);
                 OnNewRankDisplayedCB?.Invoke();
                 if (iCT.IsCancellationRequested)
@@ -198,10 +200,12 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
         Func<UniTask> step6 = async () =>
         {
             await UniTask.SwitchToMainThread();
-            await loopPresentationAnim.Hide();
-            await UniTask.WhenAny(
-                WaitHideFromRankUpAnimTask(1f, iCT),
-                WaitHideAnimTask(1f, iCT)
+            await UniTask.WhenAll(
+                loopPresentationAnim.Hide(iCT),
+                UniTask.WhenAny(
+                    WaitHideFromRankUpAnimTask(1f, iCT),
+                    WaitHideAnimTask(1f, iCT)
+                )
             );
             animator.SetTrigger(LoopShowDepthTrigger);
             if (iCT.IsCancellationRequested)

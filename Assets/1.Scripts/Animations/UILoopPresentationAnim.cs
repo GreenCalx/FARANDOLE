@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
@@ -16,7 +17,6 @@ public class UILoopPresentationAnim : ManagedAnimation
     public UIRankMedalAnim rankMedalAnimation;
     public int timeBetweenShowLinesInMs = 200;
     List<UIMiniGamePresentationImage> uiImages;
-
 
     public float radius = 50f;
     public int LR_resolution = 2;
@@ -86,41 +86,58 @@ public class UILoopPresentationAnim : ManagedAnimation
 
         init = true;
     }
+    
     public async UniTask Show(MiniGameLoop iMGLoop)
+    {
+        cancellationTokenSource?.Cancel();
+        cancellationTokenSource = new CancellationTokenSource();
+        await Show(iMGLoop, cancellationTokenSource.Token);
+    }
+
+    public async UniTask Show(MiniGameLoop iMGLoop, CancellationToken iCT)
     {
         if (!init)
         { return; }
-         
-        cancellationTokenSource = new CancellationTokenSource();
-        UpdateLights(iMGLoop);
-        await DefaultShow(cancellationTokenSource.Token);
-        await UniTask.WhenAll(ShowLoop(), rankMedalAnimation.DefaultShow(cancellationTokenSource.Token));
-    }
 
-    async UniTask ShowLoop()
-    {
-        cancellationTokenSource = new CancellationTokenSource();
-        foreach (UIMiniGamePresentationImage l in uiImages)
+        UpdateLights(iMGLoop);
+
+        List<UniTask> l = new List<UniTask>();
+        foreach (UIMiniGamePresentationImage img in uiImages)
         {
-            await l.DefaultShow(cancellationTokenSource.Token);
+            l.Add(img.DefaultShow(iCT));
         }
+
+        await UniTask.WhenAll(
+            DefaultShow(iCT),
+            UniTask.WhenAll(l),
+            rankMedalAnimation.DefaultShow(iCT));
     }
 
     public async UniTask Hide()
     {
+        cancellationTokenSource?.Cancel();
+        cancellationTokenSource = new CancellationTokenSource();
+        await Hide(cancellationTokenSource.Token);
+    }
+
+    public async UniTask Hide(CancellationToken iCT)
+    {
         if (!init)
         { return; }
 
-        cancellationTokenSource?.Cancel();
-        cancellationTokenSource = new CancellationTokenSource();
-        foreach (UIMiniGamePresentationImage l in uiImages)
+        List<UniTask> l = new List<UniTask>();
+        foreach (UIMiniGamePresentationImage img in uiImages)
         {
-            if (!l.IsShown)
-                continue;
-            l.DefaultHide(cancellationTokenSource.Token);
+            // if (!img.IsShown)
+            //     continue;
+            l.Add(img.DefaultHide(iCT));
         }
-        rankMedalAnimation.DefaultHide(cancellationTokenSource.Token);
-        await DefaultHide(cancellationTokenSource.Token);
+
+        await UniTask.WhenAll(
+            UniTask.WhenAll(l),
+            rankMedalAnimation.DefaultHide(iCT),
+            DefaultHide(iCT)
+            );
     }
 
     public void UpdateLights(MiniGameLoop iMGLoop)

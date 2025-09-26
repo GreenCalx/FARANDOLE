@@ -56,7 +56,7 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
                                     .WithAnchoredPosition(Vector3.zero)
                                     .BuildAs<UILoopPresentationAnim>();
         inst_loopPresentationAnim.Init(MGM.MGLoop);
-        
+
         ShowMiniGameMode(false);
         //ShowSuccessArea(false);
         
@@ -103,9 +103,9 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
     }
 
 
-    public void PresentLoop()
+    public async UniTask PresentLoop()
     {
-        inst_loopPresentationAnim.Show(MGM.MGLoop);
+        await inst_loopPresentationAnim.Show(MGM.MGLoop);
     }
 
     public async UniTask HideLoopPresentation()

@@ -41,7 +41,7 @@ public class ManagedAnimation : MonoBehaviour
         IsShown = true;
     }
 
-    public async UniTask DefaultHide(CancellationToken iCT)
+    public virtual async UniTask DefaultHide(CancellationToken iCT)
     {
         animator.SetBool(DefaultShowAnimParm, false);
         await WaitAnimState(DefaultHideStateName, 1f, iCT);

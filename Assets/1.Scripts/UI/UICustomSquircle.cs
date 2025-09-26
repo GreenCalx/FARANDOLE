@@ -10,7 +10,7 @@ using UnityEditor;
 
 public class UICustomSquircle : UIPrimitiveBase
 {
-    public bool ForceDrawing = false;
+    //public bool ForceDrawing = false;
     const float C = 1.0f;
         public enum Type
         {
@@ -147,14 +147,14 @@ public class UICustomSquircle : UIPrimitiveBase
         }
 #endif
 
-    void Update()
-    {
-        if (ForceDrawing)
-        {
-            material.SetColor("_Color", color);
-            SetAllDirty();
-        }
-    }
+    // void Update()
+    // {
+    //     if (ForceDrawing)
+    //     {
+    //         //material.SetColor("_Color", color);
+    //         SetAllDirty();
+    //     }
+    // }
 
     
 }
