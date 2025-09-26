@@ -20,7 +20,10 @@ public class ManagedAnimation : MonoBehaviour
                 return;
             await UniTask.Yield();
         }
-        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < iCompletionFrac)
+        while (
+            (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < iCompletionFrac) &&
+            (animator.GetCurrentAnimatorStateInfo(0).IsName(iStateName))
+            )
         {
             if (iCT.IsCancellationRequested)
                 return;
@@ -44,7 +47,7 @@ public class ManagedAnimation : MonoBehaviour
     public virtual async UniTask DefaultHide(CancellationToken iCT)
     {
         animator.SetBool(DefaultShowAnimParm, false);
-        await WaitAnimState(DefaultHideStateName, 1f, iCT);
+        await WaitAnimState(DefaultHideStateName, 0.75f, iCT);
         IsShown = false;
     }
 }

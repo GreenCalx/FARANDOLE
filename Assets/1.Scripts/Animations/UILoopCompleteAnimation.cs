@@ -139,7 +139,7 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
                 loopPresentationAnim.Show(MGLoop, iCT),
                 WaitShowLoopAnimTask(1f, iCT)
                 );
-            await loopPresentationAnim.ShowLights(MGLoop, true);
+            await loopPresentationAnim.ShowLights(MGLoop, true, iCT);
             if (iCT.IsCancellationRequested)
             {
                 OnBeforeLoopDepth?.Invoke();    
@@ -183,23 +183,25 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
                     OnBeforeLoopDepth?.Invoke();
                     return;
                 }
+                
             };
             q.Enqueue(step4);
         }
 
-        Func<UniTask> step5 = async () =>
-        {
-            await Task.Delay(GameData.GetSettings.LoopCompleteAfterAnimDisplayTimeMs);
-            await UniTask.SwitchToMainThread();
-            animator.SetTrigger(LoopHideTrigger);
-            if (iCT.IsCancellationRequested)
-            { OnBeforeLoopDepth?.Invoke(); return; }
-        };
-        q.Enqueue(step5);
+        // Func<UniTask> step5 = async () =>
+        // {
+        //     await Task.Delay(GameData.GetSettings.LoopCompleteAfterAnimDisplayTimeMs);
+        //     await UniTask.SwitchToMainThread();
+        //     animator.SetTrigger(LoopHideTrigger);
+        //     if (iCT.IsCancellationRequested)
+        //     { OnBeforeLoopDepth?.Invoke(); return; }
+        // };
+        // q.Enqueue(step5);
 
         Func<UniTask> step6 = async () =>
         {
             await UniTask.SwitchToMainThread();
+            animator.SetTrigger(LoopHideTrigger);
             await UniTask.WhenAll(
                 loopPresentationAnim.Hide(iCT),
                 UniTask.WhenAny(
@@ -207,9 +209,9 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
                     WaitHideAnimTask(1f, iCT)
                 )
             );
-            animator.SetTrigger(LoopShowDepthTrigger);
             if (iCT.IsCancellationRequested)
             { OnBeforeLoopDepth?.Invoke(); return; }
+            animator.SetTrigger(LoopShowDepthTrigger);
         };
         q.Enqueue(step6);
 

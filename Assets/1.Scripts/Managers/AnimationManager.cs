@@ -110,6 +110,5 @@ public class AnimationManager : MonoBehaviour, IManager
             animStep = UniTask.Run(animQ.queue.Dequeue());
             await animStep;
         } while (!animQ.AnimationDone());
-        Debug.Log("Animation OVER");
     }
 }
