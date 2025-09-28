@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Debug_GameSettings
   m_EditorClassIdentifier: 
   PlayerHP: 4
-  loopSize: 8
+  loopSize: 4
   percentOfLoopSizeToPass: 0.5
   MiniGameTime: 6
   MaxTimeScale: 3
@@ -59,7 +59,7 @@ MonoBehaviour:
   RankSettings: {fileID: 11400000, guid: 6a32a64a12bcf2d4abaea25fad902b82, type: 2}
   PostMiniGameLatchInMs: 500
   PreMiniGameLatchInMs: 500
-  LoopCompleteAfterAnimDisplayTimeMs: 1000
-  LoopCompleteShowDepthAnimDisplayTimeMs: 500
+  LoopCompleteAfterAnimDisplayTimeMs: 0
+  LoopCompleteShowDepthAnimDisplayTimeMs: 0
   PlayGroundColorLerpTimeSec: 1
   BGMRankLerpTimeSec: 1

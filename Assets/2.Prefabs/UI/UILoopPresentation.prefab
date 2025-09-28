@@ -110,7 +110,7 @@ MonoBehaviour:
   m_useNativeSize: 0
   m_points:
   - {x: 0, y: 0}
-  lineThickness: 32
+  lineThickness: 25
   relativeSize: 0
   lineList: 0
   lineCaps: 0

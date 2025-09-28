@@ -33,7 +33,7 @@ public class UILoopPresentationAnim : ManagedAnimation
         Vector3 pos = Vector3.zero;
 
         int lr_index = 0;
-        float lr_angle_step = angle_step / LR_resolution;
+        float lr_angle_step = (angle_step > 1f) ? angle_step / LR_resolution : 1f;
         // We're not showing the last joint that makes the full loop
         int n_points = (GameData.GetSettings.loopSize * LR_resolution) - (LR_resolution - 1);
         handle_LR.Points = new Vector2[n_points];
@@ -152,11 +152,9 @@ public class UILoopPresentationAnim : ManagedAnimation
             {
                 case MiniGameSuccessState.PASSED:
                     light_color = GameData.GetSettings.LoopPassedColor;
-                    light_color.a = 0.5f;
                     break;
                 case MiniGameSuccessState.FAILED:
                     light_color = GameData.GetSettings.LoopFailedColor;
-
                     break;
                 default:
                     light_color = new Color(1f, 1f, 1f, 0f);
