@@ -2,7 +2,7 @@ Shader "XL/MobileUnlitTransparent"
 {
     Properties
     {
-        _Color ("Color", Color) = (1, 1, 1, 1)
+        _Color ("Color", Color) = (1, 1, 1, 0)
         _MainTex ("Texture", 2D) = "white" {}
         [Enum(UnityEngine.Rendering.CullMode)] _CullMode("CullMode", Int) = 0.
         [Enum(Off,0,On,1)] _ZWrite("ZWrite", Int) = 1
@@ -56,7 +56,6 @@ Shader "XL/MobileUnlitTransparent"
 
             fixed4 frag (v2f i) : SV_Target
             {
-
                 fixed4 col = tex2D(_MainTex, i.uv) ;
                 col *= _Color;
                 return col;

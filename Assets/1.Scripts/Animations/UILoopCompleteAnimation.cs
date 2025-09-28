@@ -15,18 +15,18 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
     public const string LoopPassedTrigger = "LoopPassed";
     public const string LoopHideTrigger = "Hide";
     public const string LoopShowRankTrigger = "ShowRank";
+    public const string LoopShowDepthTrigger = "ShowLoopDepth";
     public const string LoopHideDepthTrigger = "HideLoopDepth";
     public const string LoopShowSuccessTrigger = "ShowSuccess";
     public const string LoopRankUpBoolParm = "RankingUp";
     public const string LoopPassedAnimStateName = "OnLoopPassed";
     public const string LoopHideAnimStateName = "OnLoopHide";
     public const string LoopHideFromRankUpAnimStateName = "OnLoopHideFromRankUp";
-    public const string LoopShowRankStateName = "OnLoopShowRank";
+    public const string LoopShowkStateName = "OnLoopShow";
     public const string LoopRankUpStateName = "OnLoopRankUp";
     public const string LoopDepthStateName = "OnLoopDepth";
     public const string LoopShowSuccessStateName = "OnLoopShowSuccess";
     public const string LoopIdleStateName = "IDLE";
-    public List<Image> lightImages;
 
     [Header("LoopPassed Text")]
     public const string OnPerfectTextValue = "PERFECT";
@@ -43,6 +43,7 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
 
     // internals
     MiniGameLoop MGLoop;
+    UILoopPresentationAnim loopPresentationAnim;
 
     void Start()
     {
@@ -63,16 +64,11 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
         animator.SetTrigger(LoopAnimSkipTrigger);
     }
 
-    public void Init(Color[] iLightColors, MiniGameLoop iMGLoop)
+    public void Init(MiniGameLoop iMGLoop, UILoopPresentationAnim iLoopPresentationAnim)
     {
-        for (int i = 0; i < iLightColors.Length; i++)
-        {
-            if (i >= lightImages.Count)
-                break;
-            lightImages[i].color = iLightColors[i];
-        }
         loopDepthValueTxt.text = iMGLoop.depth.ToString();
         MGLoop = iMGLoop;
+        loopPresentationAnim = iLoopPresentationAnim;
 
         // Init ani text
         if (iMGLoop.IsLoopPerfect())
@@ -138,11 +134,15 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
         Func<UniTask> step2 = async () =>
         {
             await UniTask.SwitchToMainThread();
-
-            await WaitShowRankAnimTask(1f, iCT);
+            await
+            UniTask.WhenAll(
+                loopPresentationAnim.Show(MGLoop, iCT),
+                WaitShowLoopAnimTask(1f, iCT)
+                );
+            await loopPresentationAnim.ShowLights(MGLoop, true, iCT);
             if (iCT.IsCancellationRequested)
             {
-                OnBeforeLoopDepth?.Invoke();
+                OnBeforeLoopDepth?.Invoke();    
                 if (MGLoop.IsRankUpdateRequested)
                     OnNewRankDisplayedCB?.Invoke();
                 return;
@@ -176,37 +176,42 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
             Func<UniTask> step4 = async () =>
             {
                 await UniTask.SwitchToMainThread();
-                await WaitRankUpAnimTask(1f, iCT);
+                await loopPresentationAnim.rankMedalAnimation.RankUp(iCT);
                 OnNewRankDisplayedCB?.Invoke();
                 if (iCT.IsCancellationRequested)
                 {
                     OnBeforeLoopDepth?.Invoke();
                     return;
                 }
+                
             };
             q.Enqueue(step4);
         }
 
-        Func<UniTask> step5 = async () =>
-        {
-            await Task.Delay(GameData.GetSettings.LoopCompleteAfterAnimDisplayTimeMs);
-            await UniTask.SwitchToMainThread();
-            animator.SetTrigger(LoopHideTrigger);
-            if (iCT.IsCancellationRequested)
-            { OnBeforeLoopDepth?.Invoke(); return; }
-        };
-        q.Enqueue(step5);
+        // Func<UniTask> step5 = async () =>
+        // {
+        //     await Task.Delay(GameData.GetSettings.LoopCompleteAfterAnimDisplayTimeMs);
+        //     await UniTask.SwitchToMainThread();
+        //     animator.SetTrigger(LoopHideTrigger);
+        //     if (iCT.IsCancellationRequested)
+        //     { OnBeforeLoopDepth?.Invoke(); return; }
+        // };
+        // q.Enqueue(step5);
 
         Func<UniTask> step6 = async () =>
         {
             await UniTask.SwitchToMainThread();
-
-            if (MGLoop.IsRankUpdateRequested)
-                await WaitHideFromRankUpAnimTask(1f, iCT); // half anim
-            else
-                await WaitHideAnimTask(1f, iCT); // half anim
+            animator.SetTrigger(LoopHideTrigger);
+            await UniTask.WhenAll(
+                loopPresentationAnim.Hide(iCT),
+                UniTask.WhenAny(
+                    WaitHideFromRankUpAnimTask(1f, iCT),
+                    WaitHideAnimTask(1f, iCT)
+                )
+            );
             if (iCT.IsCancellationRequested)
             { OnBeforeLoopDepth?.Invoke(); return; }
+            animator.SetTrigger(LoopShowDepthTrigger);
         };
         q.Enqueue(step6);
 
@@ -246,9 +251,9 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
         await WaitAnimState(LoopRankUpStateName, iCompletionFrac, iCT);
     }
 
-    async UniTask WaitShowRankAnimTask(float iCompletionFrac, CancellationToken iCT)
+    async UniTask WaitShowLoopAnimTask(float iCompletionFrac, CancellationToken iCT)
     {
-        await WaitAnimState(LoopShowRankStateName, iCompletionFrac, iCT);
+        await WaitAnimState(LoopShowkStateName, iCompletionFrac, iCT);
     }
 
     async UniTask WaitHideAnimTask(float iCompletionFrac, CancellationToken iCT)

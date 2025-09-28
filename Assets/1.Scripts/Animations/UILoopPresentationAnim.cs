@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
@@ -12,16 +14,17 @@ public class UILoopPresentationAnim : ManagedAnimation
     public GameObject prefab_MiniGamePresentationImage;
     public RectTransform handle_LoopShow;
     public UILineRenderer handle_LR;
+    public UIRankMedalAnim rankMedalAnimation;
     public int timeBetweenShowLinesInMs = 200;
     List<UIMiniGamePresentationImage> uiImages;
-    
+
     public float radius = 50f;
     public int LR_resolution = 2;
-    public async UniTask Show(MiniGameLoop iMGLoop)
-    {
-        cancellationTokenSource = new CancellationTokenSource();
-        await DefaultShow(cancellationTokenSource.Token);
+    bool init = false;
 
+
+    public void Init(MiniGameLoop iMGLoop)
+    {
         uiImages = new List<UIMiniGamePresentationImage>(iMGLoop.inst_miniGames.Count);
 
         int index = 0;
@@ -32,7 +35,7 @@ public class UILoopPresentationAnim : ManagedAnimation
         int lr_index = 0;
         float lr_angle_step = angle_step / LR_resolution;
         // We're not showing the last joint that makes the full loop
-        int n_points = (GameData.GetSettings.loopSize * LR_resolution) - (LR_resolution-1);
+        int n_points = (GameData.GetSettings.loopSize * LR_resolution) - (LR_resolution - 1);
         handle_LR.Points = new Vector2[n_points];
         float lr_angle = 0f;
         Vector3 lr_pos = Vector3.zero;
@@ -78,30 +81,117 @@ public class UILoopPresentationAnim : ManagedAnimation
             }
             index++;
         }
-
         //handle_LoopShow.transform.RotateAround(handle_LoopShow.transform.position, Vector3.forward, -45f);
-        await ShowLoop();
+        UpdateLights(iMGLoop);
+
+        init = true;
+    }
+    
+    public async UniTask Show(MiniGameLoop iMGLoop)
+    {
+        cancellationTokenSource?.Cancel();
+        cancellationTokenSource = new CancellationTokenSource();
+        await Show(iMGLoop, cancellationTokenSource.Token);
     }
 
-    async UniTask ShowLoop()
+    public async UniTask Show(MiniGameLoop iMGLoop, CancellationToken iCT)
     {
-        cancellationTokenSource = new CancellationTokenSource();
-        foreach (UIMiniGamePresentationImage l in uiImages)
+        if (!init)
+        { return; }
+
+        UpdateLights(iMGLoop);
+
+        List<UniTask> l = new List<UniTask>();
+        foreach (UIMiniGamePresentationImage img in uiImages)
         {
-            await l.DefaultShow(cancellationTokenSource.Token);
+            l.Add(img.DefaultShow(iCT));
         }
+
+        await UniTask.WhenAll(
+            DefaultShow(iCT),
+            UniTask.WhenAll(l),
+            rankMedalAnimation.DefaultShow(iCT));
     }
 
     public async UniTask Hide()
     {
         cancellationTokenSource?.Cancel();
         cancellationTokenSource = new CancellationTokenSource();
-        foreach (UIMiniGamePresentationImage l in uiImages)
+        await Hide(cancellationTokenSource.Token);
+    }
+
+    public async UniTask Hide(CancellationToken iCT)
+    {
+        if (!init)
+        { return; }
+
+        List<UniTask> l = new List<UniTask>();
+        foreach (UIMiniGamePresentationImage img in uiImages)
         {
-            if (!l.IsShown)
-                continue;
-            l.DefaultHide(cancellationTokenSource.Token);
+            // if (!img.IsShown)
+            //     continue;
+            l.Add(img.DefaultHide(iCT));
         }
-        await DefaultHide(cancellationTokenSource.Token);
+
+        await UniTask.WhenAll(
+            UniTask.WhenAll(l),
+            rankMedalAnimation.DefaultHide(iCT),
+            DefaultHide(iCT)
+            );
+    }
+
+    public void UpdateLights(MiniGameLoop iMGLoop)
+    {
+        if (!init)
+        { return; }
+
+        Color light_color = new Color(0f, 0f, 0f, 0f);
+        foreach (UIMiniGamePresentationImage img in uiImages)
+        {
+            switch (iMGLoop.GetSuccessState(img.selfDesc))
+            {
+                case MiniGameSuccessState.PASSED:
+                    light_color = GameData.GetSettings.LoopPassedColor;
+                    light_color.a = 0.5f;
+                    break;
+                case MiniGameSuccessState.FAILED:
+                    light_color = GameData.GetSettings.LoopFailedColor;
+
+                    break;
+                default:
+                    light_color = new Color(1f, 1f, 1f, 0f);
+                    break;
+            }
+            light_color.a = 0f;
+            img.UpdateLightColor(light_color);
+        }
+    }
+
+    public async UniTask ShowLights(MiniGameLoop iMGLoop, bool iState, CancellationToken iCT)
+    {
+        Debug.Log("Show Lights !");
+        if (!init)
+        { return; }
+
+        float delay = 1f / uiImages.Count;
+        int delay_step_in_ms = (int)(delay * 2000f);
+        
+        Queue<Func<UniTask>> q = new Queue<Func<UniTask>>();
+        foreach (UIMiniGamePresentationImage img in uiImages)
+        {
+            q.Enqueue( async () =>
+                {
+                    await UniTask.SwitchToMainThread();
+                    img.ShowLight(iState);
+                }
+            );
+        }
+
+        while (q.Count > 0)
+        {
+            UniTask.Run(q.Dequeue());
+            await UniTask.Delay(delay_step_in_ms);
+        }
+        //await WaitAnimState(showLightStateName, 1f, iCT);
     }
 }

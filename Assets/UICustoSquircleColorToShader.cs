@@ -5,9 +5,9 @@ using UnityEngine.UI;
 using Plugins.Animate_UI_Materials;
 
 [RequireComponent(typeof(GraphicMaterialOverride))]
-public class UIImageColorToShader : MonoBehaviour
+public class UICustoSquircleColorToShader : MonoBehaviour
 {
-    public Image target;
+    public UICustomSquircle target;
     public bool continuousRefresh = true;
     public Color currentColor;
     Color initColor;

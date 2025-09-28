@@ -358,7 +358,7 @@ public class PlaygroundManager : MonoBehaviour, IManager
         while (AnimateBG)
         {
             FG_MR.material.SetInt("_InvertColors", phase);
-            if (phase++ > 1)
+            if (++phase > 1)
             { phase = 0; }
             yield return new WaitForSeconds(currAnimationDeltaTime);
         }

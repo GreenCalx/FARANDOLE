@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Plugins.Animate_UI_Materials;
+using UnityEngine.UI.Extensions;
 
 [RequireComponent(typeof(GraphicMaterialOverride))]
-public class UIImageColorToShader : MonoBehaviour
+public class UILRColorToShader : MonoBehaviour
 {
-    public Image target;
+    public UILineRenderer target;
     public bool continuousRefresh = true;
     public Color currentColor;
     Color initColor;
