@@ -380,6 +380,7 @@ MonoBehaviour:
   MiniGameThumbnail: {fileID: 6257878755790239029}
   light: {fileID: 9170588877173072223}
   BG: {fileID: 2544000830564825186}
+  defaultSprite: {fileID: -7048377018462634714, guid: 094d874977a9c0f41a07414395f7e732, type: 3}
   selfDesc: {fileID: 0}
 --- !u!1 &6354176868267236616
 GameObject:

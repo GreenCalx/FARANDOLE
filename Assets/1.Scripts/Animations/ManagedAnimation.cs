@@ -7,6 +7,7 @@ public class ManagedAnimation : MonoBehaviour
     protected readonly string DefaultShowStateName = "Show";
     protected readonly string DefaultHideStateName = "Hide";
     protected readonly string DefaultShowAnimParm = "show";
+    protected readonly string animTriggerCancel = "cancel";
     [Header("ManagerAnimation : References")]
     public Animator animator;
     [Header("ManagerAnimation : Internals")]
@@ -29,6 +30,14 @@ public class ManagedAnimation : MonoBehaviour
                 return;
             await UniTask.Yield();
         }
+    }
+
+    public virtual void Cancel()
+    {
+        animator.SetBool(DefaultShowAnimParm, false);
+        IsShown = false;
+        animator.SetTrigger(animTriggerCancel);
+        cancellationTokenSource?.Cancel();
     }
 
     public async UniTask DefaultShow(CancellationToken iCT)

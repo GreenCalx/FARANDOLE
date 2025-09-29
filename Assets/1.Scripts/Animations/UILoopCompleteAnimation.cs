@@ -113,8 +113,13 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
 
         CancellationTokenRegistration ctr = iCT.Register(() => Skip());
 
+        UnityEvent cancelCB = new UnityEvent();
+        cancelCB.AddListener(() => OnBeforeLoopDepth?.Invoke());
+        if (MGLoop.IsRankUpdateRequested)
+            cancelCB.AddListener(() => OnNewRankDisplayedCB?.Invoke());
+        
         // Animation loop
-        Func<UniTask> step1 = async () =>
+            Func<UniTask> step1 = async () =>
         {
             await UniTask.SwitchToMainThread();
             animator.SetBool(LoopRankUpBoolParm, MGLoop.IsRankUpdateRequested);
@@ -122,9 +127,7 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
             await WaitMainAnimTask(1f, iCT); // full anim
             if (iCT.IsCancellationRequested)
             {
-                OnBeforeLoopDepth?.Invoke();
-                if (MGLoop.IsRankUpdateRequested)
-                    OnNewRankDisplayedCB?.Invoke();
+                cancelCB.Invoke();
                 return;
             }
             animator.SetTrigger(LoopShowRankTrigger);
@@ -134,19 +137,24 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
         Func<UniTask> step2 = async () =>
         {
             await UniTask.SwitchToMainThread();
+            cancelCB.AddListener(() => loopPresentationAnim.Cancel());
             await
             UniTask.WhenAll(
                 loopPresentationAnim.Show(MGLoop, iCT),
                 WaitShowLoopAnimTask(1f, iCT)
                 );
+            if (iCT.IsCancellationRequested)
+            {
+                cancelCB.Invoke();
+                return;
+            }
             await loopPresentationAnim.ShowLights(MGLoop, true, iCT);
             if (iCT.IsCancellationRequested)
             {
-                OnBeforeLoopDepth?.Invoke();    
-                if (MGLoop.IsRankUpdateRequested)
-                    OnNewRankDisplayedCB?.Invoke();
+                cancelCB.Invoke();
                 return;
             }
+            
             animator.SetTrigger(LoopShowSuccessTrigger);
             
         };
@@ -159,13 +167,11 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
             CancellationTokenSource ctsTextAnim = new CancellationTokenSource();
             loopPassedTextAnim.Animate(ctsTextAnim.Token, iCT);
             await WaitShowSuccessAnimTask(1f, iCT);
-            ctsTextAnim.Cancel();
+            //ctsTextAnim.Cancel();
 
             if (iCT.IsCancellationRequested)
             {
-                OnBeforeLoopDepth?.Invoke();
-                if (MGLoop.IsRankUpdateRequested)
-                    OnNewRankDisplayedCB?.Invoke();
+                cancelCB.Invoke();
                 return;
             }
         };
@@ -177,26 +183,18 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
             {
                 await UniTask.SwitchToMainThread();
                 await loopPresentationAnim.rankMedalAnimation.RankUp(iCT);
+
+                cancelCB.RemoveListener(() => OnNewRankDisplayedCB?.Invoke());
                 OnNewRankDisplayedCB?.Invoke();
                 if (iCT.IsCancellationRequested)
                 {
-                    OnBeforeLoopDepth?.Invoke();
+                    cancelCB.Invoke();
                     return;
                 }
                 
             };
             q.Enqueue(step4);
         }
-
-        // Func<UniTask> step5 = async () =>
-        // {
-        //     await Task.Delay(GameData.GetSettings.LoopCompleteAfterAnimDisplayTimeMs);
-        //     await UniTask.SwitchToMainThread();
-        //     animator.SetTrigger(LoopHideTrigger);
-        //     if (iCT.IsCancellationRequested)
-        //     { OnBeforeLoopDepth?.Invoke(); return; }
-        // };
-        // q.Enqueue(step5);
 
         Func<UniTask> step6 = async () =>
         {
@@ -209,8 +207,12 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
                     WaitHideAnimTask(1f, iCT)
                 )
             );
+
+            cancelCB.RemoveListener(() => loopPresentationAnim.Cancel());
             if (iCT.IsCancellationRequested)
-            { OnBeforeLoopDepth?.Invoke(); return; }
+            {
+                cancelCB.Invoke(); return;
+            }
             animator.SetTrigger(LoopShowDepthTrigger);
         };
         q.Enqueue(step6);

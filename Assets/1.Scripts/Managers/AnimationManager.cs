@@ -42,6 +42,7 @@ public class AnimationManager : MonoBehaviour, IManager
         {
             Debug.Log("Cancelled");
             animationDone = true;
+            queue.Clear();
         }
     }
     List<AnimationQueue> trackedAnimators;

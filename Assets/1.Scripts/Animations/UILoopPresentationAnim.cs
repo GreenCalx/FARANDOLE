@@ -86,7 +86,20 @@ public class UILoopPresentationAnim : ManagedAnimation
 
         init = true;
     }
-    
+
+    public override void Cancel()
+    {
+        animator.SetBool(DefaultShowAnimParm, false);
+        IsShown = false;
+        animator.SetTrigger(animTriggerCancel);
+        cancellationTokenSource?.Cancel();
+        foreach (UIMiniGamePresentationImage img in uiImages)
+        {
+            img.Cancel();
+        }
+        rankMedalAnimation.Cancel();
+    }
+
     public async UniTask Show(MiniGameLoop iMGLoop)
     {
         cancellationTokenSource?.Cancel();

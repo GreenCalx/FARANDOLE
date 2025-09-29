@@ -9,6 +9,7 @@ public class UIMiniGamePresentationImage : ManagedAnimation
     public UICustomSquircle MiniGameThumbnail;
     public Image light;
     public UICustomSquircle BG;
+    public Sprite defaultSprite;
     [Header("Internals")]
     public MiniGameSO selfDesc;
     readonly string showLightStateName = "MiniGameImageShowLight";
@@ -17,7 +18,10 @@ public class UIMiniGamePresentationImage : ManagedAnimation
     public void SetFromMiniGameDesc(MiniGameSO iMGDesc)
     {
         selfDesc = iMGDesc;
-        MiniGameThumbnail.sprite = iMGDesc.thumbNailImg;
+        if (iMGDesc.thumbNailImg != null)
+            MiniGameThumbnail.sprite = iMGDesc.thumbNailImg;
+        else
+            MiniGameThumbnail.sprite = defaultSprite;
     }
 
     public void UpdateLightColor(Color iColor)

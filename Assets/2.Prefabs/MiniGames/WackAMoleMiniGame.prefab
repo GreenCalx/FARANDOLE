@@ -283,7 +283,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eedd338862d6cfa448b97711dcf3289e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  descriptor: {fileID: 0}
+  descriptor: {fileID: 11400000, guid: 5f5d5d2f24b46b542b6819f9fce859f4, type: 2}
   MGM: {fileID: 0}
   PC: {fileID: 0}
   PG: {fileID: 0}
