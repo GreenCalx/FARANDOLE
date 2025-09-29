@@ -202,6 +202,8 @@ public class UILoopPresentationAnim : ManagedAnimation
         {
             UniTask.Run(q.Dequeue());
             await UniTask.Delay(delay_step_in_ms);
+            if (iCT.IsCancellationRequested)
+                return;
         }
         //await WaitAnimState(showLightStateName, 1f, iCT);
     }
