@@ -9,6 +9,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -2979126593439281272, guid: 5a3aab14e58c90046baf5fde2130fce6, type: 3}
+      propertyPath: dragMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2979126593439281272, guid: 5a3aab14e58c90046baf5fde2130fce6, type: 3}
       propertyPath: dragForce
       value: 4.41
       objectReference: {fileID: 0}
@@ -71,26 +75,30 @@ PrefabInstance:
     - target: {fileID: 5539721656196371002, guid: 5a3aab14e58c90046baf5fde2130fce6, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 9b32395bff9755347aecdff658dcfdba, type: 3}
+      objectReference: {fileID: 21300000, guid: db662d704c5e28045abecf6fa927ddf6, type: 3}
     - target: {fileID: 5539721656196371002, guid: 5a3aab14e58c90046baf5fde2130fce6, type: 3}
       propertyPath: m_Color.b
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5539721656196371002, guid: 5a3aab14e58c90046baf5fde2130fce6, type: 3}
       propertyPath: m_Color.g
-      value: 0.9002967
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5539721656196371002, guid: 5a3aab14e58c90046baf5fde2130fce6, type: 3}
       propertyPath: m_Color.r
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5539721656196371002, guid: 5a3aab14e58c90046baf5fde2130fce6, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 6e1950e904a6742439cf171222771518, type: 2}
     - target: {fileID: 7593879946343354906, guid: 5a3aab14e58c90046baf5fde2130fce6, type: 3}
       propertyPath: m_Name
       value: DragableRollingBall
       objectReference: {fileID: 0}
     - target: {fileID: 9203999590173789867, guid: 5a3aab14e58c90046baf5fde2130fce6, type: 3}
       propertyPath: m_Radius
-      value: 0.63
+      value: 1.08
       objectReference: {fileID: 0}
     - target: {fileID: 9203999590173789867, guid: 5a3aab14e58c90046baf5fde2130fce6, type: 3}
       propertyPath: m_Material

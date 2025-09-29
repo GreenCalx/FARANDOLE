@@ -30,6 +30,7 @@ Shader "XL/MobileStickerUnlit"
             "IgnoreProjector"="True"
             "RenderType"="TransparentCutout"
             "CanUseSpriteAtlas" = "True"
+            "RenderPipeline" = "UniversalPipeline"
             }
         ZWrite [_ZWrite]
         LOD 100
@@ -52,13 +53,6 @@ Shader "XL/MobileStickerUnlit"
             fixed4 color : COLOR;
         };
 
-        struct v2fOutline
-        {
-            float4 pos : SV_POSITION;
-            float2 uv : TEXCOORD0;
-            fixed4 color : COLOR;
-        };
-
         sampler2D _MainTex;
         float4 _Color;
         float4 _OutlineColor;
@@ -69,18 +63,19 @@ Shader "XL/MobileStickerUnlit"
         fixed _Shine;
         float _ShineBandWidth;
         float _ShineSpeed;
-        v2fOutline vertOutline(appdata_t IN)
-        {
-            v2fOutline OUT;
 
-            OUT.pos = UnityObjectToClipPos(IN.vertex);
+        v2f vertOutline(appdata_t IN)
+        {
+            v2f OUT;
+
+            OUT.vertex = UnityObjectToClipPos(IN.vertex);
 			OUT.uv = IN.uv;
-			OUT.color = IN.color * _Color;
+			OUT.color = IN.color * _OutlineColor;
 
             return OUT;
         }
 
-        fixed4 fragOutline(v2fOutline i) : SV_Target
+        fixed4 fragOutline(v2f i) : SV_Target
         {
             // Sobel filter
             float d = _MainTex_TexelSize.xy * _OutlineSize;
@@ -106,6 +101,7 @@ Shader "XL/MobileStickerUnlit"
             return half4(lerp(source.rgb, _OutlineColor.rgb, w), w);
         }
 
+
         float invLerp(float from, float to, float value)
         {
             return (value - from) / (to - from);
@@ -118,25 +114,10 @@ Shader "XL/MobileStickerUnlit"
 
         ENDCG
 
-        // Outline Pass
-        Pass
-        {
-            AlphaToMask On
-            CGPROGRAM
-            #pragma vertex vert
-            #pragma fragment fragOutline
-            
-            v2fOutline vert(appdata_t v)
-            {
-                return vertOutline(v);
-            }
-
-            ENDCG
-        }
-
         // Unlit pass
         Pass
         {
+            Name "StickerUnlit"
             AlphaToMask On
 
             CGPROGRAM
@@ -145,16 +126,24 @@ Shader "XL/MobileStickerUnlit"
 
             v2f vert (appdata_t v)
             {
+                v2f outline = vertOutline(v);
+
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-
-                return o;
+                o.color = outline.color;
+                return outline;
             }
 
             fixed4 frag (v2f i) : SV_Target
             {
                 fixed4 col = tex2D(_MainTex, i.uv) ;
+                col *= _Color;
+                //fixed4 col = i.color;
+                fixed4 outlineCol = fragOutline(i);
+                if (outlineCol.a > 0.8)
+                    col = outlineCol;
+
                 if (_Shine < 1)
                     return col;
             
