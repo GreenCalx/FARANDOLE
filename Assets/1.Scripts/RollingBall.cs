@@ -9,8 +9,12 @@ public class RollingBall : MiniGameEntity, IRacer
         if (!MG.IsActiveMiniGame)
             return;
         OnFinishCB?.Invoke();
-        MG.Win();
         //Destroy(gameObject);
+    }
+
+    public void Destroy()
+    {
+        Destroy(gameObject);
     }
 
     void OnTriggerEnter2D(Collider2D iCol)

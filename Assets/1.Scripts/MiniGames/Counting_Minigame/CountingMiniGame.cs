@@ -18,6 +18,11 @@ public class Counting_MiniGame : MiniGame
 
     public override void Init()
     {
+        //Reset();
+    }
+
+    public override void Reset()
+    {
         int n_spawns = numberCounterObjects[MGM.miniGamesDifficulty - 1];
         counterObjects = new CounterObject[n_spawns];
         counterObjectsPositions = new Vector2[n_spawns];

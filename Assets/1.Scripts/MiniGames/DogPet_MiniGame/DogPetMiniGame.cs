@@ -15,7 +15,12 @@ public class DogPetMiniGame : MiniGame
         inst_dogHead = GOBuilder.Create(prefab_dogHead)
                         .WithName("DogHead")
                         .WithPosition(Vector3.zero)
+                        .WithParent(transform)
                         .BuildAs<DogHead>();
+        //Reset();
+    }
+    public override void Reset()
+    {
         inst_dogHead.tapCB.AddListener(RegisterPetting);
         pettings = 0;
         UpdateMGUI();
@@ -28,8 +33,12 @@ public class DogPetMiniGame : MiniGame
     public override void Stop()
     {
         PC.RemoveTapTracker(inst_dogHead);
-        Destroy(inst_dogHead.gameObject);
         IsActiveMiniGame = false;
+    }
+
+    void OnDestroy()
+    {
+        Destroy(inst_dogHead.gameObject);
     }
     public override void Win()
     {

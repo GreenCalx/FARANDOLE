@@ -24,6 +24,11 @@ public class CowboyMiniGame : MiniGame
 
     public override void Init()
     {
+       // Reset();
+    }
+
+    public override void Reset()
+    {
         numberOfCowboys = cowboysPerDifficulty[MGM.miniGamesDifficulty - 1];
         inst_cowboys = new Cowboy[numberOfCowboys];
         inst_obstacles = new Obstacle[numberOfCowboys * maxObstaclesNumber];
@@ -39,7 +44,6 @@ public class CowboyMiniGame : MiniGame
             MGM.LM2D.PlaceObject(inst_cowboys[i].cowboySR);
         }
         PositionCowboysAndObstacles();
-
     }
 
     void PositionCowboysAndObstacles()

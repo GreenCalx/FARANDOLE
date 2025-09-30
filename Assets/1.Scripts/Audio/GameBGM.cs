@@ -27,7 +27,7 @@ public class GameBGM : MonoBehaviour
         // system.flushCommands();
         // system.update();
 
-        RefreshRank(LoopRank.Z);
+        RefreshRank(LoopRank.I);
     }
 
     public void RefreshRank(LoopRank iLoopRank)

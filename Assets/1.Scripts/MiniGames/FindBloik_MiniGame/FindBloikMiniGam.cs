@@ -23,6 +23,11 @@ public class FindBloik_MiniGame : MiniGame
 
     public override void Init()
     {
+        //Reset();
+    }
+
+    public override void Reset()
+    {
         int n_spawns = numberOfDecoySticker[MGM.miniGamesDifficulty];
         unoStickers = new BouncySticker[n_spawns];
 
@@ -51,7 +56,6 @@ public class FindBloik_MiniGame : MiniGame
             MGM.LM2D.PlaceObject(unoStickers[i].sr);
         }
     }
-
     public override void Play()
     {
         IsActiveMiniGame = true;

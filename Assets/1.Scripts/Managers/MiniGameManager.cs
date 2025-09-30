@@ -22,7 +22,7 @@ public class MiniGameManager : MonoBehaviour, IManager
         get {
             if (MGLoop==null)
                 return 0;
-            return (int)MGLoop.rank;
+            return (int)MGLoop.rank+1;
             }
     }
     
@@ -49,6 +49,8 @@ public class MiniGameManager : MonoBehaviour, IManager
         LM2D = iGameManager.LM2D;
         PData = iGameManager.playerData;
         UI = iGameManager.UI;
+
+        LoadLoop();
     }
     
     public bool IsReady()
@@ -74,42 +76,48 @@ public class MiniGameManager : MonoBehaviour, IManager
 
     public void BuildLoop()
     {
-        MGLoop = new MiniGameLoop(this, prefab_miniGames);
+        MGLoop = new MiniGameLoop();
+        MGLoop.Init(this, prefab_miniGames);
     }
 
-    public void Restart()
+    // public void Restart()
+    // {
+    //     // gameClock.Reset();
+    //     // MGLoop.Start();
+    // }
+    public async UniTask Launch()
     {
-        gameClock.Reset();
-        
-        MGLoop.Restart();
-        MGLoop.rank = LoopRank.Z;
+        MGLoop.Start();
+        PlayCurrent();
     }
 
-    public async UniTaskVoid Play()
+    public async UniTask PlayCurrent()
     {
         // Z -> I
-        MGLoop.Current.gameObject.SetActive(true);
-        MGLoop.Current.IsInPostGame = false;
-        MGLoop.Current.Init();
-        MGLoop.Current.successState = MiniGameSuccessState.PENDING;
+         MGLoop.Current.gameObject.SetActive(true);
+        // MGLoop.Current.IsInPostGame = false;
+        // //MGLoop.Current.Init();
+        // MGLoop.Current.successState = MiniGameSuccessState.PENDING;
+        //MGLoop.Start();
 
         //ShowPostGameUICB.Invoke(GameData.Get.gameSettings.MiniGameTime - gameClock.GetElapsedTime());
-        
+
         PC.Freeze();
         await PG.OpenPlaygroundAnim();
         PC.UnFreeze();
 
+        MGLoop.Current.Reset();
         MGLoop.Current.Play();
         gameClock.Reset();
     }
 
-    public void Start()
-    {
-        MGLoop.RankUpdate();
-        Play();
-    }
+    // public void Start()
+    // {
+    //     //MGLoop.RankUpdate();
+    //     Play();
+    // }
 
-    public void Stop()
+    public void StopCurrent()
     {
         gameClock.Freeze(true);
         MGLoop.Current.Stop();
@@ -152,7 +160,7 @@ public class MiniGameManager : MonoBehaviour, IManager
     async void Next()
     {
         await PG.ClosePlaygroundAnim();
-        Stop();
+        StopCurrent();
 
         if (!MGLoop.MoveNext())
         {
@@ -178,11 +186,8 @@ public class MiniGameManager : MonoBehaviour, IManager
             
             MGLoop.Reset();
         }
-
-        //await Task.Delay(GameData.GetSettings.PreMiniGameLatchInMs);
-
-        await PG.OpenPlaygroundAnim();
-        Play();
+        //await PG.OpenPlaygroundAnim();
+        PlayCurrent();
     }
 
     public LoopHighScore GetLoopHighScore()
@@ -202,8 +207,12 @@ public class MiniGameManager : MonoBehaviour, IManager
     void Update()
     {
         UI.RefreshTimeIndicator(gameClock);
-        if (MGLoop.Current.IsInPostGame)
+
+        if (gameClock.IsFrozen)
             return;
+
+        if (MGLoop.Current.IsInPostGame)
+                return;
 
         gameClock.Tick();
 

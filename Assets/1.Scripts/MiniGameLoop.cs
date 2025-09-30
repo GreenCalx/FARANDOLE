@@ -5,12 +5,11 @@ using System.Collections.Generic;
 
 public enum LoopRank
 {
-    Z = 0,
-    I = 1,
-    II = 2,
-    III = 3,
-    S = 4,
-    M = 5
+    I = 0,
+    II = 1,
+    III = 2,
+    S = 3,
+    M = 4
 }
 
 public class MiniGameLoop : IEnumerator<MiniGame>
@@ -26,9 +25,17 @@ public class MiniGameLoop : IEnumerator<MiniGame>
         get { return rankUpdateRequest; }
     }
     bool rankUpdateRequest = false;
-    public MiniGameLoop(MiniGameManager iMGM, List<GameObject> iPrefabs)
+    public MiniGameLoop()
     {
+        depth = 0;
+        rank = LoopRank.I;
+        index = 0;
+        rankUpdateRequest = false;
         inst_miniGames = new List<MiniGame>();
+    }
+
+    public void Init(MiniGameManager iMGM, List<GameObject> iPrefabs)
+    {
         foreach (GameObject prefab in iPrefabs)
         {
             GameObject new_mg = GOBuilder.Create(prefab).Build();
@@ -39,11 +46,13 @@ public class MiniGameLoop : IEnumerator<MiniGame>
             as_mg.PC = iMGM.PC;
             as_mg.PG = iMGM.PG;
             inst_miniGames.Add(as_mg);
+            as_mg.Init();
             new_mg.SetActive(false);
         }
 
-        Restart();
+        //Start();
     }
+
     public bool MoveNext()
     {
         if (++index >= inst_miniGames.Count)
@@ -52,11 +61,15 @@ public class MiniGameLoop : IEnumerator<MiniGame>
         return true;
     }
 
-    public void Restart()
+    public void Start()
     {
         depth = 0;
-        rank = LoopRank.Z;
+        rank = LoopRank.I;
         Reset();
+
+        miniGame.gameObject.SetActive(true);
+        miniGame.IsInPostGame = false;
+        miniGame.successState = MiniGameSuccessState.PENDING;
     }
     public void Reset()
     {
@@ -67,7 +80,6 @@ public class MiniGameLoop : IEnumerator<MiniGame>
         index = 0;
         miniGame = inst_miniGames[index];
         rankUpdateRequest = false;
-        
     }
 
     public MiniGame At(int i)
@@ -139,9 +151,6 @@ public class MiniGameLoop : IEnumerator<MiniGame>
 
         switch (rank)
             {
-                case LoopRank.Z:
-                    RankUp();
-                    break;
                 case LoopRank.I:
                     if (IsLoopPerfect())
                         RankUp();

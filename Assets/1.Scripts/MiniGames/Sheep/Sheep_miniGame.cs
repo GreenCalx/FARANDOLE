@@ -15,6 +15,11 @@ public class SheepMiniGame : MiniGame
     int sheepCount;
     public override void Init()
     {
+       // Reset();
+    }
+
+    public override void Reset()
+    {
         sheepCount = sheepsCounts[MGM.miniGamesDifficulty - 1];
         inst_fence = GOBuilder.Create(prefab_fence)
                     .WithParent(transform)

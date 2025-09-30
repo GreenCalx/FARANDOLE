@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine.Events;
 public class LabyrinthMiniGame : MiniGame
 {
@@ -8,6 +10,7 @@ public class LabyrinthMiniGame : MiniGame
     public TorqueRotater rotater;
     public GameObject prefab_ballToEscape;
     GameObject inst_ballToEscape;
+    List<GameObject> inst_RollingBalls;
     RollingBall inst_asBall;
     public Labyrinth inst_movingLabyrinth;
     public List<GameObject> diff1Layouts;
@@ -25,6 +28,10 @@ public class LabyrinthMiniGame : MiniGame
 
     public void PickLayout()
     {
+        if (selectedLayout != null)
+        {
+            GameObject.DestroyImmediate(selectedLayout);
+        }
         GameObject selectedLayoutPrefab = null;
         switch (MGM.miniGamesDifficulty)
         {
@@ -50,18 +57,28 @@ public class LabyrinthMiniGame : MiniGame
     }
     public override void Init()
     {
+        inst_RollingBalls = new List<GameObject>();
+        //Reset();
+    }
+
+    public override void Reset()
+    {
         PickLayout();
         inst_movingLabyrinth.SetFromLayout(selectedLayout);
         inst_movingLabyrinth.transform.rotation = Quaternion.identity;
 
-        inst_ballToEscape = Instantiate(prefab_ballToEscape);
-        inst_ballToEscape.transform.parent = transform;
-        inst_ballToEscape.transform.position = selectedLayout.spawnPoint.position;
+        for (int i = 0; i < MGM.miniGamesDifficulty; i++)
+        {
+            RollingBall newBall = GOBuilder.Create(prefab_ballToEscape)
+                                .WithParent(transform)
+                                .WithPosition(selectedLayout.spawnPoint.position)
+                                .BuildAs<RollingBall>();
+            newBall.MG = this;
+            newBall.OnFinishCB = new UnityEvent();
+            newBall.OnFinishCB.AddListener(() => { finishLine.ExplodeAt(inst_asBall.transform.position); GameObject.Destroy(newBall.gameObject); });
 
-        inst_asBall = inst_ballToEscape.GetComponent<RollingBall>();
-        inst_asBall.MG = this;
-        inst_asBall.OnFinishCB = new UnityEvent();
-        inst_asBall.OnFinishCB.AddListener(() => finishLine.ExplodeAt(inst_asBall.transform.position));
+            inst_RollingBalls.Add(newBall.gameObject);
+        }
 
         rotater.Init();
         PC.AddPositionTracker(rotater);
@@ -78,8 +95,6 @@ public class LabyrinthMiniGame : MiniGame
         inst_movingLabyrinth.Reset();
 
         PC.RemovePositionTracker(rotater);
-        if (!!inst_ballToEscape)
-            Destroy(inst_ballToEscape.gameObject);
         IsActiveMiniGame = false;
     }
     public override void Win()
@@ -87,12 +102,10 @@ public class LabyrinthMiniGame : MiniGame
         PC.RemovePositionTracker(rotater);
         MGM.WinMiniGame();
     }
-    public override void Lose()
-    {
-        
-    }
+
     public override bool SuccessCheck()
     {
-        return false;
+        //inst_RollingBalls = inst_RollingBalls.ForEach(e => e != null);
+        return inst_RollingBalls.Where(e => e != null).ToList().Count == 0;
     }
 }

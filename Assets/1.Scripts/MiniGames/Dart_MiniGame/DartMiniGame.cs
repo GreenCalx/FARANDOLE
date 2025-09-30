@@ -13,6 +13,17 @@ public class DartMiniGame : MiniGame
 
     public override void Init()
     {
+        // init gun
+        inst_gun = GOBuilder.Create(prefab_gun)
+                    .WithName("DartThrower")
+                    .WithPosition(new Vector3(0f, PG.GetYPosFromHeightFrac(0.05f), 0f))
+                    .WithParent(transform)
+                    .BuildAs<DartThrower>();
+        //Reset();
+    }
+
+    public override void Reset()
+    {
         if (balloons != null && balloons.Count > 0)
             balloons.ForEach(e => Destroy(e.gameObject));
 
@@ -42,11 +53,6 @@ public class DartMiniGame : MiniGame
 
         }
 
-        // init gun
-        inst_gun = GOBuilder.Create(prefab_gun)
-                    .WithName("DartThrower")
-                    .WithPosition(new Vector3(0f, PG.GetYPosFromHeightFrac(0.05f), 0f))
-                    .BuildAs<DartThrower>();
         PC.AddPositionTracker(inst_gun);
     }
 
@@ -75,8 +81,11 @@ public class DartMiniGame : MiniGame
     public override void Stop()
     {
         PC.RemovePositionTracker(inst_gun);
-        Destroy(inst_gun.gameObject);
         IsActiveMiniGame = false;
+    }
+    void OnDestroy()
+    {
+        Destroy(inst_gun.gameObject);
     }
     public override void Win()
     {

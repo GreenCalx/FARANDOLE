@@ -26,6 +26,11 @@ public class RainDropsMiniGame : MiniGame
 
     public override void Init()
     {
+        //Reset();
+    }
+
+    public override void Reset()
+    {
         pathLR = GOBuilder.Create()
                     .WithName("PathLineRenderer")
                     .WithParent(transform)
@@ -63,8 +68,8 @@ public class RainDropsMiniGame : MiniGame
 
         MGM.LM2D.PlaceObject(pathLR);
         MGM.LM2D.PlaceObject(inst_walker.handle_Renderer);
-        
     }
+
     public override void Play()
     {
         IsActiveMiniGame = true;

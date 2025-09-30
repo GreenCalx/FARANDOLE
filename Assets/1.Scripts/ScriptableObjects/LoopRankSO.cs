@@ -14,8 +14,6 @@ public class LoopRankSO : ScriptableObject
     {
         switch (iRank)
         {
-            case LoopRank.Z:
-                return rankMedal_default;
             case LoopRank.I:
                 return rankMedal_I;
             case LoopRank.II:

@@ -20,10 +20,12 @@ public class WackAMoleMiniGame : MiniGame
     public float[] maxHoleDuration;
     public float[] minHoleDuration;
 
-
-
-
     public override void Init()
+    {
+        //Reset();
+    }
+
+    public override void Reset()
     {
         colSize = colSizes[MGM.miniGamesDifficulty - 1];
         rowSize = rowSizes[MGM.miniGamesDifficulty - 1];

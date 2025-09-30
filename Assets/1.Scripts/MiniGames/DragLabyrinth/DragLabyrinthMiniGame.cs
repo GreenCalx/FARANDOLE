@@ -53,6 +53,10 @@ public class DragLabyrinthMiniGame : MiniGame
     }
     public override void Init()
     {
+        //Reset();
+    }
+    public override void Reset()
+    {
         PickLayout();
         inst_Labyrinth.SetFromLayout(selectedLayout);
         inst_Labyrinth.transform.rotation = Quaternion.identity;
@@ -69,6 +73,7 @@ public class DragLabyrinthMiniGame : MiniGame
         inst_asDragable = inst_ballToEscape.GetComponent<Dragable>();
         PC.AddPositionTracker(inst_asDragable);
     }
+
     public override void Play()
     {
         IsActiveMiniGame = true;
