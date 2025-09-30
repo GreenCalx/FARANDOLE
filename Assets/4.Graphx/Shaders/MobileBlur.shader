@@ -1,80 +1,78 @@
 Shader "XL/MobileBlur"
 {
-    Properties
-    {
-        _Color ("Color", Color) = (1, 1, 1, 0)
-        _MainTex ("Texture", 2D) = "white" {}
-        [Enum(UnityEngine.Rendering.CullMode)] _CullMode("CullMode", Int) = 0.
-        [Enum(Off,0,On,1)] _ZWrite("ZWrite", Int) = 1
-        [Enum(UnityEngine.Rendering.BlendMode)] _BlendSrc ("Blend mode Source", Int) = 1
-        [Enum(UnityEngine.Rendering.BlendMode)] _BlendDst ("Blend mode Destination", Int) = 0
-        _BlurSize("BlurSize", Float) = 1
-    }
+    HLSLINCLUDE
+    
+        #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+        // The Blit.hlsl file provides the vertex shader (Vert),
+        // the input structure (Attributes), and the output structure (Varyings)
+        #include "Packages/com.unity.render-pipelines.core/Runtime/Utilities/Blit.hlsl"
+
+        float _VerticalBlur;
+        float _HorizontalBlur;
+    
+        float4 BlurVertical (Varyings input) : SV_Target
+        {
+            const float BLUR_SAMPLES = 64;
+            const float BLUR_SAMPLES_RANGE = BLUR_SAMPLES / 2;
+            
+            float3 color = 0;
+            float blurPixels = _VerticalBlur * _ScreenParams.y;
+            
+            for(float i = -BLUR_SAMPLES_RANGE; i <= BLUR_SAMPLES_RANGE; i++)
+            {
+                float2 sampleOffset = float2 (0, (blurPixels / _BlitTexture_TexelSize.w) * (i / BLUR_SAMPLES_RANGE));
+                color += SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, input.texcoord + sampleOffset).rgb;
+            }
+            
+            return float4(color.rgb / (BLUR_SAMPLES + 1), 1);
+        }
+
+        float4 BlurHorizontal (Varyings input) : SV_Target
+        {
+            const float BLUR_SAMPLES = 64;
+            const float BLUR_SAMPLES_RANGE = BLUR_SAMPLES / 2;
+            
+            UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
+            float3 color = 0;
+            float blurPixels = _HorizontalBlur * _ScreenParams.x;
+            for(float i = -BLUR_SAMPLES_RANGE; i <= BLUR_SAMPLES_RANGE; i++)
+            {
+                float2 sampleOffset =
+                    float2 ((blurPixels / _BlitTexture_TexelSize.z) * (i / BLUR_SAMPLES_RANGE), 0);
+                color += SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, input.texcoord + sampleOffset).rgb;
+            }
+            return float4(color / (BLUR_SAMPLES + 1), 1);
+        }
+    
+    ENDHLSL
+    
     SubShader
     {
-        Tags {
-            "RenderQueue" = "Transparent"  
-            "RenderType"="Transparent"
-            }
-        Blend [_BlendSrc] [_BlendDst]
-        ZWrite [_ZWrite]
+        Tags { "RenderType"="Opaque" "RenderPipeline" = "UniversalPipeline"}
         LOD 100
-        Cull [_CullMode]
-        Lighting Off
-
+        ZWrite Off Cull Off
         Pass
         {
-            CGPROGRAM
-            #pragma vertex vert alpha:fade
-            #pragma fragment frag
+            Name "BlurPassVertical"
 
-            #include "UnityCG.cginc"
+            HLSLPROGRAM
+            
+            #pragma vertex Vert
+            #pragma fragment BlurVertical
+            
+            ENDHLSL
+        }
+        
+        Pass
+        {
+            Name "BlurPassHorizontal"
 
-            struct appdata
-            {
-                float4 vertex : POSITION;
-                float2 uv : TEXCOORD0;
-            };
-
-            struct v2f
-            {
-                float2 uv : TEXCOORD0;
-                float4 vertex : SV_POSITION;
-            };
-
-            sampler2D _MainTex;
-            float4 _Color;
-            float4 _MainTex_ST;
-            float _BlurSize;
-
-            v2f vert (appdata v)
-            {
-                v2f o;
-                o.vertex = UnityObjectToClipPos(v.vertex);
-                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-
-                return o;
-            }
-
-            fixed4 frag (v2f i) : SV_Target
-            {
-                fixed4 col = tex2D(_MainTex, i.uv) ;
-
-                col += tex2D(_MainTex, i.uv + _BlurSize * float2(-1, -1));
-                col += tex2D(_MainTex, i.uv + _BlurSize * float2( 0, -1));
-                col += tex2D(_MainTex, i.uv + _BlurSize * float2(+1, -1));
-                col += tex2D(_MainTex, i.uv + _BlurSize * float2(-1,  0));
-                col += tex2D(_MainTex, i.uv + _BlurSize * float2(+1,  0));
-                col += tex2D(_MainTex, i.uv + _BlurSize * float2(-1, +1));
-                col += tex2D(_MainTex, i.uv + _BlurSize * float2( 0, +1));
-                col += tex2D(_MainTex, i.uv + _BlurSize * float2(+1, +1));
-
-                col /= 9;
-
-                col *= _Color;
-                return col;
-            }
-            ENDCG
+            HLSLPROGRAM
+            
+            #pragma vertex Vert
+            #pragma fragment BlurHorizontal
+            
+            ENDHLSL
         }
     }
 }

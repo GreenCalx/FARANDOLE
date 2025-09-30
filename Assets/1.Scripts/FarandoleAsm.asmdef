@@ -11,7 +11,12 @@
         "UnityUIExtensions",
         "UniTask",
         "FMODUnity",
-        "Assembly-GraphicMaterialOverride"
+        "Assembly-GraphicMaterialOverride",
+        "Unity.RenderPipelines.Universal.Shaders",
+        "Unity.RenderPipeline.Universal.ShaderLibrary",
+        "Unity.RenderPipelines.Universal.Runtime",
+        "Unity.RenderPipelines.Universal.2D.Runtime",
+        "Unity.RenderPipelines.Core.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
