@@ -121,7 +121,8 @@ public class ObjectThrower<T> : MonoBehaviour, IPositionTracker where T : Throwa
     {
         foreach (T o in thrownObjects)
         {
-            Destroy(o.gameObject);
+            if(o != null)
+                Destroy(o.gameObject);
         }
         thrownObjects = new List<T>();
     }

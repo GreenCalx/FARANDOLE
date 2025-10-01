@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 public class Balloon : ObjectTarget
 {
     public float initPushStr = 2f;
@@ -60,6 +61,10 @@ public class Balloon : ObjectTarget
             0f);
     }
 
+    public void invulnerabilityTime()
+    {
+        IFrames(0.1f).Forget();
+    }
     void Update()
     {
         UpdatePosition();

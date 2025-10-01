@@ -54,3 +54,5 @@ MonoBehaviour:
   prefab_gun: {fileID: 653498583214564742, guid: a878bb01b767c4649b8d4ff2fa8162fb, type: 3}
   n_balloons: 3
   prefab_Balloon: {fileID: 980553201171756042, guid: 2590b816f7e5b0f41a347f51dc8ec656, type: 3}
+  prefab_BigBalloon: {fileID: 980553201171756042, guid: 7261dfdc2a46b464c9c0ca91b7ceade1, type: 3}
+  prefab_Rock: {fileID: 9008469230258281967, guid: de3b292e826e69846bc7f8b5b53f3aa0, type: 3}

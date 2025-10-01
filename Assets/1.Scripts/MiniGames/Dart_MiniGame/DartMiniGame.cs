@@ -1,15 +1,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 public class DartMiniGame : MiniGame
 {
     [Header("DartMiniGame")]
     public GameObject prefab_gun;
     List<GameObject> balloons;
-    public int n_balloons = 3;
+    public int n_balloons = 0;
     public GameObject prefab_Balloon;
+    public GameObject prefab_BigBalloon;
+
+    public GameObject prefab_Rock;
+
+    private BlockingRock inst_rock;
     DartThrower inst_gun;
+
 
     public override void Init()
     {
@@ -27,32 +34,52 @@ public class DartMiniGame : MiniGame
             balloons.ForEach(e => Destroy(e.gameObject));
 
         int n_spawns = n_balloons * MGM.miniGamesDifficulty;
-        balloons = new List<GameObject>(n_spawns);
-        for (int i = 0; i < n_spawns; i++)
+        int n_bigSpawns = Math.Max(0, MGM.miniGamesDifficulty - 2);
+
+        if (MGM.miniGamesDifficulty >= 3)
         {
-            balloons.Add(Instantiate(prefab_Balloon));
-            balloons[i].name = "BalloonBundle " + i;
-            balloons[i].transform.parent = transform;
-
-            Balloon asBalloon = balloons[i].GetComponentInChildren<Balloon>();
-            if (asBalloon != null)
-            {
-                Vector3 randPos = Random.insideUnitSphere;
-                asBalloon.InitPhysxPosition(new Vector3(
-                    randPos.x,
-                    randPos.y
-                ));
-                asBalloon.InitSortOrder(MGM.LM2D);
-            }
-            ObjectTarget asTarget = balloons[i].GetComponentInChildren<ObjectTarget>();
-            if (asTarget != null)
-            {
-                asTarget.OnTargetHit.AddListener(PopTarget);
-            }
-
+            inst_rock = GOBuilder.Create(prefab_Rock)
+                .WithPosition(new Vector3(UnityEngine.Random.Range(PG.bounds.min.x, PG.bounds.max.x), PG.GetYPosFromHeightFrac(0.35f), 0f))
+                .WithParent(this.transform)
+                .BuildAs<BlockingRock>();
+            inst_rock.StartPatrol(PG.bounds.min.x, PG.bounds.max.x);
+        }
+        balloons = new List<GameObject>(n_spawns+n_bigSpawns*2);
+        for (int i = 0; i < n_spawns + n_bigSpawns; i++)
+        {
+            SpawnBalloon(i, i >= n_spawns,UnityEngine.Random.insideUnitSphere);
         }
 
         PC.AddPositionTracker(inst_gun);
+    }
+
+    public void SpawnBalloon(int index, bool big, Vector2 pos)
+    {
+        if (big)
+        {
+            balloons.Add(Instantiate(prefab_BigBalloon));
+            balloons[index].gameObject.tag = "BigBalloon";
+        }
+        else
+            balloons.Add(Instantiate(prefab_Balloon));
+        balloons[index].name = "BalloonBundle " + index;
+        balloons[index].transform.parent = transform;
+
+        Balloon asBalloon = balloons[index].GetComponentInChildren<Balloon>();
+        if (asBalloon != null)
+        {
+            asBalloon.InitPhysxPosition(new Vector3(
+                pos.x,
+                pos.y
+            ));
+            asBalloon.InitSortOrder(MGM.LM2D);
+            asBalloon.invulnerabilityTime();
+        }
+        ObjectTarget asTarget = balloons[index].GetComponentInChildren<ObjectTarget>();
+        if (asTarget != null)
+        {
+            asTarget.OnTargetHit.AddListener(PopTarget);
+        } 
     }
 
     public void PopTarget(ObjectTarget iTarget)
@@ -63,6 +90,12 @@ public class DartMiniGame : MiniGame
 
         balloons.Remove(bundleTarget);
 
+        if (bundleTarget.gameObject.tag == "BigBalloon")
+        {
+            SpawnBalloon(balloons.Count, false, iTarget.transform.position);
+            SpawnBalloon(balloons.Count, false, iTarget.transform.position);
+            SpawnBalloon(balloons.Count, false, iTarget.transform.position);
+        }
         Balloon asBalloon = iTarget.GetComponent<Balloon>();
         if (asBalloon != null)
         {
@@ -81,10 +114,14 @@ public class DartMiniGame : MiniGame
     {
         PC.RemovePositionTracker(inst_gun);
         inst_gun.ClearThrownObjects();
+        if(inst_rock != null)
+            Destroy(inst_rock.gameObject);
         IsActiveMiniGame = false;
     }
     void OnDestroy()
     {
+        if(inst_rock != null)
+            Destroy(inst_rock.gameObject);
         Destroy(inst_gun.gameObject);
     }
     public override void Win()
@@ -94,7 +131,7 @@ public class DartMiniGame : MiniGame
     }
     public override void Lose()
     {
-        
+        //Destroy(inst_rock.gameObject);
     }
     public override bool SuccessCheck()
     {

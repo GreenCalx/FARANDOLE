@@ -1,0 +1,767 @@
+fileFormatVersion: 2
+guid: 6c1db6a83b9c6e9408e3ee25df4f80d9
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -5526107362336980393
+    second: big_balloon_explode_0
+  - first:
+      213: 3902655347499701065
+    second: big_balloon_explode_1
+  - first:
+      213: 5797763879729029830
+    second: big_balloon_explode_2
+  - first:
+      213: -8008707371386655620
+    second: big_balloon_explode_3
+  - first:
+      213: -8890348304612566638
+    second: big_balloon_explode_4
+  - first:
+      213: -1181174071780920569
+    second: big_balloon_explode_5
+  - first:
+      213: 1561548334382634673
+    second: big_balloon_explode_6
+  - first:
+      213: 369119396983227619
+    second: big_balloon_explode_7
+  - first:
+      213: 6092121667226396480
+    second: big_balloon_explode_8
+  - first:
+      213: 1641567776882434170
+    second: big_balloon_explode_9
+  - first:
+      213: -7769607143351441445
+    second: big_balloon_explode_10
+  - first:
+      213: -8880220058629556325
+    second: big_balloon_explode_11
+  - first:
+      213: 9208156625178318561
+    second: big_balloon_explode_12
+  - first:
+      213: 4097194764758738887
+    second: big_balloon_explode_13
+  - first:
+      213: 2032897179024249849
+    second: big_balloon_explode_14
+  - first:
+      213: -1780291596110773686
+    second: big_balloon_explode_15
+  - first:
+      213: 2155570748428433999
+    second: big_balloon_explode_16
+  - first:
+      213: -9081687164220341997
+    second: big_balloon_explode_17
+  - first:
+      213: -4679663080638865356
+    second: big_balloon_explode_18
+  - first:
+      213: -1701573813853338217
+    second: big_balloon_explode_19
+  - first:
+      213: -2525105173497807953
+    second: big_balloon_explode_20
+  - first:
+      213: 4179683610842908019
+    second: big_balloon_explode_21
+  - first:
+      213: -2375520610931377103
+    second: big_balloon_explode_22
+  - first:
+      213: 6243089407986623429
+    second: big_balloon_explode_23
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: big_balloon_explode_0
+      rect:
+        serializedVersion: 2
+        x: 270
+        y: 862
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 752cb3de1a25f43b0800000000000000
+      internalID: -5526107362336980393
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: big_balloon_explode_1
+      rect:
+        serializedVersion: 2
+        x: 282
+        y: 870
+        width: 10
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9439f748c54092630800000000000000
+      internalID: 3902655347499701065
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: big_balloon_explode_2
+      rect:
+        serializedVersion: 2
+        x: 302
+        y: 632
+        width: 154
+        height: 298
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6c2e6ded78bc57050800000000000000
+      internalID: 5797763879729029830
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: big_balloon_explode_3
+      rect:
+        serializedVersion: 2
+        x: 447
+        y: 724
+        width: 96
+        height: 263
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c7c2272e31b5bd090800000000000000
+      internalID: -8008707371386655620
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: big_balloon_explode_4
+      rect:
+        serializedVersion: 2
+        x: 526
+        y: 650
+        width: 190
+        height: 299
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 299521ee1532f9480800000000000000
+      internalID: -8890348304612566638
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: big_balloon_explode_5
+      rect:
+        serializedVersion: 2
+        x: 581
+        y: 598
+        width: 271
+        height: 272
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 703b8999070ab9fe0800000000000000
+      internalID: -1181174071780920569
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: big_balloon_explode_6
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 587
+        width: 220
+        height: 146
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b6da7acfebbba510800000000000000
+      internalID: 1561548334382634673
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: big_balloon_explode_7
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 612
+        width: 233
+        height: 248
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3e444e8c2206f1500800000000000000
+      internalID: 369119396983227619
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: big_balloon_explode_8
+      rect:
+        serializedVersion: 2
+        x: 501
+        y: 565
+        width: 107
+        height: 133
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0476d7ff0609b8450800000000000000
+      internalID: 6092121667226396480
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: big_balloon_explode_9
+      rect:
+        serializedVersion: 2
+        x: 588
+        y: 471
+        width: 293
+        height: 182
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a702ec7123508c610800000000000000
+      internalID: 1641567776882434170
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: big_balloon_explode_10
+      rect:
+        serializedVersion: 2
+        x: 742
+        y: 638
+        width: 182
+        height: 109
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bd72330e77fcc2490800000000000000
+      internalID: -7769607143351441445
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: big_balloon_explode_11
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 456
+        width: 271
+        height: 84
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b973616f7ee13c480800000000000000
+      internalID: -8880220058629556325
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: big_balloon_explode_12
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 539
+        width: 130
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1e6d9e7e9a1f9cf70800000000000000
+      internalID: 9208156625178318561
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: big_balloon_explode_13
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 519
+        width: 112
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7c7e8014ee82cd830800000000000000
+      internalID: 4097194764758738887
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: big_balloon_explode_14
+      rect:
+        serializedVersion: 2
+        x: 397
+        y: 77
+        width: 245
+        height: 464
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f352aca63d463c10800000000000000
+      internalID: 2032897179024249849
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: big_balloon_explode_15
+      rect:
+        serializedVersion: 2
+        x: 99
+        y: 292
+        width: 272
+        height: 204
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a424439c9322b47e0800000000000000
+      internalID: -1780291596110773686
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: big_balloon_explode_16
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 445
+        width: 40
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f4abc4ccc202aed10800000000000000
+      internalID: 2155570748428433999
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: big_balloon_explode_17
+      rect:
+        serializedVersion: 2
+        x: 367
+        y: 484
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3110c6714ad57f180800000000000000
+      internalID: -9081687164220341997
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: big_balloon_explode_18
+      rect:
+        serializedVersion: 2
+        x: 617
+        y: 394
+        width: 263
+        height: 105
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 430a20ad83f7e0fb0800000000000000
+      internalID: -4679663080638865356
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: big_balloon_explode_19
+      rect:
+        serializedVersion: 2
+        x: 261
+        y: 195
+        width: 196
+        height: 258
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7954a22b1abc268e0800000000000000
+      internalID: -1701573813853338217
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: big_balloon_explode_20
+      rect:
+        serializedVersion: 2
+        x: 567
+        y: 217
+        width: 142
+        height: 154
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fab7929293605fcd0800000000000000
+      internalID: -2525105173497807953
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: big_balloon_explode_21
+      rect:
+        serializedVersion: 2
+        x: 607
+        y: 241
+        width: 233
+        height: 184
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 37540d16918310a30800000000000000
+      internalID: 4179683610842908019
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: big_balloon_explode_22
+      rect:
+        serializedVersion: 2
+        x: 705
+        y: 232
+        width: 9
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 13cf0d42794780fd0800000000000000
+      internalID: -2375520610931377103
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: big_balloon_explode_23
+      rect:
+        serializedVersion: 2
+        x: 743
+        y: 240
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c3eb004db8e3a650800000000000000
+      internalID: 6243089407986623429
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      big_balloon_explode_0: -5526107362336980393
+      big_balloon_explode_1: 3902655347499701065
+      big_balloon_explode_10: -7769607143351441445
+      big_balloon_explode_11: -8880220058629556325
+      big_balloon_explode_12: 9208156625178318561
+      big_balloon_explode_13: 4097194764758738887
+      big_balloon_explode_14: 2032897179024249849
+      big_balloon_explode_15: -1780291596110773686
+      big_balloon_explode_16: 2155570748428433999
+      big_balloon_explode_17: -9081687164220341997
+      big_balloon_explode_18: -4679663080638865356
+      big_balloon_explode_19: -1701573813853338217
+      big_balloon_explode_2: 5797763879729029830
+      big_balloon_explode_20: -2525105173497807953
+      big_balloon_explode_21: 4179683610842908019
+      big_balloon_explode_22: -2375520610931377103
+      big_balloon_explode_23: 6243089407986623429
+      big_balloon_explode_3: -8008707371386655620
+      big_balloon_explode_4: -8890348304612566638
+      big_balloon_explode_5: -1181174071780920569
+      big_balloon_explode_6: 1561548334382634673
+      big_balloon_explode_7: 369119396983227619
+      big_balloon_explode_8: 6092121667226396480
+      big_balloon_explode_9: 1641567776882434170
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
