@@ -18,4 +18,4 @@ MonoBehaviour:
   thumbNailImg: {fileID: 21300000, guid: d244883b12f743347a194a8bda79ba80, type: 3}
   prefab_MiniGame: {fileID: 290077520304868199, guid: c462f14683fa9bf43b8e31a0ee4d53f3, type: 3}
   tags: 0300000002000000
-  orientationRequirement: 0
+  orientationRequirement: 2

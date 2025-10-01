@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f772bfecd73e0a64ca2b7000d99e16b6, type: 3}
   m_Name: MG_Chess
   m_EditorClassIdentifier: 
-  ID: 11
-  name: Knight Chess
+  ID: 10
+  name: Chess
   goal: Destroy all black Knights
   thumbNailImg: {fileID: -4421537415268300880, guid: e7e97f26a75250d41ba2f6cb8601a0ac, type: 3}
   prefab_MiniGame: {fileID: 8063128649422412875, guid: 07ecc451338969848bf4dac8f9e9191b, type: 3}

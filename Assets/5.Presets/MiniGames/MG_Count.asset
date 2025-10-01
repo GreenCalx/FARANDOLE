@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f772bfecd73e0a64ca2b7000d99e16b6, type: 3}
   m_Name: MG_Count
   m_EditorClassIdentifier: 
-  ID: 10
+  ID: 9
   name: Count
   goal: Tap objects in ascending order
   thumbNailImg: {fileID: 7603346453981358217, guid: be46881a26d999947a8484581f00952b, type: 3}

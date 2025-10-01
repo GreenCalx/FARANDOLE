@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: b1c1635a1d56a3143b34b65697dcdf0b
+guid: 15e6ea6b22d8d5b41898ec6189f7bcc3
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6872689191571971909
-    second: MiniSheep_0
+      213: 5715104984939191239
+    second: WhiteHorseAttacking_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 400
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: MiniSheep_0
+      name: WhiteHorseAttacking_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 512
-        height: 512
+        x: 68
+        y: 14
+        width: 411
+        height: 498
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 54f505b1862b06f50800000000000000
-      internalID: 6872689191571971909
+      spriteID: 7cb5d5134b1205f40800000000000000
+      internalID: 5715104984939191239
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      MiniSheep_0: 6872689191571971909
+      WhiteHorseAttacking_0: 5715104984939191239
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

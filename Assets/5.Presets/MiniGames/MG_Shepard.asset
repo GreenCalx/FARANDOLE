@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f772bfecd73e0a64ca2b7000d99e16b6, type: 3}
   m_Name: MG_Shepard
   m_EditorClassIdentifier: 
-  ID: 13
+  ID: 12
   name: Sheep sheep
   goal: Drag the sheeps inside
   thumbNailImg: {fileID: 6266472923241529454, guid: eae1c8f96d9b9324387990603535f716, type: 3}

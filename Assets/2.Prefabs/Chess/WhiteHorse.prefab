@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6429755202112447435}
   - component: {fileID: 2722435248421872918}
   m_Layer: 0
-  m_Name: Horse
+  m_Name: WhiteHorse
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 3
   m_Sprite: {fileID: -3697248383599090159, guid: ad40a8ac560aaf34fbce8a03927f686f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -102,3 +102,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   x: 0
   y: 0
+  normalPose: {fileID: -3697248383599090159, guid: ad40a8ac560aaf34fbce8a03927f686f, type: 3}
+  specialPose: {fileID: 5715104984939191239, guid: 15e6ea6b22d8d5b41898ec6189f7bcc3, type: 3}
+  poseTime: 0.75

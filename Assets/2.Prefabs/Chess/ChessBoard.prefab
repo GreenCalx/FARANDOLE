@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tilePrefab: {fileID: 1881316459604369505, guid: 8d54d96988dc915468822684b4a9b3ca, type: 3}
   knightPrefab: {fileID: 2829037840282954039, guid: 0cbc8fcae49bfc444bf364fe0fc8ebf4, type: 3}
-  whiteKnightSprite: {fileID: -3697248383599090159, guid: ad40a8ac560aaf34fbce8a03927f686f, type: 3}
-  blackKnightSprite: {fileID: 21300000, guid: 45dc081cbd21ae34aa8a808cae64ad70, type: 3}
+  queenPrefab: {fileID: 0}
+  blackKnightPrefab: {fileID: 2829037840282954039, guid: 0802beaceec05674d98df1857c758b50, type: 3}
   boardSize: 8
   tileSize: 1

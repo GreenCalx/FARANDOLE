@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f772bfecd73e0a64ca2b7000d99e16b6, type: 3}
   m_Name: MG_WackAMole
   m_EditorClassIdentifier: 
-  ID: 12
+  ID: 11
   name: WackAMole
   goal: Wack 'hem all
   thumbNailImg: {fileID: 7634476061098218831, guid: 6b0a1edabcee62940a6e8989eac0c29f, type: 3}

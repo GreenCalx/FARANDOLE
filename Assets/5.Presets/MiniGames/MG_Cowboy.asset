@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f772bfecd73e0a64ca2b7000d99e16b6, type: 3}
   m_Name: MG_Cowboy
   m_EditorClassIdentifier: 
-  ID: 9
+  ID: 8
   name: Cowboy
   goal: Shoot them all !
   thumbNailImg: {fileID: -5879514480746932602, guid: 481227394aa30b94c99ec7d1420792c3, type: 3}

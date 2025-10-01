@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using GooglePlayGames.BasicApi;
+using Cysharp.Threading.Tasks;
 public enum PlayerColor { White, Black }
 public class ChessBoard : MonoBehaviour
 {
@@ -9,12 +10,9 @@ public class ChessBoard : MonoBehaviour
     [Header("Prefabs & Sprites")]
     public GameObject tilePrefab;
     public GameObject knightPrefab;
-
-
-    [Header("Sprites")]
-    public Sprite whiteKnightSprite;
-    public Sprite blackKnightSprite;
-
+    public GameObject queenPrefab;
+    public GameObject blackKnightPrefab;
+    
 
     [Header("Board Settings")]
     public int boardSize = 8;
@@ -143,7 +141,7 @@ public class ChessBoard : MonoBehaviour
     {
         Vector3 pos = tiles[x, y].transform.position;
 
-        Knight knight = GOBuilder.Create(knightPrefab)
+        Knight knight = GOBuilder.Create(color == PlayerColor.White ? knightPrefab : blackKnightPrefab)
             .WithName("Knight" + color.ToString())
             .WithParent(transform)
             .WithPosition(pos)
@@ -154,7 +152,6 @@ public class ChessBoard : MonoBehaviour
             playerPiece = knight;
         }
         knight.Init(x, y, color, this);
-        knight.SetSprite(color == PlayerColor.White ? whiteKnightSprite : blackKnightSprite);
         knights.Add(knight);
         tiles[x, y].SetOccupant(knight);
         return knight;
@@ -179,7 +176,8 @@ public class ChessBoard : MonoBehaviour
             if (other != null && other.Color != playerPiece.Color)
             {
                 knights.Remove(other);
-                Destroy(other.gameObject);
+                other.GetComponent<ChessPiece>().Die();
+                playerPiece.SpecialPose().Forget();
                 enemyCounter--;
             }
             else
