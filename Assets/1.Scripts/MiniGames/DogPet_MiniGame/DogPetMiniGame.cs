@@ -17,10 +17,10 @@ public class DogPetMiniGame : MiniGame
                         .WithPosition(Vector3.zero)
                         .WithParent(transform)
                         .BuildAs<DogHead>();
-        //Reset();
     }
     public override void Reset()
     {
+        
         inst_dogHead.tapCB.AddListener(RegisterPetting);
         pettings = 0;
         UpdateMGUI();
@@ -32,6 +32,7 @@ public class DogPetMiniGame : MiniGame
     }
     public override void Stop()
     {
+        inst_dogHead.Reset();
         PC.RemoveTapTracker(inst_dogHead);
         IsActiveMiniGame = false;
     }

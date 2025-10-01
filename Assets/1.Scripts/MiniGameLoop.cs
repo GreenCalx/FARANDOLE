@@ -76,6 +76,7 @@ public class MiniGameLoop : IEnumerator<MiniGame>
         foreach (MiniGame mg in inst_miniGames)
         {
             mg.successState = MiniGameSuccessState.PENDING;
+            mg.IsInPostGame = false;
         }
         index = 0;
         miniGame = inst_miniGames[index];

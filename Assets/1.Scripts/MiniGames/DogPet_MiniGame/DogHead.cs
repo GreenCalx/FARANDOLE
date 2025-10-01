@@ -31,6 +31,12 @@ public class DogHead : MonoBehaviour, ITapTracker
         animScale = baseScale * 0.9f;
     }
 
+    public void Reset()
+    {
+        transform.localScale = baseScale;
+        SR.sprite = idleSprite;
+    }
+
     void OnDestroy()
     {
         if (tapAnimCo != null)

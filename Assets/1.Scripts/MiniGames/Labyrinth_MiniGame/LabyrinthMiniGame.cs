@@ -83,7 +83,6 @@ public class LabyrinthMiniGame : MiniGame
                         //GameObject.Destroy(newBall.gameObject);
                     }
                 );
-            newBall.OnFinishCB.AddListener(() => { if (SuccessCheck()) { Win(); } });
             inst_RollingBalls.Add(newBall.gameObject);
         }
 
@@ -119,5 +118,14 @@ public class LabyrinthMiniGame : MiniGame
     {
         //inst_RollingBalls = inst_RollingBalls.ForEach(e => e != null);
         return inst_RollingBalls.Where(e => e != null).ToList().Count == 0;
+    }
+
+    void Update()
+    {
+        if (IsInPostGame)
+            return;
+
+        if (SuccessCheck())
+            Win();
     }
 }
