@@ -39,7 +39,7 @@ public class DartMiniGame : MiniGame
         if (MGM.miniGamesDifficulty >= 3)
         {
             inst_rock = GOBuilder.Create(prefab_Rock)
-                .WithPosition(new Vector3(UnityEngine.Random.Range(PG.bounds.min.x, PG.bounds.max.x), PG.GetYPosFromHeightFrac(0.35f), 0f))
+                .WithPosition(new Vector3(UnityEngine.Random.Range(PG.bounds.min.x, PG.bounds.max.x), PG.GetYPosFromHeightFrac(0.5f), 0f))
                 .WithParent(this.transform)
                 .BuildAs<BlockingRock>();
             inst_rock.StartPatrol(PG.bounds.min.x, PG.bounds.max.x);
@@ -68,6 +68,7 @@ public class DartMiniGame : MiniGame
         Balloon asBalloon = balloons[index].GetComponentInChildren<Balloon>();
         if (asBalloon != null)
         {
+            Debug.Log("balloon");
             asBalloon.InitPhysxPosition(new Vector3(
                 pos.x,
                 pos.y

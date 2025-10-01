@@ -27,7 +27,7 @@ public class BlockingRock : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.GetComponent<Balloon>() == null)
+        if (collision.gameObject.GetComponent<Throwable>())
         {
             Destroy(collision.gameObject);
         }
