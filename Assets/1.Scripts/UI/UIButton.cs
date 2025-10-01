@@ -27,13 +27,13 @@ public class UIButton : Button, IPointerUpHandler, IPointerDownHandler, IPointer
         squircle_img = GetComponent<UICustomSquircle>();
         tag = GetComponent<UITag>();
         pressed = false;
-        UpdateImage();
+        //UpdateImage();
     }
 
-    // void Update()
-    // {
-    //     UpdateImage();
-    // }
+    void OnEnable()
+    {
+        UpdateImage();
+    }
 
     // IMaterialModifier
     public void UpdateImage()

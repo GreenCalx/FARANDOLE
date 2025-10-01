@@ -48,9 +48,15 @@ public class WaveformMatcherMiniGame : MiniGame
         freqCentroid = (maxFreqByDiff + minFreqByDiff) / 2f;
         ampCentroid = (maxAmpByDiff + minAmpByDiff) / 2f;
 
+        Reset();
+    }
+
+    public override void Reset()
+    {
         // Get a random target value, excluding centroid values
         // A targetRandGround too high transform the random range to a 'box'
         // leading to unreachable values via XY circle controller
+        
         Vector2 randPoint = Random.insideUnitCircle;
         if ((randPoint.x <= targetRandGround)&&(randPoint.x >= -targetRandGround))
             randPoint.x = (randPoint.x < 0f) ? -targetRandGround : targetRandGround;
@@ -95,7 +101,11 @@ public class WaveformMatcherMiniGame : MiniGame
     public override void Stop()
     {
         Destroy(targetLR.gameObject);
+        targetLR = null;
+
         Destroy(controlledLR.gameObject);
+        controlledLR = null;
+
         xyController.Reset();
         PC.RemovePositionTracker(xyController);
         IsActiveMiniGame = false;

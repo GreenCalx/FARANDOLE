@@ -18,8 +18,13 @@ public class Counting_MiniGame : MiniGame
 
     public override void Init()
     {
+        //Reset();
+    }
+
+    public override void Reset()
+    {
         int n_spawns = numberCounterObjects[MGM.miniGamesDifficulty - 1];
-        counterObjects = new CounterObject[n_spawns];
+        counterObjects          = new CounterObject[n_spawns];
         counterObjectsPositions = new Vector2[n_spawns];
         counter = 1;
         for (int i = 0; i < n_spawns; i++)
@@ -57,7 +62,7 @@ public class Counting_MiniGame : MiniGame
     public override void Lose()
     {
         destroyObjects();
-        Init();
+        Reset();
         counter = 1;
     }
     public override bool SuccessCheck()
@@ -76,10 +81,6 @@ public class Counting_MiniGame : MiniGame
             {
                 Win();
             }
-        }
-        else
-        {
-            Lose();
         }
     }
 

@@ -34,6 +34,11 @@ public class GameManager : MonoBehaviour
 
     IEnumerator Init()
     {
+        // ensure PlayerController is loaded
+        // before doing anything
+        while (PC == null)
+        { yield return null; }
+
         LM2D.Init(this);
         while (!LM2D.IsReady())
         { yield return null; }
@@ -45,7 +50,7 @@ public class GameManager : MonoBehaviour
         PG.ForceDoorClose();
 
         MGM.Init(this);
-        MGM.LoadLoop();
+        //MGM.LoadLoop();
         while (!MGM.IsReady())
         { yield return null; }
 
@@ -64,6 +69,7 @@ public class GameManager : MonoBehaviour
         UI.Init(this);
         while (!UI.IsReady())
         { yield return null; }
+        MGM.UI = UI; // TODO dirty fix
         UI.PresentLoop();
 
         //StartGame();
@@ -73,19 +79,25 @@ public class GameManager : MonoBehaviour
     void InitCallbacks()
     {
         MGM.OnHPLossCB.AddListener(playerData.LoseHP);
-        UI.OnBeforeLoopDepth.AddListener(OnLoopDepthUpdate);
         MGM.OnMiniGameComplete.AddListener(OnMiniGameCompletion);
         MGM.OnMiniGameTransitionCB.AddListener(OnMiniGameTransition);
         MGM.ShowPostGameUICB.AddListener(UI.ShowSuccessArea);
+
+        UI.OnBeforeLoopDepth.AddListener(OnLoopDepthUpdate);
+        UI.h_PauseMenu.h_TryAgainBtn.onClick.AddListener(() => { UI.h_PauseMenu.Toggle(); RestartGame(); });
+        UI.h_PauseMenu.h_ExitBtn.onClick.AddListener(() => { UI.h_PauseMenu.Toggle(); ExitToTitle(); });
     }
 
     void RemoveCallbacks()
     {
         MGM.OnHPLossCB.RemoveListener(playerData.LoseHP);
-        UI.OnBeforeLoopDepth.RemoveListener(OnLoopDepthUpdate);
         MGM.OnMiniGameComplete.RemoveListener(OnMiniGameCompletion);
         MGM.OnMiniGameTransitionCB.RemoveListener(OnMiniGameTransition);
         MGM.ShowPostGameUICB.RemoveListener(UI.ShowSuccessArea);
+
+        UI.OnBeforeLoopDepth.RemoveListener(OnLoopDepthUpdate);
+        UI.h_PauseMenu.h_TryAgainBtn.onClick.RemoveListener(() => { UI.h_PauseMenu.Toggle(); RestartGame(); });
+        UI.h_PauseMenu.h_ExitBtn.onClick.RemoveListener(() => { UI.h_PauseMenu.Toggle(); ExitToTitle(); });
     }
 
     async UniTaskVoid StartGame()
@@ -101,7 +113,7 @@ public class GameManager : MonoBehaviour
         }
         InitCallbacks();
 
-        MGM.Start();
+        await MGM.Launch();
         UI.ShowMiniGameMode(true);
         GameStarted = true;
     }
@@ -109,7 +121,7 @@ public class GameManager : MonoBehaviour
     void StopGame()
     {
         GameStarted = false;
-        MGM.Stop();
+        MGM.StopCurrent();
         RemoveCallbacks();
         UI.ShowMiniGameMode(false);
     }
@@ -117,13 +129,14 @@ public class GameManager : MonoBehaviour
     void RestartGame()
     {
         // Remove callbacks pointing obsolete methods
-        RemoveCallbacks();
+        //RemoveCallbacks();
+        StopGame();
 
         // Reset Player data
         playerData = new PlayerData();
 
         // Mini Game Reset
-        MGM.Restart();
+        //MGM.Start();
 
         /// playground reset mat
         PG.RefreshMatFromDiff(MGM.MGLoop.rank);

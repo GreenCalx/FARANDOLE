@@ -21,6 +21,11 @@ public class MemoryMiniGame : MiniGame
 
     public override void Init()
     {
+        //Reset();
+    }
+
+    public override void Reset()
+    {
         cardsCount = cardsCounts[MGM.miniGamesDifficulty];
 
         cards = new Card[cardsCount];
@@ -53,8 +58,8 @@ public class MemoryMiniGame : MiniGame
             PC.AddTapTracker(cards[i]);
         }
         pairs = 0;
-
     }
+
     public override void Play()
     {
         IsActiveMiniGame = true;

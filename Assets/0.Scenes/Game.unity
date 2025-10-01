@@ -163,7 +163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80b8b58d2f403e84aa6ce22d65c5011f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MiniGameToTest: {fileID: 2266623309687070485, guid: b5b8eac1938e1384e85eab4e8998b613, type: 3}
+  MiniGameToTest: {fileID: 0}
   prefab_miniGames:
   - {fileID: 6891743480671891591, guid: ca650ba5ffb5e9c4d8e5e5b7a7fdaeae, type: 3}
   - {fileID: 5205109001117507003, guid: ef698d4e9557cd14dbc5770833ba666b, type: 3}
@@ -475,27 +475,6 @@ MonoBehaviour:
   OnOpenCB:
     m_PersistentCalls:
       m_Calls: []
---- !u!1 &941404847 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1410958093947007585, guid: df5d7df267dc5bc4ba1454afb1ad01cf, type: 3}
-  m_PrefabInstance: {fileID: 6872624366841792069}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &941404850
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 941404847}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a4312897b04e5a498af276419224d8c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Shader: {fileID: 4800000, guid: d133b90d44596fd408adfe68e9f4aeb3, type: 3}
-  blurSettings:
-    horizontalBlur: 0.1
-    verticalBlur: 0.1
 --- !u!1 &1078912652
 GameObject:
   m_ObjectHideFlags: 0
@@ -1392,14 +1371,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 120837399191838227, guid: df5d7df267dc5bc4ba1454afb1ad01cf, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -9.549988
-      objectReference: {fileID: 0}
-    - target: {fileID: 1410958093947007585, guid: df5d7df267dc5bc4ba1454afb1ad01cf, type: 3}
-      propertyPath: m_Name
-      value: BlurFX
-      objectReference: {fileID: 0}
     - target: {fileID: 1829307407240905378, guid: df5d7df267dc5bc4ba1454afb1ad01cf, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -1512,18 +1483,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MiniGameUI
       objectReference: {fileID: 0}
-    - target: {fileID: 4231819985281672215, guid: df5d7df267dc5bc4ba1454afb1ad01cf, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -9.549988
-      objectReference: {fileID: 0}
     - target: {fileID: 6367907849115618033, guid: df5d7df267dc5bc4ba1454afb1ad01cf, type: 3}
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1246381609}
-    - target: {fileID: 6367907849115618033, guid: df5d7df267dc5bc4ba1454afb1ad01cf, type: 3}
-      propertyPath: m_RenderMode
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7782491275208354475, guid: df5d7df267dc5bc4ba1454afb1ad01cf, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1555,10 +1518,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1410958093947007585, guid: df5d7df267dc5bc4ba1454afb1ad01cf, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 941404850}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: df5d7df267dc5bc4ba1454afb1ad01cf, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

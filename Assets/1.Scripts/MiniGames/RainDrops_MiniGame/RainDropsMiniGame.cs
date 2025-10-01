@@ -26,6 +26,11 @@ public class RainDropsMiniGame : MiniGame
 
     public override void Init()
     {
+        //Reset();
+    }
+
+    public override void Reset()
+    {
         pathLR = GOBuilder.Create()
                     .WithName("PathLineRenderer")
                     .WithParent(transform)
@@ -49,7 +54,7 @@ public class RainDropsMiniGame : MiniGame
                         .BuildAs<AutoWalker>();
         inst_walker.from = handle_startLine.position;
         inst_walker.to = handle_endLine.position;
-        inst_walker.OnReachCB.AddListener(() => { if (SuccessCheck()) { Win(); } });
+        inst_walker.OnReachCB.AddListener(Win);
         inst_walker.OnAutoWalkToggleCB.AddListener((b) => UIVisualToggle.Toggle(b));
         inst_walker.OnPreDelayedyCB.AddListener(() => UIVisualToggle.freeze = true);
         inst_walker.OnPostDelayedCB.AddListener(() => UIVisualToggle.freeze = false);
@@ -63,8 +68,8 @@ public class RainDropsMiniGame : MiniGame
 
         MGM.LM2D.PlaceObject(pathLR);
         MGM.LM2D.PlaceObject(inst_walker.handle_Renderer);
-        
     }
+
     public override void Play()
     {
         IsActiveMiniGame = true;

@@ -15,8 +15,8 @@ MonoBehaviour:
   m_Active: 0
   m_Shader: {fileID: 4800000, guid: d133b90d44596fd408adfe68e9f4aeb3, type: 3}
   m_Settings:
-    horizontalBlur: 0.01
-    verticalBlur: 0.01
+    horizontalBlur: 0
+    verticalBlur: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0

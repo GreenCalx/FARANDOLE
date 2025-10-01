@@ -29,7 +29,8 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
 
     [Header("Launch Game")]
     public UIButton launchGameBtn;
-    
+    [Header("Pause Menu")]
+    public UIPauseMenu h_PauseMenu;
     [Header("Callbacks")]
     public UnityEvent OnBeforeLoopDepth;
     public UIButton skipAnimBtn;

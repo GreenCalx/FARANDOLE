@@ -30,6 +30,10 @@ public class MiniGame : MonoBehaviour, IMiniGame
     {
         successState = MiniGameSuccessState.NONE;
     }
+    public virtual void Reset()
+    {
+        
+    }
     public virtual void Play()
     {
         IsActiveMiniGame = true;
@@ -52,4 +56,5 @@ public class MiniGame : MonoBehaviour, IMiniGame
     {
         return false;
     }
+
 }
