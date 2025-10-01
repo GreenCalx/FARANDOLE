@@ -93,33 +93,22 @@ public class MiniGameManager : MonoBehaviour, IManager
 
     public async UniTask PlayCurrent()
     {
-        // Z -> I
-         MGLoop.Current.gameObject.SetActive(true);
-        // MGLoop.Current.IsInPostGame = false;
-        // //MGLoop.Current.Init();
-        // MGLoop.Current.successState = MiniGameSuccessState.PENDING;
-        //MGLoop.Start();
-
-        //ShowPostGameUICB.Invoke(GameData.Get.gameSettings.MiniGameTime - gameClock.GetElapsedTime());
-
+        MGLoop.Current.gameObject.SetActive(true);
+        MGLoop.Current.Reset();
+        
         PC.Freeze();
         await PG.OpenPlaygroundAnim();
         PC.UnFreeze();
 
-        MGLoop.Current.Reset();
+        //MGLoop.Current.Reset();
         MGLoop.Current.Play();
         gameClock.Reset();
     }
 
-    // public void Start()
-    // {
-    //     //MGLoop.RankUpdate();
-    //     Play();
-    // }
-
     public void StopCurrent()
     {
         gameClock.Freeze(true);
+
         MGLoop.Current.Stop();
         MGLoop.Current.gameObject.SetActive(false);
         PC.ClearAllTrackers();

@@ -69,6 +69,7 @@ public class DragLabyrinthMiniGame : MiniGame
         inst_asBall.MG = this;
         inst_asBall.OnFinishCB = new UnityEvent();
         inst_asBall.OnFinishCB.AddListener(() => finishLine.ExplodeAt(inst_asBall.transform.position));
+        inst_asBall.OnFinishCB.AddListener(Win);
 
         inst_asDragable = inst_ballToEscape.GetComponent<Dragable>();
         PC.AddPositionTracker(inst_asDragable);

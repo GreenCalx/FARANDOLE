@@ -117,11 +117,17 @@ public class ObjectThrower<T> : MonoBehaviour, IPositionTracker where T : Throwa
         thrownObjects.Add(inst_Bullet);
     }
 
-    void OnDestroy()
+    public void ClearThrownObjects()
     {
         foreach (T o in thrownObjects)
         {
             Destroy(o.gameObject);
         }
+        thrownObjects = new List<T>();
+    }
+
+    void OnDestroy()
+    {
+        ClearThrownObjects();
     }
 }

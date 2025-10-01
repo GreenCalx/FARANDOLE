@@ -49,6 +49,7 @@ public class CounterObject : MonoBehaviour, ITapTracker
     {
         selectedParticles.Play();
         transform.DOScale(Vector3.zero, shrinkAnimDuration);
-        sr.material.DOFade(0, shrinkAnimDuration);
+        // TODO Make it compliant with custom shaders
+        //sr.material.DOFade(0, shrinkAnimDuration);
     }
 }

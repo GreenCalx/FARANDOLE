@@ -101,7 +101,11 @@ public class WaveformMatcherMiniGame : MiniGame
     public override void Stop()
     {
         Destroy(targetLR.gameObject);
+        targetLR = null;
+
         Destroy(controlledLR.gameObject);
+        controlledLR = null;
+
         xyController.Reset();
         PC.RemovePositionTracker(xyController);
         IsActiveMiniGame = false;

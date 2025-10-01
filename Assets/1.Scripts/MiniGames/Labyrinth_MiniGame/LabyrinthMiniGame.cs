@@ -75,8 +75,15 @@ public class LabyrinthMiniGame : MiniGame
                                 .BuildAs<RollingBall>();
             newBall.MG = this;
             newBall.OnFinishCB = new UnityEvent();
-            newBall.OnFinishCB.AddListener(() => { finishLine.ExplodeAt(inst_asBall.transform.position); GameObject.Destroy(newBall.gameObject); });
-
+            newBall.OnFinishCB.AddListener(
+                () =>
+                    {
+                        finishLine.ExplodeAt(newBall.transform.position);
+                        inst_RollingBalls.Remove(newBall.gameObject);
+                        //GameObject.Destroy(newBall.gameObject);
+                    }
+                );
+            newBall.OnFinishCB.AddListener(() => { if (SuccessCheck()) { Win(); } });
             inst_RollingBalls.Add(newBall.gameObject);
         }
 
@@ -93,6 +100,11 @@ public class LabyrinthMiniGame : MiniGame
         finishLine.ResetParticles();
         inst_movingLabyrinth.transform.rotation = Quaternion.identity;
         inst_movingLabyrinth.Reset();
+        foreach (GameObject rollingBall in inst_RollingBalls)
+        {
+            if (rollingBall!=null)
+                GameObject.Destroy(rollingBall);
+        }
 
         PC.RemovePositionTracker(rotater);
         IsActiveMiniGame = false;

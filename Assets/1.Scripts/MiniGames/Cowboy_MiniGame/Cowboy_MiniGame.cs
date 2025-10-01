@@ -93,7 +93,7 @@ public class CowboyMiniGame : MiniGame
     }
     public override void Win()
     {
-        Clean();
+        //Clean();
         MGM.WinMiniGame();
     }
 

@@ -19,7 +19,6 @@ public class DartMiniGame : MiniGame
                     .WithPosition(new Vector3(0f, PG.GetYPosFromHeightFrac(0.05f), 0f))
                     .WithParent(transform)
                     .BuildAs<DartThrower>();
-        //Reset();
     }
 
     public override void Reset()
@@ -81,6 +80,7 @@ public class DartMiniGame : MiniGame
     public override void Stop()
     {
         PC.RemovePositionTracker(inst_gun);
+        inst_gun.ClearThrownObjects();
         IsActiveMiniGame = false;
     }
     void OnDestroy()
