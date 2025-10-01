@@ -21,7 +21,8 @@ public class UILoopPresentationAnim : ManagedAnimation
     public float radius = 50f;
     public int LR_resolution = 2;
     bool init = false;
-
+    [Header("Internals")]
+    public bool IsShown = false;
 
     public void Init(MiniGameLoop iMGLoop)
     {
@@ -124,6 +125,7 @@ public class UILoopPresentationAnim : ManagedAnimation
             DefaultShow(iCT),
             UniTask.WhenAll(l),
             rankMedalAnimation.DefaultShow(iCT));
+        IsShown = true;
     }
 
     public async UniTask Hide()
@@ -151,6 +153,7 @@ public class UILoopPresentationAnim : ManagedAnimation
             rankMedalAnimation.DefaultHide(iCT),
             DefaultHide(iCT)
             );
+        IsShown = false;
     }
 
     public void UpdateLights(MiniGameLoop iMGLoop)

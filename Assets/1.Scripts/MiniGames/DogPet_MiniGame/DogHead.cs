@@ -33,7 +33,7 @@ public class DogHead : MonoBehaviour, ITapTracker
 
     public void Reset()
     {
-        transform.localScale = baseScale;
+        SR.transform.localScale = baseScale;
         SR.sprite = idleSprite;
     }
 

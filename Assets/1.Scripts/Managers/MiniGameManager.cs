@@ -92,6 +92,12 @@ public class MiniGameManager : MonoBehaviour, IManager
         PlayCurrent();
     }
 
+    public void GameOver()
+    {
+        gameClock.Freeze(true);
+        gameClock.Reset();
+    }
+
     public async UniTask PlayCurrent()
     {
         MGLoop.Current.gameObject.SetActive(true);
@@ -111,7 +117,8 @@ public class MiniGameManager : MonoBehaviour, IManager
     public void StopCurrent()
     {
         gameClock.Reset();
-        MGLoop.Current.Stop();
+        if (MGLoop.Current.IsActiveMiniGame)
+            MGLoop.Current.Stop();
         MGLoop.Current.gameObject.SetActive(false);
         PC.ClearAllTrackers();
         LM2D.ClearLayers();

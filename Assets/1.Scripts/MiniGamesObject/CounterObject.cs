@@ -37,6 +37,9 @@ public class CounterObject : MonoBehaviour, ITapTracker
     }
     public bool OnTap(Vector2 vector2)
     {
+        if (!counterCollider)
+            return false;
+            
         if (counterCollider.bounds.Contains(vector2))
         {
             tapCB.Invoke(count);

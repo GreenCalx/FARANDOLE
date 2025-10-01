@@ -71,8 +71,6 @@ public class GameManager : MonoBehaviour
         { yield return null; }
         MGM.UI = UI; // TODO dirty fix
         UI.PresentLoop();
-
-        //StartGame();
         UI.launchGameBtn?.clickCallback.AddListener(() => StartGame());
     }
 
@@ -106,7 +104,8 @@ public class GameManager : MonoBehaviour
     {
         UI.launchGameBtn?.clickCallback.RemoveListener(() => StartGame());
         UI.launchGameBtn.gameObject.SetActive(false);
-        await UI.HideLoopPresentation();
+        if ((UI.inst_loopPresentationAnim.IsShown!=null) && UI.inst_loopPresentationAnim.IsShown)
+            await UI.HideLoopPresentation();
 
         if (inst_UIGameOver != null)
         {
@@ -124,30 +123,16 @@ public class GameManager : MonoBehaviour
     {
         GameStarted = false;
         MGM.StopCurrent();
+        MGM.GameOver();
         RemoveCallbacks();
         UI.ShowMiniGameMode(false);
     }
 
     void RestartGame()
     {
-        // Remove callbacks pointing obsolete methods
-        //RemoveCallbacks();
-        StopGame();
-
-        // Reset Player data
-        playerData = new PlayerData();
-
-        // Mini Game Reset
-        //MGM.Start();
-
-        /// playground reset mat
-        PG.RefreshMatFromDiff(MGM.MGLoop.rank);
-        PG.RefreshMatFromLoopLevel(MGM.MGLoop.depth);
-        PG.ResetAnimation();
-        PG.FinalClapOpen();
-
-        // Start game again
-        StartGame();
+        // Its quite overkill, but requires no maintenance and is less likely to produce buggy behaviours
+        // Also it can be smoothed by a dedicated scene loader manager at some point..
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void OnMiniGameCompletion()
