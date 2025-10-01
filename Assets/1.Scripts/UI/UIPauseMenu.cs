@@ -5,8 +5,10 @@ public class UIPauseMenu : MonoBehaviour
     public InjectBlurPass h_blurEffect;
     public Transform h_BtnLayout;
     public Transform h_PauseText;
+    public UIButton h_ResumeBtn;
     public UIButton h_TryAgainBtn;
     public UIButton h_ExitBtn;
+    public Transform  h_TintBackground;
     float m_TimeScale;
     bool m_Toggle = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -32,6 +34,8 @@ public class UIPauseMenu : MonoBehaviour
         h_blurEffect.gameObject.SetActive(true);
         h_PauseText.gameObject.SetActive(true);
         h_BtnLayout.gameObject.SetActive(true);
+        h_TintBackground.gameObject.SetActive(true);
+        m_Toggle = true;
     }
 
     void UnPause()
@@ -39,6 +43,8 @@ public class UIPauseMenu : MonoBehaviour
         h_blurEffect.gameObject.SetActive(false);
         h_PauseText.gameObject.SetActive(false);
         h_BtnLayout.gameObject.SetActive(false);
+        h_TintBackground.gameObject.SetActive(false);
         Time.timeScale = m_TimeScale;
+        m_Toggle = false;
     }
 }

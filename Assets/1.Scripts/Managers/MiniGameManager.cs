@@ -42,6 +42,7 @@ public class MiniGameManager : MonoBehaviour, IManager
     public void Init(GameManager iGameManager)
     {
         gameClock = new GameClock();
+        gameClock.Freeze(true);
 
         OnHPLossCB = new UnityEvent<float>();
         PC = iGameManager.PC;
@@ -91,25 +92,33 @@ public class MiniGameManager : MonoBehaviour, IManager
         PlayCurrent();
     }
 
+    public void GameOver()
+    {
+        gameClock.Freeze(true);
+        gameClock.Reset();
+    }
+
     public async UniTask PlayCurrent()
     {
         MGLoop.Current.gameObject.SetActive(true);
         MGLoop.Current.Reset();
-        
+
         PC.Freeze();
         await PG.OpenPlaygroundAnim();
         PC.UnFreeze();
 
         //MGLoop.Current.Reset();
         MGLoop.Current.Play();
+
         gameClock.Reset();
+        gameClock.Freeze(false);
     }
 
     public void StopCurrent()
     {
-        gameClock.Freeze(true);
-
-        MGLoop.Current.Stop();
+        gameClock.Reset();
+        if (MGLoop.Current.IsActiveMiniGame)
+            MGLoop.Current.Stop();
         MGLoop.Current.gameObject.SetActive(false);
         PC.ClearAllTrackers();
         LM2D.ClearLayers();
@@ -148,6 +157,7 @@ public class MiniGameManager : MonoBehaviour, IManager
 
     async void Next()
     {
+        gameClock.Freeze(true);
         await PG.ClosePlaygroundAnim();
         StopCurrent();
 
@@ -201,7 +211,7 @@ public class MiniGameManager : MonoBehaviour, IManager
             return;
 
         if (MGLoop.Current.IsInPostGame)
-                return;
+            return;
 
         gameClock.Tick();
 

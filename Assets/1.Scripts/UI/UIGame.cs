@@ -20,9 +20,6 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
     [Header("Success")]
     public UIStageClearAnimation handle_animStageClear;
     public TextMeshProUGUI successTimeTxt;
-    public Color successTimePositiveColor;
-    public Color successTimeNegativeColor;
-    public Color frozenTimeColor;
     [Header("Loop Presentation")]
     public GameObject prefab_loopPresentationAnim;
     public UILoopPresentationAnim inst_loopPresentationAnim;
@@ -47,9 +44,9 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         MGM = iGameManager.MGM;
         miniGameClock.text = GameData.GetSettings.MiniGameTime.ToString("#0");
         hpClock.text = GameData.GetSettings.PlayerHP.ToString("#0.0");
-        timeIndicatorImg.color = frozenTimeColor;
-        successTimePositiveColor = GameData.GetSettings.LoopPassedColor;
-        successTimeNegativeColor = GameData.GetSettings.LoopFailedColor;
+        timeIndicatorImg.color = GameData.GetUITheme.FrozenTimeColor;
+        GameData.GetUITheme.PositiveTimeColor = GameData.GetSettings.LoopPassedColor;
+        GameData.GetUITheme.NegativeTimeColor = GameData.GetSettings.LoopFailedColor;
         timeNeedleAnim.Init(MGM.gameClock);
 
         inst_loopPresentationAnim = GOBuilder.Create(prefab_loopPresentationAnim)
@@ -83,30 +80,35 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
 
         handle_UIDoorAnim.Init();
 
-        //handle_animLoopSuccess.passedTextColor = successTimePositiveColor;
-        //handle_animLoopSuccess.failedTextColor = successTimeNegativeColor;
+        //handle_animLoopSuccess.passedTextColor = GameData.GetUITheme.PositiveTimeColor;
+        //handle_animLoopSuccess.failedTextColor = GameData.GetUITheme.NegativeTimeColor;
     }
 
     public void RefreshTimeIndicator(GameClock iGameClock)
     {
         if (iGameClock.IsFrozen)
         {
-            timeIndicatorImg.color = frozenTimeColor;
+            timeIndicatorImg.color = GameData.GetUITheme.FrozenTimeColor;
+        } else if ((iGameClock.GetRemainingTime() <= 1f) && (iGameClock.GetRemainingTime() > 0f))
+        {
+            timeIndicatorImg.color = GameData.GetUITheme.LastSecondTimeColor;
         }
         else if (iGameClock.MiniGameTimeExpired())
         {
-            timeIndicatorImg.color = successTimeNegativeColor;
+            timeIndicatorImg.color = GameData.GetUITheme.NegativeTimeColor;
         }
         else
         {
-            timeIndicatorImg.color = successTimePositiveColor;
+            timeIndicatorImg.color = GameData.GetUITheme.PositiveTimeColor;
         }
     }
 
 
     public async UniTask PresentLoop()
     {
+        launchGameBtn.gameObject.SetActive(false);
         await inst_loopPresentationAnim.Show(MGM.MGLoop);
+        launchGameBtn.gameObject.SetActive(true);
     }
 
     public async UniTask HideLoopPresentation()
@@ -127,12 +129,12 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         string successTimeStr = "";
         if (iTime >= 0f)
         {
-            successTimeTxt.color = successTimePositiveColor;
+            successTimeTxt.color = GameData.GetUITheme.PositiveTimeColor;
             successTimeStr += "+";
         }
         else
         {
-            successTimeTxt.color = successTimeNegativeColor;
+            successTimeTxt.color = GameData.GetUITheme.NegativeTimeColor;
             //successTimeStr += "-";
         }
 

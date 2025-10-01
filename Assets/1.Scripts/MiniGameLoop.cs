@@ -63,19 +63,24 @@ public class MiniGameLoop : IEnumerator<MiniGame>
 
     public void Start()
     {
-        depth = 0;
-        rank = LoopRank.I;
-        Reset();
+        ResetAll();
 
         miniGame.gameObject.SetActive(true);
         miniGame.IsInPostGame = false;
         miniGame.successState = MiniGameSuccessState.PENDING;
+    }
+    public void ResetAll()
+    {
+        Reset();
+        depth = 0;
+        rank = LoopRank.I;
     }
     public void Reset()
     {
         foreach (MiniGame mg in inst_miniGames)
         {
             mg.successState = MiniGameSuccessState.PENDING;
+            mg.IsInPostGame = false;
         }
         index = 0;
         miniGame = inst_miniGames[index];

@@ -19,7 +19,7 @@ public class GameClock
 
     public void Reset()
     {
-        frozen = false;
+        //frozen = false;
         miniGameStartTime = Time.time;
     }
 
