@@ -84,6 +84,7 @@ public class GameManager : MonoBehaviour
         MGM.ShowPostGameUICB.AddListener(UI.ShowSuccessArea);
 
         UI.OnBeforeLoopDepth.AddListener(OnLoopDepthUpdate);
+        UI.h_PauseMenu.h_ResumeBtn.onClick.AddListener(() => { UI.h_PauseMenu.Toggle(); });
         UI.h_PauseMenu.h_TryAgainBtn.onClick.AddListener(() => { UI.h_PauseMenu.Toggle(); RestartGame(); });
         UI.h_PauseMenu.h_ExitBtn.onClick.AddListener(() => { UI.h_PauseMenu.Toggle(); ExitToTitle(); });
     }
@@ -96,6 +97,7 @@ public class GameManager : MonoBehaviour
         MGM.ShowPostGameUICB.RemoveListener(UI.ShowSuccessArea);
 
         UI.OnBeforeLoopDepth.RemoveListener(OnLoopDepthUpdate);
+        UI.h_PauseMenu.h_ResumeBtn.onClick.RemoveListener(() => { UI.h_PauseMenu.Toggle(); });
         UI.h_PauseMenu.h_TryAgainBtn.onClick.RemoveListener(() => { UI.h_PauseMenu.Toggle(); RestartGame(); });
         UI.h_PauseMenu.h_ExitBtn.onClick.RemoveListener(() => { UI.h_PauseMenu.Toggle(); ExitToTitle(); });
     }
