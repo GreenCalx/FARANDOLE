@@ -18,3 +18,7 @@ MonoBehaviour:
   pressedMainBtnColor: {r: 0.7157727, g: 0.98039216, b: 0.4862745, a: 1}
   normalActionBtnColor: {r: 1, g: 0.47771692, b: 0.1372549, a: 1}
   pressedActionBtnColor: {r: 0.745, g: 0.35643137, b: 0.1022549, a: 0.8}
+  PositiveTimeColor: {r: 0.48593804, g: 0.9811321, b: 0.6148211, a: 1}
+  LastSecondTimeColor: {r: 1, g: 0.63569504, b: 0, a: 1}
+  NegativeTimeColor: {r: 1, g: 0, b: 0.4448824, a: 1}
+  FrozenTimeColor: {r: 0, g: 0.5592723, b: 1, a: 1}

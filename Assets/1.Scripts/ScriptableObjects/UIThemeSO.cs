@@ -13,4 +13,9 @@ public class UIThemeSO : ScriptableObject
     [Header("Action Button")]
     public Color normalActionBtnColor;
     public Color pressedActionBtnColor;
+    [Header("Clock")]
+    public Color PositiveTimeColor;
+    public Color LastSecondTimeColor;
+    public Color NegativeTimeColor;
+    public Color FrozenTimeColor;
 }

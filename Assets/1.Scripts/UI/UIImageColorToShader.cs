@@ -11,7 +11,7 @@ public class UIImageColorToShader : MonoBehaviour
     public bool continuousRefresh = true;
     public Color currentColor;
     Color initColor;
-    GraphicPropertyOverrideColor matColorOverride;
+    List<GraphicPropertyOverrideColor> matColorOverrides;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -19,15 +19,23 @@ public class UIImageColorToShader : MonoBehaviour
         initColor = target.color;
         currentColor = initColor;
 
-        matColorOverride = GetComponentInChildren<GraphicPropertyOverrideColor>();
-        matColorOverride.PropertyValue = initColor;
+        matColorOverrides = new List<GraphicPropertyOverrideColor>(GetComponentsInChildren<GraphicPropertyOverrideColor>());
+        ResetColors();
+    }
+
+    public void ResetColors()
+    {
+        foreach ( var c in matColorOverrides)
+        {
+            c.PropertyValue = initColor;
+        }
     }
 
     void OnDisable()
     {
         if (target == null)
             return;
-        matColorOverride.PropertyValue = initColor;
+        ResetColors();
     }
 
     // Update is called once per frame
@@ -35,7 +43,10 @@ public class UIImageColorToShader : MonoBehaviour
     {
         if (continuousRefresh)
         {
-            matColorOverride.PropertyValue = target.color;
+            foreach (var c in matColorOverrides)
+            {
+                c.PropertyValue = target.color;
+            }
             currentColor = target.color;
         }
     }

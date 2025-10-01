@@ -1,8 +1,9 @@
-Shader "XL/MobileUnlit"
+Shader "XL/MobileEmissiveUnlit"
 {
     Properties
     {
         _Color ("Color", Color) = (1, 1, 1, 1)
+        [HDR]_EmissiveColor ("EmissiveColor",Color) = (0,0,0,0)
         _MainTex ("Texture", 2D) = "white" {}
         _Brightness ("Brightness", Float) = 1
         [Enum(UnityEngine.Rendering.CullMode)] _CullMode("CullMode", Int) = 0.
@@ -45,6 +46,7 @@ Shader "XL/MobileUnlit"
 
             sampler2D _MainTex;
             float4 _Color;
+            float4 _EmissiveColor;
             float4 _MainTex_ST;
             float _Brightness;
             float _AlphaCutoff;
@@ -65,7 +67,8 @@ Shader "XL/MobileUnlit"
                 // col.g *= _Color.g * _Brightness;
                 // col.b *= _Color.b * _Brightness;
                 col *= _Color;
-                
+                if (col.a > 0)
+                    col += _EmissiveColor;
                 return col;
             }
             ENDCG

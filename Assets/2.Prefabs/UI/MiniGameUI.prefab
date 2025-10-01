@@ -2395,9 +2395,6 @@ MonoBehaviour:
   handle_animLoopSuccess: {fileID: 5774820691861808128}
   handle_animStageClear: {fileID: 3251116668050295382}
   successTimeTxt: {fileID: 8894301836107079185}
-  successTimePositiveColor: {r: 0.15881987, g: 0.7830189, b: 0.27088255, a: 1}
-  successTimeNegativeColor: {r: 0.7921569, g: 0.15686275, b: 0.28817493, a: 1}
-  frozenTimeColor: {r: 0.83137256, g: 0.6596764, b: 0.04313726, a: 1}
   prefab_loopPresentationAnim: {fileID: 9146333944164088359, guid: 5f90757ba107b484191573ba2ea5308f, type: 3}
   inst_loopPresentationAnim: {fileID: 0}
   launchGameBtn: {fileID: 5124853588596703458}
@@ -2406,6 +2403,53 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   skipAnimBtn: {fileID: 7226601599054630873}
+--- !u!1 &3552156367653611492
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6423368672245775405}
+  - component: {fileID: 1002899711747889191}
+  m_Layer: 5
+  m_Name: _EmissiveColor Override
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &6423368672245775405
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3552156367653611492}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6041569065667967355}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1002899711747889191
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3552156367653611492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0769e07e9d844582aed9c22013f56c3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  propertyName: _EmissiveColor
+  propertyValue: {r: 21.112127, g: 21.112127, b: 21.112127, a: 1}
+  isHDR: 0
 --- !u!1 &3589294947579111983
 GameObject:
   m_ObjectHideFlags: 0
@@ -4428,7 +4472,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propertyName: _Color
   propertyValue: {r: 0.735849, g: 0.735849, b: 0.735849, a: 1}
-  isHDR: 1
+  isHDR: 0
 --- !u!1 &5235239890763617221
 GameObject:
   m_ObjectHideFlags: 0
@@ -12416,6 +12460,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7925251382880606787}
+  - {fileID: 6423368672245775405}
   m_Father: {fileID: 4158359068285141354}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
@@ -12443,7 +12488,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 2100000, guid: 669fc3a2495674442b1fac19bafa84a8, type: 2}
+  m_Material: {fileID: 2100000, guid: cb180266364414d448db846b4339fc0a, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
