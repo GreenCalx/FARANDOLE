@@ -8,7 +8,9 @@ public class DartMiniGame : MiniGame
     [Header("DartMiniGame")]
     public GameObject prefab_gun;
     List<GameObject> balloons;
-    public int n_balloons = 0;
+    public int[] n_balloons;
+    public int[] n_bigballoons;
+    public bool[] rock;
     public GameObject prefab_Balloon;
     public GameObject prefab_BigBalloon;
 
@@ -33,10 +35,10 @@ public class DartMiniGame : MiniGame
         if (balloons != null && balloons.Count > 0)
             balloons.ForEach(e => Destroy(e.gameObject));
 
-        int n_spawns = n_balloons * MGM.miniGamesDifficulty;
-        int n_bigSpawns = Math.Max(0, MGM.miniGamesDifficulty - 2);
+        int n_spawns = n_balloons[MGM.miniGamesDifficulty-1];
+        int n_bigSpawns = n_bigballoons[MGM.miniGamesDifficulty-1];
 
-        if (MGM.miniGamesDifficulty >= 3)
+        if (rock[MGM.miniGamesDifficulty-1])
         {
             inst_rock = GOBuilder.Create(prefab_Rock)
                 .WithPosition(new Vector3(UnityEngine.Random.Range(PG.bounds.min.x, PG.bounds.max.x), PG.GetYPosFromHeightFrac(0.5f), 0f))

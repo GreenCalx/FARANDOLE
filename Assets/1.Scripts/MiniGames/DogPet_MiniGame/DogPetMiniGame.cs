@@ -9,6 +9,9 @@ public class DogPetMiniGame : MiniGame
     int pettings = 0;
     int targetPetting = 10;
 
+    public int[] difficultyTapForces;
+    private int tapForce;
+    public int bounceOnRandomTreshold;
     public TextMeshProUGUI UIworld_petCounter;
     public override void Init()
     {
@@ -17,11 +20,19 @@ public class DogPetMiniGame : MiniGame
                         .WithPosition(Vector3.zero)
                         .WithParent(transform)
                         .BuildAs<DogHead>();
+        inst_dogHead.Init();
+        inst_dogHead.tapCB.AddListener(RegisterPetting);
     }
     public override void Reset()
     {
-        inst_dogHead.tapCB.AddListener(RegisterPetting);
         pettings = 0;
+        tapForce = difficultyTapForces[MGM.miniGamesDifficulty - 1];
+        if (MGM.miniGamesDifficulty >= bounceOnRandomTreshold)
+        {
+            inst_dogHead.bounceRandomOnTap = true;
+        }
+        else
+            inst_dogHead.bounceRandomOnTap = false;
         UpdateMGUI();
         PC.AddTapTracker(inst_dogHead);
     }
@@ -62,7 +73,7 @@ public class DogPetMiniGame : MiniGame
     {
         pettings = (pettings >= targetPetting) ? targetPetting : pettings + 1;
         UpdateMGUI();
-        inst_dogHead.TapEffect(MGM.miniGamesDifficulty);
+        inst_dogHead.TapEffect(tapForce);
         if (SuccessCheck())
             Win();
     }

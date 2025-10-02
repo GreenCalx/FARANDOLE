@@ -18,23 +18,29 @@ public class DogHead : MonoBehaviour, ITapTracker
     public float torque = 10f;
     Coroutine tapAnimCo;
     Vector3 baseScale;
+
+    Quaternion baseRot;
     Vector3 animScale;
     public bool stopPropagation => true;
-    public int GetDisplayPriority(){ return 0; }
+    public int GetDisplayPriority() { return 0; }
 
-    void Start()
+    public bool bounceRandomOnTap = false;
+
+    public void Init()
     {
         rb2d = GetComponent<Rigidbody2D>();
 
         SR.sprite = idleSprite;
         baseScale = SR.transform.localScale;
         animScale = baseScale * 0.9f;
+        baseRot = transform.rotation;
     }
 
     public void Reset()
     {
         SR.transform.localScale = baseScale;
         SR.sprite = idleSprite;
+        transform.rotation = baseRot;
     }
 
     void OnDestroy()
@@ -60,12 +66,18 @@ public class DogHead : MonoBehaviour, ITapTracker
         }
         return false;
     }
-    public void TapEffect(int iMGDifficulty)
+    public void TapEffect(int force)
     {
         SR.sprite = tapSprite;
         if (rb2d)
         {
-            rb2d.AddForce(-Vector3.up * 3f * iMGDifficulty, ForceMode2D.Impulse);
+            if (bounceRandomOnTap)
+            {
+                rb2d.AddForce(UnityEngine.Random.insideUnitCircle.normalized * force, ForceMode2D.Impulse);
+            }
+            else
+                rb2d.AddForce(-Vector3.up * force, ForceMode2D.Impulse);
+
         }
         if (tapAnimCo != null)
         {
@@ -90,6 +102,7 @@ public class DogHead : MonoBehaviour, ITapTracker
         }
         SR.transform.localScale = baseScale;
         SR.sprite = idleSprite;
+
     }
 
     public void FadeOutAnim()
@@ -115,8 +128,9 @@ public class DogHead : MonoBehaviour, ITapTracker
             rb2d.AddTorque(torque, ForceMode2D.Impulse);
 
             lerpFactor = 1f - ((Time.time - startAnimTime) / animationDuration);
-            transform.localScale = baseScale * lerpFactor;
+            SR.transform.localScale = baseScale * lerpFactor;
             yield return null;
         }
+        rb2d.constraints = RigidbodyConstraints2D.None;
     }
 }

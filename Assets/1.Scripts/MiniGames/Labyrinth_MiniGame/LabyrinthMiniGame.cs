@@ -80,7 +80,7 @@ public class LabyrinthMiniGame : MiniGame
                     {
                         finishLine.ExplodeAt(newBall.transform.position);
                         inst_RollingBalls.Remove(newBall.gameObject);
-                        //GameObject.Destroy(newBall.gameObject);
+                        GameObject.Destroy(newBall.gameObject);
                     }
                 );
             inst_RollingBalls.Add(newBall.gameObject);
