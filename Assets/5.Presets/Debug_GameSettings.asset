@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Debug_GameSettings
   m_EditorClassIdentifier: 
   PlayerHP: 4
-  loopSize: 4
+  loopSize: 6
   percentOfLoopSizeToPass: 0.5
   MiniGameTime: 6
   MaxTimeScale: 3
@@ -57,8 +57,8 @@ MonoBehaviour:
   LoopPassedColor: {r: 0.48593804, g: 0.9811321, b: 0.6148211, a: 1}
   LoopFailedColor: {r: 1, g: 0, b: 0.4448824, a: 1}
   RankSettings: {fileID: 11400000, guid: 6a32a64a12bcf2d4abaea25fad902b82, type: 2}
-  PostMiniGameLatchInMs: 500
-  PreMiniGameLatchInMs: 500
+  PostMiniGameLatchInMs: 250
+  PreMiniGameLatchInMs: 250
   LoopCompleteAfterAnimDisplayTimeMs: 0
   LoopCompleteShowDepthAnimDisplayTimeMs: 0
   PlayGroundColorLerpTimeSec: 1

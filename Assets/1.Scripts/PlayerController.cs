@@ -24,6 +24,10 @@ public class PlayerController : MonoBehaviour
     Vector2 lastTouchWorldPos;
 
     bool freezeInputs = false;
+    public bool IsFrozen
+    {
+        get { return freezeInputs; }
+    }
     bool tapTrackersModified = false;
     void Start()
     {
@@ -134,6 +138,7 @@ public class PlayerController : MonoBehaviour
         swipeTrackers.Clear();
     }
 
+    public void Freeze(bool iState) { freezeInputs = iState; }
     public void Freeze() { freezeInputs = true; }
     public void UnFreeze() { freezeInputs = false; }
 

@@ -8,6 +8,9 @@ using TMPro;
 
 public class UIGame : MonoBehaviour, IManager, IDynamicUI
 {
+    [Header("UI Spaces")]
+    public RectTransform OverlaySpace;
+    public RectTransform CameraSpace;
     [Header("Player UI")]
     public TextMeshProUGUI miniGameClock;
     public TextMeshProUGUI hpClock;
@@ -42,6 +45,7 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         ANIM = iGameManager.ANIM;
         AUDIO = iGameManager.AUDIO;
         MGM = iGameManager.MGM;
+        h_PauseMenu.PC = iGameManager.PC;
         miniGameClock.text = GameData.GetSettings.MiniGameTime.ToString("#0");
         hpClock.text = GameData.GetSettings.PlayerHP.ToString("#0.0");
         timeIndicatorImg.color = GameData.GetUITheme.FrozenTimeColor;
@@ -50,7 +54,7 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         timeNeedleAnim.Init(MGM.gameClock);
 
         inst_loopPresentationAnim = GOBuilder.Create(prefab_loopPresentationAnim)
-                                    .WithParent(transform)
+                                    .WithParent(OverlaySpace)
                                     .WithAnchoredPosition(Vector3.zero)
                                     .BuildAs<UILoopPresentationAnim>();
         inst_loopPresentationAnim.Init(MGM.MGLoop);

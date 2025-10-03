@@ -75,7 +75,7 @@ public class CowboyMiniGame : MiniGame
                     .WithPosition(new Vector3(Random.Range(minX, maxX), posY + obstacle_offset, 0))
                     .BuildAs<Obstacle>();
                 inst_obstacles[obstacle_index].transform.DOScale(scale, 0);
-                inst_obstacles[obstacle_index].transform.DOLocalMoveZ(0, 0); // sinon Z = 0.016
+                //inst_obstacles[obstacle_index].transform.DOLocalMoveZ(0, 0); // sinon Z = 0.016
                 PC.AddTapTracker(inst_obstacles[obstacle_index]);
                 MGM.LM2D.PlaceObject(inst_obstacles[obstacle_index].sr);
                 obstacle_index++;

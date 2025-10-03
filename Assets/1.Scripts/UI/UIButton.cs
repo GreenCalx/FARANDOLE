@@ -46,23 +46,28 @@ public class UIButton : Button, IPointerUpHandler, IPointerDownHandler, IPointer
 
     void UpdateUIImage()
     {
+        if (GameData.Get == null)
+            return; // weird but happens..
         switch (tag.tag)
-        {
-            case EUITag.MainBtn:
-                ui_img.color = pressed ? GameData.GetUITheme.pressedMainBtnColor : GameData.GetUITheme.normalMainBtnColor;
-                break;
-            case EUITag.ActionBtn:
-                ui_img.color = pressed ? GameData.GetUITheme.pressedActionBtnColor : GameData.GetUITheme.normalActionBtnColor;
-                break;
-            default:
-                ui_img.color = pressed ? GameData.GetUITheme.pressedBtnColor : GameData.GetUITheme.normalBtnColor;
-                break;
-        }
+            {
+                case EUITag.MainBtn:
+                    ui_img.color = pressed ? GameData.GetUITheme.pressedMainBtnColor : GameData.GetUITheme.normalMainBtnColor;
+                    break;
+                case EUITag.ActionBtn:
+                    ui_img.color = pressed ? GameData.GetUITheme.pressedActionBtnColor : GameData.GetUITheme.normalActionBtnColor;
+                    break;
+                default:
+                    ui_img.color = pressed ? GameData.GetUITheme.pressedBtnColor : GameData.GetUITheme.normalBtnColor;
+                    break;
+            }
         ui_img.SetVerticesDirty();
     }
 
     void UpdateSquircleImage()
     {
+        if (GameData.Get == null)
+            return; // weird but happens..
+
         switch (tag.tag)
         {
             case EUITag.MainBtn:

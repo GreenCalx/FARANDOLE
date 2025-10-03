@@ -11,6 +11,8 @@ public class UIPauseMenu : MonoBehaviour
     public Transform  h_TintBackground;
     float m_TimeScale;
     bool m_Toggle = false;
+    public PlayerController PC;
+    bool PCWasFrozen = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -36,6 +38,9 @@ public class UIPauseMenu : MonoBehaviour
         h_BtnLayout.gameObject.SetActive(true);
         h_TintBackground.gameObject.SetActive(true);
         m_Toggle = true;
+
+        PCWasFrozen = PC.IsFrozen;
+        PC.Freeze();
     }
 
     void UnPause()
@@ -46,5 +51,7 @@ public class UIPauseMenu : MonoBehaviour
         h_TintBackground.gameObject.SetActive(false);
         Time.timeScale = m_TimeScale;
         m_Toggle = false;
+        
+        PC.Freeze(PCWasFrozen);
     }
 }

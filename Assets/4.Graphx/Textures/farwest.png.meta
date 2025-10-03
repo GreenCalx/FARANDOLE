@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: f749f144f99cb6b46976a911f7dde20a
+guid: 03c1ef9e68fef2140972544153eeb1f4
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3414701089094172137
-    second: vortex_0
+      213: 2059451065424036403
+    second: farwest_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: vortex_0
+      name: farwest_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1024
-        height: 1024
+        width: 1080
+        height: 2080
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 9edf8957c84736f20800000000000000
-      internalID: 3414701089094172137
+      spriteID: 33246e225d3a49c10800000000000000
+      internalID: 2059451065424036403
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      vortex_0: 3414701089094172137
+      farwest_0: 2059451065424036403
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

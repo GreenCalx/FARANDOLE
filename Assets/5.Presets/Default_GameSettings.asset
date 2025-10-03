@@ -13,11 +13,10 @@ MonoBehaviour:
   m_Name: Default_GameSettings
   m_EditorClassIdentifier: 
   PlayerHP: 10
-  loopSize: 5
-  loopPassThreshold: 3
-  MiniGameTime: 5
-  miniGameLevelUpThreshold: 2
-  MaxTimeScale: 3
+  loopSize: 7
+  percentOfLoopSizeToPass: 0.5
+  MiniGameTime: 6
+  MaxTimeScale: 2.5
   timeScaleOverLoopLevel:
     serializedVersion: 2
     m_Curve:
@@ -31,22 +30,13 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0.08620094
     - serializedVersion: 3
-      time: 8
-      value: 2.25
-      inSlope: 0.22034901
-      outSlope: 0.22034901
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.06294966
-    - serializedVersion: 3
       time: 16
       value: 3
-      inSlope: 0.032551806
-      outSlope: 0.032551806
+      inSlope: 0.28929704
+      outSlope: 0.28929704
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.1061151
+      inWeight: 0.035121977
       outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -60,7 +50,7 @@ MonoBehaviour:
   RankSettings: {fileID: 11400000, guid: 6a32a64a12bcf2d4abaea25fad902b82, type: 2}
   PostMiniGameLatchInMs: 500
   PreMiniGameLatchInMs: 500
-  LoopCompleteAfterAnimDisplayTimeMs: 1000
-  LoopCompleteShowDepthAnimDisplayTimeMs: 500
+  LoopCompleteAfterAnimDisplayTimeMs: 0
+  LoopCompleteShowDepthAnimDisplayTimeMs: 0
   PlayGroundColorLerpTimeSec: 1
   BGMRankLerpTimeSec: 1
