@@ -4,7 +4,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine.Events;
 
 using DG.Tweening;
-public class Cowboy : MonoBehaviour, ITapTracker
+public class Cowboy : MonoBehaviour, ITapTracker, IRendered
 {
     public enum State
     {
@@ -120,9 +120,10 @@ public class Cowboy : MonoBehaviour, ITapTracker
         await UniTask.WaitForSeconds(waitTime / difficultyTimeCoef);
     }
 
+    // ITapTracker
     public bool OnTap(Vector2 pos)
     {
-        if (hitbox.bounds.Contains(pos))
+        if (Utils.IsContained2D(pos, hitbox.bounds))
         {
             if (currentState == State.Distracted)
             {
@@ -136,6 +137,12 @@ public class Cowboy : MonoBehaviour, ITapTracker
             return true;
         }
         return false;
+    }
+
+    // IRendered
+    public Renderer GetRenderer()
+    {
+        return cowboySR;
     }
 
     public async void DestroySelf()

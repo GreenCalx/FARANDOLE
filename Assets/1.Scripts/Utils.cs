@@ -114,4 +114,9 @@ public static class Utils
             iList[rand] = prev;
         }
     }
+
+    public static bool IsContained2D(Vector2 iPos, Bounds iBounds)
+    {
+        return iBounds.Contains(new Vector3( iPos.x, iPos.y, iBounds.center.z));
+    }
 }

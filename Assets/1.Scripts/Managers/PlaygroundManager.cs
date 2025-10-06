@@ -120,7 +120,7 @@ public class PlaygroundManager : MonoBehaviour, IManager
         go_playfield = GOBuilder.Create()
                             .WithName("PlayField")
                             .WithParent(transform)
-                            .WithLocalPosition(new Vector3(0f, 0f, 1f))
+                            .WithLocalPosition(new Vector3(0f, 0f, 1))
                             .WithMeshFilter(Playfield_Mesh, true)
                             .WithRenderer(playFieldMat)
                             .Build();

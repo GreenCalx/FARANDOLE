@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
@@ -28,13 +29,40 @@ public class RoomPlan
         get { return area.height; }
     }
 }
-
-public class RoomRow
+public struct RoomObject
 {
-    List<Transform> objects;
-    public int rowDepth;
+    public Transform transform;
+    public Renderer renderer;
+    public RoomObject(Transform iTransform, Renderer iRenderer)
+    {
+        transform = iTransform;
+        renderer = iRenderer;
+    }
+}
+
+[Serializable]
+public class RowInfo
+{
     public Vector2 min, max;
     public Rect area;
+    public int rowDepth;
+    public float objectScale;
+    public RowInfo(RoomRow iRoomRow)
+    {
+        min = iRoomRow.min;
+        max = iRoomRow.max;
+        area = iRoomRow.area;
+        rowDepth = iRoomRow.rowDepth;
+        objectScale = iRoomRow.objectScale;
+    }
+}
+public class RoomRow
+{
+    public List<RoomObject> objects;
+    public Vector2 min, max;
+    public Rect area;
+    public int rowDepth;
+    public float objectScale;
     public LineRenderer lineTracer;
     public RoomRow(Rect iArea, int iDepth)
     {
@@ -42,26 +70,37 @@ public class RoomRow
         max = iArea.max;
         area = iArea;
         rowDepth = iDepth;
-
-        objects = new List<Transform>();
+        objectScale = 1f;
+        objects = new List<RoomObject>();
     }
 
-    public void AddToRow(Transform iTransform)
+    public RowInfo GetInfo()
     {
-        if (!objects.Contains(iTransform))
-            objects.Add(iTransform);
+        return new RowInfo(this);
+    }
+    public void AddToRow(Transform iTransform, Renderer iRenderer, bool iMutateScaling)
+    {
+        objects.Add(new RoomObject(iTransform, iRenderer));
+        if (iMutateScaling)
+        {
+            iTransform.localScale = new Vector3(objectScale, objectScale, objectScale);
+            iTransform.position = new Vector2(Mathf.Clamp(iTransform.position.x, min.x, max.x), min.y);
+        }
     }
 
     public bool Remove(Transform iTransform)
     {
-        if (objects.Contains(iTransform))
+        List<RoomObject> to_rm = objects.Where(e => e.transform == iTransform).ToList();
+        if (to_rm.Count > 0)
         {
-            objects.Remove(iTransform);
+            foreach (RoomObject ro in to_rm)
+            {
+                objects.Remove(ro);
+            }
             return true;
         }
         return false;
     }
-
 }
 
 #if UNITY_EDITOR
@@ -76,8 +115,11 @@ public class PerspectiveRoom : MonoBehaviour
 
     [Header("Tweaks")]
     public int m_Depth = 3;
-    public RoomPlan m_ForwardPlan;
+    public RoomPlan m_NearPlan;
     public RoomPlan m_FarPlan;
+    public float nearObjectScale = 1f;
+    public float farObjectScale = 0.2f;
+    public bool AutoScaleFromVanishingPoint = false;
 
     public bool m_TraceLines = true;
     public Material m_LineTracerMat;
@@ -92,9 +134,19 @@ public class PerspectiveRoom : MonoBehaviour
     float m_FarLineWidth = 0;
 
     LineRenderer farPlaneLineTracer;
-    LineRenderer forwardPlaneLineTracer;
+    LineRenderer nearPlaneLineTracer;
     List<LineRenderer> perspectiveLines;
 
+    public void Init(LayerManager2D iLM2D)
+    {
+        r_LM2D = iLM2D;
+    }
+
+    public void Init(LayerManager2D iLM2D, int iNumberOfRows)
+    {
+        r_LM2D = iLM2D;
+        m_Depth = iNumberOfRows;
+    }
     public void Build()
     {
         if (!m_TraceLines)
@@ -110,10 +162,14 @@ public class PerspectiveRoom : MonoBehaviour
 
         // ----------------------------------------------------
         // Trace planes
-        BuildPlan("ForwardPlan", m_ForwardPlan, m_LineWidth, ref forwardPlaneLineTracer);
+        BuildPlan("nearPlan", m_NearPlan, m_LineWidth, ref nearPlaneLineTracer);
+        r_LM2D?.PlaceObject(nearPlaneLineTracer);
+
         BuildPlan("FarPlan", m_FarPlan, m_FarLineWidth, ref farPlaneLineTracer);
+        r_LM2D?.PlaceObject(farPlaneLineTracer);
+
         // Deduce FOV from plans
-        Vector3 relative = m_FarPlan.area.min - m_ForwardPlan.area.min;
+        Vector3 relative = m_FarPlan.area.min - m_NearPlan.area.min;
         m_FOV = Mathf.Atan2(relative.y, relative.x) * Mathf.Rad2Deg;
 
 
@@ -123,7 +179,7 @@ public class PerspectiveRoom : MonoBehaviour
         perspectiveLines.Add(
             BuildLine(
                 "min -> min",
-                new Vector3(m_ForwardPlan.min.x, m_ForwardPlan.min.y, m_ForwardPlan.zDepth),
+                new Vector3(m_NearPlan.min.x, m_NearPlan.min.y, m_NearPlan.zDepth),
                 new Vector3(m_FarPlan.min.x, m_FarPlan.min.y, m_FarPlan.zDepth),
                 m_LineWidth,
                 m_FarLineWidth)
@@ -131,7 +187,7 @@ public class PerspectiveRoom : MonoBehaviour
         perspectiveLines.Add(
             BuildLine(
                 "max -> max",
-                new Vector3(m_ForwardPlan.max.x, m_ForwardPlan.max.y, m_ForwardPlan.zDepth),
+                new Vector3(m_NearPlan.max.x, m_NearPlan.max.y, m_NearPlan.zDepth),
                 new Vector3(m_FarPlan.max.x, m_FarPlan.max.y, m_FarPlan.zDepth),
                 m_LineWidth,
                 m_FarLineWidth)
@@ -139,7 +195,7 @@ public class PerspectiveRoom : MonoBehaviour
         perspectiveLines.Add(
             BuildLine(
                 "min -> max",
-                new Vector3(m_ForwardPlan.min.x, m_ForwardPlan.max.y, m_ForwardPlan.zDepth),
+                new Vector3(m_NearPlan.min.x, m_NearPlan.max.y, m_NearPlan.zDepth),
                 new Vector3(m_FarPlan.min.x, m_FarPlan.max.y, m_FarPlan.zDepth),
                 m_LineWidth,
                 m_FarLineWidth)
@@ -147,7 +203,7 @@ public class PerspectiveRoom : MonoBehaviour
         perspectiveLines.Add(
             BuildLine(
                 "max -> min",
-                new Vector3(m_ForwardPlan.max.x, m_ForwardPlan.min.y, m_ForwardPlan.zDepth),
+                new Vector3(m_NearPlan.max.x, m_NearPlan.min.y, m_NearPlan.zDepth),
                 new Vector3(m_FarPlan.max.x, m_FarPlan.min.y, m_FarPlan.zDepth),
                 m_LineWidth,
                 m_FarLineWidth)
@@ -162,22 +218,34 @@ public class PerspectiveRoom : MonoBehaviour
             float frac = (float)i / m_Depth;
             string name = "Row " + i;
             Rect rowArea = new Rect(
-                Utils.Lerp(m_ForwardPlan.min.x, m_FarPlan.min.x, frac),
-                Utils.Lerp(m_ForwardPlan.min.y, m_FarPlan.min.y, frac),
-                Utils.Lerp(m_ForwardPlan.width, m_FarPlan.width, frac),
-                Utils.Lerp(m_ForwardPlan.height, m_FarPlan.height, frac)
+                Utils.Lerp(m_NearPlan.min.x, m_FarPlan.min.x, frac),
+                Utils.Lerp(m_NearPlan.min.y, m_FarPlan.min.y, frac),
+                Utils.Lerp(m_NearPlan.width, m_FarPlan.width, frac),
+                Utils.Lerp(m_NearPlan.height, m_FarPlan.height, frac)
             );
             float lineWidth = Utils.Lerp(m_LineWidth, m_FarLineWidth, frac);
-            float zDepth = Utils.Lerp(m_ForwardPlan.zDepth, m_FarPlan.zDepth, frac);
-            m_Rows.Add(BuildRow(name, rowArea, lineWidth, zDepth));
+            float zDepth = Utils.Lerp(m_NearPlan.zDepth, m_FarPlan.zDepth, frac);
+            float objectScale = ComputeRowObjectScale(frac);
+            m_Rows.Add(BuildRow(name, rowArea, lineWidth, zDepth, i, objectScale));
         }
 
 
     }
 
-    public RoomRow BuildRow(string iName, Rect iArea, float iLineWidth, float iDepth)
+    float ComputeRowObjectScale(float iFrac)
     {
-        RoomRow ret = new RoomRow(iArea, iDepth);
+        if (AutoScaleFromVanishingPoint)
+        {
+            //  TODO
+            return 1f;
+        }
+
+        return Utils.Lerp(nearObjectScale, farObjectScale, iFrac);
+    }
+
+    public RoomRow BuildRow(string iName, Rect iArea, float iLineWidth, float iZDepth, int iRowDepth, float iRowObjectScale)
+    {
+        RoomRow ret = new RoomRow(iArea, iRowDepth);
 
         ret.lineTracer = GOBuilder.Create()
                         .WithName(iName)
@@ -187,10 +255,10 @@ public class PerspectiveRoom : MonoBehaviour
                         .BuildAs<LineRenderer>();
 
         Vector3[] pos = new Vector3[4];
-        pos[0] = new Vector3(iArea.max.x, iArea.max.y, iDepth);
-        pos[1] = new Vector3(iArea.max.x, iArea.min.y, iDepth);
-        pos[2] = new Vector3(iArea.min.x, iArea.min.y, iDepth);
-        pos[3] = new Vector3(iArea.min.x, iArea.max.y, iDepth);
+        pos[0] = new Vector3(iArea.max.x, iArea.max.y, iZDepth);
+        pos[1] = new Vector3(iArea.max.x, iArea.min.y, iZDepth);
+        pos[2] = new Vector3(iArea.min.x, iArea.min.y, iZDepth);
+        pos[3] = new Vector3(iArea.min.x, iArea.max.y, iZDepth);
 
         ret.lineTracer.positionCount = 4;
         ret.lineTracer.loop = true;
@@ -200,6 +268,11 @@ public class PerspectiveRoom : MonoBehaviour
         ret.lineTracer.sortingOrder = 1;
         ret.lineTracer.sortingLayerName = m_TracesSortingLayer;
         ret.lineTracer.rendererPriority = 8;
+
+        ret.rowDepth = iRowDepth;
+        ret.objectScale = iRowObjectScale;
+
+        r_LM2D?.PlaceObject(ret.lineTracer);
 
         return ret;
     }
@@ -260,7 +333,7 @@ public class PerspectiveRoom : MonoBehaviour
 
     public RoomRow GetRowAt(int iDepth)
     {
-        int rowDepth = Mathf.Clamp(iRowDepth, 0, m_Depth);
+        int rowDepth = Mathf.Clamp(iDepth, 0, m_Depth);
         RoomRow retval = m_Rows[rowDepth];
         if (retval.rowDepth != rowDepth)
         {
@@ -287,8 +360,8 @@ public class PerspectiveRoom : MonoBehaviour
 
         // if (farPlaneLineTracer != null)
         //     DestroyImmediate(farPlaneLineTracer.gameObject);
-        // if (forwardPlaneLineTracer != null)
-        //     DestroyImmediate(forwardPlaneLineTracer.gameObject);
+        // if (nearPlaneLineTracer != null)
+        //     DestroyImmediate(nearPlaneLineTracer.gameObject);
         // foreach (LineRenderer lr in perspectiveLines)
         // {
         //     if (lr == null)
@@ -313,15 +386,35 @@ public class PerspectiveRoom : MonoBehaviour
     // --------------------------------------------
     // Public API
 
-    public void AddToRoom(Transform iCaller, int iRowDepth)
+    public void PlaceAllOnLayers()
+    {
+        if (m_Rows.Count < 0)
+            return;
+            
+        for (int i = m_Rows.Count - 1; i >= 0; i--)
+        {
+            if (m_Rows[i] == null)
+                continue;
+            if (m_Rows[i].objects.Count == 0)
+                continue;
+
+            foreach (RoomObject ro in m_Rows[i].objects)
+            {
+                r_LM2D.PlaceObject(ro.renderer);
+            }
+        }
+    }
+
+    public RowInfo AddToRoom(Transform iCaller, int iRowDepth, Renderer iRenderer)
     {
         RoomRow targetRow = GetRowAt(iRowDepth);
         if (targetRow == null)
         {
-            Debug.Log("PerspectiveRoom::AddToRoom(" + iCaller / gameObject.name + ", " + iRowDepth + ")");
-            return;
+            Debug.Log("PerspectiveRoom::AddToRoom(" + iCaller + gameObject.name + ", " + iRowDepth + ")");
+            return null;
         }
-        targetRow.AddObject(iCaller);
+        targetRow.AddToRow(iCaller, iRenderer, true);
+        return targetRow.GetInfo();
     }
 
     public bool RemoveFromRoom(Transform iCaller)
@@ -332,6 +425,21 @@ public class PerspectiveRoom : MonoBehaviour
                 return true;
         }
         return false;
+    }
+
+    public float XMinForRow(int iRowDepth)
+    {
+        return m_Rows[iRowDepth].min.x;
+    }
+
+    public float XMaxForRow(int iRowDepth)
+    {
+        return m_Rows[iRowDepth].max.x;
+    }
+
+    public void RandomPositionInRow(Transform iTarget, int iRowDepth)
+    {
+       // iTarget.transform.position
     }
 
 

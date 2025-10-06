@@ -46,28 +46,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cmd_Build: 0
   cmd_Clean: 0
-  m_Depth: 3
-  m_ForwardPlan:
+  m_Depth: 5
+  m_NearPlan:
     area:
       serializedVersion: 2
       x: -2
-      y: -4
+      y: -3.5
       width: 4
-      height: 8
-    depth: 0
+      height: 7
+    zDepth: 20
   m_FarPlan:
     area:
       serializedVersion: 2
-      x: -0.5
+      x: -1
       y: -1
-      width: 1
-      height: 2
-    depth: 10
+      width: 2
+      height: 6
+    zDepth: 50
+  nearObjectScale: 0.7
+  farObjectScale: 0.15
+  AutoScaleFromVanishingPoint: 0
   m_TraceLines: 1
   m_LineTracerMat: {fileID: 2100000, guid: 7e49a6b8b3415754d869225782a84df1, type: 2}
   m_RowTracerMat: {fileID: 2100000, guid: a9d8194e6ead1fd42818e6a452c1fab7, type: 2}
   m_LineWidth: 0.1
   m_LineWidthDepthFalloff: 4
   m_TracesSortingLayer: PerspectiveRoom
-  m_FOV: 63.43495
+  m_FOV: 74.0546
   r_LM2D: {fileID: 0}

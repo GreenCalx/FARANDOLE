@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Obstacle : MonoBehaviour, ITapTracker
+public class Obstacle : MonoBehaviour, ITapTracker, IRendered
 {
     public bool stopPropagation => true;
     public int GetDisplayPriority() { return sr.sortingOrder; }
@@ -28,5 +28,10 @@ public class Obstacle : MonoBehaviour, ITapTracker
             return true;
         }
         return false;
+    }
+
+    public Renderer GetRenderer()
+    {
+        return sr;
     }
 }
