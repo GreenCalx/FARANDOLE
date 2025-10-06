@@ -13,7 +13,7 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
     public RectTransform CameraSpace;
     [Header("Player UI")]
     public TextMeshProUGUI miniGameClock;
-    public TextMeshProUGUI hpClock;
+    public Image m_HPImage;
     public Image timeIndicatorImg;
     public RotateAlongTimeAnim timeNeedleAnim;
     public RectTransform infoArea;
@@ -47,7 +47,10 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         MGM = iGameManager.MGM;
         h_PauseMenu.PC = iGameManager.PC;
         miniGameClock.text = GameData.GetSettings.MiniGameTime.ToString("#0");
-        hpClock.text = GameData.GetSettings.PlayerHP.ToString("#0.0");
+
+        m_HPImage.color = GameData.GetSettings.LoopPassedColor;
+        m_HPImage.fillAmount = 1f;
+
         timeIndicatorImg.color = GameData.GetUITheme.FrozenTimeColor;
         GameData.GetUITheme.PositiveTimeColor = GameData.GetSettings.LoopPassedColor;
         GameData.GetUITheme.NegativeTimeColor = GameData.GetSettings.LoopFailedColor;
@@ -88,12 +91,20 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         //handle_animLoopSuccess.failedTextColor = GameData.GetUITheme.NegativeTimeColor;
     }
 
+    public void RefreshHPImage(PlayerData iData)
+    {
+        float hp_frac = iData.HP / GameData.GetSettings.PlayerHP;
+        m_HPImage.fillAmount = hp_frac;
+        m_HPImage.color = Color.Lerp(GameData.GetSettings.LoopPassedColor, GameData.GetSettings.LoopFailedColor, 1f - hp_frac);
+    }
+
     public void RefreshTimeIndicator(GameClock iGameClock)
     {
         if (iGameClock.IsFrozen)
         {
             timeIndicatorImg.color = GameData.GetUITheme.FrozenTimeColor;
-        } else if ((iGameClock.GetRemainingTime() <= 1f) && (iGameClock.GetRemainingTime() > 0f))
+        }
+        else if ((iGameClock.GetRemainingTime() <= 1f) && (iGameClock.GetRemainingTime() > 0f))
         {
             timeIndicatorImg.color = GameData.GetUITheme.LastSecondTimeColor;
         }
@@ -123,7 +134,7 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
     public void ShowMiniGameMode(bool iState)
     {
         miniGameClock.enabled = iState;
-        hpClock.enabled = iState;
+        m_HPImage.enabled = iState;
         handle_UIDoorAnim.OpenAnim();
     }
 

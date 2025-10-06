@@ -254,6 +254,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PerspectiveRoom
       objectReference: {fileID: 0}
+    - target: {fileID: 7413221358431396152, guid: 0dc1fe543b1162748bee11f4944a9954, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
