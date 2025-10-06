@@ -88,7 +88,7 @@ public class Card : MonoBehaviour, ITapTracker
         transform.position = new Vector3(10, 0, 0);
     }
 
-    IEnumerator TapAnim()
+    public IEnumerator TapAnim()
     {
         float startTime = Time.time;
         transform.localScale = baseScale;

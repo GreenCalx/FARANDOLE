@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using System.Collections.Generic;
 using System;
-
+using Cysharp.Threading.Tasks;
 public class MemoryMiniGame : MiniGame
 {
     [Header("MemoryMiniGame")]
@@ -18,6 +18,8 @@ public class MemoryMiniGame : MiniGame
     private int pairs = 0;
 
     public float distFromCenter = 1.5f;
+
+    public float timeCardsShowedOnIntro;
 
     public override void Init()
     {
@@ -120,8 +122,8 @@ public class MemoryMiniGame : MiniGame
         {
             Win();
         }
-        PC.EnableTapTracker(selectedCard,false);
-        PC.EnableTapTracker(cards[index],false);
+        PC.EnableTapTracker(selectedCard, false);
+        PC.EnableTapTracker(cards[index], false);
         selectedCard.WinCard();
         cards[index].WinCard();
         selectedCard = null;
@@ -147,15 +149,29 @@ public class MemoryMiniGame : MiniGame
         }
     }
 
-    private void deleteCards() {
-    for (int i = 0; i < cardsCount; i++)
+    private void deleteCards()
+    {
+        for (int i = 0; i < cardsCount; i++)
         {
             if (cards[i] != null)
             {
                 PC.RemoveTapTracker(cards[i]);
-                Destroy(cards[i].gameObject); 
+                Destroy(cards[i].gameObject);
             }
 
+        }
+    }
+    override
+    public async UniTask IntroAnim()
+    {
+        foreach (Card card in cards)
+        {
+            StartCoroutine(card.TapAnim());
+        }
+        await UniTask.WaitForSeconds(timeCardsShowedOnIntro);
+        foreach (Card card in cards)
+        {
+            StartCoroutine(card.TapAnim());
         }
     }
 }

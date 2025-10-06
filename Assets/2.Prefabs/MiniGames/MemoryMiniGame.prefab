@@ -51,6 +51,7 @@ MonoBehaviour:
   IsActiveMiniGame: 0
   IsInPostGame: 0
   successState: 0
+  hasIntro: 1
   prefabs_card:
   - {fileID: 1942787962436337013, guid: 48ee0c6328031924ab09687166ff993f, type: 3}
   - {fileID: 3836405946255295576, guid: efd258069367ec34ca945d64c87d2279, type: 3}
@@ -65,3 +66,4 @@ MonoBehaviour:
   - 30
   - 10
   distFromCenter: 1.5
+  timeCardsShowedOnIntro: 2

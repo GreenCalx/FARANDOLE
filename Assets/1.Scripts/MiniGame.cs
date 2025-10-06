@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using Cysharp.Threading.Tasks;
 
 public enum MiniGameSuccessState
 {
@@ -14,6 +15,7 @@ public enum MiniGameSuccessState
 
 public class MiniGame : MonoBehaviour, IMiniGame
 {
+
     [Header("MiniGame Mand")]
     public MiniGameSO descriptor;
     [Header("MiniGame Internal View")]
@@ -24,6 +26,8 @@ public class MiniGame : MonoBehaviour, IMiniGame
     // Might want to implement a full FSM..
     public bool IsInPostGame;
     public MiniGameSuccessState successState;
+
+    public bool hasIntro = false;
 
 
     public virtual void Init()
@@ -56,5 +60,9 @@ public class MiniGame : MonoBehaviour, IMiniGame
     {
         return false;
     }
-
+    
+    public virtual async UniTask IntroAnim()
+    {
+        return;
+    }
 }

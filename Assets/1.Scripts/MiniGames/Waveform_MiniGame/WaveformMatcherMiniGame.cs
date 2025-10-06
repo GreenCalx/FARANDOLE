@@ -39,11 +39,11 @@ public class WaveformMatcherMiniGame : MiniGame
     float freqCentroid, ampCentroid;
     public override void Init()
     {
-        float rangeExtension = ((float)MGM.miniGamesDifficulty - 1f) / 10f;
-        minAmpByDiff = minAmp   - (minAmp * rangeExtension);
+        float rangeExtension = ((float)MGM.miniGamesDifficulty - 1f) / 5f;
+        minAmpByDiff = minAmp - (minAmp * rangeExtension);
         minFreqByDiff = minFreq - (minFreq * rangeExtension);
         maxFreqByDiff = maxFreq + (maxFreq * rangeExtension);
-        maxAmpByDiff = maxAmp   + (maxAmp * rangeExtension);
+        maxAmpByDiff = maxAmp + (maxAmp * rangeExtension);
 
         freqCentroid = (maxFreqByDiff + minFreqByDiff) / 2f;
         ampCentroid = (maxAmpByDiff + minAmpByDiff) / 2f;
@@ -56,11 +56,11 @@ public class WaveformMatcherMiniGame : MiniGame
         // Get a random target value, excluding centroid values
         // A targetRandGround too high transform the random range to a 'box'
         // leading to unreachable values via XY circle controller
-        
+
         Vector2 randPoint = Random.insideUnitCircle;
-        if ((randPoint.x <= targetRandGround)&&(randPoint.x >= -targetRandGround))
+        if ((randPoint.x <= targetRandGround) && (randPoint.x >= -targetRandGround))
             randPoint.x = (randPoint.x < 0f) ? -targetRandGround : targetRandGround;
-        if ((randPoint.y <= targetRandGround)&&(randPoint.y >= -targetRandGround))
+        if ((randPoint.y <= targetRandGround) && (randPoint.y >= -targetRandGround))
             randPoint.y = (randPoint.y < 0f) ? -targetRandGround : targetRandGround;
 
         target = new Waveshape(
@@ -117,8 +117,8 @@ public class WaveformMatcherMiniGame : MiniGame
 
         controlled.freq = target.freq;
         controlled.amp = target.amp;
-        targetLR.material       = LROnMatchMat;
-        controlledLR.material   = LROnMatchMat;
+        targetLR.material = LROnMatchMat;
+        controlledLR.material = LROnMatchMat;
         DrawControlled();
     }
     public override void Lose()
@@ -145,32 +145,102 @@ public class WaveformMatcherMiniGame : MiniGame
     }
     void DrawControlled()
     {
-        controlledLR.positionCount = resolution;
-        controlledLR.SetPositions(GetSinWave(controlled.amp, controlled.freq, controlledWaveformPoint.position));
+        DrawFunc(2, controlledLR, controlled);
+        //DrawFunc(Random.Range(0, 2), controlledLR);
     }
     void DrawTarget()
     {
-        targetLR.positionCount = resolution;
-        targetLR.SetPositions(GetSinWave(target.amp, target.freq, targetWaveformPoint.position));
+        DrawFunc(2, targetLR, target);
+        //DrawFunc(Random.Range(0, 2), targetLR);
     }
 
-    public Vector3[] GetSinWave(float iAmp, float iFreq, Vector3 iWorldAnchor)
+    void DrawFunc(int func, LineRenderer line, Waveshape wave)
+    {
+        if (func == 0) //Sin
+        {
+            line.SetPositions(GetSinWave(wave.amp, wave.freq, controlledWaveformPoint.position, line));
+        }
+        else if (func == 1)//tri
+        {
+            line.SetPositions(GetTriangularWave(wave.amp, wave.freq, controlledWaveformPoint.position, line));
+        }
+        else//Squared by default
+        {
+
+            line.SetPositions(GetSquaredWave(wave.amp, wave.freq, controlledWaveformPoint.position, line));
+        }
+        
+    }
+    public Vector3[] GetSinWave(float iAmp, float iFreq, Vector3 iWorldAnchor, LineRenderer line)
     {
         Vector3[] positions = new Vector3[resolution];
-
+        line.positionCount = resolution;
         float fPoints = (float)resolution;
-        float  x = 0f, y = 0f;
+        float x = 0f, y = 0f;
         float xStep = windowSize.x / fPoints;
         for (int i = 0; i < resolution; i++)
         {
             x = i * xStep;
             y = iAmp * Mathf.Sin(x / iFreq);
             positions[i] = new Vector3(
-                iWorldAnchor.x + /*Utils.Remap(x, xStart, xFinish, 0f, 1f)*/ + x,
-                iWorldAnchor.y + /*Utils.Remap(y, -iAmp, iAmp, -0.2f, 0.2f)*/ + y,
+                iWorldAnchor.x + /*Utils.Remap(x, xStart, xFinish, 0f, 1f)*/ +x,
+                iWorldAnchor.y + /*Utils.Remap(y, -iAmp, iAmp, -0.2f, 0.2f)*/ +y,
                 -1f
             );
         }
         return positions;
+    }
+    
+public Vector3[] GetSquaredWave(float iAmp, float iFreq, Vector3 iWorldAnchor, LineRenderer line)
+{
+    int cornerCount = Mathf.FloorToInt(3 / iFreq) + 4;
+    line.positionCount = cornerCount;
+
+    Vector3[] positions = new Vector3[cornerCount];
+
+    float xStep = windowSize.x * iFreq / 3;
+
+    float x = 0;
+    float y = iAmp / 2;
+        for (int i = 0; i < cornerCount; i++)
+        {
+            if (i % 2 == 0)
+                x = i * xStep;
+            else
+                y = -y;
+
+            positions[i] = new Vector3(
+                iWorldAnchor.x + x,
+                iWorldAnchor.y + y,
+                -1f
+            );
+        }
+
+    return positions;
+}
+
+    public Vector3[] GetTriangularWave(float iAmp, float iFreq, Vector3 iWorldAnchor, LineRenderer line)
+    {
+        int peakCount = Mathf.FloorToInt(2 / iFreq) + 2;
+        line.positionCount = peakCount;
+        float xStep = windowSize.x * iFreq / 2 ;
+        Vector3[] peaks = new Vector3[peakCount];
+
+        float x = 0;
+        float y = iAmp;
+
+        for (int i = 0; i < peakCount; i++)
+        {
+            x = i * xStep;
+            y = -y;
+
+            peaks[i] = new Vector3(
+                iWorldAnchor.x + x,
+                iWorldAnchor.y + y,
+                -1f
+            );
+        }
+
+        return peaks;
     }
 }

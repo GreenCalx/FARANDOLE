@@ -105,6 +105,10 @@ public class MiniGameManager : MonoBehaviour, IManager
 
         PC.Freeze();
         await PG.OpenPlaygroundAnim();
+        if (MGLoop.Current.hasIntro)
+        {
+            await MGLoop.Current.IntroAnim();
+        }
         PC.UnFreeze();
 
         //MGLoop.Current.Reset();
