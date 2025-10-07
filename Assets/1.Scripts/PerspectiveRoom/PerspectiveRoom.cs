@@ -381,16 +381,26 @@ public class PerspectiveRoom : MonoBehaviour
         // }
 
 #endif
+        foreach (Transform t in transform)
+        {
+            Destroy(t.gameObject);
+        }
     }
+
 
     // --------------------------------------------
     // Public API
+
+    public Vector3 GetVanishingPoint()
+    {
+        return m_FarPlan.area.center;
+    }
 
     public void PlaceAllOnLayers()
     {
         if (m_Rows.Count < 0)
             return;
-            
+
         for (int i = m_Rows.Count - 1; i >= 0; i--)
         {
             if (m_Rows[i] == null)
@@ -400,6 +410,7 @@ public class PerspectiveRoom : MonoBehaviour
 
             foreach (RoomObject ro in m_Rows[i].objects)
             {
+                Debug.Log("Placed " + ro.renderer.gameObject.name);
                 r_LM2D.PlaceObject(ro.renderer);
             }
         }

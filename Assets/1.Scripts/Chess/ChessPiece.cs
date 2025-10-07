@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
-using Unity.Android.Gradle.Manifest;
+//using Unity.Android.Gradle.Manifest;
 
 public abstract class ChessPiece : MonoBehaviour
 {

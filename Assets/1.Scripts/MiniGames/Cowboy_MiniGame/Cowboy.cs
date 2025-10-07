@@ -13,7 +13,7 @@ public class Cowboy : MonoBehaviour, ITapTracker, IRendered
         Distracted,
         Hit
     }
-    public UnityEvent hitCB;
+    public UnityEvent<Cowboy> hitCB;
     public SpriteRenderer cowboySR;
     public Sprite iddleSprite;
     public Sprite dodgeSprite;
@@ -55,7 +55,7 @@ public class Cowboy : MonoBehaviour, ITapTracker, IRendered
         float firstDestination = startGoingLeft ? minBound : maxBound;
         float secondDestination = startGoingLeft ? maxBound : minBound;
 
-        transform.DOMoveX(firstDestination, patrolTime * Mathf.Abs(startX - firstDestination)/ (maxBound - minBound))
+        transform.DOMoveX(firstDestination, patrolTime * Mathf.Abs(startX - firstDestination) / (maxBound - minBound))
                  .SetEase(Ease.Linear)
                  .OnComplete(() =>
                  {
@@ -64,9 +64,26 @@ public class Cowboy : MonoBehaviour, ITapTracker, IRendered
                               .SetLoops(-1, LoopType.Yoyo); // boucle infinie
                  });
     }
+
+    public void StopMovement()
+    {
+        transform.DOKill();
+    }
+
+    public void DeathAnimation(Vector2 iDestination)
+    {
+        transform.DOMove(iDestination, deathAnimDuration, false)
+            .SetEase(Ease.InOutQuint)
+            .OnComplete(() => GameObject.Destroy(gameObject));
+        transform.DOScale(Vector3.zero, deathAnimDuration)
+            .SetEase(Ease.InOutQuint);
+        //transform.DORotate(new Vector3(0f, 0f, 900f), deathAnimDuration, RotateMode.FastBeyond360);
+    }
+
     void FixedUpdate()
     {
         nextStateTime -= Time.fixedDeltaTime;
+
         if (nextStateTime <= 0)
         {
             switch (currentState)
@@ -82,11 +99,7 @@ public class Cowboy : MonoBehaviour, ITapTracker, IRendered
                     break;
             }
         }
-        else if (currentState == State.Hit)
-        {
-            float frac = nextStateTime / deathAnimDuration;
-            transform.localScale = Vector3.Slerp(Vector3.zero, baseScale, frac);
-        }
+
     }
 
     void SetState(State newState)
@@ -114,12 +127,6 @@ public class Cowboy : MonoBehaviour, ITapTracker, IRendered
         }
     }
 
-
-    public async UniTaskVoid StateLogic(float waitTime)
-    {
-        await UniTask.WaitForSeconds(waitTime / difficultyTimeCoef);
-    }
-
     // ITapTracker
     public bool OnTap(Vector2 pos)
     {
@@ -128,7 +135,7 @@ public class Cowboy : MonoBehaviour, ITapTracker, IRendered
             if (currentState == State.Distracted)
             {
                 SetState(State.Hit);
-                hitCB.Invoke();
+                hitCB.Invoke(this);
             }
             else if (currentState == State.Iddle)
             {
@@ -144,15 +151,4 @@ public class Cowboy : MonoBehaviour, ITapTracker, IRendered
     {
         return cowboySR;
     }
-
-    public async void DestroySelf()
-    {
-        await UniTask.WaitForSeconds(deathAnimDuration);
-        if (this.gameObject != null)
-            Destroy(this.gameObject);
-    }
-
-
-
-
 }
