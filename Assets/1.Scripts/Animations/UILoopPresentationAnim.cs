@@ -82,6 +82,7 @@ public class UILoopPresentationAnim : ManagedAnimation
             img.Cancel();
         }
         rankMedalAnimation.Cancel();
+        inst_loopStartImage.Cancel();
     }
 
     public async UniTask Show(MiniGameLoop iMGLoop)
