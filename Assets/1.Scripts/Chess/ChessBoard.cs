@@ -12,7 +12,7 @@ public class ChessBoard : MonoBehaviour
     public GameObject knightPrefab;
     public GameObject queenPrefab;
     public GameObject blackKnightPrefab;
-    
+
 
     [Header("Board Settings")]
     public int boardSize = 8;
@@ -38,12 +38,6 @@ public class ChessBoard : MonoBehaviour
 
     public void Restart()
     {
-        foreach (var k in knights) if (k != null) Destroy(k.gameObject);
-        knights.Clear();
-
-        if (playerPiece != null)
-            Destroy(playerPiece.gameObject);
-
         if (tiles != null)
         {
             foreach (var t in tiles) if (t != null) Destroy(t.gameObject);
@@ -110,8 +104,9 @@ public class ChessBoard : MonoBehaviour
         }
     }
 
-    void PlaceInitialPieces(){
-        int[] positions = new int[2+enemyCounter * 2];
+    void PlaceInitialPieces()
+    {
+        int[] positions = new int[2 + enemyCounter * 2];
 
         positions[0] = Random.Range(0, boardSize);
         positions[1] = Random.Range(0, boardSize);
@@ -127,14 +122,17 @@ public class ChessBoard : MonoBehaviour
         }
 
     }
-    
-    private bool containsPositon(int[] pos, int x, int y, int numberOfPlacedPieces) {
-        for (int i = 0; i < numberOfPlacedPieces; i++) {
-            if (x == pos[i] && y == pos[i + 1]) {
+
+    private bool containsPositon(int[] pos, int x, int y, int numberOfPlacedPieces)
+    {
+        for (int i = 0; i < numberOfPlacedPieces; i++)
+        {
+            if (x == pos[i] && y == pos[i + 1])
+            {
                 return true;
             }
         }
-    return false;
+        return false;
     }
 
     Knight SpawnKnight(int x, int y, PlayerColor color)
@@ -225,6 +223,20 @@ public class ChessBoard : MonoBehaviour
 
         }
     }
-    
+
     public Tile[,] GetTiles() { return tiles; }
+
+    public void CleanAll(PlayerController iPC)
+    {
+        foreach (Tile t in tiles)
+        {
+            iPC.RemoveTapTracker(t);
+            Destroy(t.gameObject);
+        }
+        foreach (var k in knights) if (k != null) Destroy(k.gameObject);
+        knights.Clear();
+
+        if (playerPiece != null)
+            Destroy(playerPiece.gameObject);
+    }
 }

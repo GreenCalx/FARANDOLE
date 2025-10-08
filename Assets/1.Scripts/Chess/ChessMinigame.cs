@@ -6,14 +6,8 @@ public class ChessMinigame : MiniGame
     public GameObject boardPrefab;
     private ChessBoard board;
 
-    public void ResetGame()
+    public override void Reset()
     {
-        board.Restart();
-    }
-
-    public override void Init()
-    {
-
         board = GOBuilder.Create(boardPrefab)
             .WithName("board")
             .WithParent(this.transform)
@@ -27,6 +21,11 @@ public class ChessMinigame : MiniGame
 
         float boardDim = Math.Min(PG.bounds.size.x, PG.bounds.size.y) - 0.45f;
         board.transform.localScale = new Vector3(boardDim / board.boardSize, boardDim / board.boardSize, boardDim / board.boardSize);
+    }
+
+    public override void Init()
+    {
+       // Reset();
     }
 
     public override void Play()
@@ -55,11 +54,7 @@ public class ChessMinigame : MiniGame
     }
     private void Clean()
     {
-        Tile[,] tiles = board.GetTiles();
-        foreach (Tile t in tiles)
-        {
-            PC.RemoveTapTracker(t);
-        }
+        board.CleanAll(PC);
         Destroy(board.gameObject);
     }
 }

@@ -54,7 +54,7 @@ public abstract class ChessPiece : MonoBehaviour
         particles.Play();
         //await SpecialPose();
         sr.enabled = false;
-        await UniTask.WaitWhile(() => particles.isPlaying);
-        Destroy(this);
+        // await UniTask.WaitWhile(() => particles.isPlaying);
+        // Destroy(this);
     }
 }
