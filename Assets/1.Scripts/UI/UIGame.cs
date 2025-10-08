@@ -176,10 +176,10 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
             () => { AUDIO.LerpRank(prevRank, newRank); }
             );
 
-        ANIM.TrackAnimator(handle_animLoopSuccess.animator, iCT);
-        ANIM.QueueAnimRange(handle_animLoopSuccess.animator, handle_animLoopSuccess.GetAnimQueue(iCT));
-        await ANIM.PlayAnim(handle_animLoopSuccess.animator);
-        ANIM.StopTrackAnimator(handle_animLoopSuccess.animator);
+        ANIM.TrackAnimator(handle_animLoopSuccess.m_Animator, iCT);
+        ANIM.QueueAnimRange(handle_animLoopSuccess.m_Animator, handle_animLoopSuccess.GetAnimQueue(iCT));
+        await ANIM.PlayAnim(handle_animLoopSuccess.m_Animator);
+        ANIM.StopTrackAnimator(handle_animLoopSuccess.m_Animator);
         //await handle_animLoopSuccess.Animate(colors, iLoopPassed, iRankUp, iLoopDepth, iCT);
 
         handle_animLoopSuccess.OnBeforeLoopDepth.RemoveListener(()=>OnBeforeLoopDepth?.Invoke());

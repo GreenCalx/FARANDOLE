@@ -47,7 +47,7 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
 
     void Start()
     {
-        animator = GetComponent<Animator>();
+        m_Animator = GetComponent<Animator>();
 
         loopPassedTxt.color = new Color
         (
@@ -61,7 +61,7 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
 
     public void Skip()
     {
-        animator.SetTrigger(LoopAnimSkipTrigger);
+        m_Animator.SetTrigger(LoopAnimSkipTrigger);
     }
 
     public void Init(MiniGameLoop iMGLoop, UILoopPresentationAnim iLoopPresentationAnim)
@@ -122,15 +122,15 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
             Func<UniTask> step1 = async () =>
         {
             await UniTask.SwitchToMainThread();
-            animator.SetBool(LoopRankUpBoolParm, MGLoop.IsRankUpdateRequested);
-            animator.SetTrigger(LoopPassedTrigger);
+            m_Animator.SetBool(LoopRankUpBoolParm, MGLoop.IsRankUpdateRequested);
+            m_Animator.SetTrigger(LoopPassedTrigger);
             await WaitMainAnimTask(1f, iCT); // full anim
             if (iCT.IsCancellationRequested)
             {
                 cancelCB.Invoke();
                 return;
             }
-            animator.SetTrigger(LoopShowRankTrigger);
+            m_Animator.SetTrigger(LoopShowRankTrigger);
         };
         q.Enqueue(step1);
 
@@ -155,7 +155,7 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
                 return;
             }
             
-            animator.SetTrigger(LoopShowSuccessTrigger);
+            m_Animator.SetTrigger(LoopShowSuccessTrigger);
             
         };
         q.Enqueue(step2);
@@ -199,7 +199,7 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
         Func<UniTask> step6 = async () =>
         {
             await UniTask.SwitchToMainThread();
-            animator.SetTrigger(LoopHideTrigger);
+            m_Animator.SetTrigger(LoopHideTrigger);
             await UniTask.WhenAll(
                 loopPresentationAnim.Hide(iCT),
                 UniTask.WhenAny(
@@ -213,7 +213,7 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
             {
                 cancelCB.Invoke(); return;
             }
-            animator.SetTrigger(LoopShowDepthTrigger);
+            m_Animator.SetTrigger(LoopShowDepthTrigger);
         };
         q.Enqueue(step6);
 
@@ -224,7 +224,7 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
             await WaitShowLoopDepth(1f, iCT);
             if (iCT.IsCancellationRequested)
             { return; }
-            animator.SetTrigger(LoopHideDepthTrigger);
+            m_Animator.SetTrigger(LoopHideDepthTrigger);
         };
         q.Enqueue(step7);
 

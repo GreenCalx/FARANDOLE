@@ -375,7 +375,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a6d2fefdc0c72a4c8306193ca825c59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 317005901450341987}
+  m_Animator: {fileID: 317005901450341987}
   IsShown: 0
   MiniGameThumbnail: {fileID: 6257878755790239029}
   light: {fileID: 9170588877173072223}

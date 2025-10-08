@@ -14,6 +14,7 @@ Shader "XL/MobileUnlitTransparent"
         Tags {
             "RenderQueue" = "Transparent"  
             "RenderType"="Transparent"
+            "RenderPipeline" = "UniversalPipeline"
             }
         Blend [_BlendSrc] [_BlendDst]
         ZWrite [_ZWrite]

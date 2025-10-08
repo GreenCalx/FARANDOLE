@@ -24,7 +24,6 @@ public class UILoopPresentationAnim : ManagedAnimation
     public int LR_resolution = 2;
     bool init = false;
     [Header("Internals")]
-    public bool IsShown = false;
     UILoopStartImage inst_loopStartImage;
 
     public void Init(MiniGameLoop iMGLoop)
@@ -73,9 +72,9 @@ public class UILoopPresentationAnim : ManagedAnimation
 
     public override void Cancel()
     {
-        animator.SetBool(DefaultShowAnimParm, false);
+        m_Animator.SetBool(DefaultShowAnimParm, false);
         IsShown = false;
-        animator.SetTrigger(animTriggerCancel);
+        m_Animator.SetTrigger(animTriggerCancel);
         cancellationTokenSource?.Cancel();
         foreach (UIMiniGamePresentationImage img in uiImages)
         {

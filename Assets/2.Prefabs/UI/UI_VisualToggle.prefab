@@ -88,7 +88,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &1165495411186150323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121,6 +121,7 @@ MonoBehaviour:
   Point_On: {fileID: 2322888001014126902}
   Point_Off: {fileID: 8960943363199674209}
   ToggleKnob: {fileID: 8512485681406804117}
+  FreezeVisual: {fileID: 0}
   Text_On: {fileID: 7116723956480292107}
   Text_Off: {fileID: 8290951394142740523}
   Color_On: {r: 1, g: 1, b: 1, a: 1}
