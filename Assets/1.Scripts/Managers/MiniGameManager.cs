@@ -37,6 +37,7 @@ public class MiniGameManager : MonoBehaviour, IManager
     public PlayerData PData;
     public UIGame UI;
     CancellationTokenSource LoopCompleteAnimCTS;
+    CancellationTokenSource LoopClearAnimCTS;
 
     #region IManager
     public void Init(GameManager iGameManager)
@@ -138,11 +139,11 @@ public class MiniGameManager : MonoBehaviour, IManager
         gameClock.Freeze(true);
         MGLoop.Current.IsInPostGame = true;
 
-        float miniGameDuration = GameData.Get.gameSettings.MiniGameTime - gameClock.GetElapsedTime();
+        //float miniGameDuration = GameData.Get.gameSettings.MiniGameTime - gameClock.GetElapsedTime();
         MGLoop.Current.successState = (gameClock.GetElapsedTime() > GameData.Get.gameSettings.MiniGameTime) ?
             MiniGameSuccessState.FAILED : MiniGameSuccessState.PASSED;
 
-        ShowPostGameUICB.Invoke(miniGameDuration);
+        //ShowPostGameUICB.Invoke(miniGameDuration);
         OnMiniGameComplete.Invoke();
         //UI.RefreshLoopStage(MGLoop.index, MGLoop.Current.successState);
 
@@ -151,7 +152,10 @@ public class MiniGameManager : MonoBehaviour, IManager
 
     async void DelayedNext()
     {
-        await Task.Delay(GameData.GetSettings.PostMiniGameLatchInMs);
+        //await Task.Delay(GameData.GetSettings.PostMiniGameLatchInMs);
+        float miniGameDuration = GameData.Get.gameSettings.MiniGameTime - gameClock.GetElapsedTime();
+        LoopClearAnimCTS = new CancellationTokenSource();
+        await UI.StageClearAnimation(miniGameDuration, LoopClearAnimCTS.Token);
 
         OnMiniGameTransitionCB.Invoke();
         //Stop();

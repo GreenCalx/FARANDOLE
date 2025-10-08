@@ -79,7 +79,7 @@ public class GameManager : MonoBehaviour
         MGM.OnHPLossCB.AddListener(playerData.LoseHP);
         MGM.OnMiniGameComplete.AddListener(OnMiniGameCompletion);
         MGM.OnMiniGameTransitionCB.AddListener(OnMiniGameTransition);
-        MGM.ShowPostGameUICB.AddListener(UI.ShowSuccessArea);
+       // MGM.ShowPostGameUICB.AddListener(UI.ShowSuccessArea);
 
         UI.OnBeforeLoopDepth.AddListener(OnLoopDepthUpdate);
         UI.h_PauseMenu.h_ResumeBtn.onClick.AddListener(() => { UI.h_PauseMenu.Toggle(); });
@@ -92,7 +92,7 @@ public class GameManager : MonoBehaviour
         MGM.OnHPLossCB.RemoveListener(playerData.LoseHP);
         MGM.OnMiniGameComplete.RemoveListener(OnMiniGameCompletion);
         MGM.OnMiniGameTransitionCB.RemoveListener(OnMiniGameTransition);
-        MGM.ShowPostGameUICB.RemoveListener(UI.ShowSuccessArea);
+       // MGM.ShowPostGameUICB.RemoveListener(UI.ShowSuccessArea);
 
         UI.OnBeforeLoopDepth.RemoveListener(OnLoopDepthUpdate);
         UI.h_PauseMenu.h_ResumeBtn.onClick.RemoveListener(() => { UI.h_PauseMenu.Toggle(); });

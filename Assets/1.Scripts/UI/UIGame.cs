@@ -63,7 +63,6 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         inst_loopPresentationAnim.Init(MGM.MGLoop);
 
         ShowMiniGameMode(false);
-        //ShowSuccessArea(false);
         
         Refresh();
         InitDone = true;
@@ -138,7 +137,7 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         handle_UIDoorAnim.OpenAnim();
     }
 
-    public void ShowSuccessArea(float iTime = 0f)
+    public async UniTask StageClearAnimation(float iTime, CancellationToken iCT)
     {
         //successArea.gameObject.SetActive(iState);
         string successTimeStr = "";
@@ -156,7 +155,7 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         successTimeStr += iTime.ToString("#0.0");
         successTimeTxt.text = successTimeStr;
         
-        handle_animStageClear.Animate();
+        await handle_animStageClear.DefaultShow(iCT);
     }
 
     public void InterStageAnimation()
@@ -164,7 +163,7 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         handle_UIDoorAnim.ClapAnim();
     }
 
-    public async Task LoopCompleteAnim(MiniGameLoop iMGLoop, CancellationToken iCT)
+    public async UniTask LoopCompleteAnim(MiniGameLoop iMGLoop, CancellationToken iCT)
     {
         handle_animLoopSuccess.Init(iMGLoop, inst_loopPresentationAnim);
         handle_animLoopSuccess.OnBeforeLoopDepth = new UnityEvent();

@@ -73,10 +73,10 @@ public class Cowboy : MonoBehaviour, ITapTracker, IRendered
     public void DeathAnimation(Vector2 iDestination)
     {
         transform.DOMove(iDestination, deathAnimDuration, false)
-            .SetEase(Ease.InOutQuint)
+            .SetEase(Ease.Linear)
             .OnComplete(() => GameObject.Destroy(gameObject));
         transform.DOScale(Vector3.zero, deathAnimDuration)
-            .SetEase(Ease.InOutQuint);
+            .SetEase(Ease.Linear);
         //transform.DORotate(new Vector3(0f, 0f, 900f), deathAnimDuration, RotateMode.FastBeyond360);
     }
 
