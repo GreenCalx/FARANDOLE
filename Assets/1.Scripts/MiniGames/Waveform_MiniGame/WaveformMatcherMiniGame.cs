@@ -37,6 +37,8 @@ public class WaveformMatcherMiniGame : MiniGame
     float minAmpByDiff, maxAmpByDiff;
     float minFreqByDiff, maxFreqByDiff;
     float freqCentroid, ampCentroid;
+    int selectedFunc = 0;
+
     public override void Init()
     {
         float rangeExtension = ((float)MGM.miniGamesDifficulty - 1f) / 5f;
@@ -76,6 +78,7 @@ public class WaveformMatcherMiniGame : MiniGame
                     .BuildAs<LineRenderer>();
         targetLR.startWidth = 0.05f;
         targetLR.endWidth = 0.05f;
+        //targetLR.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
 
         controlled = new Waveshape(freqCentroid, ampCentroid);
         controlledLR = GOBuilder.Create()
@@ -86,6 +89,7 @@ public class WaveformMatcherMiniGame : MiniGame
                     .BuildAs<LineRenderer>();
         controlledLR.startWidth = 0.05f;
         controlledLR.endWidth = 0.05f;
+        //controlledLR.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
 
         PC.AddPositionTracker(xyController);
     }
@@ -94,6 +98,7 @@ public class WaveformMatcherMiniGame : MiniGame
         if (IsActiveMiniGame)
             return;
 
+        FuncSelect();
         DrawTarget();
         DrawControlled();
         IsActiveMiniGame = true;
@@ -143,14 +148,30 @@ public class WaveformMatcherMiniGame : MiniGame
         if (SuccessCheck())
             Win();
     }
+
+    void FuncSelect()
+    {
+        switch (MGM.miniGamesDifficulty)
+        {
+            case 2:
+                selectedFunc = Random.Range(0, 3);
+                break;
+            case 3:
+                selectedFunc = Random.Range(0, 3);
+                break;
+            default:
+                selectedFunc = 0;
+                break;
+        }
+    }
     void DrawControlled()
     {
-        DrawFunc(2, controlledLR, controlled);
+        DrawFunc(selectedFunc, controlledLR, controlled);
         //DrawFunc(Random.Range(0, 2), controlledLR);
     }
     void DrawTarget()
     {
-        DrawFunc(2, targetLR, target);
+        DrawFunc(selectedFunc, targetLR, target);
         //DrawFunc(Random.Range(0, 2), targetLR);
     }
 
@@ -198,7 +219,7 @@ public Vector3[] GetSquaredWave(float iAmp, float iFreq, Vector3 iWorldAnchor, L
 
     Vector3[] positions = new Vector3[cornerCount];
 
-    float xStep = windowSize.x * iFreq / 3;
+    float xStep = windowSize.x * iFreq / 3f;
 
     float x = 0;
     float y = iAmp / 2;
@@ -223,7 +244,7 @@ public Vector3[] GetSquaredWave(float iAmp, float iFreq, Vector3 iWorldAnchor, L
     {
         int peakCount = Mathf.FloorToInt(2 / iFreq) + 2;
         line.positionCount = peakCount;
-        float xStep = windowSize.x * iFreq / 2 ;
+        float xStep = windowSize.x * iFreq / 2f ;
         Vector3[] peaks = new Vector3[peakCount];
 
         float x = 0;
