@@ -290,7 +290,8 @@ MonoBehaviour:
   IsActiveMiniGame: 0
   IsInPostGame: 0
   successState: 0
+  hasIntro: 0
   prefab_dogHead: {fileID: 2552087635930286327, guid: c4141d031335370439c23e6e7c103037, type: 3}
-  difficultyTapForces: 030000000600000007000000070000000a000000
-  bounceOnRandomTreshold: 1
+  difficultyTapForces: 0300000004000000050000000600000007000000
+  bounceOnRandomTreshold: 2
   UIworld_petCounter: {fileID: 5601667270289216680}

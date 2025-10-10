@@ -145,6 +145,7 @@ MonoBehaviour:
   tapAnimDuration: 0.2
   PS: {fileID: 0}
   torque: 0.14
+  bounceRandomOnTap: 0
 --- !u!50 &31922092679153987
 Rigidbody2D:
   serializedVersion: 5
@@ -189,7 +190,7 @@ SpringJoint2D:
   m_AutoConfigureConnectedAnchor: 0
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
-  m_AutoConfigureDistance: 1
+  m_AutoConfigureDistance: 0
   m_Distance: 0.005
   m_DampingRatio: 0
   m_Frequency: 1
