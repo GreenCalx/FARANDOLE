@@ -1,22 +1,31 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
+using Unity.Services.Core;
+// using Unity.Services.IAP;
+// using Unity.Services.IAP.AppStore;
+// using Unity.Services.IAP.AppleStore;
+// using Unity.Services.IAP.GooglePlay;
 using UnityEngine.Purchasing;
 using UnityEngine.Purchasing.Extension;
+using Cysharp.Threading.Tasks;
+using System.Threading;
 
-public class IAPManager : MonoBehaviour, IStoreListener
+public class IAPManager : MonoBehaviour
 {
-    private static IStoreController storeController;
-    private static IExtensionProvider storeExtensionProvider;
+    private StoreController m_StoreController;
+    private PurchaseService purchaseService;
+    //private IExtensionProvider storeExtensionProvider;
 
     private static IAPManager instance = null;
     public static IAPManager Get => instance;
 
-    readonly string kPremiumAccKey = "premium_account";
+    readonly string kPremiumAccStoreKey = "premium_account";
     readonly string kLocalPremiumUnlocked = "PremiumFeatures";
 
     bool m_Initialized
     {
-        get { return storeController != null && storeExtensionProvider != null; }
+        get { return m_StoreController != null && purchaseService != null; }
     }
     void Awake()
     {
@@ -34,92 +43,67 @@ public class IAPManager : MonoBehaviour, IStoreListener
 
     void Start()
     {
-        InitializePurchasing();
+        AsyncStart();
     }
 
-    void InitializePurchasing()
+    async UniTaskVoid AsyncStart()
     {
-        if (m_Initialized)
-            return;
-        var builder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance());
-        builder.AddProduct(kPremiumAccKey, ProductType.NonConsumable);
-
-        UnityPurchasing.Initialize(this, builder);
-    }
-
-    public void OnInitialized(IStoreController controller, IExtensionProvider extensions)
-    {
-        storeController = controller;
-        storeExtensionProvider = extensions;
-        Debug.Log("Unity IAP inialized : OK");
-    }
-
-    public void OnInitializeFailed(InitializationFailureReason error)
-    {
-        Debug.Log("Unity IAP inialized : KO : " + error);
-    }
-    public void OnInitializeFailed(InitializationFailureReason error, string? err)
-    {
-        Debug.Log("Unity IAP inialized : KO : " + err);
-    }
-
-    public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs purchaseEvent)
-    {
-        if (String.Equals(purchaseEvent.purchasedProduct.definition.id, kPremiumAccKey, StringComparison.Ordinal))
+        try
         {
-            Debug.Log("Achat réussi : contenu premium débloqué !");
-            // Ici, débloquez le contenu premium dans votre jeu
-            PlayerPrefs.SetInt(kLocalPremiumUnlocked, 1);
-            PlayerPrefs.Save();
+            await UnityServices.InitializeAsync();
+            await InitializeIAP();
         }
-        return PurchaseProcessingResult.Complete;
-    }
-
-    public void OnPurchaseFailed(Product product, PurchaseFailureReason failureReason)
-    {
-        Debug.LogError("Achat échoué : " + product.definition.id + " - " + failureReason);
-    }
-
-    public void RestorePurchases()
-    {
-        if (!m_Initialized)
+        catch (Exception e)
         {
-            Debug.Log("Unity IAP not initialized");
-            return;
-        }
-
-        if (Application.platform == RuntimePlatform.IPhonePlayer ||
-            Application.platform == RuntimePlatform.OSXPlayer)
-        {
-            var appleExtensions = storeExtensionProvider.GetExtension<IAppleExtensions>();
-            appleExtensions.RestoreTransactions(
-                (result, message) =>
-                {
-                    if (result)
-                    {
-                        Debug.Log("Restore purchases succeeded");
-                    }
-                    else
-                    {
-                        Debug.Log("Restore purchases failed with message : " + message);
-                    }
-                });
-        }
-        else if (Application.platform == RuntimePlatform.Android)
-        {
-            // On Android, purchases are restored automatically on initialization
-            Debug.Log("Android: Purchases are restored automatically");
+            Debug.LogError("Failed to initialized IAP Manager : " + e);
         }
     }
+
+    private async UniTask InitializeIAP()
+    {
+        m_StoreController = UnityIAPServices.StoreController();
+        m_StoreController.OnPurchasePending += OnPurchasePending;
+
+        // Connect to the store
+        await m_StoreController.Connect();
+
+        m_StoreController.OnProductsFetched += OnProductsFetched;
+        m_StoreController.OnPurchasesFetched += OnPurchasesFetched ;
+
+        // Fetch products
+        var initialProductsToFetch = new List<ProductDefinition>  
+        {  
+            new(kPremiumAccStoreKey, ProductType.NonConsumable),  
+        };  
+    
+        m_StoreController.FetchProducts(initialProductsToFetch);  
+    }
+    void OnProductsFetched(List<Product> products)  
+    {
+        // Handle fetched products  
+        m_StoreController.FetchPurchases();
+    }
+    void OnPurchasesFetched(Orders orders)
+    {
+        // Process purchases, e.g. check for entitlements from completed orders
+        CheckPremiumPurchased();
+    }
+    
+    void OnPurchasePending(PendingOrder iPendingOrder)
+    {
+        // 
+    }
+
+    // -------------------------------
 
     public void BuyPremiumContent()
     {
         if (m_Initialized)
         {
-            Product product = storeController.products.WithID(kPremiumAccKey);
+            Product product = m_StoreController.GetProductById(kPremiumAccStoreKey);
             if (product != null && product.availableToPurchase)
             {
-                storeController.InitiatePurchase(product);
+                m_StoreController.PurchaseProduct(product);
             }
             else
             {
@@ -134,19 +118,24 @@ public class IAPManager : MonoBehaviour, IStoreListener
 
     public bool CanAccessPremiumContent()
     {
-        return PlayerPrefs.GetInt(kLocalPremiumUnlocked, 0) == 1 || IsPremiumPurchased();
+        return PlayerPrefs.GetInt(kLocalPremiumUnlocked, 0) == 1 || CheckPremiumPurchased();
     }
 
-    public bool IsPremiumPurchased()
+    public bool CheckPremiumPurchased()
     {
         if (!m_Initialized)
             return false;
-        Product product = storeController.products.WithID(kPremiumAccKey);
-        if (product != null)
+
+        var purchases = m_StoreController.GetPurchases();
+        foreach(Order order in purchases)
         {
-            return product.hasReceipt;
+            if (order is ConfirmedOrder)
+            {
+                Debug.Log("Product " + kPremiumAccStoreKey + " purchased !");
+                PlayerPrefs.SetInt(kLocalPremiumUnlocked, 1);
+                return true;
+            }
         }
         return false;
-
     }
 }

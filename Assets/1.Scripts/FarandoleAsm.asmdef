@@ -17,7 +17,11 @@
         "Unity.RenderPipelines.Universal.Runtime",
         "Unity.RenderPipelines.Universal.2D.Runtime",
         "Unity.RenderPipelines.Core.Runtime",
-        "Unity.Purchasing"
+        "Unity.Purchasing",
+        "Unity.Purchasing.Stores",
+        "Unity.Purchasing.Apple",
+        "Unity.Services.Core",
+        ""
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
