@@ -159,8 +159,9 @@ public class PlayerController : MonoBehaviour
 
             if ((touch.phase == UnityEngine.InputSystem.TouchPhase.Ended)) //tapCount >= 1, problemes avec time scale?
             {
+                float deltaTime = lastTimeTouch - firstTimeTouch;
                 //Tap sur la même position et moins d'une seconde
-                if ((lastTouchWorldPos - firstTouchWorldPos).sqrMagnitude < 0.01f && lastTimeTouch - firstTimeTouch <= 1)
+                if (deltaTime < 0.1 || ((lastTouchWorldPos - firstTouchWorldPos).sqrMagnitude < 0.01f && deltaTime <= 1))
                     Tap(touch);
                 // Swipe(touch);
             }
