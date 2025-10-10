@@ -14,12 +14,12 @@ public class CowboyMiniGame : MiniGame
 
     PerspectiveRoom inst_PerspectiveRoom;
 
-    public Obstacle[] inst_obstacles;
-    public Cowboy[] inst_cowboys;
+    public List<Obstacle> inst_obstacles;
+    public List<Cowboy> inst_cowboys;
 
     public int[] cowboysPerDifficulty;
 
-    private int numberOfCowboys;
+    private int numberOfRows;
     public int maxObstaclesNumber;
 
     public float perspectiveMarginDelta; // En pourcentage de reduction
@@ -33,36 +33,37 @@ public class CowboyMiniGame : MiniGame
 
     public override void Reset()
     {
-        numberOfCowboys = cowboysPerDifficulty[MGM.miniGamesDifficulty - 1];
+        numberOfRows = cowboysPerDifficulty[MGM.miniGamesDifficulty - 1];
 
         // room
         inst_PerspectiveRoom = GOBuilder.Create(prefab_PerspectiveRoom)
                                 .WithParent(transform)
                                 .BuildAs<PerspectiveRoom>();
-        inst_PerspectiveRoom.Init(MGM.LM2D, numberOfCowboys);
+        inst_PerspectiveRoom.Init(MGM.LM2D, numberOfRows);
         inst_PerspectiveRoom.Build();
 
         // cowboys & obstacles
 
-        inst_cowboys = new Cowboy[numberOfCowboys];
-        inst_obstacles = new Obstacle[numberOfCowboys * maxObstaclesNumber];
+        inst_cowboys = new List<Cowboy>(numberOfRows);
+        inst_obstacles = new List<Obstacle>();
 
-        for (int i = 0; i < numberOfCowboys; i++)
+        for (int i = 0; i < numberOfRows; i++)
         {
-            inst_cowboys[i] = GOBuilder.Create(prefab_cowboy)
+            Cowboy newCowboy = GOBuilder.Create(prefab_cowboy)
                 .WithName("Cowboy" + i)
                 .WithParent(this.gameObject.transform)
                 .BuildAs<Cowboy>();
 
-            PC.AddTapTracker(inst_cowboys[i]);
-            inst_cowboys[i].hitCB.AddListener(CowboyShot);
+            PC.AddTapTracker(newCowboy);
+            newCowboy.hitCB.AddListener(CowboyShot);
 
-            //MGM.LM2D.PlaceObject(inst_cowboys[i].cowboySR);
-            inst_PerspectiveRoom.AddToRoom(inst_cowboys[i].transform, i, inst_cowboys[i].GetRenderer());
-            inst_cowboys[i].SetMovement(
+            //MGM.LM2D.PlaceObject(newCowboy.cowboySR);
+            inst_PerspectiveRoom.AddToRoom(newCowboy.transform, i, newCowboy.GetRenderer());
+            newCowboy.SetMovement(
                 inst_PerspectiveRoom.XMinForRow(i),
                 inst_PerspectiveRoom.XMaxForRow(i)
                 );
+            inst_cowboys.Add(newCowboy);
         }
         PositionCowboysAndObstacles();
 
@@ -73,31 +74,28 @@ public class CowboyMiniGame : MiniGame
 
     void PositionCowboysAndObstacles()
     {
-        float y_delta = (PG.bounds.max.y - PG.bounds.min.y) / (numberOfCowboys + 1);
-        float cowboyHalfHeight = inst_cowboys[0].hitbox.bounds.size.y / 2;
-
         int n_obstacles;
-        int obstacle_index = 0;
-        float obstacle_offset = -0.2f;
-        float minX, maxX, posY, scale;
 
-        for (int i = 0; i < numberOfCowboys; i++)
+        inst_obstacles = new List<Obstacle>();
+
+        for (int i = 0; i < numberOfRows; i++)
         {
             n_obstacles = Random.Range(1, maxObstaclesNumber + 1);
             for (int j = 0; j < n_obstacles; j++)
             {
-                inst_obstacles[j] = GOBuilder.Create(prefab_obstacle)
-                    .WithName("Obstacle " + j)
+                Obstacle newObstacle = GOBuilder.Create(prefab_obstacle)
+                    .WithName("Obstacle " + i + j)
                     .WithParent(this.transform)
                     .BuildAs<Obstacle>();
 
-                PC.AddTapTracker(inst_obstacles[j]);
-                RowInfo rowInfo = inst_PerspectiveRoom.AddToRoom(inst_obstacles[j].transform, i, inst_obstacles[j].GetRenderer());
-                inst_obstacles[j].transform.position = new Vector3(
+                PC.AddTapTracker(newObstacle);
+                RowInfo rowInfo = inst_PerspectiveRoom.AddToRoom(newObstacle.transform, i, newObstacle.GetRenderer());
+                newObstacle.transform.position = new Vector3(
                     Random.Range(rowInfo.min.x, rowInfo.max.x),
-                    inst_obstacles[j].transform.position.y,
-                    inst_obstacles[j].transform.position.z
+                    newObstacle.transform.position.y,
+                    newObstacle.transform.position.z
                 );
+                inst_obstacles.Add(newObstacle);
             }
         }
 
@@ -126,6 +124,8 @@ public class CowboyMiniGame : MiniGame
                 Destroy(cowboy.gameObject);
             }
         }
+        inst_cowboys.Clear();
+        
         foreach (Obstacle obstacle in inst_obstacles)
         {
             if (obstacle != null)
@@ -134,10 +134,9 @@ public class CowboyMiniGame : MiniGame
                 Destroy(obstacle.gameObject);
             }
         }
-        foreach (Transform c in inst_PerspectiveRoom.transform)
-        {
-            Destroy(c.gameObject);
-        }
+        inst_obstacles.Clear();
+
+        inst_PerspectiveRoom.Clean();
         Destroy(inst_PerspectiveRoom.gameObject);
     }
     public override void Lose()
@@ -146,12 +145,21 @@ public class CowboyMiniGame : MiniGame
     }
     public override bool SuccessCheck()
     {
-        return numberOfCowboys <= 0;
+        return inst_cowboys.Count == 0;
     }
 
-    public void CowboyShot()
+    public void CowboyShot(Cowboy iHitCowboy)
     {
-        numberOfCowboys--;
+        inst_cowboys.Remove(iHitCowboy);
+        iHitCowboy.StopMovement();
+        iHitCowboy.DeathAnimation(
+                new Vector2(
+                inst_PerspectiveRoom.GetVanishingPoint().x,
+                inst_PerspectiveRoom.m_FarPlan.min.y
+                )
+            );
+        PC.RemoveTapTracker(iHitCowboy);
+
         if (SuccessCheck())
         {
             Win();

@@ -330,7 +330,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b8f8f1c5d279894f81ff39bfebae68e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 9018796940828872127}
+  m_Animator: {fileID: 9018796940828872127}
   IsShown: 0
   currentRankText: {fileID: 366280597507842356}
   newRankText: {fileID: 4972224823737320137}

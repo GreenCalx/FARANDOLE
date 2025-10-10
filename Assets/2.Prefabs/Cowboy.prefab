@@ -109,14 +109,14 @@ MonoBehaviour:
   dodgeSprite: {fileID: -4693932192084691647, guid: 980eea9fe67395c479a0dcc2be78b70d, type: 3}
   distractedSprite: {fileID: -6903168626831442327, guid: 4008baeb34ecd4f4abcc688779a5b7b3, type: 3}
   hitSprite: {fileID: -59066101396820148, guid: 65666751b8b0b1d49b50a1f70d758f8b, type: 3}
-  minIddleTime: 0.2
-  maxIddleTime: 0.8
-  minDodgeTime: 0.3
-  maxDodgeTime: 0.5
-  minDistractedTime: 0.65
-  maxDistractedTime: 0.8
-  deathAnimDuration: 1
-  patrolTime: 3
+  minIddleTime: 0.5
+  maxIddleTime: 1
+  minDodgeTime: 0.25
+  maxDodgeTime: 0.25
+  minDistractedTime: 0.8
+  maxDistractedTime: 1.2
+  deathAnimDuration: 0.5
+  patrolTime: 4
   hitbox: {fileID: 6572754096827647358}
   difficultyTimeCoef: 1
 --- !u!70 &6572754096827647358

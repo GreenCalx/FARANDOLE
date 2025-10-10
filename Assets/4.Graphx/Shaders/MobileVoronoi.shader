@@ -13,7 +13,10 @@ Shader "XL/MobileVoronoi"
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
+        Tags { 
+            "RenderType"="Opaque"  
+            "RenderPipeline" = "UniversalPipeline"
+            }
 
         Pass
         {

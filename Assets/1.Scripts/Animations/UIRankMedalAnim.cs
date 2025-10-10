@@ -16,19 +16,19 @@ public class UIRankMedalAnim : ManagedAnimation
     public Image newRankImage;
     public async UniTask RankUp(CancellationToken iCT)
     {
-        animator.SetTrigger(RankUpTrigger);
+        m_Animator.SetTrigger(RankUpTrigger);
         await WaitAnimState(RankUpState, 1f, iCT);
     }
 
     public async UniTask RankDown(CancellationToken iCT)
     {
-        animator.SetTrigger(RankDownTrigger);
+        m_Animator.SetTrigger(RankDownTrigger);
         await WaitAnimState(RankDownState, 1f, iCT);
     }
 
     public override async UniTask DefaultHide(CancellationToken iCT)
     {
-        animator.SetBool(DefaultShowAnimParm, false);
+        m_Animator.SetBool(DefaultShowAnimParm, false);
         await UniTask.WhenAny(
             WaitAnimState(DefaultHideStateName, 1f, iCT),
             WaitAnimState(HideFlippedState, 1f, iCT)

@@ -265,8 +265,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c9d1540b4f69944799fa7a3239fed54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 289530761544596789}
+  m_Animator: {fileID: 289530761544596789}
   IsShown: 0
+  prefab_LoopStartImage: {fileID: 5733051450864779848, guid: 7f2c204ff255dcf4d9d003576316b970, type: 3}
   prefab_MiniGamePresentationImage: {fileID: 5733051450864779848, guid: 3c1be2cfe02e840438132dee7c6f88c6, type: 3}
   handle_LoopShow: {fileID: 8392689232544831756}
   handle_LR: {fileID: 4484042373633296733}
@@ -274,6 +275,7 @@ MonoBehaviour:
   timeBetweenShowLinesInMs: 1000
   radius: 300
   LR_resolution: 4
+  IsShown: 0
 --- !u!1001 &6148106468472290640
 PrefabInstance:
   m_ObjectHideFlags: 0

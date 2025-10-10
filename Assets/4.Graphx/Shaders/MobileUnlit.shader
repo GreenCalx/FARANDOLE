@@ -5,6 +5,7 @@ Shader "XL/MobileUnlit"
         _Color ("Color", Color) = (1, 1, 1, 1)
         _MainTex ("Texture", 2D) = "white" {}
         _Brightness ("Brightness", Float) = 1
+        _AlphaCutoff("AlphaCutoff", Float) = 0.5
         [Enum(UnityEngine.Rendering.CullMode)] _CullMode("CullMode", Int) = 0.
         [Enum(Off,0,On,1)] _ZWrite("ZWrite", Int) = 1
     }
@@ -64,6 +65,8 @@ Shader "XL/MobileUnlit"
                 // col.r *= _Color.r * _Brightness;
                 // col.g *= _Color.g * _Brightness;
                 // col.b *= _Color.b * _Brightness;
+                if (col.a < _AlphaCutoff)
+                    discard;
                 col *= _Color;
                 
                 return col;

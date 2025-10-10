@@ -19,6 +19,7 @@ Shader "XL/MobileButton"
             "Queue" = "AlphaTest"
             "IgnoreProjector"="True"
             "RenderType"="TransparentCutout"
+            "RenderPipeline" = "UniversalPipeline"
             }
         ZWrite [_ZWrite]
         LOD 100

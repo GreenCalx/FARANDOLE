@@ -32,13 +32,13 @@ public class UIMiniGamePresentationImage : ManagedAnimation
 
     public void ShowLight(bool iShow)
     {
-        animator.SetBool(showLightParam, iShow);
+        m_Animator.SetBool(showLightParam, iShow);
     }
 
     public override async UniTask DefaultHide(CancellationToken iCT)
     {
-        animator.SetBool(DefaultShowAnimParm, false);
-        animator.SetBool(showLightParam, false);
+        m_Animator.SetBool(DefaultShowAnimParm, false);
+        m_Animator.SetBool(showLightParam, false);
 
         await UniTask.WhenAny(
             WaitAnimState(DefaultHideStateName, 1f, iCT),

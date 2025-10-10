@@ -7,10 +7,12 @@ using Cysharp.Threading.Tasks;
 using System.Threading.Tasks;
 using System.Threading;
 using UnityEngine.UI.Extensions;
+using static DrawUtils;
 
 public class UILoopPresentationAnim : ManagedAnimation
 {
     [Header("UILoopPresentationAnim")]
+    public GameObject prefab_LoopStartImage;
     public GameObject prefab_MiniGamePresentationImage;
     public RectTransform handle_LoopShow;
     public UILineRenderer handle_LR;
@@ -22,31 +24,36 @@ public class UILoopPresentationAnim : ManagedAnimation
     public int LR_resolution = 2;
     bool init = false;
     [Header("Internals")]
-    public bool IsShown = false;
+    UILoopStartImage inst_loopStartImage;
 
     public void Init(MiniGameLoop iMGLoop)
     {
         uiImages = new List<UIMiniGamePresentationImage>(iMGLoop.inst_miniGames.Count);
 
         int index = 0;
-        float angle_step = Mathf.PI * 2f / GameData.GetSettings.loopSize;
+        float angle_step = Mathf.PI * 2f / (GameData.GetSettings.loopSize + 1);
         float angle = 0f;
+        float angle_offset = -77f;
         Vector3 pos = Vector3.zero;
 
-        int lr_index = 0;
-        float lr_angle_step = (angle_step > 1f) ? angle_step / LR_resolution : 1f;
-        // We're not showing the last joint that makes the full loop
-        int n_points = (GameData.GetSettings.loopSize * LR_resolution) - (LR_resolution - 1);
-        handle_LR.Points = new Vector2[n_points];
-        float lr_angle = 0f;
-        Vector3 lr_pos = Vector3.zero;
+        // Start Image
+        pos = new Vector3(
+                radius * Mathf.Cos(angle_offset + angle),
+                radius * Mathf.Sin(angle_offset + angle),
+                0f);
+        inst_loopStartImage = GOBuilder.Create(prefab_LoopStartImage)
+                                .WithParent(handle_LoopShow)
+                                .WithAnchoredPosition(pos)
+                                .BuildAs<UILoopStartImage>();
 
+        // Mini Game Images
+        index = 1;
         foreach (MiniGame mg in iMGLoop.inst_miniGames)
         {
-            angle = index * angle_step;
+            angle = (index * angle_step);
             pos = new Vector3(
-                radius * Mathf.Cos(angle),
-                radius * Mathf.Sin(angle),
+                radius * Mathf.Cos(angle_offset - angle),
+                radius * Mathf.Sin(angle_offset - angle),
                 0f);
 
             UIMiniGamePresentationImage newImg = GOBuilder.Create(prefab_MiniGamePresentationImage)
@@ -55,34 +62,9 @@ public class UILoopPresentationAnim : ManagedAnimation
                                                 .BuildAs<UIMiniGamePresentationImage>();
             newImg.SetFromMiniGameDesc(mg.descriptor);
             uiImages.Add(newImg);
-
-
-            lr_index = index * LR_resolution;
-            // Add point on self coordinates
-            lr_angle = lr_index * lr_angle_step;
-            lr_pos = new Vector3(
-                    radius * Mathf.Cos(lr_angle),
-                    radius * Mathf.Sin(lr_angle),
-                    0f);
-            handle_LR.Points[lr_index] = lr_pos;
-            if (index >= iMGLoop.inst_miniGames.Count - 1)
-            {
-                // don't finish the loop
-                continue;
-            }
-            // Add resolution points continuing the LR curve
-            for (int i = 1; i < LR_resolution; i++)
-            {
-                lr_angle = (lr_index + i) * lr_angle_step;
-                lr_pos = new Vector3(
-                    radius * Mathf.Cos(lr_angle),
-                    radius * Mathf.Sin(lr_angle),
-                    0f);
-                handle_LR.Points[lr_index + i] = lr_pos;
-            }
             index++;
         }
-        //handle_LoopShow.transform.RotateAround(handle_LoopShow.transform.position, Vector3.forward, -45f);
+        DrawUtils.DrawUICircle(handle_LR, radius);
         UpdateLights(iMGLoop);
 
         init = true;
@@ -90,15 +72,16 @@ public class UILoopPresentationAnim : ManagedAnimation
 
     public override void Cancel()
     {
-        animator.SetBool(DefaultShowAnimParm, false);
+        m_Animator.SetBool(DefaultShowAnimParm, false);
         IsShown = false;
-        animator.SetTrigger(animTriggerCancel);
+        m_Animator.SetTrigger(animTriggerCancel);
         cancellationTokenSource?.Cancel();
         foreach (UIMiniGamePresentationImage img in uiImages)
         {
             img.Cancel();
         }
         rankMedalAnimation.Cancel();
+        inst_loopStartImage.Cancel();
     }
 
     public async UniTask Show(MiniGameLoop iMGLoop)
@@ -124,6 +107,7 @@ public class UILoopPresentationAnim : ManagedAnimation
         await UniTask.WhenAll(
             DefaultShow(iCT),
             UniTask.WhenAll(l),
+            inst_loopStartImage.DefaultShow(iCT),
             rankMedalAnimation.DefaultShow(iCT));
         IsShown = true;
     }
@@ -151,6 +135,7 @@ public class UILoopPresentationAnim : ManagedAnimation
         await UniTask.WhenAll(
             UniTask.WhenAll(l),
             rankMedalAnimation.DefaultHide(iCT),
+            inst_loopStartImage.DefaultHide(iCT),
             DefaultHide(iCT)
             );
         IsShown = false;

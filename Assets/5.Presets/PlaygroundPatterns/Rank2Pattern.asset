@@ -15,5 +15,5 @@ MonoBehaviour:
   pattern: 1
   angle: 0.75
   boxSize: 0.71
-  tiling: 1.12
+  tiling: 2.12
   offset: {x: 0, y: 0}

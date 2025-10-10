@@ -94,6 +94,7 @@ public class WaveformMatcherMiniGame : MiniGame
                     .BuildAs<LineRenderer>();
         targetLR.startWidth = 0.05f;
         targetLR.endWidth = 0.05f;
+        //targetLR.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
 
         controlled = new Waveshape(freqCentroid, ampCentroid);
         controlledLR = GOBuilder.Create()
@@ -104,6 +105,7 @@ public class WaveformMatcherMiniGame : MiniGame
                     .BuildAs<LineRenderer>();
         controlledLR.startWidth = 0.05f;
         controlledLR.endWidth = 0.05f;
+        //controlledLR.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
 
         PC.AddPositionTracker(xyController);
 
@@ -114,6 +116,7 @@ public class WaveformMatcherMiniGame : MiniGame
         if (IsActiveMiniGame)
             return;
 
+        FuncSelect();
         DrawTarget();
         DrawControlled();
         IsActiveMiniGame = true;
@@ -162,6 +165,22 @@ public class WaveformMatcherMiniGame : MiniGame
         DrawControlled();
         if (SuccessCheck())
             Win();
+    }
+
+    void FuncSelect()
+    {
+        switch (MGM.miniGamesDifficulty)
+        {
+            case 2:
+                selectedFunc = Random.Range(0, 3);
+                break;
+            case 3:
+                selectedFunc = Random.Range(0, 3);
+                break;
+            default:
+                selectedFunc = 0;
+                break;
+        }
     }
     void DrawControlled()
     {
@@ -243,7 +262,7 @@ public Vector3[] GetSquaredWave(float iAmp, float iFreq, Vector3 iWorldAnchor, L
     {
         int peakCount = Mathf.FloorToInt(2 / iFreq) + 2;
         line.positionCount = peakCount;
-        float xStep = windowSize.x * iFreq / 2 ;
+        float xStep = windowSize.x * iFreq / 2f ;
         Vector3[] peaks = new Vector3[peakCount];
         float xOffset = xStep * Mathf.Lerp(minFreqByDiff, maxFreqByDiff, iFreq);
         float x = 0;

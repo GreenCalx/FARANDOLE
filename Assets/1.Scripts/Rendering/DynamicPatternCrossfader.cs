@@ -35,7 +35,7 @@ public Material renderedMat;
         renderedMat.SetFloat("_BoxSize", Utils.Lerp(patternA.boxSize, patternB.boxSize, crossfader));
         renderedMat.SetFloat("_Tiling", Utils.Lerp(patternA.tiling, patternB.tiling, crossfader));
         Vector2 lerpOffset = Vector2.Lerp(patternA.offset, patternB.offset, crossfader);
-        renderedMat.SetFloatArray("_Offset", new float[2]{patternA.offset.x, patternA.offset.y} );
+        renderedMat.SetFloatArray("_Offset", new float[4]{patternA.offset.x, patternA.offset.y, 0f, 0f} );
 
         _faderLock = false;
     }

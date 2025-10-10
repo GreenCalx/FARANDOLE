@@ -16,6 +16,6 @@ MonoBehaviour:
   name: Chess
   goal: Destroy all black Knights
   thumbNailImg: {fileID: -4421537415268300880, guid: e7e97f26a75250d41ba2f6cb8601a0ac, type: 3}
-  prefab_MiniGame: {fileID: 8063128649422412875, guid: 07ecc451338969848bf4dac8f9e9191b, type: 3}
+  prefab_MiniGame: {fileID: 7478234881393395322, guid: 4912fad786dba284fa74feb8348bef18, type: 3}
   tags: 0100000003000000
   orientationRequirement: 2

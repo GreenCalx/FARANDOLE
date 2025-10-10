@@ -1,19 +1,21 @@
 using UnityEngine;
 using UnityEngine.UI;
-
-public class UIStageClearAnimation : MonoBehaviour
+using Cysharp.Threading.Tasks;
+using System.Threading;
+public class UIStageClearAnimation : ManagedAnimation
 {
     public const string StageClearTrigger = "StageClear";
-    public Animator animator;
+    public const string StageClearState = "OnStageClear";
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        animator = GetComponent<Animator>();
+        m_Animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
-    public void Animate()
+    public override async UniTask DefaultShow(CancellationToken iCT)
     {
-        animator.SetTrigger(StageClearTrigger);
+        m_Animator.SetTrigger(StageClearTrigger);
+        await WaitAnimState(StageClearState, 0.75f, iCT);
     }
 }

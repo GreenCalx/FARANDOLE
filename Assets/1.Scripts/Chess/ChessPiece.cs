@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
-using Unity.Android.Gradle.Manifest;
+//using Unity.Android.Gradle.Manifest;
 
 public abstract class ChessPiece : MonoBehaviour
 {
@@ -54,7 +54,7 @@ public abstract class ChessPiece : MonoBehaviour
         particles.Play();
         //await SpecialPose();
         sr.enabled = false;
-        await UniTask.WaitWhile(() => particles.isPlaying);
-        Destroy(this);
+        // await UniTask.WaitWhile(() => particles.isPlaying);
+        // Destroy(this);
     }
 }

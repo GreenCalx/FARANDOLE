@@ -13,7 +13,7 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
     public RectTransform CameraSpace;
     [Header("Player UI")]
     public TextMeshProUGUI miniGameClock;
-    public TextMeshProUGUI hpClock;
+    public Image m_HPImage;
     public Image timeIndicatorImg;
     public RotateAlongTimeAnim timeNeedleAnim;
     public RectTransform infoArea;
@@ -47,7 +47,10 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         MGM = iGameManager.MGM;
         h_PauseMenu.PC = iGameManager.PC;
         miniGameClock.text = GameData.GetSettings.MiniGameTime.ToString("#0");
-        hpClock.text = GameData.GetSettings.PlayerHP.ToString("#0.0");
+
+        m_HPImage.color = GameData.GetSettings.LoopPassedColor;
+        m_HPImage.fillAmount = 1f;
+
         timeIndicatorImg.color = GameData.GetUITheme.FrozenTimeColor;
         GameData.GetUITheme.PositiveTimeColor = GameData.GetSettings.LoopPassedColor;
         GameData.GetUITheme.NegativeTimeColor = GameData.GetSettings.LoopFailedColor;
@@ -60,7 +63,6 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         inst_loopPresentationAnim.Init(MGM.MGLoop);
 
         ShowMiniGameMode(false);
-        //ShowSuccessArea(false);
         
         Refresh();
         InitDone = true;
@@ -88,12 +90,20 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         //handle_animLoopSuccess.failedTextColor = GameData.GetUITheme.NegativeTimeColor;
     }
 
+    public void RefreshHPImage(PlayerData iData)
+    {
+        float hp_frac = iData.HP / GameData.GetSettings.PlayerHP;
+        m_HPImage.fillAmount = hp_frac;
+        m_HPImage.color = Color.Lerp(GameData.GetSettings.LoopPassedColor, GameData.GetSettings.LoopFailedColor, 1f - hp_frac);
+    }
+
     public void RefreshTimeIndicator(GameClock iGameClock)
     {
         if (iGameClock.IsFrozen)
         {
             timeIndicatorImg.color = GameData.GetUITheme.FrozenTimeColor;
-        } else if ((iGameClock.GetRemainingTime() <= 1f) && (iGameClock.GetRemainingTime() > 0f))
+        }
+        else if ((iGameClock.GetRemainingTime() <= 1f) && (iGameClock.GetRemainingTime() > 0f))
         {
             timeIndicatorImg.color = GameData.GetUITheme.LastSecondTimeColor;
         }
@@ -123,11 +133,11 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
     public void ShowMiniGameMode(bool iState)
     {
         miniGameClock.enabled = iState;
-        hpClock.enabled = iState;
+        m_HPImage.enabled = iState;
         handle_UIDoorAnim.OpenAnim();
     }
 
-    public void ShowSuccessArea(float iTime = 0f)
+    public async UniTask StageClearAnimation(float iTime, CancellationToken iCT)
     {
         //successArea.gameObject.SetActive(iState);
         string successTimeStr = "";
@@ -145,7 +155,7 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         successTimeStr += iTime.ToString("#0.0");
         successTimeTxt.text = successTimeStr;
         
-        handle_animStageClear.Animate();
+        await handle_animStageClear.DefaultShow(iCT);
     }
 
     public void InterStageAnimation()
@@ -153,7 +163,7 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         handle_UIDoorAnim.ClapAnim();
     }
 
-    public async Task LoopCompleteAnim(MiniGameLoop iMGLoop, CancellationToken iCT)
+    public async UniTask LoopCompleteAnim(MiniGameLoop iMGLoop, CancellationToken iCT)
     {
         handle_animLoopSuccess.Init(iMGLoop, inst_loopPresentationAnim);
         handle_animLoopSuccess.OnBeforeLoopDepth = new UnityEvent();
@@ -166,10 +176,10 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
             () => { AUDIO.LerpRank(prevRank, newRank); }
             );
 
-        ANIM.TrackAnimator(handle_animLoopSuccess.animator, iCT);
-        ANIM.QueueAnimRange(handle_animLoopSuccess.animator, handle_animLoopSuccess.GetAnimQueue(iCT));
-        await ANIM.PlayAnim(handle_animLoopSuccess.animator);
-        ANIM.StopTrackAnimator(handle_animLoopSuccess.animator);
+        ANIM.TrackAnimator(handle_animLoopSuccess.m_Animator, iCT);
+        ANIM.QueueAnimRange(handle_animLoopSuccess.m_Animator, handle_animLoopSuccess.GetAnimQueue(iCT));
+        await ANIM.PlayAnim(handle_animLoopSuccess.m_Animator);
+        ANIM.StopTrackAnimator(handle_animLoopSuccess.m_Animator);
         //await handle_animLoopSuccess.Animate(colors, iLoopPassed, iRankUp, iLoopDepth, iCT);
 
         handle_animLoopSuccess.OnBeforeLoopDepth.RemoveListener(()=>OnBeforeLoopDepth?.Invoke());
