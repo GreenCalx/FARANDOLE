@@ -15,7 +15,7 @@ MonoBehaviour:
   PlayerHP: 4
   loopSize: 6
   percentOfLoopSizeToPass: 0.5
-  MiniGameTime: 6
+  MiniGameTime: 99
   MaxTimeScale: 3
   timeScaleOverLoopLevel:
     serializedVersion: 2

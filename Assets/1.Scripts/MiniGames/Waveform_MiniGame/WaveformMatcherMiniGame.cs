@@ -15,6 +15,12 @@ public class WaveformMatcherMiniGame : MiniGame
     public float maxAmp = 1f;
     public float minFreq = 1f;
     public float maxFreq = 2f;
+
+    [Range(0f,1f)]
+    public float ampDiffCoefRangeExtension;
+    [Range(0f,1f)]
+    public float freqDiffCoefRangeExtension;
+
     public XYController xyController;
     public int resolution = 60;
     // Careful if changing below range
@@ -22,8 +28,12 @@ public class WaveformMatcherMiniGame : MiniGame
     // current clamp code doesn't check if the 'limited' randpoint
     // is still reachable within unit circle
     // Examples : diagonals 
-    [Range(0f, 0.5f)]
+    [Range(0f, 1f)]
     public float targetRandGround = 0.1f; // unit ircle center exclusion
+    public float targetRandGroundExtension = 0.1f;
+
+    [Range(0f,0.02f)]
+    public float precisionDiff = 0f;
     public Transform targetWaveformPoint;
     public Transform controlledWaveformPoint;
     public Material LRTargetMat;
@@ -37,13 +47,15 @@ public class WaveformMatcherMiniGame : MiniGame
     float minAmpByDiff, maxAmpByDiff;
     float minFreqByDiff, maxFreqByDiff;
     float freqCentroid, ampCentroid;
+
+    int func;
     public override void Init()
     {
-        float rangeExtension = ((float)MGM.miniGamesDifficulty - 1f) / 5f;
-        minAmpByDiff = minAmp - (minAmp * rangeExtension);
-        minFreqByDiff = minFreq - (minFreq * rangeExtension);
-        maxFreqByDiff = maxFreq + (maxFreq * rangeExtension);
-        maxAmpByDiff = maxAmp + (maxAmp * rangeExtension);
+        int rank = MGM.miniGamesDifficulty - 1;
+        minAmpByDiff = minAmp * Mathf.Pow(1- ampDiffCoefRangeExtension, rank);
+        minFreqByDiff = minFreq * Mathf.Pow(1 - freqDiffCoefRangeExtension, rank);
+        maxFreqByDiff = maxFreq * Mathf.Pow(1 - freqDiffCoefRangeExtension, rank);
+        maxAmpByDiff = maxAmp *  Mathf.Pow( 1 - ampDiffCoefRangeExtension, rank);
 
         freqCentroid = (maxFreqByDiff + minFreqByDiff) / 2f;
         ampCentroid = (maxAmpByDiff + minAmpByDiff) / 2f;
@@ -58,10 +70,16 @@ public class WaveformMatcherMiniGame : MiniGame
         // leading to unreachable values via XY circle controller
 
         Vector2 randPoint = Random.insideUnitCircle;
-        if ((randPoint.x <= targetRandGround) && (randPoint.x >= -targetRandGround))
-            randPoint.x = (randPoint.x < 0f) ? -targetRandGround : targetRandGround;
-        if ((randPoint.y <= targetRandGround) && (randPoint.y >= -targetRandGround))
-            randPoint.y = (randPoint.y < 0f) ? -targetRandGround : targetRandGround;
+        int i = 0;
+        while(i < 50 || ((randPoint.x <= targetRandGround) && (randPoint.x >= -targetRandGround)) || ((randPoint.y <= targetRandGround) && (randPoint.y >= -targetRandGround)))
+        {
+            randPoint = Random.insideUnitCircle;
+            i++;
+        }
+        if(i == 50){
+            randPoint.x = targetRandGround;
+            randPoint.y = targetRandGround;
+        }
 
         target = new Waveshape(
             Utils.Remap(randPoint.x, -1f, 1f, minFreqByDiff, maxFreqByDiff),
@@ -88,6 +106,8 @@ public class WaveformMatcherMiniGame : MiniGame
         controlledLR.endWidth = 0.05f;
 
         PC.AddPositionTracker(xyController);
+
+        func = Random.Range(0,3);
     }
     public override void Play()
     {
@@ -127,8 +147,8 @@ public class WaveformMatcherMiniGame : MiniGame
     }
     public override bool SuccessCheck()
     {
-        bool eq_freq = Mathf.Abs(controlled.freq - target.freq) < 0.02f;
-        bool eq_amp = Mathf.Abs(controlled.amp - target.amp) < 0.02f;
+        bool eq_freq = Mathf.Abs(controlled.freq - target.freq) < 0.02f - precisionDiff * MGM.miniGamesDifficulty;
+        bool eq_amp = Mathf.Abs(controlled.amp - target.amp) < 0.02f - precisionDiff * MGM.miniGamesDifficulty;
         return eq_freq && eq_amp;
     }
 
@@ -145,12 +165,12 @@ public class WaveformMatcherMiniGame : MiniGame
     }
     void DrawControlled()
     {
-        DrawFunc(2, controlledLR, controlled);
+        DrawFunc(func, controlledLR, controlled);
         //DrawFunc(Random.Range(0, 2), controlledLR);
     }
     void DrawTarget()
     {
-        DrawFunc(2, targetLR, target);
+        DrawFunc(func, targetLR, target);
         //DrawFunc(Random.Range(0, 2), targetLR);
     }
 
@@ -199,7 +219,7 @@ public Vector3[] GetSquaredWave(float iAmp, float iFreq, Vector3 iWorldAnchor, L
     Vector3[] positions = new Vector3[cornerCount];
 
     float xStep = windowSize.x * iFreq / 3;
-
+    float xOffset = xStep * Lerp(minFreqByDiff, maxFreqByDiff, iFreq);
     float x = 0;
     float y = iAmp / 2;
         for (int i = 0; i < cornerCount; i++)
@@ -210,7 +230,7 @@ public Vector3[] GetSquaredWave(float iAmp, float iFreq, Vector3 iWorldAnchor, L
                 y = -y;
 
             positions[i] = new Vector3(
-                iWorldAnchor.x + x,
+                iWorldAnchor.x + x - xOffset,
                 iWorldAnchor.y + y,
                 -1f
             );
@@ -225,7 +245,7 @@ public Vector3[] GetSquaredWave(float iAmp, float iFreq, Vector3 iWorldAnchor, L
         line.positionCount = peakCount;
         float xStep = windowSize.x * iFreq / 2 ;
         Vector3[] peaks = new Vector3[peakCount];
-
+        float xOffset = xStep * Mathf.Lerp(minFreqByDiff, maxFreqByDiff, iFreq);
         float x = 0;
         float y = iAmp;
 
@@ -235,7 +255,7 @@ public Vector3[] GetSquaredWave(float iAmp, float iFreq, Vector3 iWorldAnchor, L
             y = -y;
 
             peaks[i] = new Vector3(
-                iWorldAnchor.x + x,
+                iWorldAnchor.x + x - xOffset,
                 iWorldAnchor.y + y,
                 -1f
             );

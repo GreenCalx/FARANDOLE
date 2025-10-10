@@ -103,7 +103,7 @@ Transform:
   m_GameObject: {fileID: 1925725159500221472}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.5, y: 0, z: 0}
+  m_LocalPosition: {x: -2, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -166,13 +166,17 @@ MonoBehaviour:
   successState: 0
   hasIntro: 0
   windowSize: {x: 4, y: 2}
-  minAmp: 0.5
+  minAmp: 0.65
   maxAmp: 1
-  minFreq: 0.2
+  minFreq: 0.1
   maxFreq: 0.3
+  ampDiffCoefRangeExtension: 0.35
+  freqDiffCoefRangeExtension: 0.25
   xyController: {fileID: 9008774579250620429}
-  resolution: 120
-  targetRandGround: 0.388
+  resolution: 80
+  targetRandGround: 0.3
+  targetRandGroundExtension: 0.1
+  precisionDiff: 0.002
   targetWaveformPoint: {fileID: 4006086730372813668}
   controlledWaveformPoint: {fileID: 4006086730372813668}
   LRTargetMat: {fileID: 2100000, guid: bb5ed207406334745b294a872816cb3b, type: 2}
