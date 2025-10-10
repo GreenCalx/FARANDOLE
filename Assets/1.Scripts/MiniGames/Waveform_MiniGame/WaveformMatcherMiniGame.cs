@@ -48,7 +48,7 @@ public class WaveformMatcherMiniGame : MiniGame
     float minFreqByDiff, maxFreqByDiff;
     float freqCentroid, ampCentroid;
 
-    int func;
+    int selectedFunc;
     public override void Init()
     {
         int rank = MGM.miniGamesDifficulty - 1;
@@ -109,7 +109,7 @@ public class WaveformMatcherMiniGame : MiniGame
 
         PC.AddPositionTracker(xyController);
 
-        func = Random.Range(0,3);
+        FuncSelect();
     }
     public override void Play()
     {
@@ -172,7 +172,7 @@ public class WaveformMatcherMiniGame : MiniGame
         switch (MGM.miniGamesDifficulty)
         {
             case 2:
-                selectedFunc = Random.Range(0, 3);
+                selectedFunc = Random.Range(0, 2);
                 break;
             case 3:
                 selectedFunc = Random.Range(0, 3);
@@ -184,13 +184,11 @@ public class WaveformMatcherMiniGame : MiniGame
     }
     void DrawControlled()
     {
-        DrawFunc(func, controlledLR, controlled);
-        //DrawFunc(Random.Range(0, 2), controlledLR);
+        DrawFunc(selectedFunc, controlledLR, controlled);
     }
     void DrawTarget()
     {
-        DrawFunc(func, targetLR, target);
-        //DrawFunc(Random.Range(0, 2), targetLR);
+        DrawFunc(selectedFunc, targetLR, target);
     }
 
     void DrawFunc(int func, LineRenderer line, Waveshape wave)
@@ -238,7 +236,6 @@ public Vector3[] GetSquaredWave(float iAmp, float iFreq, Vector3 iWorldAnchor, L
     Vector3[] positions = new Vector3[cornerCount];
 
     float xStep = windowSize.x * iFreq / 3;
-    float xOffset = xStep * Lerp(minFreqByDiff, maxFreqByDiff, iFreq);
     float x = 0;
     float y = iAmp / 2;
         for (int i = 0; i < cornerCount; i++)
@@ -249,7 +246,7 @@ public Vector3[] GetSquaredWave(float iAmp, float iFreq, Vector3 iWorldAnchor, L
                 y = -y;
 
             positions[i] = new Vector3(
-                iWorldAnchor.x + x - xOffset,
+                iWorldAnchor.x + x,
                 iWorldAnchor.y + y,
                 -1f
             );
@@ -264,7 +261,6 @@ public Vector3[] GetSquaredWave(float iAmp, float iFreq, Vector3 iWorldAnchor, L
         line.positionCount = peakCount;
         float xStep = windowSize.x * iFreq / 2f ;
         Vector3[] peaks = new Vector3[peakCount];
-        float xOffset = xStep * Mathf.Lerp(minFreqByDiff, maxFreqByDiff, iFreq);
         float x = 0;
         float y = iAmp;
 
@@ -274,7 +270,7 @@ public Vector3[] GetSquaredWave(float iAmp, float iFreq, Vector3 iWorldAnchor, L
             y = -y;
 
             peaks[i] = new Vector3(
-                iWorldAnchor.x + x - xOffset,
+                iWorldAnchor.x + x,
                 iWorldAnchor.y + y,
                 -1f
             );
