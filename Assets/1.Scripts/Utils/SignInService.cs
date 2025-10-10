@@ -5,13 +5,19 @@ using Cysharp.Threading.Tasks;
 using System.Threading.Tasks;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
+using UnityEngine.UI;
+using TMPro;
 
 public class SignInService : MonoBehaviour
 {
+    public Button SignInBtn;
+    public Button OfflineBtn;
+    public TextMeshProUGUI connectionText;
     public UnityEvent OnSignIn;
 
     // TODO : bad security maybe, just for quick testing atm.
     bool signedIn = false;
+    bool authentificationProcessed = false;
     bool retry = false;
     bool kill = false;
 
@@ -19,12 +25,22 @@ public class SignInService : MonoBehaviour
     {
         signedIn = false;
         retry = true;
-        //PlayGamesPlatform.Instance.Authenticate(ProcessAuthentication);
+
+        PlayGamesPlatform.Activate();
+        PlayGamesPlatform.DebugLogEnabled = true;
+
+        authentificationProcessed = false;
+        SignInBtn?.onClick.AddListener(() => TrySignIn());
+        OfflineBtn?.onClick.AddListener(() => OfflineMode());
+
         WaitSignIn();
     }
 
     void OnDestroy()
     {
+        SignInBtn?.onClick.RemoveListener(() => TrySignIn());
+        OfflineBtn?.onClick.RemoveListener(() => OfflineMode());
+
         kill = true;
     }
 
@@ -33,9 +49,14 @@ public class SignInService : MonoBehaviour
         signedIn = true;
     }
 
+    public void TrySignIn()
+    {
+        authentificationProcessed = false;
+        PlayGamesPlatform.Instance.Authenticate(ProcessAuthentication);
+    }
+
     async UniTaskVoid WaitSignIn()
     {
-        PlayGamesPlatform.Activate();
         await SignIn();
         OnSignIn.Invoke();
     }
@@ -43,13 +64,15 @@ public class SignInService : MonoBehaviour
     {
         while (!signedIn && !kill)
         {
-            if (retry)
-            {
-                PlayGamesPlatform.Instance.Authenticate(ProcessAuthentication);
-            }
-            await Task.Delay(500); // half a sec wait time inbetween attempts
+            //     if (retry)
+            //     {
+            //         PlayGamesPlatform.Instance.Authenticate(ProcessAuthentication);
+            //     }
+            //     await Task.Delay(500); // half a sec wait time inbetween attempts
+
+            await Task.Yield();
         }
-        retry = false;
+        // retry = false;
         return;
     }
 
@@ -58,21 +81,23 @@ public class SignInService : MonoBehaviour
         if (status == SignInStatus.Success)
         {
             // Continue with Play Games Services
-            Debug.Log("signed in !");
+            //Debug.Log("signed in !");
+            string userName = "foo";
+            connectionText.text = "Signed in as " + userName;
 
             signedIn = true;
-            retry = false;
+            //retry = false;
         }
         else
         {
-            Debug.Log("Failed to sign in");
+            connectionText.text = "Failed to sign in";
             // Disable your integration with Play Games Services or show a login button
             // to ask users to sign-in. Clicking it should call
             // PlayGamesPlatform.Instance.ManuallyAuthenticate(ProcessAuthentication).
             signedIn = false;
-            retry = true;
+            //retry = true;
         }
+        authentificationProcessed = true;
     }
     
-
 }

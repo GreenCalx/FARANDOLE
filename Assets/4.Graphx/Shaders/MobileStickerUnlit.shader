@@ -14,6 +14,7 @@ Shader "XL/MobileStickerUnlit"
         _MainTex ("Texture", 2D) = "white" {}
         [Enum(UnityEngine.Rendering.CullMode)] _CullMode("CullMode", Int) = 0.
         [Enum(Off,0,On,1)] _ZWrite("ZWrite", Int) = 1
+        _AlphaCutoff("AlphaCutoff", Float ) = 0.5
         
         [Enum(Off,0,On,1)]_Shine("Shine",Int) = 1
         _ShineColor ("ShineColor", Color) = (1,1,1,1)
@@ -63,6 +64,7 @@ Shader "XL/MobileStickerUnlit"
         fixed _Shine;
         float _ShineBandWidth;
         float _ShineSpeed;
+        float _AlphaCutoff;
 
         v2f vertOutline(appdata_t IN)
         {
@@ -143,6 +145,9 @@ Shader "XL/MobileStickerUnlit"
                 fixed4 outlineCol = fragOutline(i);
                 if (outlineCol.a > 0.8)
                     col = outlineCol;
+
+                if (col.a < _AlphaCutoff)
+                    discard;
 
                 if (_Shine < 1)
                     return col;

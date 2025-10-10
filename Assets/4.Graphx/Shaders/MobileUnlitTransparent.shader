@@ -12,7 +12,7 @@ Shader "XL/MobileUnlitTransparent"
     SubShader
     {
         Tags {
-            "RenderQueue" = "Transparent"  
+            "RenderQueue" = "Transparent+1"  
             "RenderType"="Transparent"
             "RenderPipeline" = "UniversalPipeline"
             }

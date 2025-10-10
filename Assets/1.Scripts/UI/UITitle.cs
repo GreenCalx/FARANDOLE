@@ -62,9 +62,9 @@ public class UITitle : MonoBehaviour
         highScoresBtn?.clickCallback.AddListener(() => ShowHighScores());
         settingsBtn?.clickCallback.AddListener(() => ShowSettings());
 
-        randomSeedBtn?.clickCallback.AddListener(() => StartRandomSeed());
+        randomSeedBtn?.clickCallback.AddListener(() => StartMutationMode());
         dailySeedBtn?.clickCallback.AddListener(() => StartDailySeed());
-        sprintBtn?.clickCallback.AddListener(() => StartSprint());
+        sprintBtn?.clickCallback.AddListener(() => StartCustom());
 
         backBtn?.clickCallback.AddListener(() => BackToTitle());
         quitBtn?.clickCallback.AddListener(() => QuitGame());
@@ -81,7 +81,6 @@ public class UITitle : MonoBehaviour
         {
             int intensity = (int)Mathf.Floor(elapsedTime/intensityGainTimeStep);
             bgmEmitter.SetParameter(IntensityBGMParm, intensity);
-            //Debug.Log(intensity);
         }
     }
 
@@ -117,26 +116,23 @@ public class UITitle : MonoBehaviour
 
         handle_quitBtn.gameObject.SetActive(true);
     }
-    void StartRandomSeed()
+    void StartMutationMode()
     {
-        bgmEmitter.SetParameter(ExitMenuParm, 1);
-        titleAnimations.ExitAnim();
-        DelayedLaunch(GAME_MODE.RANDOM_SEED);
+        DelayedLaunch(GAME_MODE.MUTATION);
     }
     void StartDailySeed()
     {
-        bgmEmitter.SetParameter(ExitMenuParm, 1);
-        titleAnimations.ExitAnim();
         DelayedLaunch(GAME_MODE.DAILY_SEED);
     }
-    void StartSprint()
+    void StartCustom()
     {
-        DelayedLaunch(GAME_MODE.SPRINT);
+        DelayedLaunch(GAME_MODE.CUSTOM);
     }
 
     async UniTaskVoid DelayedLaunch(GAME_MODE iGameMode)
     {
         bgmEmitter.SetParameter(ExitMenuParm, 1);
+        titleAnimations.ExitAnim();
         await Transition();
         GameData.Get.PickGameMode(iGameMode);
         SceneManager.LoadScene(GameScene, LoadSceneMode.Single);

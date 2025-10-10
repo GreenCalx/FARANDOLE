@@ -17,6 +17,6 @@ MonoBehaviour:
   - gameMode: 0
     settings: {fileID: 11400000, guid: 55846b72a52e9754f9b3893e872a06b4, type: 2}
   - gameMode: 1
-    settings: {fileID: 11400000, guid: 55846b72a52e9754f9b3893e872a06b4, type: 2}
+    settings: {fileID: 11400000, guid: 0697016cebe55f348aeb7caa0ad30eab, type: 2}
   - gameMode: 2
-    settings: {fileID: 11400000, guid: af30005369517ca47af61c7d8fb78805, type: 2}
+    settings: {fileID: 11400000, guid: da824db7a0ba3054bbc669197223d556, type: 2}

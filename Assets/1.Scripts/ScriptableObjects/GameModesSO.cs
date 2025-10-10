@@ -5,9 +5,9 @@ using UnityEngine;
 
 public enum GAME_MODE
 {
-    RANDOM_SEED,
     DAILY_SEED,
-    SPRINT
+    MUTATION,
+    CUSTOM
 };
 
 [CreateAssetMenu(fileName = "GameModesSO", menuName = "Scriptable Objects/GameModesSO")]

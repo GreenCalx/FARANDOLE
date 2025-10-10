@@ -14,14 +14,14 @@ public class MiniGameBankSO : ScriptableObject
     {
         switch (iGameMode)
         {
-            case GAME_MODE.RANDOM_SEED:
-                return GetRandom(GameData.GetSettings.loopSize);
             case GAME_MODE.DAILY_SEED:
+                return GetRandom(GameData.GetSettings.loopSize);
+            case GAME_MODE.MUTATION:
                 return GetDaily(GameData.GetSettings.loopSize);
-            case GAME_MODE.SPRINT:
+            case GAME_MODE.CUSTOM:
                 return GetRandom(GameData.GetSettings.loopSize);
             default:
-                return GetRandom(GameData.GetSettings.loopSize);
+                return GetFromGameMode(GAME_MODE.DAILY_SEED);
         }
     }
     public List<GameObject> GetRandom(int iNumber)
