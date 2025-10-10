@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Pawn : ChessPiece
 {
-
     override public List<Tile> GetLegalMoves()
     {
         List<Tile> moves = new List<Tile>();

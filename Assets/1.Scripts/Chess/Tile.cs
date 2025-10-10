@@ -6,7 +6,7 @@ public class Tile : MonoBehaviour, ITapTracker
 
     public int x, y;
     private ChessBoard board;
-    private Knight occupant;
+    private ChessPiece occupant;
     private SpriteRenderer sr;
 
     private BoxCollider2D col;
@@ -48,8 +48,8 @@ public class Tile : MonoBehaviour, ITapTracker
     }
 
     public int GetDisplayPriority(){ return 0; }
-    public void SetOccupant(Knight k) { occupant = k; }
+    public void SetOccupant(ChessPiece k) { occupant = k; }
     public void ClearOccupant() { occupant = null; }
     public bool IsOccupied() { return occupant != null; }
-    public Knight GetOccupant() { return occupant; }
+    public ChessPiece GetOccupant() { return occupant; }
 }

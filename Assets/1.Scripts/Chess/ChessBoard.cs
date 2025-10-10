@@ -3,15 +3,22 @@ using System.Collections.Generic;
 using GooglePlayGames.BasicApi;
 using Cysharp.Threading.Tasks;
 public enum PlayerColor { White, Black }
+public enum PieceType {Pawn,Knight,Bishop,Tower, King, Queen}
 public class ChessBoard : MonoBehaviour
 {
 
 
     [Header("Prefabs & Sprites")]
     public GameObject tilePrefab;
+
     public GameObject knightPrefab;
+    public GameObject towerPrefab;
+    public GameObject pawnPrefab;
+    public GameObject bishopPrefab;
     public GameObject queenPrefab;
-    public GameObject blackKnightPrefab;
+    public GameObject kingPrefab;
+
+
 
 
     [Header("Board Settings")]
@@ -21,18 +28,16 @@ public class ChessBoard : MonoBehaviour
 
     private Tile[,] tiles;
 
-    private Knight playerPiece;
-    private List<Knight> knights = new List<Knight>();
+    private List<ChessPiece> enemies = new List<ChessPiece>();
+    private ChessPiece playerPiece;
     private List<Tile> legalMoves;
-    private int knightSpawnMargin;
-    private int enemyCounter = 0;
 
     private int diff;
-    public void Init(int difficulty)
+
+    public bool blackPlays = false;
+    public void Init(int size)
     {
-        difficultyParameters(difficulty);
-        GenerateBoard();
-        PlaceInitialPieces();
+        GenerateBoard(size); //
         SelectChessPiece(playerPiece);
     }
 
@@ -42,13 +47,13 @@ public class ChessBoard : MonoBehaviour
         {
             foreach (var t in tiles) if (t != null) Destroy(t.gameObject);
         }
-        GenerateBoard();
-        PlaceInitialPieces();
+        GenerateBoard(boardSize);
         SelectChessPiece(playerPiece);
     }
 
-    void GenerateBoard()
+    void GenerateBoard(int size)
     {
+        boardSize = size;
         tiles = new Tile[boardSize, boardSize];
         Vector2 origin = new Vector2(-boardSize / 2f * tileSize + tileSize / 2f, -boardSize / 2f * tileSize + tileSize / 2f);
         Tile tile;
@@ -70,60 +75,8 @@ public class ChessBoard : MonoBehaviour
     }
 
 
-    void difficultyParameters(int difficulty)
-    {
-        if (difficulty == 1)
-        {
-            knightSpawnMargin = 1;
-            boardSize = 6;
-            enemyCounter = 1;
-        }
-        if (difficulty == 2)
-        {
-            knightSpawnMargin = 1;
-            boardSize = 7;
-            enemyCounter = 1;
-        }
-        if (difficulty == 3)
-        {
-            knightSpawnMargin = 0;
-            boardSize = 8;
-            enemyCounter = 1;
-        }
-        if (difficulty == 4)
-        {
-            knightSpawnMargin = 2;
-            boardSize = 8;
-            enemyCounter = 2;
-        }
-        if (difficulty == 5)
-        {
-            knightSpawnMargin = 0;
-            boardSize = 8;
-            enemyCounter = 2;
-        }
-    }
 
-    void PlaceInitialPieces()
-    {
-        int[] positions = new int[2 + enemyCounter * 2];
-
-        positions[0] = Random.Range(0, boardSize);
-        positions[1] = Random.Range(0, boardSize);
-        SpawnKnight(positions[0], positions[1], PlayerColor.White);
-        for (int i = 1; i < 1 + enemyCounter; i++)
-        {
-            do
-            {
-                positions[2 * i] = Random.Range(knightSpawnMargin, boardSize - knightSpawnMargin);
-                positions[2 * i + 1] = Random.Range(knightSpawnMargin, boardSize - knightSpawnMargin);
-            } while (containsPositon(positions, positions[2 * i], positions[2 * i + 1], i));
-            SpawnKnight(positions[2 * i], positions[2 * i + 1], PlayerColor.Black);
-        }
-
-    }
-
-    private bool containsPositon(int[] pos, int x, int y, int numberOfPlacedPieces)
+    public bool containsPositon(int[] pos, int x, int y, int numberOfPlacedPieces)
     {
         for (int i = 0; i < numberOfPlacedPieces; i++)
         {
@@ -135,24 +88,50 @@ public class ChessBoard : MonoBehaviour
         return false;
     }
 
-    Knight SpawnKnight(int x, int y, PlayerColor color)
+    public void SpawnPiece(int x, int y, PlayerColor color, PieceType type)
     {
         Vector3 pos = tiles[x, y].transform.position;
 
-        Knight knight = GOBuilder.Create(color == PlayerColor.White ? knightPrefab : blackKnightPrefab)
-            .WithName("Knight" + color.ToString())
+        GameObject prefab;
+
+        switch (type)
+        {
+            case PieceType.Bishop:
+                prefab = bishopPrefab;
+                break;
+            case PieceType.Knight:
+                prefab = knightPrefab;
+                break;
+            case PieceType.Pawn:
+                prefab = pawnPrefab;
+                break;
+            case PieceType.Tower:
+                prefab = towerPrefab;
+                break;
+            case PieceType.Queen:
+                prefab = queenPrefab;
+                break;
+            default :
+                prefab = kingPrefab;
+                break;
+        }
+
+        ChessPiece cp = GOBuilder.Create(prefab)
+            .WithName("ChessPiece" + color.ToString())
             .WithParent(transform)
             .WithPosition(pos)
-            .Build().GetComponent<Knight>();
+            .Build().GetComponent<ChessPiece>();
 
         if (color == PlayerColor.White)
         {
-            playerPiece = knight;
+            playerPiece = cp;
         }
-        knight.Init(x, y, color, this);
-        knights.Add(knight);
-        tiles[x, y].SetOccupant(knight);
-        return knight;
+        else
+        {
+            enemies.Add(cp);
+        }
+        cp.Init(x, y, color, this);
+        tiles[x, y].SetOccupant(cp);
     }
 
 
@@ -163,20 +142,19 @@ public class ChessBoard : MonoBehaviour
     }
 
 
-    public void MoveKnight(Tile to)
+    public void MovePlayer(Tile to)
     {
         Tile from = GetTile(playerPiece.x, playerPiece.y);
         if (to == null) return;
 
         if (to.IsOccupied())
         {
-            Knight other = to.GetOccupant();
+            ChessPiece other = to.GetOccupant();
             if (other != null && other.Color != playerPiece.Color)
             {
-                knights.Remove(other);
+                enemies.Remove(other);
                 other.GetComponent<ChessPiece>().Die();
                 playerPiece.SpecialPose().Forget();
-                enemyCounter--;
             }
             else
             {
@@ -185,14 +163,54 @@ public class ChessBoard : MonoBehaviour
         }
 
 
-        from.ClearOccupant();
-        playerPiece.SetPosition(to.x, to.y);
-        to.SetOccupant(playerPiece);
+        MovePiece(from, to, playerPiece);
 
         CheckWinCondition();
+        if (blackPlays)
+        {
+            MoveBlacks();
+        }
         SelectChessPiece(playerPiece);
+
+
     }
 
+    void MoveBlacks()
+    {
+        List<Tile> positions;
+        foreach (ChessPiece bcp in enemies)
+        {
+            positions = bcp.GetLegalMoves();
+            Utils.Shuffle<Tile>(positions);
+            for (int i = 0; i < positions.Count; i++)
+            {
+                if (!positions[i].IsOccupied())
+                {
+                    int x, y;
+                    bcp.GetPos(out x, out y);
+                    MovePiece(GetTile(x, y), positions[i], bcp);
+                }
+            }
+        }
+    }
+
+    void MovePiece(Tile from, Tile to, ChessPiece piece)
+    {
+        from.ClearOccupant();
+        if (piece is Pawn pawn)
+        {
+            if (piece.y == boardSize - 1 || piece.y == 0) //Promote
+            {
+                enemies.Remove(piece);
+                SpawnPiece(to.x, to.y, piece.Color, PieceType.Queen);
+            }
+        }
+        else
+        {
+            piece.SetPosition(to.x, to.y);
+            to.SetOccupant(piece);
+        }       
+    }
     void SelectChessPiece(ChessPiece piece)
     {
         legalMoves = piece.GetLegalMoves();
@@ -204,7 +222,7 @@ public class ChessBoard : MonoBehaviour
 
     void CheckWinCondition()
     {
-        if (enemyCounter <= 0)
+        if (enemies.Count == 0)
         {
             GetComponentInParent<MiniGame>().Win();
         }
@@ -219,7 +237,7 @@ public class ChessBoard : MonoBehaviour
                 legalTile.Highlight(false);
             }
             legalMoves.Clear();
-            MoveKnight(t);
+            MovePlayer(t);
 
         }
     }
@@ -233,8 +251,8 @@ public class ChessBoard : MonoBehaviour
             iPC.RemoveTapTracker(t);
             Destroy(t.gameObject);
         }
-        foreach (var k in knights) if (k != null) Destroy(k.gameObject);
-        knights.Clear();
+        foreach (var k in enemies) if (k != null) Destroy(k.gameObject);
+        enemies.Clear();
 
         if (playerPiece != null)
             Destroy(playerPiece.gameObject);

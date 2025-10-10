@@ -40,6 +40,11 @@ public abstract class ChessPiece : MonoBehaviour
         transform.position = board.GetTile(x, y).transform.position;
     }
 
+    public void GetPos(out int posX, out int posY)
+    {
+        posX = x;
+        posY = y;
+    }
     public abstract List<Tile> GetLegalMoves();
 
     public async UniTask SpecialPose()

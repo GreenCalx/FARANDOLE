@@ -24,6 +24,10 @@ public class PlayerController : MonoBehaviour
     Vector2 lastTouchWorldPos;
 
     bool freezeInputs = false;
+
+    float lastTimeTouch;
+    float firstTimeTouch;
+
     public bool IsFrozen
     {
         get { return freezeInputs; }
@@ -61,6 +65,7 @@ public class PlayerController : MonoBehaviour
         if (freezeInputs)
             return;
 
+        firstTimeTouch = Time.fixedUnscaledTime;
         firstTouchWorldPos = GetWorldPos(finger.screenPosition);
         positionTrackers.ForEach(e => e.OnStartTracking(firstTouchWorldPos));
     }
@@ -70,6 +75,7 @@ public class PlayerController : MonoBehaviour
         if (freezeInputs)
             return;
 
+        lastTimeTouch = Time.fixedUnscaledTime;
         lastTouchWorldPos = GetWorldPos(finger.screenPosition);
         positionTrackers.ForEach(e => e.OnStopTracking(lastTouchWorldPos));
         if (HaveSwipers())
@@ -99,6 +105,7 @@ public class PlayerController : MonoBehaviour
                 .Where(e => e.enabled)
                 .OrderByDescending(e => e.GetDisplayPriority())
                 .ToList();
+                tapTrackersModified = false;
             }
             foreach (ITapTracker tracker in tapTrackers)
             {
@@ -149,9 +156,12 @@ public class PlayerController : MonoBehaviour
 
         foreach (EnhancedTouch.Touch touch in EnhancedTouch.Touch.activeTouches)
         {
-            if ((touch.phase == UnityEngine.InputSystem.TouchPhase.Ended) && (touch.tapCount >= 1))
+
+            if ((touch.phase == UnityEngine.InputSystem.TouchPhase.Ended)) //tapCount >= 1, problemes avec time scale?
             {
-                Tap(touch);
+                //Tap sur la même position et moins d'une seconde
+                if ((lastTouchWorldPos - firstTouchWorldPos).sqrMagnitude < 0.01f && lastTimeTouch - firstTimeTouch <= 1)
+                    Tap(touch);
                 // Swipe(touch);
             }
             if (touch.phase == UnityEngine.InputSystem.TouchPhase.Moved)
