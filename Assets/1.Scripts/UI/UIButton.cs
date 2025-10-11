@@ -20,6 +20,10 @@ public class UIButton : Button, IPointerUpHandler, IPointerDownHandler, IPointer
     UITag tag;
     bool pressed = false;
 
+    void Awake()
+    {
+       // clickCallback = new UnityEvent();
+    }
     void Start()
     {
         ui_img = GetComponent<Image>();

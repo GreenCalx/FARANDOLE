@@ -140,10 +140,12 @@ PlayerSettings:
   loadStoreDebugModeEnabled: 0
   visionOSBundleVersion: 1.0
   tvOSBundleVersion: 1.0
-  bundleVersion: 0.5
+  bundleVersion: 0.6
   preloadedAssets:
   - {fileID: -944628639613478452, guid: 9c15b0db52f1f4a41b18f5e2a943e43d, type: 3}
   - {fileID: 11400000, guid: 5e562b16f3477b14eacf9fc73592ea54, type: 2}
+  - {fileID: -147551953535198308, guid: ca4f0749513c4a144b2f2c45b3417e66, type: 2}
+  - {fileID: 11400000, guid: ec56eba5d1ca8134d8697bce0090e1bf, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -176,7 +178,7 @@ PlayerSettings:
     iPhone: 0
     tvOS: 0
   overrideDefaultApplicationIdentifier: 1
-  AndroidBundleVersionCode: 5
+  AndroidBundleVersionCode: 6
   AndroidMinSdkVersion: 23
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 1

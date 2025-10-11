@@ -14,7 +14,7 @@ public class SignInService : MonoBehaviour
     public Button OfflineBtn;
     public TextMeshProUGUI connectionText;
     public UnityEvent OnSignIn;
-
+    public UIPlayerProfileCard playerCard;
     // TODO : bad security maybe, just for quick testing atm.
     bool signedIn = false;
     bool authentificationProcessed = false;
@@ -23,6 +23,12 @@ public class SignInService : MonoBehaviour
 
     public void Start()
     {
+        if (PlayGamesPlatform.Instance.IsAuthenticated())
+        {
+            EnableProfileCard();
+            Destroy(gameObject);
+        }
+
         signedIn = false;
         retry = true;
 
@@ -32,6 +38,7 @@ public class SignInService : MonoBehaviour
         authentificationProcessed = false;
         SignInBtn?.onClick.AddListener(() => TrySignIn());
         OfflineBtn?.onClick.AddListener(() => OfflineMode());
+        OnSignIn.AddListener(() => EnableProfileCard());
 
         WaitSignIn();
     }
@@ -44,6 +51,10 @@ public class SignInService : MonoBehaviour
         kill = true;
     }
 
+    void EnableProfileCard()
+    {
+        playerCard.gameObject.SetActive(true);
+    }
     public void OfflineMode()
     {
         signedIn = true;

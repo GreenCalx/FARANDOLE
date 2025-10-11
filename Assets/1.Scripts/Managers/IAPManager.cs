@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using Unity.Services.Core;
-// using Unity.Services.IAP;
-// using Unity.Services.IAP.AppStore;
-// using Unity.Services.IAP.AppleStore;
-// using Unity.Services.IAP.GooglePlay;
 using UnityEngine.Purchasing;
 using UnityEngine.Purchasing.Extension;
 using Cysharp.Threading.Tasks;
@@ -15,18 +12,20 @@ public class IAPManager : MonoBehaviour
 {
     private StoreController m_StoreController;
     private PurchaseService purchaseService;
-    //private IExtensionProvider storeExtensionProvider;
+    public Transform m_HandleStorePage;
 
     private static IAPManager instance = null;
     public static IAPManager Get => instance;
 
     readonly string kPremiumAccStoreKey = "premium_account";
     readonly string kLocalPremiumUnlocked = "PremiumFeatures";
-
+    StandardPurchasingModule m_PurchasingModule;
+    public UnityEvent m_OnPremium;
     bool m_Initialized
     {
-        get { return m_StoreController != null && purchaseService != null; }
+        get { return m_StoreController != null; }
     }
+    bool m_InTransaction = false;
     void Awake()
     {
         if (instance != null && instance != this)
@@ -63,47 +62,85 @@ public class IAPManager : MonoBehaviour
     {
         m_StoreController = UnityIAPServices.StoreController();
         m_StoreController.OnPurchasePending += OnPurchasePending;
+        m_StoreController.OnPurchaseConfirmed += OnPurchaseConfirmed;
+        m_StoreController.OnPurchaseFailed += OnPurchaseFailed;
+        m_StoreController.OnStoreDisconnected += OnStoreDisconnected;
 
         // Connect to the store
         await m_StoreController.Connect();
 
         m_StoreController.OnProductsFetched += OnProductsFetched;
-        m_StoreController.OnPurchasesFetched += OnPurchasesFetched ;
+        m_StoreController.OnPurchasesFetched += OnPurchasesFetched;
 
         // Fetch products
-        var initialProductsToFetch = new List<ProductDefinition>  
-        {  
-            new(kPremiumAccStoreKey, ProductType.NonConsumable),  
-        };  
-    
-        m_StoreController.FetchProducts(initialProductsToFetch);  
+        var initialProductsToFetch = new List<ProductDefinition>
+        {
+            new(kPremiumAccStoreKey, ProductType.NonConsumable),
+        };
+
+        m_StoreController.FetchProducts(initialProductsToFetch);
+
+        m_PurchasingModule = StandardPurchasingModule.Instance();
+
+#if UNITY_EDITOR
+            PlayerPrefs.SetInt(kLocalPremiumUnlocked, 0);
+            m_PurchasingModule.useFakeStoreAlways = true;
+            m_PurchasingModule.useFakeStoreUIMode = FakeStoreUIMode.Default;
+#endif
+
     }
-    void OnProductsFetched(List<Product> products)  
+    
+    void OnStoreDisconnected(StoreConnectionFailureDescription iReason)
     {
+        Debug.Log("Store disconnected");
+    }
+    void OnProductsFetched(List<Product> products)
+    {
+        Debug.Log("OnProductsFetched");
         // Handle fetched products  
         m_StoreController.FetchPurchases();
     }
     void OnPurchasesFetched(Orders orders)
     {
+        Debug.Log("OnPurchasesFetched");
         // Process purchases, e.g. check for entitlements from completed orders
         CheckPremiumPurchased();
     }
-    
-    void OnPurchasePending(PendingOrder iPendingOrder)
+
+    public void OnPurchasePending(PendingOrder iPendingOrder)
     {
-        // 
+        Debug.Log("Pending Order");
+        m_StoreController.ConfirmPurchase(iPendingOrder);
+    }
+
+    public void OnPurchaseConfirmed(Order iOrder)
+    {
+        Debug.Log("OnPurchaseConfirmed Order");
+        CheckPremiumPurchased();
+        CloseStore();
+        m_InTransaction = false;
+    }
+    
+    private void OnPurchaseFailed(FailedOrder iOrder)
+    {
+        Debug.LogError("Purchase failed.");
     }
 
     // -------------------------------
 
     public void BuyPremiumContent()
     {
+        if (m_InTransaction)
+            return;
+
         if (m_Initialized)
         {
             Product product = m_StoreController.GetProductById(kPremiumAccStoreKey);
             if (product != null && product.availableToPurchase)
             {
                 m_StoreController.PurchaseProduct(product);
+                Debug.Log("Purchase product called on : " + kPremiumAccStoreKey);
+                m_InTransaction = true;
             }
             else
             {
@@ -125,17 +162,30 @@ public class IAPManager : MonoBehaviour
     {
         if (!m_Initialized)
             return false;
+        if (PlayerPrefs.GetInt(kLocalPremiumUnlocked, 0) == 1)
+            return true;
 
         var purchases = m_StoreController.GetPurchases();
         foreach(Order order in purchases)
         {
             if (order is ConfirmedOrder)
             {
-                Debug.Log("Product " + kPremiumAccStoreKey + " purchased !");
+                Debug.Log("Product " + kPremiumAccStoreKey + " purchase found. ");
                 PlayerPrefs.SetInt(kLocalPremiumUnlocked, 1);
+                m_OnPremium.Invoke();
                 return true;
             }
         }
         return false;
+    }
+
+    public void OpenStore()
+    {
+        m_HandleStorePage.gameObject.SetActive(true);
+    }
+
+    public void CloseStore()
+    {
+        m_HandleStorePage.gameObject.SetActive(false);
     }
 }
