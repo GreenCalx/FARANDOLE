@@ -12,7 +12,8 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
     public RectTransform OverlaySpace;
     public RectTransform CameraSpace;
     [Header("Player UI")]
-    public TextMeshProUGUI miniGameClock;
+    //public TextMeshProUGUI miniGameClock;
+    public UIMiniGameClock miniGameClock;
     public Image m_HPImage;
     public Image timeIndicatorImg;
     public RotateAlongTimeAnim timeNeedleAnim;
@@ -34,17 +35,20 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
     [Header("Callbacks")]
     public UnityEvent OnBeforeLoopDepth;
     public UIButton skipAnimBtn;
-    // Internals
+    
+    [Header("Internal references")]
     bool InitDone = false;
     AnimationManager ANIM;
     AudioManager AUDIO;
     MiniGameManager MGM;
+    PlayerData m_PlayerData;
 
     public void Init(GameManager iGameManager)
     {
         ANIM = iGameManager.ANIM;
         AUDIO = iGameManager.AUDIO;
         MGM = iGameManager.MGM;
+        m_PlayerData = iGameManager.playerData;
         h_PauseMenu.PC = iGameManager.PC;
         miniGameClock.text = GameData.GetSettings.MiniGameTime.ToString("#0");
 
@@ -64,7 +68,7 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
 
         ShowMiniGameMode(false);
         
-        Refresh();
+        handle_UIDoorAnim.Init();
         InitDone = true;
     }
 
@@ -75,19 +79,8 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
 
     public void Refresh()
     {
-        // infoArea.anchoredPosition = new Vector2(0f, -GameData.GetSettings.GameUIScreenProportion * Screen.height);
-        // infoArea.sizeDelta = new Vector2(0f, Screen.height * GameData.GetSettings.GameUIScreenProportion);
-
-        // TODO : compute sizes according to screen.
-        // scoreUIVisuals.sizeDelta = new Vector2(256f, 256f);
-
-        // scoreUIText.sizeDelta = new Vector2(158.78f, 200f);
-        // scoreUIText.anchoredPosition += new Vector2(-12.9f, 128f);
-
-        handle_UIDoorAnim.Init();
-
-        //handle_animLoopSuccess.passedTextColor = GameData.GetUITheme.PositiveTimeColor;
-        //handle_animLoopSuccess.failedTextColor = GameData.GetUITheme.NegativeTimeColor;
+        miniGameClock.text = Mathf.Ceil(MGM.gameClock.GetRemainingTime()).ToString("#0");
+        RefreshHPImage(m_PlayerData);
     }
 
     public void RefreshHPImage(PlayerData iData)

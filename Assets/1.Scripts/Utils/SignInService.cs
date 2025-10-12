@@ -10,6 +10,7 @@ using TMPro;
 
 public class SignInService : MonoBehaviour
 {
+    public Transform m_SignInUI;
     public Button SignInBtn;
     public Button OfflineBtn;
     public TextMeshProUGUI connectionText;
@@ -28,6 +29,8 @@ public class SignInService : MonoBehaviour
             EnableProfileCard();
             Destroy(gameObject);
         }
+
+        m_SignInUI.gameObject.SetActive(true);
 
         signedIn = false;
         retry = true;
