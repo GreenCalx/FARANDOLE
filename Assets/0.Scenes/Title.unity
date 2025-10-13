@@ -5585,7 +5585,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fd0e83c22e97024699206fd50a8e125, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SignInUI: {fileID: 1618228072}
+  m_SignInUI: {fileID: 1743115350}
   SignInBtn: {fileID: 1786533380}
   OfflineBtn: {fileID: 936088751}
   connectionText: {fileID: 564658120}

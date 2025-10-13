@@ -580,6 +580,7 @@ MonoBehaviour:
   IsActiveMiniGame: 0
   IsInPostGame: 0
   successState: 0
+  hasIntro: 0
   finishLine: {fileID: 2639687645726103807}
   prefab_ballToEscape: {fileID: 4784646498703449647, guid: 0d739d971aabeca459808abace071bc5, type: 3}
   inst_Labyrinth: {fileID: 8487501759319076828}
@@ -6184,7 +6185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4135755091be5324387fac995327eda1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LabMat: {fileID: 2100000, guid: 3605a5b0a6afc9949bfeab4432ac1384, type: 2}
+  LabMat: {fileID: 2100000, guid: a78d3f0b5ce2d324a917bba26a1600be, type: 2}
   visualLab: {fileID: 0}
 --- !u!50 &7618993489830231932
 Rigidbody2D:

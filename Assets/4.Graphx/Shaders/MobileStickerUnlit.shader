@@ -19,7 +19,9 @@ Shader "XL/MobileStickerUnlit"
         [Enum(Off,0,On,1)]_Shine("Shine",Int) = 1
         _ShineColor ("ShineColor", Color) = (1,1,1,1)
         _ShineBandWidth("ShineBandWidth",Float) = 0.03
-        _ShineSpeed("ShineSpeed", Float) = 0.05
+        _ShineSpeedX("ShineSpeedX", Float) = 0.05
+        _ShineSpeedY("ShineSpeedY", Float) = 0.05
+        _ShineAngle("ShineAngle", Float) = 45
 
         _OutlineColor("OutlineColor", Color) = (1,1,1,1)
         _OutlineSize("OutlineSize", Float) = 1
@@ -63,8 +65,10 @@ Shader "XL/MobileStickerUnlit"
         float4 _MainTex_ST;
         fixed _Shine;
         float _ShineBandWidth;
-        float _ShineSpeed;
+        float _ShineSpeedX;
+        float _ShineSpeedY;
         float _AlphaCutoff;
+        float _ShineAngle;
 
         v2f vertOutline(appdata_t IN)
         {
@@ -114,6 +118,19 @@ Shader "XL/MobileStickerUnlit"
             return lerp(targetFrom, targetTo, rel);
         }
 
+        float2 rotate2D(float2 _st, float _angle)
+        {
+            _st -= 0.5;
+
+            float2x2 inter = float2x2(
+                        cos(_angle), -sin(_angle),
+                        sin(_angle),  cos(_angle)
+                        );
+            _st =  mul(inter ,_st);
+            _st += 0.5;
+            return _st;
+        }
+        
         ENDCG
 
         // Unlit pass
@@ -153,10 +170,12 @@ Shader "XL/MobileStickerUnlit"
                     return col;
             
                 // Move band center with time
-                float bandCenter = lerp(0,1, frac(_Time.y*_ShineSpeed));               
+                float bandCenterX = lerp(0,1, frac(_Time.y*_ShineSpeedX));               
+                float bandCenterY = lerp(0,1, frac(_Time.y*_ShineSpeedY));               
 
                 // Retrieve frag dist from bandcenter
-                float dist = bandCenter - i.uv.x;
+                //float dist = (bandCenterX - i.uv.x) - (bandCenterY - i.uv.y);
+                float dist = ((bandCenterX - rotate2D(i.uv, _ShineAngle).x) - (bandCenterY -  rotate2D(i.uv, _ShineAngle).y));
                 dist = sqrt(dist*dist);
 
                 if (dist <= _ShineBandWidth)

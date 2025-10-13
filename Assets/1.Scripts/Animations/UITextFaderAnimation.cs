@@ -138,6 +138,8 @@ public class UITextFaderAnimation : MonoBehaviour
                     }
                 }
             }
+            if (targetTxt == null)
+                return;
             targetTxt.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
             if (currentCharacter + 1 < characterCount)
                 currentCharacter++;
