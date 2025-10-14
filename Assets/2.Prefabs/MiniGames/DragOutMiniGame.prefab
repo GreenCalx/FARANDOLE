@@ -583,6 +583,8 @@ MonoBehaviour:
   hasIntro: 0
   finishLine: {fileID: 2639687645726103807}
   prefab_ballToEscape: {fileID: 4784646498703449647, guid: 0d739d971aabeca459808abace071bc5, type: 3}
+  ballClosedSprite: {fileID: 21300000, guid: 72ec9b67f37c50f409fc2874a85d48da, type: 3}
+  ballOpenSprite: {fileID: 21300000, guid: 07c498e3321ce0f4fa0b02c191d9a130, type: 3}
   inst_Labyrinth: {fileID: 8487501759319076828}
   diff1Layouts:
   - {fileID: 4726206639710619473, guid: add235bbb1d47394db43cd70fe028554, type: 3}
