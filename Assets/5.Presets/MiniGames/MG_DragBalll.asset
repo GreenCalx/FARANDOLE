@@ -15,7 +15,7 @@ MonoBehaviour:
   ID: 7
   name: DragBall
   goal: Drag the ball outside the box
-  thumbNailImg: {fileID: 21300000, guid: 5f84ee867ef9ec742b5c7f46a299cb85, type: 3}
+  thumbNailImg: {fileID: 21300000, guid: e00e8e897433af0439be590c708f4a0a, type: 3}
   prefab_MiniGame: {fileID: 2266623309687070485, guid: b5b8eac1938e1384e85eab4e8998b613, type: 3}
   tags: 01000000
   orientationRequirement: 2

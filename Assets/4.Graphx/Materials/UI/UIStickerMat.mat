@@ -61,6 +61,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _AlphaCutoff: 0.5
     - _Brightness: 3.51
     - _BumpScale: 1
     - _CullMode: 2
@@ -77,8 +78,11 @@ Material:
     - _OutlineSize: 5.36
     - _Parallax: 0.02
     - _Shine: 1
-    - _ShineBandWidth: 0.32
+    - _ShineAngle: 65.74
+    - _ShineBandWidth: 0.9
     - _ShineSpeed: 0.71
+    - _ShineSpeedX: 1
+    - _ShineSpeedY: 2
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -88,6 +92,6 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _OutlineColor: {r: 1, g: 1, b: 1, a: 1}
-    - _ShineColor: {r: 1, g: 1, b: 1, a: 0.18431373}
+    - _ShineColor: {r: 1, g: 1, b: 1, a: 0.33333334}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

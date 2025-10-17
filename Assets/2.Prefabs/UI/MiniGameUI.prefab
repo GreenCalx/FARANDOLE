@@ -387,7 +387,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: 669fc3a2495674442b1fac19bafa84a8, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 0.8}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -1791,9 +1791,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e72b0ea2f6846a048bb6db0e1e013aa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 2407649389579048574}
+  m_Animator: {fileID: 0}
   IsShown: 0
-  animator: {fileID: 0}
 --- !u!1 &2553176466832485399
 GameObject:
   m_ObjectHideFlags: 0
@@ -2246,6 +2245,8 @@ GameObject:
   m_Component:
   - component: {fileID: 664388261695531494}
   - component: {fileID: 1856225011989343196}
+  - component: {fileID: 6821998763738773468}
+  - component: {fileID: 8152932993109307206}
   m_Layer: 5
   m_Name: o_PauseMenu
   m_TagString: Untagged
@@ -2296,6 +2297,46 @@ MonoBehaviour:
   h_ExitBtn: {fileID: 8930240675538302979}
   h_TintBackground: {fileID: 7497232089315781569}
   PC: {fileID: 0}
+--- !u!223 &6821998763738773468
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2856993360011291144}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 1
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 99
+  m_TargetDisplay: 0
+--- !u!114 &8152932993109307206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2856993360011291144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1 &2962431248442609980
 GameObject:
   m_ObjectHideFlags: 0
@@ -2801,7 +2842,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   OverlaySpace: {fileID: 5947117843415238699}
   CameraSpace: {fileID: 3206059287346949142}
-  miniGameClock: {fileID: 2113449347020115204}
+  miniGameClock: {fileID: 4810562953438799937}
   m_HPImage: {fileID: 637431863129588419}
   timeIndicatorImg: {fileID: 4909375525986423983}
   timeNeedleAnim: {fileID: 4473547259170245384}
@@ -3412,7 +3453,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 314f47b4cd61ead4c9f625be938e1b45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 0}
+  m_Animator: {fileID: 0}
   IsShown: 0
   loopPassedTextAnim: {fileID: 2957891142391670109}
   loopPassedTxt: {fileID: 5902086620705578079}
@@ -5262,7 +5303,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   propertyName: _Color
-  propertyValue: {r: 0, g: 0, b: 0, a: 0.8}
+  propertyValue: {r: 0, g: 0, b: 0, a: 0.9019608}
   isHDR: 0
 --- !u!1 &6470894489248042201
 GameObject:
@@ -5866,6 +5907,7 @@ GameObject:
   - component: {fileID: 418623614397977609}
   - component: {fileID: 2108465398614114730}
   - component: {fileID: 2113449347020115204}
+  - component: {fileID: 4810562953438799937}
   m_Layer: 5
   m_Name: StageTime
   m_TagString: Untagged
@@ -5991,6 +6033,19 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &4810562953438799937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7137380272679676587}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6396a24ebd9a1d14d802fd5314a71465, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_UIText: {fileID: 2113449347020115204}
 --- !u!1 &7144378342229539249
 GameObject:
   m_ObjectHideFlags: 0

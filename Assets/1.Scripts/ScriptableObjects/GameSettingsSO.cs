@@ -30,9 +30,8 @@ public class GameSettingsSO : ScriptableObject
     [Header("GameFlow Tweaks")]
     public int PostMiniGameLatchInMs = 500;
     public int PreMiniGameLatchInMs = 500;
-    public int LoopCompleteAfterAnimDisplayTimeMs = 1000;
-    public int LoopCompleteShowDepthAnimDisplayTimeMs = 500;
     public float PlayGroundColorLerpTimeSec = 1f;
     public float BGMRankLerpTimeSec = 1f;
+    public float GameClockScaleAnimDuration = 0.25f;
 
 }

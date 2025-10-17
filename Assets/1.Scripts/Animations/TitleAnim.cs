@@ -34,8 +34,7 @@ public class TitleAnim : MonoBehaviour
         initOutCellColor = titleMat.GetColor(sParmOutCellColor);
         initTint = titleMat.GetColor(sParmTint);
         initMinDist = titleMat.GetFloat(sParmMinDist);
-        initImageScale = image.rectTransform.localScale.x;
-
+        initImageScale = image.rectTransform.localScale.x; 
     }
 
     void OnDestroy()

@@ -70,6 +70,8 @@ public class GameManager : MonoBehaviour
         while (!UI.IsReady())
         { yield return null; }
         MGM.UI = UI; // TODO dirty fix
+
+        InitCallbacks();
         UI.PresentLoop();
         UI.launchGameBtn?.clickCallback.AddListener(() => StartGame());
     }
@@ -82,9 +84,9 @@ public class GameManager : MonoBehaviour
        // MGM.ShowPostGameUICB.AddListener(UI.ShowSuccessArea);
 
         UI.OnBeforeLoopDepth.AddListener(OnLoopDepthUpdate);
-        UI.h_PauseMenu.h_ResumeBtn.onClick.AddListener(() => { UI.h_PauseMenu.Toggle(); });
-        UI.h_PauseMenu.h_TryAgainBtn.onClick.AddListener(() => { UI.h_PauseMenu.Toggle(); RestartGame(); });
-        UI.h_PauseMenu.h_ExitBtn.onClick.AddListener(() => { UI.h_PauseMenu.Toggle(); ExitToTitle(); });
+        UI.h_PauseMenu.h_ResumeBtn.clickCallback.AddListener(() => { UI.h_PauseMenu.Toggle(); });
+        UI.h_PauseMenu.h_TryAgainBtn.clickCallback.AddListener(() => { UI.h_PauseMenu.Toggle(); RestartGame(); });
+        UI.h_PauseMenu.h_ExitBtn.clickCallback.AddListener(() => { UI.h_PauseMenu.Toggle(); ExitToTitle(); });
     }
 
     void RemoveCallbacks()
@@ -95,9 +97,9 @@ public class GameManager : MonoBehaviour
        // MGM.ShowPostGameUICB.RemoveListener(UI.ShowSuccessArea);
 
         UI.OnBeforeLoopDepth.RemoveListener(OnLoopDepthUpdate);
-        UI.h_PauseMenu.h_ResumeBtn.onClick.RemoveListener(() => { UI.h_PauseMenu.Toggle(); });
-        UI.h_PauseMenu.h_TryAgainBtn.onClick.RemoveListener(() => { UI.h_PauseMenu.Toggle(); RestartGame(); });
-        UI.h_PauseMenu.h_ExitBtn.onClick.RemoveListener(() => { UI.h_PauseMenu.Toggle(); ExitToTitle(); });
+        UI.h_PauseMenu.h_ResumeBtn.clickCallback.RemoveListener(() => { UI.h_PauseMenu.Toggle(); });
+        UI.h_PauseMenu.h_TryAgainBtn.clickCallback.RemoveListener(() => { UI.h_PauseMenu.Toggle(); RestartGame(); });
+        UI.h_PauseMenu.h_ExitBtn.clickCallback.RemoveListener(() => { UI.h_PauseMenu.Toggle(); ExitToTitle(); });
     }
 
     async UniTaskVoid StartGame()
@@ -112,7 +114,7 @@ public class GameManager : MonoBehaviour
             Destroy(inst_UIGameOver.gameObject);
             inst_UIGameOver = null;
         }
-        InitCallbacks();
+        //InitCallbacks();
 
         await MGM.Launch();
         UI.ShowMiniGameMode(true);
@@ -188,14 +190,6 @@ public class GameManager : MonoBehaviour
         inst_UIGameOver.Animate(IsHighScore, PG, cts.Token);
     }
 
-    void RefreshUI()
-    {
-        UI.miniGameClock.text = Mathf.Ceil(MGM.gameClock.GetRemainingTime()).ToString("#0");
-        //UI.hpClock.text = playerData.HP.ToString("#0.0");
-        UI.RefreshHPImage(playerData);
-        //UI.score.text = playerData.score.ToString();
-    }
-
     void Update()
     {
         // if (Input.GetKey(KeyCode.Escape))
@@ -204,8 +198,7 @@ public class GameManager : MonoBehaviour
         if (!GameStarted)
             return;
 
-        // GameLoop
-        RefreshUI();
+        UI.Refresh();
 
         if (playerData.HP <= 0)
         {

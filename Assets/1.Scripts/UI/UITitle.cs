@@ -20,9 +20,9 @@ public class UITitle : MonoBehaviour
     public UIButton backBtn;
     public UIButton quitBtn;
     [Header("Game Modes Buttons")]
-    public UIButton randomSeedBtn;
-    public UIButton dailySeedBtn;
-    public UIButton sprintBtn;
+    public UIButton m_MutationMode;
+    public UIButton m_DailySeedMode;
+    public UIButton m_CustomMode;
     [Header("Transition")]
     public Image transitionImage;
     [Header("Audio")]
@@ -62,9 +62,9 @@ public class UITitle : MonoBehaviour
         highScoresBtn?.clickCallback.AddListener(() => ShowHighScores());
         settingsBtn?.clickCallback.AddListener(() => ShowSettings());
 
-        randomSeedBtn?.clickCallback.AddListener(() => StartMutationMode());
-        dailySeedBtn?.clickCallback.AddListener(() => StartDailySeed());
-        sprintBtn?.clickCallback.AddListener(() => StartCustom());
+        m_MutationMode?.clickCallback.AddListener(() => StartMutationMode());
+        m_DailySeedMode?.clickCallback.AddListener(() => StartDailySeed());
+        m_CustomMode?.clickCallback.AddListener(() => StartCustom());
 
         backBtn?.clickCallback.AddListener(() => BackToTitle());
         quitBtn?.clickCallback.AddListener(() => QuitGame());

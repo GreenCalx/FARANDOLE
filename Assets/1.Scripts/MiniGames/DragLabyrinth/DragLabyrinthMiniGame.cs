@@ -1,15 +1,19 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.Events;
+using Cysharp.Threading.Tasks;
 
 public class DragLabyrinthMiniGame : MiniGame
 {
     [Header("DragLabyrinthMiniGame")]
+    public float electrifyDuration = 1f;
     public FinishLine finishLine;
     public GameObject prefab_ballToEscape;
     GameObject inst_ballToEscape;
     RollingBall inst_asBall;
-    Dragable    inst_asDragable;
+    DragBall    inst_asDragable;
+    public Sprite ballClosedSprite;
+    public Sprite ballOpenSprite;
 
     public Labyrinth inst_Labyrinth;
     public List<GameObject> diff1Layouts;
@@ -71,8 +75,30 @@ public class DragLabyrinthMiniGame : MiniGame
         inst_asBall.OnFinishCB.AddListener(() => finishLine.ExplodeAt(inst_asBall.transform.position));
         inst_asBall.OnFinishCB.AddListener(Win);
 
-        inst_asDragable = inst_ballToEscape.GetComponent<Dragable>();
+        inst_asDragable = inst_ballToEscape.GetComponent<DragBall>();
         PC.AddPositionTracker(inst_asDragable);
+        inst_asDragable.collisionEvent.AddListener((dragable, other) => OnCollision(dragable, other));
+        //inst_asDragable.m_SpriteRenderer.sprite = ballClosedSprite;
+    }
+
+    public void OnCollision(Dragable iDragable, Collision2D iOther)
+    {
+        if (iDragable != inst_asDragable)
+            return;
+        if (!inst_asDragable.selected)
+            return;
+
+        inst_asDragable.OnStopTracking(iDragable.transform.position);
+        BallIsElectric();
+    }
+    
+    async UniTaskVoid BallIsElectric()
+    {
+        inst_asDragable.Freeze();
+        inst_asDragable.m_SpriteRenderer.sprite = ballOpenSprite;
+        await UniTask.WaitForSeconds(electrifyDuration);
+        inst_asDragable.m_SpriteRenderer.sprite = ballClosedSprite;
+        inst_asDragable.UnFreeze();
     }
 
     public override void Play()

@@ -15,6 +15,7 @@ public class DogHead : MonoBehaviour, ITapTracker
     public float tapAnimDuration = 0.1f;
     [Header("Pop Out Anim")]
     public ParticleSystem PS;
+    public ParticleSystem OnPetPS;
     public float torque = 10f;
     Coroutine tapAnimCo;
     Vector3 baseScale;
@@ -62,6 +63,7 @@ public class DogHead : MonoBehaviour, ITapTracker
         if (Vector3.Distance(transform.position, new Vector3(iVec2.x, iVec2.y, 0f)) < tapRadius)
         {
             tapCB.Invoke();
+            OnPetPS.Play();
             return true;
         }
         return false;

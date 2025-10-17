@@ -9,24 +9,32 @@ public class Dragable : MonoBehaviour, IPositionTracker
     public UnityEvent selectedEvent;
     [HideInInspector]
     public UnityEvent droppedEvent;
-
     public DragMode dragMode;
     public float dragForce = 10f;
+
+    public bool isFrozen = false;
     private Vector2 dragDirection;
-    private bool selected = false;
+    public bool selected = false;
 
     private Rigidbody2D rb;
 
     private Collider2D dragCollider;
-
+    public SpriteRenderer m_SpriteRenderer;
     public float accelerationWithDistance = 1f;
     public float maxVelocityRange = 1f;
     private float baseGScale = 1f;
+    public UnityEvent<Dragable, Collision2D> collisionEvent;
     void Start()
     {
+        InitDragable();
+    }
 
+    protected void InitDragable()
+    {
         rb = this.gameObject.GetComponent<Rigidbody2D>();
         dragCollider = this.gameObject.GetComponent<Collider2D>();
+        if (m_SpriteRenderer == null)
+            m_SpriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         baseGScale = rb.gravityScale;
     }
 
@@ -95,6 +103,21 @@ public class Dragable : MonoBehaviour, IPositionTracker
             rb.bodyType = RigidbodyType2D.Dynamic;
             rb.useFullKinematicContacts = true;
         }
-        droppedEvent.Invoke();        
+        droppedEvent.Invoke();
+    }
+    
+    void OnCollisionEnter2D(Collision2D iOther)
+    {
+        collisionEvent?.Invoke(this, iOther);
+    }
+
+    public void Freeze()
+    {
+        isFrozen = true;
+    }
+    
+    public void UnFreeze()
+    {
+        isFrozen = false;
     }
 }
