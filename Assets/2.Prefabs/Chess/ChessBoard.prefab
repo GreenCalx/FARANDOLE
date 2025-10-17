@@ -46,7 +46,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tilePrefab: {fileID: 1881316459604369505, guid: 8d54d96988dc915468822684b4a9b3ca, type: 3}
   knightPrefab: {fileID: 2829037840282954039, guid: 0cbc8fcae49bfc444bf364fe0fc8ebf4, type: 3}
-  queenPrefab: {fileID: 0}
-  blackKnightPrefab: {fileID: 2829037840282954039, guid: 0802beaceec05674d98df1857c758b50, type: 3}
+  towerPrefab: {fileID: 2829037840282954039, guid: 8add082c791d1fe4ba4fb868f2cf4dbf, type: 3}
+  pawnPrefab: {fileID: 2829037840282954039, guid: 3cda6a52045231c49848cbc442a90a20, type: 3}
+  bishopPrefab: {fileID: 2829037840282954039, guid: f8026cec204ef9d449e63ed60fc6bda7, type: 3}
+  queenPrefab: {fileID: 2829037840282954039, guid: f77f4c74b7f076240916fc3c2c02929a, type: 3}
+  kingPrefab: {fileID: 2829037840282954039, guid: 33f77d6871e75dd4cbd2833014f02951, type: 3}
   boardSize: 8
   tileSize: 1
+  blackPlays: 0

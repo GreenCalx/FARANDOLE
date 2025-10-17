@@ -12,7 +12,7 @@ public class Bishop : ChessPiece
         int[] dy = {1,1,-1,-1};
 
 
-        for (int dir = 0; dir < 8; dir++)
+        for (int dir = 0; dir < 4; dir++)
         {
             int nx = x;
             int ny = y;
@@ -30,7 +30,7 @@ public class Bishop : ChessPiece
                 }
                 else
                 {
-                if (t.GetOccupant().Color != this.Color)
+                if (t.GetOccupant().color != this.color)
                     moves.Add(t);
                     break;
                 }

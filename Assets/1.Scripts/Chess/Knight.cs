@@ -17,7 +17,7 @@ public class Knight : ChessPiece
             Tile t = board.GetTile(nx, ny);
             if (t == null) continue;
 
-            if (!t.IsOccupied() || (t.IsOccupied() && t.GetOccupant().Color != this.Color))
+            if (!t.IsOccupied() || (t.IsOccupied() && t.GetOccupant().color != this.color))
             {
                 moves.Add(t);
             }

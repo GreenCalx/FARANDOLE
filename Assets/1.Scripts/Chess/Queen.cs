@@ -30,7 +30,7 @@ public class Queen : ChessPiece
                 }
                 else
                 {
-                if (t.GetOccupant().Color != this.Color)
+                if (t.GetOccupant().color != this.color)
                     moves.Add(t);
                     break;
                 }

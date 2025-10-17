@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f772bfecd73e0a64ca2b7000d99e16b6, type: 3}
-  m_Name: MG_Chess
+  m_Name: MG_KnightChess
   m_EditorClassIdentifier: 
   ID: 10
   name: Chess

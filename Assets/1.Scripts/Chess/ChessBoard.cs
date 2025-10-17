@@ -2,15 +2,15 @@ using UnityEngine;
 using System.Collections.Generic;
 using GooglePlayGames.BasicApi;
 using Cysharp.Threading.Tasks;
+using Unity.VisualScripting;
+
 public enum PlayerColor { White, Black }
-public enum PieceType {Pawn,Knight,Bishop,Tower, King, Queen}
+public enum PieceType { Pawn, Knight, Bishop, Tower, King, Queen }
+
 public class ChessBoard : MonoBehaviour
 {
-
-
     [Header("Prefabs & Sprites")]
     public GameObject tilePrefab;
-
     public GameObject knightPrefab;
     public GameObject towerPrefab;
     public GameObject pawnPrefab;
@@ -18,161 +18,137 @@ public class ChessBoard : MonoBehaviour
     public GameObject queenPrefab;
     public GameObject kingPrefab;
 
-
-
-
     [Header("Board Settings")]
-    public int boardSize = 8;
+    public Vector2Int boardSize = new Vector2Int(8, 8); // <-- maintenant rectangulaire !
     public float tileSize = 1f;
-
 
     private Tile[,] tiles;
 
-    private List<ChessPiece> enemies = new List<ChessPiece>();
-    private ChessPiece playerPiece;
-    private List<Tile> legalMoves;
+    public List<ChessPiece> enemies = new List<ChessPiece>();
+    private List<ChessPiece> playerPieces = new List<ChessPiece>();
+    private ChessPiece selectedPiece;
 
-    private int diff;
+    private List<Tile> legalMoves = new List<Tile>();
 
     public bool blackPlays = false;
-    public void Init(int size)
-    {
-        GenerateBoard(size); //
-        SelectChessPiece(playerPiece);
-    }
 
-    public void Restart()
-    {
-        if (tiles != null)
-        {
-            foreach (var t in tiles) if (t != null) Destroy(t.gameObject);
-        }
-        GenerateBoard(boardSize);
-        SelectChessPiece(playerPiece);
-    }
-
-    void GenerateBoard(int size)
+    
+    public void GenerateBoard(Vector2Int size, bool[,] removeTiles)
     {
         boardSize = size;
-        tiles = new Tile[boardSize, boardSize];
-        Vector2 origin = new Vector2(-boardSize / 2f * tileSize + tileSize / 2f, -boardSize / 2f * tileSize + tileSize / 2f);
+        tiles = new Tile[boardSize.x, boardSize.y];
+
+        Vector2 origin = new Vector2(
+                -boardSize.x / 2f * tileSize + tileSize / 2f,
+                -boardSize.y / 2f * tileSize + tileSize / 2f
+        );
+
         Tile tile;
 
-        for (int x = 0; x < boardSize; x++)
+        for (int x = 0; x < boardSize.x; x++)
         {
-
-            for (int y = 0; y < boardSize; y++)
+            for (int y = 0; y < boardSize.y; y++)
             {
+                if (removeTiles != null && removeTiles[x, y])
+                    continue;
+
                 Vector2 pos = origin + new Vector2(x * tileSize, y * tileSize);
                 tile = GOBuilder.Create(tilePrefab)
-                    .WithName("Tile_{" + x + "}_{+" + y + "}")
+                    .WithName($"Tile_{x}_{y}")
                     .WithParent(transform)
-                    .WithPosition(pos).Build().GetComponent<Tile>();
+                    .WithLocalPosition(pos)
+                    .Build()
+                    .GetComponent<Tile>();
+
                 tile.Init(x, y, this);
                 tiles[x, y] = tile;
             }
         }
     }
 
-
-
-    public bool containsPositon(int[] pos, int x, int y, int numberOfPlacedPieces)
+    public bool canSpawn(int x, int y)
     {
-        for (int i = 0; i < numberOfPlacedPieces; i++)
-        {
-            if (x == pos[i] && y == pos[i + 1])
-            {
-                return true;
-            }
-        }
-        return false;
+        if (tiles[x, y] == null)
+            return false;
+        return !tiles[x, y].IsOccupied();
     }
 
-    public void SpawnPiece(int x, int y, PlayerColor color, PieceType type)
+    public ChessPiece SpawnPiece(Tile tile, PlayerColor color, PieceType type)
     {
-        Vector3 pos = tiles[x, y].transform.position;
-
-        GameObject prefab;
-
-        switch (type)
+        GameObject prefab = type switch
         {
-            case PieceType.Bishop:
-                prefab = bishopPrefab;
-                break;
-            case PieceType.Knight:
-                prefab = knightPrefab;
-                break;
-            case PieceType.Pawn:
-                prefab = pawnPrefab;
-                break;
-            case PieceType.Tower:
-                prefab = towerPrefab;
-                break;
-            case PieceType.Queen:
-                prefab = queenPrefab;
-                break;
-            default :
-                prefab = kingPrefab;
-                break;
-        }
+            PieceType.Bishop => bishopPrefab,
+            PieceType.Knight => knightPrefab,
+            PieceType.Pawn => pawnPrefab,
+            PieceType.Tower => towerPrefab,
+            PieceType.Queen => queenPrefab,
+            _ => kingPrefab,
+        };
 
         ChessPiece cp = GOBuilder.Create(prefab)
-            .WithName("ChessPiece" + color.ToString())
+            .WithName($"ChessPiece_{color}")
             .WithParent(transform)
-            .WithPosition(pos)
-            .Build().GetComponent<ChessPiece>();
+            .WithPosition(tile.transform.position)
+            .Build()
+            .GetComponent<ChessPiece>();
+
+        cp.Init(tile.x, tile.y, color, this);
+        tile.SetOccupant(cp);
 
         if (color == PlayerColor.White)
         {
-            playerPiece = cp;
+            playerPieces.Add(cp);
+            SelectPiece(cp); // dernier ajouté sélectionné
         }
         else
         {
             enemies.Add(cp);
         }
-        cp.Init(x, y, color, this);
-        tiles[x, y].SetOccupant(cp);
-    }
 
+        return cp;
+    }
 
     public Tile GetTile(int x, int y)
     {
-        if (x < 0 || y < 0 || x >= boardSize || y >= boardSize) return null;
+        if (x < 0 || y < 0 || x >= boardSize.x || y >= boardSize.y)
+            return null;
+
         return tiles[x, y];
     }
 
-
     public void MovePlayer(Tile to)
     {
-        Tile from = GetTile(playerPiece.x, playerPiece.y);
+        Tile from = GetTile(selectedPiece.x, selectedPiece.y);
         if (to == null) return;
 
         if (to.IsOccupied())
         {
             ChessPiece other = to.GetOccupant();
-            if (other != null && other.Color != playerPiece.Color)
+            if (other != null && other.color != selectedPiece.color)
             {
                 enemies.Remove(other);
                 other.GetComponent<ChessPiece>().Die();
-                playerPiece.SpecialPose().Forget();
+                selectedPiece.SpecialPose().Forget();
             }
             else
-            {
                 return;
-            }
         }
 
-
-        MovePiece(from, to, playerPiece);
+        MovePiece(from, to, selectedPiece);
 
         CheckWinCondition();
+
         if (blackPlays)
-        {
             MoveBlacks();
-        }
-        SelectChessPiece(playerPiece);
 
+        FindLegalMoves();
+    }
 
+    void SelectPiece(ChessPiece piece)
+    {
+        selectedPiece = piece;
+        ClearLegalMoves();
+        FindLegalMoves();
     }
 
     void MoveBlacks()
@@ -181,14 +157,15 @@ public class ChessBoard : MonoBehaviour
         foreach (ChessPiece bcp in enemies)
         {
             positions = bcp.GetLegalMoves();
-            Utils.Shuffle<Tile>(positions);
-            for (int i = 0; i < positions.Count; i++)
+            Utils.Shuffle(positions);
+
+            foreach(Tile pos in positions)
             {
-                if (!positions[i].IsOccupied())
+                if (!pos.IsOccupied())
                 {
-                    int x, y;
-                    bcp.GetPos(out x, out y);
-                    MovePiece(GetTile(x, y), positions[i], bcp);
+                    bcp.GetPos(out int x, out int y);
+                    MovePiece(GetTile(x, y), pos, bcp);
+                    break;
                 }
             }
         }
@@ -197,64 +174,82 @@ public class ChessBoard : MonoBehaviour
     void MovePiece(Tile from, Tile to, ChessPiece piece)
     {
         from.ClearOccupant();
+
+        piece.SetPosition(to.x, to.y);
+        to.SetOccupant(piece);
+
+                
         if (piece is Pawn pawn)
         {
-            if (piece.y == boardSize - 1 || piece.y == 0) //Promote
+            if (to.y == boardSize.y - 1 || to.y == 0) // Promotion selon la hauteur du plateau
             {
-                enemies.Remove(piece);
-                SpawnPiece(to.x, to.y, piece.Color, PieceType.Queen);
+                piece.playParticles();
+                piece = pawn.Promote();
             }
-        }
-        else
-        {
-            piece.SetPosition(to.x, to.y);
-            to.SetOccupant(piece);
-        }       
-    }
-    void SelectChessPiece(ChessPiece piece)
-    {
-        legalMoves = piece.GetLegalMoves();
-        foreach (Tile legalTile in legalMoves)
-        {
-            legalTile.Highlight(true);
         }
     }
 
     void CheckWinCondition()
     {
         if (enemies.Count == 0)
-        {
             GetComponentInParent<MiniGame>().Win();
-        }
     }
 
     public void TileTouched(Tile t)
     {
         if (legalMoves.Contains(t))
         {
-            foreach (Tile legalTile in legalMoves)
-            {
-                legalTile.Highlight(false);
-            }
-            legalMoves.Clear();
+            ClearLegalMoves();
             MovePlayer(t);
-
+        }
+        else if (t.IsOccupied() && t.GetOccupant().color == PlayerColor.White)
+        {
+            SelectPiece(t.GetOccupant());
         }
     }
 
-    public Tile[,] GetTiles() { return tiles; }
+    public void ClearLegalMoves()
+    {
+        foreach (Tile legalTile in legalMoves)
+            legalTile.Highlight(false);
+
+        legalMoves.Clear();
+    }
+
+    void FindLegalMoves()
+    {
+        legalMoves = selectedPiece.GetLegalMoves();
+        foreach (Tile legalTile in legalMoves)
+            legalTile.Highlight(true);
+    }
+
+    public Tile[,] GetTiles() => tiles;
 
     public void CleanAll(PlayerController iPC)
     {
         foreach (Tile t in tiles)
         {
+            if (t == null) continue;
             iPC.RemoveTapTracker(t);
             Destroy(t.gameObject);
         }
+
         foreach (var k in enemies) if (k != null) Destroy(k.gameObject);
         enemies.Clear();
 
-        if (playerPiece != null)
-            Destroy(playerPiece.gameObject);
+        foreach (var k in playerPieces) if (k != null) Destroy(k.gameObject);
+        playerPieces.Clear();
+    }
+
+    public Tile getRandomUnoccupiedTile(Vector2Int margin)
+    {
+        int x, y;
+        do
+        {
+            x = Random.Range(margin.x, boardSize.x - margin.x);
+            y = Random.Range(margin.y, boardSize.y - margin.y);
+        } while (tiles[x, y] == null || tiles[x, y].IsOccupied());
+
+        return tiles[x, y];
     }
 }

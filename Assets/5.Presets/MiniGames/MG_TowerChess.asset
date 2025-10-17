@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f772bfecd73e0a64ca2b7000d99e16b6, type: 3}
+  m_Name: MG_TowerChess
+  m_EditorClassIdentifier: 
+  ID: 14
+  name: TowerChess
+  goal: Don't let pawns promote!
+  thumbNailImg: {fileID: -4421537415268300880, guid: e7e97f26a75250d41ba2f6cb8601a0ac, type: 3}
+  prefab_MiniGame: {fileID: 38687925018564972, guid: 65f9575b2786ab94092d50af34343720, type: 3}
+  tags: 03000000
+  orientationRequirement: 2

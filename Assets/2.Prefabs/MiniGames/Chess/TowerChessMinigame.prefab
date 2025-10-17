@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7478234881393395322
+--- !u!1 &38687925018564972
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,47 +8,55 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2327737200222682320}
-  - component: {fileID: 3633236532807321857}
+  - component: {fileID: 1732602980158893130}
+  - component: {fileID: 6554627355123567505}
   m_Layer: 0
-  m_Name: ChessMiniGame
+  m_Name: TowerChessMinigame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2327737200222682320
+--- !u!4 &1732602980158893130
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7478234881393395322}
+  m_GameObject: {fileID: 38687925018564972}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.1297369, z: 19.54275}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3633236532807321857
+--- !u!114 &6554627355123567505
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7478234881393395322}
+  m_GameObject: {fileID: 38687925018564972}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c576ead7991ef4428348654bfc9cbb5, type: 3}
+  m_Script: {fileID: 11500000, guid: 18e4f3ccc427b8440a083e770610cb3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  descriptor: {fileID: 11400000, guid: 9ad74936e19ac3e4c9a74aac6f2c7e74, type: 2}
+  descriptor: {fileID: 11400000, guid: c448180679400474d90bfc3ff334c4b5, type: 2}
   MGM: {fileID: 0}
   PC: {fileID: 0}
   PG: {fileID: 0}
   IsActiveMiniGame: 0
   IsInPostGame: 0
   successState: 0
+  hasIntro: 0
   boardPrefab: {fileID: 3907564602954375878, guid: ad671640d15afe244a28d9b032c8ba29, type: 3}
+  boardSizes:
+  - {x: 6, y: 8}
+  - {x: 6, y: 7}
+  - {x: 6, y: 6}
+  - {x: 7, y: 6}
+  - {x: 8, y: 6}
+  enemyCounters: 0200000002000000030000000300000004000000

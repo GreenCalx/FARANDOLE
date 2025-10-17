@@ -1,28 +1,37 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 //using Unity.Android.Gradle.Manifest;
 
 public abstract class ChessPiece : MonoBehaviour
 {
     public int x, y;
-    public PlayerColor Color { get; private set; }
+    public PlayerColor color { get; private set; }
 
     public Sprite normalPose;
-    public Sprite specialPose;
+    public Sprite attackPose;
+    public Sprite blackPiece;
     private SpriteRenderer sr;
     protected ChessBoard board;
 
     private ParticleSystem particles;
     public float poseTime;
 
-    public void Init(int x, int y, PlayerColor color, ChessBoard board)
+    public void Init(int x, int y, PlayerColor pcolor, ChessBoard board)
     {
-        this.x = x; this.y = y; this.Color = color; this.board = board;
+        this.x = x; this.y = y; this.color = pcolor; this.board = board;
         sr = GetComponent<SpriteRenderer>();
-        if(color == PlayerColor.Black)
-            particles = GetComponentInChildren<ParticleSystem>();
-        transform.localScale = Vector3.one * (board.tileSize * 0.8f);
+        particles = GetComponentInChildren<ParticleSystem>();
+        if (color == PlayerColor.Black)
+        {
+            sr.sprite = blackPiece;           
+        }
+        else
+        {
+            sr.sprite = normalPose;
+        }
+        transform.localScale = Vector3.one * (board.tileSize * 0.9f);
     }
 
 
@@ -33,11 +42,10 @@ public abstract class ChessPiece : MonoBehaviour
         sr.sortingOrder = 1;
     }
 
-
-    public void SetPosition(int newX, int newY)
+    public void SetPosition(int newX, int newY, float duration = 0.1f)
     {
         x = newX; y = newY;
-        transform.position = board.GetTile(x, y).transform.position;
+        transform.DOMove(board.GetTile(x, y).transform.position, duration);
     }
 
     public void GetPos(out int posX, out int posY)
@@ -49,17 +57,27 @@ public abstract class ChessPiece : MonoBehaviour
 
     public async UniTask SpecialPose()
     {
-        sr.sprite = specialPose;
+        sr.sprite = attackPose;
         await UniTask.WaitForSeconds(poseTime);
-        sr.sprite = normalPose;
+        if(gameObject != null) //in case of promote
+            sr.sprite = normalPose;
     }
 
     public async void Die()
     {
-        particles.Play();
-        //await SpecialPose();
+        playParticles();
         sr.enabled = false;
-        // await UniTask.WaitWhile(() => particles.isPlaying);
-        // Destroy(this);
+        await UniTask.WaitForSeconds(particles.main.startLifetime.constantMax);
+        Destroy(this.gameObject);   
+    }
+
+    public void playParticles()
+    {
+        var main = particles.main;
+        if (color == PlayerColor.White)
+            main.startColor = new Color(1, 1, 1, 1);
+        else
+            main.startColor = new Color(0, 0, 0, 1);
+        particles.Play();
     }
 }
