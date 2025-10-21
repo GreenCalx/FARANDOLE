@@ -1,15 +1,15 @@
 fileFormatVersion: 2
-guid: 9188222328ae17b4595606cf099dfda1
+guid: e93314bea695e4745a9740eec464ec2e
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6417892295993666631
-    second: loopLight_OFF_0
+      213: -8015028116147074161
+    second: balloon1_StickerMask_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -48,7 +48,7 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 1
   spriteExtrude: 1
-  spriteMeshType: 1
+  spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: loopLight_OFF_0
+      name: balloon1_StickerMask_0
       rect:
         serializedVersion: 2
-        x: 26
-        y: 26
-        width: 204
-        height: 204
+        x: 239
+        y: 5
+        width: 549
+        height: 920
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 9b3d492d5f01fe6a0800000000000000
-      internalID: -6417892295993666631
+      spriteID: f8b0940d466e4c090800000000000000
+      internalID: -8015028116147074161
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      loopLight_OFF_0: -6417892295993666631
+      balloon1_StickerMask_0: -8015028116147074161
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -1,10 +1,19 @@
 fileFormatVersion: 2
-guid: df91caee1bd6ab54ab6f4a552ed7be76
+guid: f541d26e232a72d4daf3c770652ace16
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3197579909923225054
-    second: smallKnob_0
+      213: -3681947918056103583
+    second: shuriken_launcher_0
+  - first:
+      213: 7953108391392046851
+    second: shuriken_launcher_1
+  - first:
+      213: -3120077387416776639
+    second: shuriken_launcher_2
+  - first:
+      213: -5289147339597263670
+    second: shuriken_launcher_3
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -49,7 +58,7 @@ TextureImporter:
   spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 0
-  alignment: 0
+  alignment: 9
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
@@ -113,13 +122,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: smallKnob_0
+      name: shuriken_launcher_0
       rect:
         serializedVersion: 2
-        x: 247
-        y: 248
-        width: 530
-        height: 529
+        x: 199
+        y: 175
+        width: 114
+        height: 271
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +137,74 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 222c910730aef93d0800000000000000
-      internalID: -3197579909923225054
+      spriteID: 161e6c650e717ecc0800000000000000
+      internalID: -3681947918056103583
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuriken_launcher_1
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 49
+        width: 15
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 30fe911d1fd1f5e60800000000000000
+      internalID: 7953108391392046851
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuriken_launcher_2
+      rect:
+        serializedVersion: 2
+        x: 291
+        y: 26
+        width: 21
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1405b43a52243b4d0800000000000000
+      internalID: -3120077387416776639
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuriken_launcher_3
+      rect:
+        serializedVersion: 2
+        x: 201
+        y: 24
+        width: 87
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: acc4a9a848c2996b0800000000000000
+      internalID: -5289147339597263670
       vertices: []
       indices: 
       edges: []
@@ -148,7 +223,10 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      smallKnob_0: -3197579909923225054
+      shuriken_launcher_0: -3681947918056103583
+      shuriken_launcher_1: 7953108391392046851
+      shuriken_launcher_2: -3120077387416776639
+      shuriken_launcher_3: -5289147339597263670
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

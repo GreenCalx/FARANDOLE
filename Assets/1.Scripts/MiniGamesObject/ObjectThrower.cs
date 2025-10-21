@@ -3,11 +3,13 @@ using System.Collections.Generic;
 public class ObjectThrower<T> : MonoBehaviour, IPositionTracker where T : Throwable
 {
     [Header("ObjectThrower Generics")]
+    public bool RotateThrower = true;
     public float shootingLatch = 0.2f;
     public float shootingForce = 10f;
     public float aimLRLengthMul = 5f;
     public Material aimLRMat;
     public GameObject prefab_Bullet;
+    public Transform BulletSpawnPoint;
     protected T inst_Bullet;
     protected Vector2 dir;
     LineRenderer aimLR;
@@ -85,7 +87,14 @@ public class ObjectThrower<T> : MonoBehaviour, IPositionTracker where T : Throwa
 
     void Aim()
     {
-        aimLR.SetPosition(1, transform.position + new Vector3(dir.x * shootingForce, dir.y * shootingForce, 0f));
+        Vector3 aimSpot = transform.position + new Vector3(dir.x * shootingForce, dir.y * shootingForce, 0f);
+        aimLR.SetPosition(1, aimSpot);
+        if (RotateThrower)
+        {
+            float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.AngleAxis(angle - 90, transform.forward);
+        }
+        inst_Bullet.transform.position = BulletSpawnPoint.position;   
     }
 
     void BuildLR()
@@ -98,8 +107,8 @@ public class ObjectThrower<T> : MonoBehaviour, IPositionTracker where T : Throwa
         aimLR = newGO.AddComponent<LineRenderer>();
         aimLR.material = aimLRMat;
         aimLR.positionCount = 2;
-        aimLR.startWidth = 0.05f;
-        aimLR.endWidth = 0.05f;
+        aimLR.startWidth = 0.025f;
+        aimLR.endWidth = 0.025f;
         aimLR.enabled = false;
 
     }
@@ -113,7 +122,11 @@ public class ObjectThrower<T> : MonoBehaviour, IPositionTracker where T : Throwa
 
         GameObject newGO = Instantiate(prefab_Bullet);
         inst_Bullet = newGO.GetComponent<T>();
-        inst_Bullet.transform.position = transform.position;
+        inst_Bullet.transform.parent = transform.parent;
+        if (BulletSpawnPoint == null)
+            inst_Bullet.transform.position = transform.position;
+        else
+            inst_Bullet.transform.position = BulletSpawnPoint.position;
         thrownObjects.Add(inst_Bullet);
     }
 

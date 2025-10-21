@@ -51,6 +51,7 @@ public class Balloon : ObjectTarget
     {
         face.enabled = false;
         animator.SetTrigger("Explode");
+        self_attachedPhysxBody.isKinematic = true;
     }
 
     void UpdatePosition()

@@ -71,7 +71,7 @@ public class LabyrinthMiniGame : MiniGame
         {
             RollingBall newBall = GOBuilder.Create(prefab_ballToEscape)
                                 .WithParent(transform)
-                                .WithPosition(selectedLayout.spawnPoint.position)
+                                .WithPosition(selectedLayout.GetSpawnInRange())
                                 .BuildAs<RollingBall>();
             newBall.MG = this;
             newBall.OnFinishCB = new UnityEvent();

@@ -16,7 +16,7 @@ MonoBehaviour:
   loopSize: 6
   percentOfLoopSizeToPass: 0.5
   MiniGameTime: 99
-  MaxTimeScale: 3
+  MaxTimeScale: 2
   timeScaleOverLoopLevel:
     serializedVersion: 2
     m_Curve:
@@ -30,22 +30,13 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0.08620094
     - serializedVersion: 3
-      time: 8
-      value: 2.25
-      inSlope: 0.22034901
-      outSlope: 0.22034901
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.06294966
-    - serializedVersion: 3
       time: 16
-      value: 3
-      inSlope: 0.032551806
-      outSlope: 0.032551806
+      value: 2
+      inSlope: 0.108680464
+      outSlope: 0.108680464
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.1061151
+      inWeight: 0.038048804
       outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -59,7 +50,7 @@ MonoBehaviour:
   RankSettings: {fileID: 11400000, guid: 6a32a64a12bcf2d4abaea25fad902b82, type: 2}
   PostMiniGameLatchInMs: 250
   PreMiniGameLatchInMs: 250
-  LoopCompleteAfterAnimDisplayTimeMs: 0
-  LoopCompleteShowDepthAnimDisplayTimeMs: 0
   PlayGroundColorLerpTimeSec: 1
   BGMRankLerpTimeSec: 1
+  GameClockScaleAnimDuration: 0.25
+  ShowLightTotalTimeInMs: 2000

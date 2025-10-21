@@ -5616,7 +5616,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4784646498703449647}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fa2e6d22a0a298e42ab2a1c48052f969, type: 3}
   m_Name: 
@@ -5654,6 +5654,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   OnWallHitPS: {fileID: 1179516925825862085}
+  ballClosedSprite: {fileID: 21300000, guid: 72ec9b67f37c50f409fc2874a85d48da, type: 3}
+  ballOpenSprite: {fileID: 21300000, guid: 07c498e3321ce0f4fa0b02c191d9a130, type: 3}
 --- !u!212 &7486548623205113359 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 5539721656196371002, guid: 5a3aab14e58c90046baf5fde2130fce6, type: 3}

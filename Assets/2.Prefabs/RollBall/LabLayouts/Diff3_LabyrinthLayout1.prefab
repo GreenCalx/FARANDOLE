@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &133788220383723577
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7394952977817132610}
+  m_Layer: 0
+  m_Name: SpawnRangePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7394952977817132610
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 133788220383723577}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.3, y: 0.518, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6148190584993943246}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4726206639710619473
 GameObject:
   m_ObjectHideFlags: 0
@@ -38,6 +69,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4398163701138074936}
+  - {fileID: 7394952977817132610}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &4812573831993836705
@@ -243,13 +275,13 @@ CompositeCollider2D:
   - m_Collider: {fileID: 9137380156224461699}
     m_ColliderPaths:
     - - X: 15000000
-        Y: 1500000
+        Y: 2000000
       - X: -15000000
-        Y: 1500000
+        Y: 2000000
       - X: -15000000
-        Y: -1500000
+        Y: -2000000
       - X: 15000000
-        Y: -1500000
+        Y: -2000000
   - m_Collider: {fileID: 2758550573943437792}
     m_ColliderPaths:
     - - X: 627153
@@ -527,14 +559,12 @@ CompositeCollider2D:
       - {x: 0.58688784, y: 0.3752492}
       - {x: 0.5706331, y: 0.3145875}
       - {x: 0.5481264, y: 0.255956}
-      - {x: 0.5196127, y: 0.1999956}
-      - {x: 0.4872072, y: 0.15}
-      - {x: 1.5, y: 0.1500293}
+      - {x: 0.5196687, y: 0.2}
+      - {x: 1.5, y: 0.2000293}
       - {x: 1.4999707, y: 1.5}
       - {x: -1.5, y: 1.4999707}
-      - {x: -1.4999707, y: 0.15}
-      - {x: -0.4871791, y: 0.15005231}
-      - {x: -0.51961523, y: 0.2000001}
+      - {x: -1.4999707, y: 0.2}
+      - {x: -0.51963943, y: 0.2000478}
       - {x: -0.5481277, y: 0.2559591}
       - {x: -0.5706342, y: 0.3145908}
       - {x: -0.58688873, y: 0.3752535}
@@ -638,14 +668,12 @@ CompositeCollider2D:
       - {x: -0.5868885, y: -0.3752521}
       - {x: -0.5706338, y: -0.3145895}
       - {x: -0.54812723, y: -0.2559579}
-      - {x: -0.5196137, y: -0.1999973}
-      - {x: -0.4872073, y: -0.15}
-      - {x: -1.5, y: -0.1500293}
+      - {x: -0.5196688, y: -0.2}
+      - {x: -1.5, y: -0.2000293}
       - {x: -1.4999707, y: -1.5}
       - {x: 1.5, y: -1.4999707}
-      - {x: 1.4999707, y: -0.15}
-      - {x: 0.487179, y: -0.15005231}
-      - {x: 0.5196147, y: -0.1999992}
+      - {x: 1.4999707, y: -0.2}
+      - {x: 0.5196395, y: -0.2000478}
       - {x: 0.5481281, y: -0.25596002}
       - {x: 0.5706344, y: -0.3145918}
       - {x: 0.58688873, y: -0.3752532}
@@ -716,8 +744,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4a33cb2686e8c94ba07fac365936ca6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  refreshPreviewMesh: 0
+  cleanPreview: 0
+  previewMeshMat: {fileID: 0}
   CC2D: {fileID: 3193834241320168808}
   spawnPoint: {fileID: 4398163701138074936}
+  rangePoint: {fileID: 7394952977817132610}
 --- !u!58 &8233041128408479997
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -798,7 +830,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 3, y: 0.3}
+  m_Size: {x: 3, y: 0.4}
   m_EdgeRadius: 0
 --- !u!58 &2758550573943437792
 CircleCollider2D:
@@ -897,7 +929,7 @@ Transform:
   m_GameObject: {fileID: 7453803601713162861}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.543, z: 0}
+  m_LocalPosition: {x: -0.3, y: 0.518, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
