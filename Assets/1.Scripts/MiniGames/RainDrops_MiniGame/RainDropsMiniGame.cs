@@ -11,7 +11,8 @@ public class RainDropsMiniGame : MiniGame
     public GameObject prefab_rainDrop;
     public Transform handle_startLine;
     public Transform handle_endLine;
-    public UIVisualToggle UIVisualToggle;
+
+    public UIArcadeInputs m_ArcadeInputs;
 
     public float timeBeforeRainDrops = 0.5f;
     public float dropsPerSec = 1f;
@@ -20,13 +21,14 @@ public class RainDropsMiniGame : MiniGame
     public float LRWidth = 0.03f;
     float lastDropTime = 0f;
     AutoWalker inst_walker;
-    List<AutoWalkDelayer> inst_rainDrops;
+    int inst_walker_layerPosition = 0;
+    List<AutoWalkKiller> inst_rainDrops;
 
     LineRenderer pathLR;
 
     public override void Init()
     {
-        //Reset();
+        
     }
 
     public override void Reset()
@@ -45,29 +47,12 @@ public class RainDropsMiniGame : MiniGame
                                 handle_endLine.position
                                 };
         pathLR.SetPositions(positions);
-
-
-        inst_walker = GOBuilder.Create(prefab_walker)
-                        .WithName("AutoWalker")
-                        .WithParent(transform)
-                        .WithPosition(handle_startLine.position)
-                        .BuildAs<AutoWalker>();
-        inst_walker.from = handle_startLine.position;
-        inst_walker.to = handle_endLine.position;
-        inst_walker.OnReachCB.AddListener(Win);
-        inst_walker.OnAutoWalkToggleCB.AddListener((b) => UIVisualToggle.Toggle(b));
-        inst_walker.OnPreDelayedyCB.AddListener(() => UIVisualToggle.freeze = true);
-        inst_walker.OnPostDelayedCB.AddListener(() => UIVisualToggle.freeze = false);
-
-        PC.AddTapTracker(inst_walker);
-
-        UIVisualToggle.Toggle(inst_walker.AutoWalk);
-        UIVisualToggle.freeze = false;
-
-        inst_rainDrops = new List<AutoWalkDelayer>();
-
         MGM.LM2D.PlaceObject(pathLR);
-        MGM.LM2D.PlaceObject(inst_walker.handle_Renderer);
+
+        SpawnFireWalker();
+
+        inst_rainDrops = new List<AutoWalkKiller>();
+        inst_walker_layerPosition = MGM.LM2D.PlaceObject(inst_walker.handle_Renderer);
     }
 
     public override void Play()
@@ -77,9 +62,10 @@ public class RainDropsMiniGame : MiniGame
     }
     public override void Stop()
     {
-        PC.RemoveTapTracker(inst_walker);
+        //PC.RemoveTapTracker(inst_walker);
         Destroy(inst_walker.gameObject);
         inst_rainDrops.ForEach(e => GameObject.Destroy(e.gameObject));
+        Destroy(pathLR.gameObject);
         IsActiveMiniGame = false;
     }
     public override void Win()
@@ -100,7 +86,7 @@ public class RainDropsMiniGame : MiniGame
         if (!IsActiveMiniGame)
             return;
 
-        if ((Time.time - lastDropTime) >= (dropsPerSec/MGM.miniGamesDifficulty))
+        if ((Time.time - lastDropTime) >= (dropsPerSec / MGM.miniGamesDifficulty))
         {
             SpawnRainDrop();
             lastDropTime = Time.time;
@@ -108,16 +94,34 @@ public class RainDropsMiniGame : MiniGame
 
     }
 
+    void SpawnFireWalker()
+    {
+        inst_walker = GOBuilder.Create(prefab_walker)
+                        .WithName("FireWalker")
+                        .WithParent(transform)
+                        .WithPosition(handle_startLine.position)
+                        .BuildAs<AutoWalker>();
+        inst_walker.from = handle_startLine.position;
+        inst_walker.to = handle_endLine.position;
+        inst_walker.OnReachCB.AddListener(Win);
+        inst_walker.OnKilledCB.AddListener(() => SpawnFireWalker());
+
+        m_ArcadeInputs.Btn1Unbind();
+        m_ArcadeInputs.OnBtn1Press(() => { inst_walker.AutoWalk = true; });
+        m_ArcadeInputs.OnBtn1Release(() => { inst_walker.AutoWalk = false; });
+    }
+    
+
     void SpawnRainDrop()
     {
         float x = UnityEngine.Random.Range(PG.bounds.min.x, PG.bounds.max.x);
         float y = PG.bounds.max.y;
         Vector3 spawnPos = new Vector3(x, y, 0f);
-        AutoWalkDelayer newDrop = GOBuilder.Create(prefab_rainDrop)
+        AutoWalkKiller newDrop = GOBuilder.Create(prefab_rainDrop)
                                     .WithName("RainDrop " + inst_rainDrops.Count + 1)
                                     .WithParent(transform)
                                     .WithPosition(spawnPos)
-                                    .BuildAs<AutoWalkDelayer>();
+                                    .BuildAs<AutoWalkKiller>();
         newDrop.OnDestroyCB.AddListener(() => inst_rainDrops.Remove(newDrop));
         MGM.LM2D.PlaceObject(newDrop.handle_Renderer);
         inst_rainDrops.Add(newDrop);

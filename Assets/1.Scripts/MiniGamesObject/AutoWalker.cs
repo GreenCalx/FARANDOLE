@@ -2,28 +2,32 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using DG.Tweening;
 
-public class AutoWalker : MonoBehaviour, ITapTracker
+public class AutoWalker : MonoBehaviour
 {
     [Header("Tweaks")]
     public SpriteRenderer handle_Renderer;
     public float walkDuration = 3f;
+    public float animCycle = 0.3f;
     public bool ReverseBehaviour = false;
     public UnityEvent<bool> OnAutoWalkToggleCB;
     public UnityEvent OnReachCB;
     public UnityEvent OnPreDelayedyCB;
     public UnityEvent OnPostDelayedCB;
+    public UnityEvent OnKilledCB;
     [Header("Internals")]
     public bool AutoWalk = false;
     public Vector3 from;
     public Vector3 to;
-    float elapsedTime;
-    Coroutine DelayedCo;
+    protected float elapsedTime;
+    protected Coroutine DelayedCo;
     public bool isDelayed = false;
     public bool stopPropagation => true;
-    public int GetDisplayPriority(){ return 0; }
-
-    void Start()
+    public int GetDisplayPriority() { return 0; }
+    protected Vector3 baseScale;
+    protected Rigidbody2D RB2D;
+    protected void Start()
     {
         if (ReverseBehaviour)
         {
@@ -31,18 +35,13 @@ public class AutoWalker : MonoBehaviour, ITapTracker
         }
         transform.position = from;
         elapsedTime = 0f;
-    }
-    public bool OnTap(Vector2 iVec2)
-    {
-        if (isDelayed)
-            return false;
-
-        AutoWalk = !AutoWalk;
-        OnAutoWalkToggleCB.Invoke(AutoWalk);
-        return true;
+        OnReachCB.AddListener(() => transform.DOKill());
+        baseScale = transform.localScale;
+        RB2D = GetComponent<Rigidbody2D>();
+        StartAnimation();
     }
 
-    void Update()
+    protected void Update()
     {
         if (AutoWalk)
         {
@@ -58,7 +57,12 @@ public class AutoWalker : MonoBehaviour, ITapTracker
         }
     }
 
-    void OnDestroy()
+    protected virtual void StartAnimation()
+    {
+
+    }
+
+    protected void OnDestroy()
     {
         if (DelayedCo != null)
         {
@@ -80,7 +84,7 @@ public class AutoWalker : MonoBehaviour, ITapTracker
         DelayedCo = StartCoroutine(DelayCo(iDelayer.delayTime));
     }
 
-    IEnumerator DelayCo(float iTime)
+    protected IEnumerator DelayCo(float iTime)
     {
         isDelayed = true;
         OnPreDelayedyCB.Invoke();
@@ -92,6 +96,11 @@ public class AutoWalker : MonoBehaviour, ITapTracker
 
         isDelayed = false;
         OnPostDelayedCB.Invoke();
+    }
+
+    public virtual void Kill()
+    {
+        OnKilledCB?.Invoke();
     }
 
 }

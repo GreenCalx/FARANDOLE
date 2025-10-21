@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4303294066598413978}
   - component: {fileID: 1988993029350909508}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Renderer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27,8 +27,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.02, y: 0.02, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.25, y: 0.25, z: 12.500001}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 7629320753057512088}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -73,10 +73,10 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 5378352612430853706, guid: 4f178970fae6efa488ca12a4fe69b99a, type: 3}
+  m_SortingLayerID: -1321468233
+  m_SortingLayer: 2
+  m_SortingOrder: 1
+  m_Sprite: {fileID: 21300000, guid: 425cd7b2bfebcee4597b821eec271b9b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -96,11 +96,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7629320753057512088}
-  - component: {fileID: 3228026180347840980}
   - component: {fileID: 2305746928130172609}
   - component: {fileID: 8087593287071545654}
-  m_Layer: 0
-  m_Name: AutoWalker
+  - component: {fileID: 8293068489358064981}
+  m_Layer: 9
+  m_Name: FireWalker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -122,37 +122,6 @@ Transform:
   - {fileID: 4303294066598413978}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3228026180347840980
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4773738385027529234}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d68d15fbf6893f54aaaaab43139cea67, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  handle_Renderer: {fileID: 1988993029350909508}
-  walkDuration: 2.5
-  ReverseBehaviour: 0
-  OnAutoWalkToggleCB:
-    m_PersistentCalls:
-      m_Calls: []
-  OnReachCB:
-    m_PersistentCalls:
-      m_Calls: []
-  OnPreDelayedyCB:
-    m_PersistentCalls:
-      m_Calls: []
-  OnPostDelayedCB:
-    m_PersistentCalls:
-      m_Calls: []
-  AutoWalk: 0
-  from: {x: 0, y: 0, z: 0}
-  to: {x: 0, y: 0, z: 0}
-  isDelayed: 0
 --- !u!50 &2305746928130172609
 Rigidbody2D:
   serializedVersion: 5
@@ -216,3 +185,36 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.1
+--- !u!114 &8293068489358064981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4773738385027529234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 206b3f3edc2faad4983d00181f0ea8f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handle_Renderer: {fileID: 1988993029350909508}
+  walkDuration: 3
+  animCycle: 0.3
+  ReverseBehaviour: 0
+  OnAutoWalkToggleCB:
+    m_PersistentCalls:
+      m_Calls: []
+  OnReachCB:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPreDelayedyCB:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPostDelayedCB:
+    m_PersistentCalls:
+      m_Calls: []
+  AutoWalk: 0
+  from: {x: 0, y: 0, z: 0}
+  to: {x: 0, y: 0, z: 0}
+  isDelayed: 0
+  deathSprite: {fileID: 21300000, guid: ff23e7fc10e6ae7469bba92f9ee10d5d, type: 3}

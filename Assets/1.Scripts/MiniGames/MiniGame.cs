@@ -27,6 +27,7 @@ public class MiniGame : MonoBehaviour, IMiniGame
     public bool IsInPostGame;
     public MiniGameSuccessState successState;
 
+
     public bool hasIntro = false;
 
 

@@ -38,6 +38,7 @@ public class MiniGameManager : MonoBehaviour, IManager
     public UIGame UI;
     CancellationTokenSource LoopCompleteAnimCTS;
     CancellationTokenSource LoopClearAnimCTS;
+    public List<SpriteSwapOnWin> autoSwappersOnWin;
 
     #region IManager
     public void Init(GameManager iGameManager)
@@ -52,6 +53,7 @@ public class MiniGameManager : MonoBehaviour, IManager
         PData = iGameManager.playerData;
         UI = iGameManager.UI;
 
+        autoSwappersOnWin = new List<SpriteSwapOnWin>();
         LoadLoop();
     }
     
@@ -127,6 +129,8 @@ public class MiniGameManager : MonoBehaviour, IManager
         MGLoop.Current.gameObject.SetActive(false);
         PC.ClearAllTrackers();
         LM2D.ClearLayers();
+
+        autoSwappersOnWin.Clear();
     }
 
     public void WinMiniGame()
@@ -139,13 +143,12 @@ public class MiniGameManager : MonoBehaviour, IManager
         gameClock.Freeze(true);
         MGLoop.Current.IsInPostGame = true;
 
-        //float miniGameDuration = GameData.Get.gameSettings.MiniGameTime - gameClock.GetElapsedTime();
+        autoSwappersOnWin.ForEach(e => e.OnWinSwap());
+
         MGLoop.Current.successState = (gameClock.GetElapsedTime() > GameData.Get.gameSettings.MiniGameTime) ?
             MiniGameSuccessState.FAILED : MiniGameSuccessState.PASSED;
 
-        //ShowPostGameUICB.Invoke(miniGameDuration);
         OnMiniGameComplete.Invoke();
-        //UI.RefreshLoopStage(MGLoop.index, MGLoop.Current.successState);
 
         DelayedNext();
     }

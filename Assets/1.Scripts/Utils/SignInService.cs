@@ -19,8 +19,11 @@ public class SignInService : MonoBehaviour
     // TODO : bad security maybe, just for quick testing atm.
     bool signedIn = false;
     bool authentificationProcessed = false;
+    bool userAuthentificationProcessed = false;
     bool retry = false;
     bool kill = false;
+
+    PlayGamesLocalUser localUser;
 
     public void Start()
     {
@@ -67,6 +70,7 @@ public class SignInService : MonoBehaviour
     {
         authentificationProcessed = false;
         PlayGamesPlatform.Instance.Authenticate(ProcessAuthentication);
+        
     }
 
     async UniTaskVoid WaitSignIn()
@@ -95,16 +99,19 @@ public class SignInService : MonoBehaviour
         if (status == SignInStatus.Success)
         {
             // Continue with Play Games Services
-            //Debug.Log("signed in !");
-            string userName = "foo";
-            connectionText.text = "Signed in as " + userName;
-
+            
+            // TODO
+            // When google cloud connection is available, fetch user name and
+            // sign in used through ProcessUserAuthentication
+            
+            //localUser = PlayGamesPlatform.Instance.localUser;
+            //localUser.Authenticate(ProcessUserAuthentication);
             signedIn = true;
-            //retry = false;
+            
         }
         else
         {
-            connectionText.text = "Failed to sign in";
+            connectionText.text = "Failed to connect to google play services";
             // Disable your integration with Play Games Services or show a login button
             // to ask users to sign-in. Clicking it should call
             // PlayGamesPlatform.Instance.ManuallyAuthenticate(ProcessAuthentication).
@@ -112,6 +119,22 @@ public class SignInService : MonoBehaviour
             //retry = true;
         }
         authentificationProcessed = true;
+    }
+
+    internal void ProcessUserAuthentication(bool status)
+    {
+        if (status)
+        {
+            string userName = localUser.userName;
+            connectionText.text = "Signed in as " + userName;
+            signedIn = true;
+        }
+        else
+        {
+            connectionText.text = "Failed to connect to authenticate user";
+            signedIn = false;
+        }
+        userAuthentificationProcessed = true;
     }
     
 }

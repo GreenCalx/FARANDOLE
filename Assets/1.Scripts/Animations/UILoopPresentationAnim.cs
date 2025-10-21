@@ -173,8 +173,16 @@ public class UILoopPresentationAnim : ManagedAnimation
         { return; }
 
         float delay = 1f / uiImages.Count;
-        int delay_step_in_ms = (int)(delay * 2000f);
+        int delay_step_in_ms = (int)(delay * GameData.GetSettings.ShowLightTotalTimeInMs);
         
+        if (delay_step_in_ms <= 0)
+        {
+            foreach (UIMiniGamePresentationImage img in uiImages)
+            {
+                img.ShowLight(iState);
+            }
+        }
+
         Queue<Func<UniTask>> q = new Queue<Func<UniTask>>();
         foreach (UIMiniGamePresentationImage img in uiImages)
         {

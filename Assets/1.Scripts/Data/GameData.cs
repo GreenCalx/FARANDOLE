@@ -7,11 +7,13 @@ public class GameData : MonoBehaviour
     public GameSettingsSO gameSettings;
     public MiniGameBankSO gameBank;
     public UIThemeSO UITheme;
+    public AccessibilitySettingsSO accessibilitySettingsSO;
     private static GameData instance = null;
     public static GameData Get => instance;
     public static GameSettingsSO GetSettings => instance.gameSettings;
     public static MiniGameBankSO GetMGBank => instance.gameBank;
     public static UIThemeSO GetUITheme => instance.UITheme;
+    public static AccessibilitySettingsSO GetAccessibilitySettings => instance.accessibilitySettingsSO;
 
     void Awake()
     {

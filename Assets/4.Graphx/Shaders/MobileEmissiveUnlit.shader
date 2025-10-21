@@ -63,6 +63,8 @@ Shader "XL/MobileEmissiveUnlit"
             fixed4 frag (v2f i) : SV_Target
             {
                 fixed4 col = tex2D(_MainTex, i.uv) ;
+                if (col.a < _AlphaCutoff)
+                    discard;
                 // col.r *= _Color.r * _Brightness;
                 // col.g *= _Color.g * _Brightness;
                 // col.b *= _Color.b * _Brightness;

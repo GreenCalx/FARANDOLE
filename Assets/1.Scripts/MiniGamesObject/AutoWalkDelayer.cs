@@ -4,23 +4,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class AutoWalkDelayer : MonoBehaviour
+public class AutoWalkDelayer : AutoWalkEffector
 {
-    public SpriteRenderer handle_Renderer;
     public float delayTime = 0.5f;
-    public Sprite OnTriggerSprite;
     public float delayBeforeEnablingRB2D = 0.25f;
-    SpriteRenderer SR;
-    Rigidbody2D RB2D;
     Coroutine delayPhysxCo;
-    public UnityEvent OnDestroyCB;
-    void Start()
+    protected void Start()
     {
-        SR = GetComponent<SpriteRenderer>();
-        RB2D = GetComponent<Rigidbody2D>();
+        base.Start();
         RB2D.bodyType = RigidbodyType2D.Kinematic;
-
         delayPhysxCo = StartCoroutine(DelayedPhysxCo());
+
+        OnTriggerEnterCB.AddListener( (walker) => DelayWalker(walker));
+        OnAnyCollisionEnterCB.AddListener(() => OnObjectCollision());
+        OnDestroyCB.AddListener(() => CleanUp());
     }
 
     IEnumerator DelayedPhysxCo()
@@ -30,32 +27,36 @@ public class AutoWalkDelayer : MonoBehaviour
         RB2D.bodyType = RigidbodyType2D.Dynamic;
     }
 
-    void OnDestroy()
+    public void CleanUp()
     {
-        if (delayPhysxCo!=null)
+        if (delayPhysxCo != null)
         {
             StopCoroutine(delayPhysxCo);
             delayPhysxCo = null;
         }
-        OnDestroyCB.Invoke();
+    }
+    
+    public void DelayWalker(AutoWalker iWalker)
+    {
+        if (iWalker.isDelayed)
+            return;
+        iWalker.Delay(this);
+        if (SR != null)
+        {
+            SR.sprite = OnTriggerSprite;
+        }
+        RB2D.bodyType = RigidbodyType2D.Static;
+        Destroy(gameObject, delayTime);
     }
 
-    void OnTriggerEnter2D(Collider2D iCol)
+    public void OnObjectCollision()
     {
-        AutoWalker walker = iCol.gameObject.GetComponent<AutoWalker>();
-        if (!!walker)
+        if (SR != null)
         {
-            if (walker.isDelayed)
-                return;
-                
-            walker.Delay(this);
-            if (SR != null)
-            {
-                SR.sprite = OnTriggerSprite;
-            }
-            transform.position = walker.transform.position;
-            RB2D.bodyType = RigidbodyType2D.Static;
-            Destroy(gameObject, delayTime);
-        }
+            SR.sprite = OnTriggerSprite;
+        } 
+        RB2D.bodyType = RigidbodyType2D.Static;
+        Destroy(gameObject, delayTime);
     }
+    
 }

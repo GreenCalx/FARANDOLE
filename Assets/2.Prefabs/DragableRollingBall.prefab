@@ -76,7 +76,7 @@ ParticleSystemForceField:
   m_Parameters:
     m_Shape: 0
     m_StartRange: 0.27
-    m_EndRange: 0.39
+    m_EndRange: 0.49
     m_Length: 1
     m_GravityFocus: 0.56
     m_RotationRandomness: {x: 0, y: 0}
@@ -1540,7 +1540,7 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 0
-        scalar: 20
+        scalar: 10
         minScalar: 30
         maxCurve:
           serializedVersion: 2
@@ -1756,7 +1756,7 @@ ParticleSystem:
         m_RotationOrder: 4
     separateAxes: 0
   RotationModule:
-    enabled: 0
+    enabled: 1
     x:
       serializedVersion: 2
       minMaxState: 0
@@ -1866,7 +1866,7 @@ ParticleSystem:
     curve:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 3.1415925
+      scalar: -0.17453292
       minScalar: 0.7853982
       maxCurve:
         serializedVersion: 2
@@ -2325,7 +2325,7 @@ ParticleSystem:
     orbitalY:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 4
+      scalar: 2
       minScalar: 0
       maxCurve:
         serializedVersion: 2

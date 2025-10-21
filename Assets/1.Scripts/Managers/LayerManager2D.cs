@@ -50,13 +50,19 @@ public class LayerManager2D : MonoBehaviour, IManager
             //Debug.LogWarning("Failed to place in reserve");
         }
 
-        public void PlaceNew(Renderer iRenderer)
+        public int PlaceNew(Renderer iRenderer)
         {
             iRenderer.sortingOrder = min + nextSlot;
             renderers[nextSlot] = iRenderer;
             TryUpdatePosition(nextSlot);
-            //Debug.Log("LM2D Alloc : " + renderers[nextSlot].gameObject.name + " sorting order : " + renderers[nextSlot].sortingOrder);
+
             nextSlot++;
+            return nextSlot - 1;
+        }
+
+        public void ReplaceExisting(int iIndex, Renderer iNewRend)
+        {
+            renderers[iIndex] = iNewRend;
         }
 
         public void TryUpdatePosition(int iIndex)
@@ -93,9 +99,14 @@ public class LayerManager2D : MonoBehaviour, IManager
         backgroundLayer.Clear();
         forgroundLayer.Clear();
     }
-    public void PlaceObject(Renderer iRenderer)
+    public int PlaceObject(Renderer iRenderer)
     {
-        objectLayer.PlaceNew(iRenderer);
+        return objectLayer.PlaceNew(iRenderer);
+    }
+
+    public void ReplaceObject(int iIndex, Renderer iNewRenderer)
+    {
+        objectLayer.ReplaceExisting(iIndex, iNewRenderer);
     }
 
     public void PlaceForgroundReserve(Renderer iRenderer)

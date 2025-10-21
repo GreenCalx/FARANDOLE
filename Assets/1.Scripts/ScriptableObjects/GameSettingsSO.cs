@@ -33,5 +33,6 @@ public class GameSettingsSO : ScriptableObject
     public float PlayGroundColorLerpTimeSec = 1f;
     public float BGMRankLerpTimeSec = 1f;
     public float GameClockScaleAnimDuration = 0.25f;
+    public float ShowLightTotalTimeInMs = 2000f;
 
 }
