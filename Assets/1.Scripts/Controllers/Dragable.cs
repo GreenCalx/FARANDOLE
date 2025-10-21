@@ -36,6 +36,7 @@ public class Dragable : MonoBehaviour, IPositionTracker
         if (m_SpriteRenderer == null)
             m_SpriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         baseGScale = rb.gravityScale;
+        selected = false;
     }
 
     void FixedUpdate()
