@@ -290,7 +290,9 @@ MonoBehaviour:
   IsActiveMiniGame: 0
   IsInPostGame: 0
   successState: 0
+  hasIntro: 0
   prefab_mole: {fileID: 7528823468832330446, guid: 48d5329a62bd09b40ab84b09a6eb5f35, type: 3}
+  prefab_PerspectiveRoom: {fileID: 7413221358431396152, guid: 57b500e58b4820d42919660e759da4b7, type: 3}
   UIWorld_targetCounter: {fileID: 8319815142386184525}
   colSizes: 0300000004000000040000000500000005000000
   rowSizes: 0300000003000000040000000500000006000000

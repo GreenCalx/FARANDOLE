@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 using Cysharp.Threading.Tasks;
 using static Utils;
 [Serializable]
@@ -39,6 +40,7 @@ public struct RoomObject
         renderer = iRenderer;
     }
 }
+
 
 [Serializable]
 public class RowInfo
@@ -84,7 +86,7 @@ public class RoomRow
         if (iMutateScaling)
         {
             iTransform.localScale = new Vector3(objectScale, objectScale, objectScale);
-            iTransform.position = new Vector2(Mathf.Clamp(iTransform.position.x, min.x, max.x), min.y);
+            iTransform.position = new Vector3(Mathf.Clamp(iTransform.position.x, min.x, max.x), min.y, rowDepth);
         }
     }
 
@@ -103,6 +105,54 @@ public class RoomRow
     }
 }
 
+public class RoomRowPlacer : IEnumerator<float>
+{
+    public float Current { get { return currFrac; } }
+    object IEnumerator.Current { get { return Current; } }
+    int index = 0;
+    float fracStep = 0f;
+    int rowDepth = 0;
+    int rowSubdivision = 0;
+    int currDepth = 0;
+    float currFrac = 0f;
+    bool m_LRPadding;
+    public void Init(int iRows, int iRowSubdivision, bool iLRPadding)
+    {
+        m_LRPadding = iLRPadding;
+        rowDepth        = iRows;
+        rowSubdivision = iLRPadding ? iRowSubdivision + 2 : iRowSubdivision;
+        if (rowSubdivision <= 1)
+            fracStep = 0.5f;
+        else
+            fracStep = 1f / Math.Max(rowSubdivision - 1, 0);
+
+    }
+    public void Reset()
+    {
+        currDepth   = 0;
+        index       = 0;
+        currFrac    = 0f;
+    }
+    public bool MoveNext()
+    {
+        if (index >= rowSubdivision * rowDepth)
+            return false;
+        currFrac = (++index % rowSubdivision) * fracStep;
+        return true;
+    }
+
+    public float At(int iRowIndex)
+    {
+        if (m_LRPadding)
+            return ((iRowIndex+1) % (rowSubdivision)) * fracStep;
+        else
+            return ((iRowIndex) % rowSubdivision) * fracStep;
+    }
+    void IDisposable.Dispose()
+    {
+
+    }
+}
 #if UNITY_EDITOR
 [ExecuteInEditMode]
 #endif
@@ -111,7 +161,7 @@ public class PerspectiveRoom : MonoBehaviour
     [Header("RemoveMe")]
     public bool cmd_Build = false;
     public bool cmd_Clean = false;
-
+    public bool cmd_ContinuousRefresh = false;
 
     [Header("Tweaks")]
     public int m_Depth = 3;
@@ -132,7 +182,7 @@ public class PerspectiveRoom : MonoBehaviour
     public LayerManager2D r_LM2D;
     List<RoomRow> m_Rows;
     float m_FarLineWidth = 0;
-
+    public RoomRowPlacer m_RoomRowPlacer;
     LineRenderer farPlaneLineTracer;
     LineRenderer nearPlaneLineTracer;
     List<LineRenderer> perspectiveLines;
@@ -147,6 +197,12 @@ public class PerspectiveRoom : MonoBehaviour
         r_LM2D = iLM2D;
         m_Depth = iNumberOfRows;
     }
+
+    public void InitRoomPlacer(int iRowSubdivision, bool iLRPadding)
+    {
+        m_RoomRowPlacer = new RoomRowPlacer();
+        m_RoomRowPlacer.Init(m_Depth, iRowSubdivision, iLRPadding);
+    }
     public void Build()
     {
         if (!m_TraceLines)
@@ -155,6 +211,12 @@ public class PerspectiveRoom : MonoBehaviour
             // TODO : build line tracers only when required properly
             m_LineWidth = 0f;
         }
+
+        // ----------------------------------------------------
+        // Rebase Z position on active camera to have a meaningful depth value
+        transform.position = new Vector3(transform.position.x,
+                                        transform.position.y,
+                                        Camera.main.transform.position.z);
 
         // ----------------------------------------------------
         // Invariants compute
@@ -255,10 +317,10 @@ public class PerspectiveRoom : MonoBehaviour
                         .BuildAs<LineRenderer>();
 
         Vector3[] pos = new Vector3[4];
-        pos[0] = new Vector3(iArea.max.x, iArea.max.y, iZDepth);
-        pos[1] = new Vector3(iArea.max.x, iArea.min.y, iZDepth);
-        pos[2] = new Vector3(iArea.min.x, iArea.min.y, iZDepth);
-        pos[3] = new Vector3(iArea.min.x, iArea.max.y, iZDepth);
+        pos[0] = transform.position + new Vector3(iArea.max.x, iArea.max.y, iZDepth);
+        pos[1] = transform.position + new Vector3(iArea.max.x, iArea.min.y, iZDepth);
+        pos[2] = transform.position + new Vector3(iArea.min.x, iArea.min.y, iZDepth);
+        pos[3] = transform.position + new Vector3(iArea.min.x, iArea.max.y, iZDepth);
 
         ret.lineTracer.positionCount = 4;
         ret.lineTracer.loop = true;
@@ -287,10 +349,10 @@ public class PerspectiveRoom : MonoBehaviour
                             .BuildAs<LineRenderer>();
 
         Vector3[] pos = new Vector3[4];
-        pos[0] = new Vector3(iPlan.area.max.x, iPlan.area.max.y, iPlan.zDepth);
-        pos[1] = new Vector3(iPlan.area.max.x, iPlan.area.min.y, iPlan.zDepth);
-        pos[2] = new Vector3(iPlan.area.min.x, iPlan.area.min.y, iPlan.zDepth);
-        pos[3] = new Vector3(iPlan.area.min.x, iPlan.area.max.y, iPlan.zDepth);
+        pos[0] = transform.position + new Vector3(iPlan.area.max.x, iPlan.area.max.y, iPlan.zDepth);
+        pos[1] = transform.position + new Vector3(iPlan.area.max.x, iPlan.area.min.y, iPlan.zDepth);
+        pos[2] = transform.position + new Vector3(iPlan.area.min.x, iPlan.area.min.y, iPlan.zDepth);
+        pos[3] = transform.position + new Vector3(iPlan.area.min.x, iPlan.area.max.y, iPlan.zDepth);
 
         oLineTracer.positionCount = 4;
         oLineTracer.loop = true;
@@ -312,8 +374,8 @@ public class PerspectiveRoom : MonoBehaviour
                             .BuildAs<LineRenderer>();
 
         Vector3[] pos = new Vector3[2];
-        pos[0] = iMin;
-        pos[1] = iMax;
+        pos[0] = transform.position + iMin;
+        pos[1] = transform.position + iMax;
 
         line.positionCount = 2;
         line.loop = false;
@@ -353,38 +415,22 @@ public class PerspectiveRoom : MonoBehaviour
     {
 #if UNITY_EDITOR
 
-        foreach (Transform t in transform)
+        // Note : Dirty hack to delete every child
+        // because for some reason this forloop
+        // only iterates over some of them ?
+        for (int i=0; i < 5; i++)
         {
-            DestroyImmediate(t.gameObject);
+            foreach (Transform t in transform)
+            {
+                DestroyImmediate(t.gameObject);
+            }
         }
-
-        // if (farPlaneLineTracer != null)
-        //     DestroyImmediate(farPlaneLineTracer.gameObject);
-        // if (nearPlaneLineTracer != null)
-        //     DestroyImmediate(nearPlaneLineTracer.gameObject);
-        // foreach (LineRenderer lr in perspectiveLines)
-        // {
-        //     if (lr == null)
-        //         continue;
-        //     DestroyImmediate(lr.gameObject);
-        // }
-        // perspectiveLines.Clear();
-        // if (m_Rows != null)
-        // {
-        //     foreach (RoomRow rr in m_Rows)
-        //     {
-        //         if (rr==null)
-        //             continue;
-        //         DestroyImmediate(rr.gameObject);
-        //     }
-        //     m_Rows.Clear();
-        // }
-
-#endif
+#else
         foreach (Transform t in transform)
         {
             Destroy(t.gameObject);
         }
+#endif
     }
 
 
@@ -448,23 +494,38 @@ public class PerspectiveRoom : MonoBehaviour
         return m_Rows[iRowDepth].max.x;
     }
 
+    public float GetXRowLerp(int iRowDepth, float iLerpValue)
+    {
+        float lerp = Mathf.Clamp(iLerpValue, 0f, 1f);
+        Debug.Log( "row depth : " + iRowDepth +  " /lerp : " + lerp);
+        return Utils.Lerp(XMinForRow(iRowDepth), XMaxForRow(iRowDepth), lerp);
+    }
+
     public void RandomPositionInRow(Transform iTarget, int iRowDepth)
     {
-       // iTarget.transform.position
+        // iTarget.transform.position
     }
 
 
     void Update()
     {
+#if UNITY_EDITOR
+        if (cmd_ContinuousRefresh)
+        {
+            Clean();
+            Build();
+            return;
+        }
         if (cmd_Clean)
         {
             Clean();
             cmd_Clean = false;
         }
         if (cmd_Build)
-            {
-                Build();
-                cmd_Build = false;
-            }
+        {
+            Build();
+            cmd_Build = false;
+        }
+#endif
     }
 }

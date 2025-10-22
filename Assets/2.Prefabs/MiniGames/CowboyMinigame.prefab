@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6940981594421101440
 Transform:
   m_ObjectHideFlags: 0
@@ -139,6 +139,7 @@ MonoBehaviour:
   IsActiveMiniGame: 0
   IsInPostGame: 0
   successState: 0
+  hasIntro: 0
   prefab_PerspectiveRoom: {fileID: 7413221358431396152, guid: 0dc1fe543b1162748bee11f4944a9954, type: 3}
   prefab_cowboy: {fileID: 1254674784674536253, guid: e40f0ca83aeb6a440b2c9241466c3340, type: 3}
   prefab_obstacle: {fileID: 7061715364767946349, guid: 12cc4e7782e91cc47aa4508c0c550a9b, type: 3}

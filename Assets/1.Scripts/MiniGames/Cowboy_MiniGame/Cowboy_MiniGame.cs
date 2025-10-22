@@ -138,6 +138,7 @@ public class CowboyMiniGame : MiniGame
 
         inst_PerspectiveRoom.Clean();
         Destroy(inst_PerspectiveRoom.gameObject);
+        inst_PerspectiveRoom = null;
     }
     public override void Lose()
     {

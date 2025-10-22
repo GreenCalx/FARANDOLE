@@ -6,7 +6,9 @@ using TMPro;
 public class WackAMoleMiniGame : MiniGame
 {
     [Header("WackAMoleGame")]
+
     public GameObject prefab_mole;
+    public GameObject prefab_PerspectiveRoom;
     public TextMeshProUGUI UIWorld_targetCounter;
 
     private Mole[] inst_moles;
@@ -19,6 +21,7 @@ public class WackAMoleMiniGame : MiniGame
     private int target;
     public float[] maxHoleDuration;
     public float[] minHoleDuration;
+    PerspectiveRoom inst_PerspectiveRoom;
 
     public override void Init()
     {
@@ -27,33 +30,51 @@ public class WackAMoleMiniGame : MiniGame
 
     public override void Reset()
     {
+
+
         colSize = colSizes[MGM.miniGamesDifficulty - 1];
         rowSize = rowSizes[MGM.miniGamesDifficulty - 1];
         float tempMinHoleDuration = minHoleDuration[MGM.miniGamesDifficulty - 1];
         float tempMaxHoleDuration = maxHoleDuration[MGM.miniGamesDifficulty - 1];
         target = targets[MGM.miniGamesDifficulty - 1];
 
+                // room
+        inst_PerspectiveRoom = GOBuilder.Create(prefab_PerspectiveRoom)
+                                .WithParent(transform)
+                                .BuildAs<PerspectiveRoom>();
+        inst_PerspectiveRoom.Init(MGM.LM2D, rowSize);
+        inst_PerspectiveRoom.Build();
+        inst_PerspectiveRoom.InitRoomPlacer(colSize, true);
+
         UpdateMGUI();
-        float delta_x = PG.bounds.size.x / (rowSize + 1);
-        float delta_y = PG.bounds.size.y / (colSize + 1);
+        //float delta_x = PG.bounds.size.x / (rowSize + 1);
+        //float delta_y = PG.bounds.size.y / (colSize + 1);
+        
 
         inst_moles = new Mole[colSize * rowSize];
         for (int j = 0; j < colSize; j++)
         {
             for (int i = 0; i < rowSize; i++)
             {
-                inst_moles[j * rowSize + i] = GOBuilder.Create(prefab_mole)
+                Mole currMole = GOBuilder.Create(prefab_mole)
                     .WithParent(transform)
-                    .WithLocalPosition(new Vector3(PG.bounds.min.x + (delta_x * (i + 1)), PG.bounds.max.y - (delta_y * (j + 1))))
                     .WithName("mole" + i + "" + j)
                     .BuildAs<Mole>();
-                inst_moles[j * rowSize + i].Init(tempMinHoleDuration, tempMaxHoleDuration);
-                PC.AddTapTracker(inst_moles[j * rowSize + i]);
-                MGM.LM2D.PlaceObject(inst_moles[j * rowSize + i].GetComponent<SpriteRenderer>());
+                currMole.Init(tempMinHoleDuration, tempMaxHoleDuration);
+                PC.AddTapTracker(currMole);
+                inst_PerspectiveRoom.AddToRoom(currMole.transform, i, currMole.GetRenderer());
 
-                inst_moles[j * rowSize + i].tapCB.AddListener(MoleWhacked);
+                currMole.transform.position = new Vector3(
+                    inst_PerspectiveRoom.GetXRowLerp(i, inst_PerspectiveRoom.m_RoomRowPlacer.At(j)),
+                    currMole.transform.position.y,
+                    currMole.transform.position.z);
+                currMole.tapCB.AddListener(MoleWhacked);
+
+                inst_moles[j * rowSize + i] = currMole;
             }
         }
+
+        inst_PerspectiveRoom.PlaceAllOnLayers();
     }
     public override void Play()
     {
@@ -68,7 +89,7 @@ public class WackAMoleMiniGame : MiniGame
     }
     public override void Win()
     {
-        Clean();
+        //Clean();
         MGM.WinMiniGame();
     }
     public override void Lose()
@@ -98,6 +119,7 @@ public class WackAMoleMiniGame : MiniGame
 
     public void Clean()
     {
+        Debug.Log("Mole Clean");
         foreach (Mole mole in inst_moles)
         {
             if (mole != null)
@@ -106,5 +128,12 @@ public class WackAMoleMiniGame : MiniGame
                 Destroy(mole.gameObject);
             }
         }
+
+        if (inst_PerspectiveRoom!=null)
+        {
+            inst_PerspectiveRoom.Clean();
+            Destroy(inst_PerspectiveRoom.gameObject);    
+        }
+        
     }
 }

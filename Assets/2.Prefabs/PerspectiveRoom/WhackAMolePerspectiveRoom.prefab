@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2799946259453991426}
   - component: {fileID: 2087264664428440975}
   m_Layer: 0
-  m_Name: PerspectiveRoom
+  m_Name: WhackAMolePerspectiveRoom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 7413221358431396152}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -1, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -46,31 +46,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cmd_Build: 0
   cmd_Clean: 0
-  m_Depth: 5
+  cmd_ContinuousRefresh: 0
+  m_Depth: 4
   m_NearPlan:
     area:
       serializedVersion: 2
       x: -2
-      y: -3.5
+      y: -2.05
       width: 4
-      height: 7
-    zDepth: 20
+      height: 3
+    zDepth: 2
   m_FarPlan:
     area:
       serializedVersion: 2
-      x: -1
-      y: -1
-      width: 2
-      height: 6
-    zDepth: 50
-  nearObjectScale: 0.7
-  farObjectScale: 0.15
+      x: -1.3
+      y: 0
+      width: 2.6
+      height: 3
+    zDepth: 6
+  nearObjectScale: 0.16
+  farObjectScale: 0.1
   AutoScaleFromVanishingPoint: 0
-  m_TraceLines: 1
+  m_TraceLines: 0
   m_LineTracerMat: {fileID: 2100000, guid: 7e49a6b8b3415754d869225782a84df1, type: 2}
   m_RowTracerMat: {fileID: 2100000, guid: a9d8194e6ead1fd42818e6a452c1fab7, type: 2}
-  m_LineWidth: 0.1
-  m_LineWidthDepthFalloff: 4
+  m_LineWidth: 0.05
+  m_LineWidthDepthFalloff: 3
   m_TracesSortingLayer: PerspectiveRoom
-  m_FOV: 74.0546
+  m_FOV: 78.95906
   r_LM2D: {fileID: 0}

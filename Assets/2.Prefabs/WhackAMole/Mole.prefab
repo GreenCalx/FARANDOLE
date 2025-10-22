@@ -4968,8 +4968,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 898769707
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: -1746135964, guid: 37f6f38981de4c64d94349c538f3bdf1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -5053,6 +5053,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b1d6d5ffec86b6469544de2476608d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_SR: {fileID: 4997609254448369444}
   tapCB:
     m_PersistentCalls:
       m_Calls: []

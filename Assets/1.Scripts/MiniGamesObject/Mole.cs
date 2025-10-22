@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEngine.Events;
-public class Mole : MonoBehaviour, ITapTracker
+public class Mole : MonoBehaviour, ITapTracker, IRendered
 {
 
-
+    public SpriteRenderer m_SR;
     public UnityEvent tapCB;
     private float minTime;
 
@@ -65,5 +65,11 @@ public class Mole : MonoBehaviour, ITapTracker
         ResetClock();
         Debug.Log("mole in hole " + name);
         inHole = true;
+    }
+
+        // IRendered
+    public Renderer GetRenderer()
+    {
+        return m_SR;
     }
 }
