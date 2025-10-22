@@ -6,6 +6,8 @@ using UnityEngine.Events;
 public class CounterObject : MonoBehaviour, ITapTracker
 {
     public SpriteRenderer sr;
+    public SpriteRenderer bodySR;
+    public SpriteRenderer stickerSR;
     public Sprite[] countSprite;
     public int count = 0;
     public Collider2D counterCollider;
@@ -14,12 +16,13 @@ public class CounterObject : MonoBehaviour, ITapTracker
     public float shrinkAnimDuration = 0.5f;
     public ParticleSystem selectedParticles;
     public bool stopPropagation => true;
+
+
     public int GetDisplayPriority(){ return sr.sortingOrder; }
     void Start()
     {
-        selectedParticles = GetComponent<ParticleSystem>(); 
+        selectedParticles = GetComponent<ParticleSystem>();
         counterCollider = GetComponent<Collider2D>();
-        sr.GetComponent<SpriteRenderer>();
     }
 
     public void Setup(int index)
@@ -32,7 +35,6 @@ public class CounterObject : MonoBehaviour, ITapTracker
         else
         {
             sr.sprite = countSprite[index];
-            sr.sortingOrder = 10-index;
         }
     }
     public bool OnTap(Vector2 vector2)

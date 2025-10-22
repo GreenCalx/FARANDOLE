@@ -57,7 +57,7 @@ public class LayerManager2D : MonoBehaviour, IManager
             TryUpdatePosition(nextSlot);
 
             nextSlot++;
-            return nextSlot - 1;
+            return reservedSize + nextSlot - 1;
         }
 
         public void ReplaceExisting(int iIndex, Renderer iNewRend)

@@ -27,19 +27,23 @@ public class Counting_MiniGame : MiniGame
         counterObjects          = new CounterObject[n_spawns];
         counterObjectsPositions = new Vector2[n_spawns];
         counter = 1;
-        for (int i = 0; i < n_spawns; i++)
+        for (int i = n_spawns-1; i >= 0; i--)
         {
             counterObjects[i] = GOBuilder.Create(prefabs_dice)
             .WithName("counter" + i)
             .WithParent(transform)
             .WithPosition(counterObjectsPositions[i])
-            .Build().GetComponent<CounterObject>();
+            .BuildAs<CounterObject>();
             counterObjects[i].Setup(i);
-            //MGM.LM2D.PlaceObject(counterObjects[i].sr);
+            
             PC.AddTapTracker(counterObjects[i]);
             counterObjects[i].tapCB.AddListener(diceSelected);
+
+            MGM.LM2D.PlaceObject(counterObjects[i].stickerSR);
+            MGM.LM2D.PlaceObject(counterObjects[i].bodySR);
+            MGM.LM2D.PlaceObject(counterObjects[i].sr);
         }
-        spawnMargin = (counterObjects[0].sr.bounds.max.x - counterObjects[0].sr.bounds.min.x)/2;
+        spawnMargin = (counterObjects[0].sr.bounds.max.x - counterObjects[0].sr.bounds.min.x);
         PositionAtRandomNoOverlap();
     }
 
@@ -119,7 +123,7 @@ public class Counting_MiniGame : MiniGame
 
                 safetyCounter++;
 
-            } while (hasOverlap && safetyCounter < 5); // 50 tentatives max
+            } while (hasOverlap && safetyCounter < 10); // 50 tentatives max
         }
     }
 
