@@ -14,14 +14,12 @@ public class CounterObject : MonoBehaviour, ITapTracker
     public UnityEvent<int> tapCB;
 
     public float shrinkAnimDuration = 0.5f;
-    public ParticleSystem selectedParticles;
     public bool stopPropagation => true;
 
 
     public int GetDisplayPriority(){ return sr.sortingOrder; }
     void Start()
     {
-        selectedParticles = GetComponent<ParticleSystem>();
         counterCollider = GetComponent<Collider2D>();
     }
 
@@ -52,7 +50,6 @@ public class CounterObject : MonoBehaviour, ITapTracker
 
     public void Selected()
     {
-        selectedParticles.Play();
         transform.DOScale(Vector3.zero, shrinkAnimDuration);
         // TODO Make it compliant with custom shaders
         //sr.material.DOFade(0, shrinkAnimDuration);

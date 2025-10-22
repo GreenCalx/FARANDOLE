@@ -47,6 +47,12 @@ public class GOBuilder
         return this;
     }
 
+    public GOBuilder WithZRotation(float iAngle, bool iAlignWithUp = false)
+    {
+        float angle = iAlignWithUp ? iAngle - 90f : iAngle;
+        GO.transform.rotation = Quaternion.AngleAxis(angle, GO.transform.forward);
+        return this;
+    }
     public GOBuilder WithAnchoredPosition(Vector3 iPos)
     {
         GO.GetComponent<RectTransform>().anchoredPosition = iPos;

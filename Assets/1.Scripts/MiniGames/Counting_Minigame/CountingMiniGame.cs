@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 using Unity.VisualScripting;
 
 public class Counting_MiniGame : MiniGame
@@ -9,20 +10,37 @@ public class Counting_MiniGame : MiniGame
     [Header("CountingMiniGame")]
     public GameObject prefabs_dice;
     public GameObject prefab_poolBall;
-
+    public GameObject prefab_OnTapParticles;
     private float spawnMargin;
     public int[] numberCounterObjects;
     private CounterObject[] counterObjects;
     private int counter = 1;
     private Vector2[] counterObjectsPositions;
-
+    List<ParticleSystem> inst_OnTapPS;
+    public float randomTiltRangeMin = -25f,
+                 randomTiltRangeMax = 25f;
     public override void Init()
     {
         //Reset();
+
     }
 
     public override void Reset()
     {
+        if ((inst_OnTapPS!=null)&&(inst_OnTapPS.Count>0))
+        {
+            inst_OnTapPS.ForEach(e =>
+            {
+                if (e != null)
+                    GameObject.Destroy(e.gameObject);
+            });
+            inst_OnTapPS.Clear();
+        } else
+        {
+            inst_OnTapPS = new List<ParticleSystem>(numberCounterObjects[numberCounterObjects.Length - 1]);
+        }
+        
+
         int n_spawns = numberCounterObjects[MGM.miniGamesDifficulty - 1];
         counterObjects          = new CounterObject[n_spawns];
         counterObjectsPositions = new Vector2[n_spawns];
@@ -33,6 +51,7 @@ public class Counting_MiniGame : MiniGame
             .WithName("counter" + i)
             .WithParent(transform)
             .WithPosition(counterObjectsPositions[i])
+            .WithZRotation(UnityEngine.Random.Range(randomTiltRangeMin * MGM.miniGamesDifficulty, randomTiltRangeMax* MGM.miniGamesDifficulty))
             .BuildAs<CounterObject>();
             counterObjects[i].Setup(i);
             
@@ -74,12 +93,24 @@ public class Counting_MiniGame : MiniGame
         return false;
     }
 
+    public void SpawnParticles(Vector3 iPosition)
+    {
+        ParticleSystem new_OnTapPS = GOBuilder.Create(prefab_OnTapParticles)
+                .WithName("OnTapPS")
+                .WithParent(transform)
+                .WithPosition(iPosition)
+                .BuildAs<ParticleSystem>();
+        inst_OnTapPS.Add(new_OnTapPS);
+        GameObject.Destroy(new_OnTapPS.gameObject, new_OnTapPS.main.startLifetime.Evaluate(0f));
+    }
 
     private void diceSelected(int count)
     {
         if (count == counter)
         {
+            SpawnParticles(counterObjects[count - 1].transform.position);
             counterObjects[count - 1].Selected();
+
             counter++;
             if (counter > numberCounterObjects[MGM.miniGamesDifficulty - 1])
             {
