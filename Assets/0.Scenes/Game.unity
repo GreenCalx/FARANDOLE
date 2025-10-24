@@ -163,7 +163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80b8b58d2f403e84aa6ce22d65c5011f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MiniGameToTest: {fileID: 0}
+  MiniGameToTest: {fileID: 7478234881393395322, guid: 71d13dff3bf38ff4da5b090cba665e8f, type: 3}
   prefab_miniGames:
   - {fileID: 6891743480671891591, guid: ca650ba5ffb5e9c4d8e5e5b7a7fdaeae, type: 3}
   - {fileID: 5205109001117507003, guid: ef698d4e9557cd14dbc5770833ba666b, type: 3}
@@ -896,8 +896,8 @@ MonoBehaviour:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
   compositeCollider: {fileID: 1431966741}
-  diff1Pattern: {fileID: 11400000, guid: d55dfaed82ef78046aed37696cfe035b, type: 2}
-  diff2Pattern: {fileID: 11400000, guid: c8152ed6644d30c43887c2642f867aa4, type: 2}
+  diff1Pattern: {fileID: 11400000, guid: c8152ed6644d30c43887c2642f867aa4, type: 2}
+  diff2Pattern: {fileID: 11400000, guid: d55dfaed82ef78046aed37696cfe035b, type: 2}
   diff3Pattern: {fileID: 11400000, guid: 2d148bf1b03b946409e7e2c4497b73d7, type: 2}
   forgroundMat: {fileID: 2100000, guid: 85f130548d231f148be3b875de155db5, type: 2}
   playFieldMat: {fileID: 2100000, guid: 10297d9c3a9557e43a58da2bfeefbfb0, type: 2}
@@ -1537,10 +1537,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2673550815212639681, guid: df5d7df267dc5bc4ba1454afb1ad01cf, type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 2100000, guid: 669fc3a2495674442b1fac19bafa84a8, type: 2}
+    - target: {fileID: 2744125304652807212, guid: df5d7df267dc5bc4ba1454afb1ad01cf, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 7.8099365
+      objectReference: {fileID: 0}
+    - target: {fileID: 2744125304652807212, guid: df5d7df267dc5bc4ba1454afb1ad01cf, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -119.19995
+      objectReference: {fileID: 0}
     - target: {fileID: 2857134964581060119, guid: df5d7df267dc5bc4ba1454afb1ad01cf, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1572,18 +1576,6 @@ PrefabInstance:
     - target: {fileID: 3444349891774788956, guid: df5d7df267dc5bc4ba1454afb1ad01cf, type: 3}
       propertyPath: m_Name
       value: MiniGameUI
-      objectReference: {fileID: 0}
-    - target: {fileID: 4909375525986423983, guid: df5d7df267dc5bc4ba1454afb1ad01cf, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 4f178970fae6efa488ca12a4fe69b99a, type: 3}
-    - target: {fileID: 7663694545038056309, guid: df5d7df267dc5bc4ba1454afb1ad01cf, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 4f178970fae6efa488ca12a4fe69b99a, type: 3}
-    - target: {fileID: 7663694545038056309, guid: df5d7df267dc5bc4ba1454afb1ad01cf, type: 3}
-      propertyPath: m_Enabled
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7782491275208354475, guid: df5d7df267dc5bc4ba1454afb1ad01cf, type: 3}
       propertyPath: m_AnchorMax.y

@@ -49,5 +49,14 @@ TagManager:
   - name: GameSprites
     uniqueID: 2973499063
     locked: 0
+  - name: Forground
+    uniqueID: 1817917733
+    locked: 0
+  - name: GameUI
+    uniqueID: 2046389989
+    locked: 0
+  - name: UI
+    uniqueID: 1282134747
+    locked: 0
   m_RenderingLayers:
   - Default

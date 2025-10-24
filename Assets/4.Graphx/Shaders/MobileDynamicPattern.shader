@@ -17,7 +17,7 @@ Shader "XL/MobileDynamicPattern"
         _Tiling("Tiling",Float) = 4
         _BoxSize("BoxSize", Float) = 0.7
         _Angle("Angle", Float) = 0.25
-        [ShowAsVector2] _Offset("Offset", Vector) = (0,0,0,0)
+        [ShowAsVector2] _PatternOffset("PatternOffset", Vector) = (0,0,0,0)
     }
     SubShader
     {
@@ -102,7 +102,7 @@ Shader "XL/MobileDynamicPattern"
             float _Angle;
             float _BoxSize;
             float _Tiling;
-            float2 _Offset;
+            vector _PatternOffset;
 
             fixed _PatternA;
             fixed _PatternB;
@@ -138,7 +138,7 @@ Shader "XL/MobileDynamicPattern"
 
             float4 frag (v2f i) : SV_Target
             {
-                float2 st = tile(i.uv + _Offset, _Tiling);
+                float2 st = tile(i.uv + _PatternOffset, _Tiling);
                 //st = rotate2D(st, PI*0.25);
                 st = rotate2D(st,PI*_Angle);
                 

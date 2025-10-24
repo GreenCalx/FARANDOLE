@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using System.Collections;
 using Cysharp.Threading.Tasks;
 using static Utils;
+using static MeshUtils;
+using static Constants;
+
 [Serializable]
 public class RoomPlan
 {
@@ -29,6 +32,10 @@ public class RoomPlan
     {
         get { return area.height; }
     }
+    public Vector3 BottomLeftPoint => new Vector3(min.x, max.y, zDepth);
+    public Vector3 BottomRightPoint => new Vector3(max.x, max.y, zDepth);
+    public Vector3 UpperLeftPoint => new Vector3(min.x, min.y, zDepth);
+    public Vector3 UpperRightPoint => new Vector3(max.x, min.y, zDepth);
 }
 public struct RoomObject
 {
@@ -41,7 +48,64 @@ public struct RoomObject
     }
 }
 
-
+public struct RoomCubemap
+{
+    Mesh[] meshes;
+    public void Init()
+    {
+        meshes = new Mesh[6];
+        for (int i = 0; i < 6; i++)
+        {
+            meshes[i] = new Mesh();
+        }
+    }
+    public readonly Mesh ground => meshes[0];
+    public Mesh BuildGround(PerspectiveRoom iRoom)
+    {
+        meshes[0] = MeshUtils.QuadMesh(
+            iRoom.m_NearPlan.UpperLeftPoint,
+            iRoom.m_NearPlan.UpperRightPoint,
+            iRoom.m_FarPlan.UpperLeftPoint,
+            iRoom.m_FarPlan.UpperRightPoint
+        );
+        return meshes[0];
+    }
+    public readonly Mesh sky => meshes[1];
+    public readonly Mesh far => meshes[2];
+    public Mesh BuildFar(PerspectiveRoom iRoom)
+    {
+            meshes[2] = MeshUtils.QuadMesh(
+            iRoom.m_FarPlan.UpperLeftPoint,
+            iRoom.m_FarPlan.UpperRightPoint,
+            iRoom.m_FarPlan.BottomLeftPoint,
+            iRoom.m_FarPlan.BottomRightPoint
+        );
+        return meshes[2];
+    }
+    public readonly Mesh near => meshes[3];
+    public readonly Mesh leftWall => meshes[4];
+    public Mesh BuildLeftWall(PerspectiveRoom iRoom)
+    {
+            meshes[4] = MeshUtils.QuadMesh(
+            iRoom.m_NearPlan.UpperLeftPoint,
+            iRoom.m_FarPlan.UpperLeftPoint,
+            iRoom.m_NearPlan.BottomLeftPoint,
+            iRoom.m_FarPlan.BottomLeftPoint
+        );
+        return meshes[4];
+    }
+    public readonly Mesh rightWall => meshes[5];
+    public Mesh BuildRightWall(PerspectiveRoom iRoom)
+    {
+            meshes[5] = MeshUtils.QuadMesh(
+            iRoom.m_NearPlan.UpperRightPoint,
+            iRoom.m_FarPlan.UpperRightPoint,
+            iRoom.m_NearPlan.BottomRightPoint,
+            iRoom.m_FarPlan.BottomRightPoint
+        );
+        return meshes[5];
+    }
+}
 [Serializable]
 public class RowInfo
 {
@@ -177,6 +241,12 @@ public class PerspectiveRoom : MonoBehaviour
     public float m_LineWidth = 0.5f;
     public float m_LineWidthDepthFalloff = 2f;
     public string m_TracesSortingLayer = "PerspectiveRoom";
+    [Header("CubeMap")]
+    public RoomCubemap cubemap;
+    public Material groundMat;
+    public Material backMat;
+    public Material wallMat_Left;
+    public Material wallMat_Right;
     [Header("Internal View")]
     public float m_FOV = 90; // auto
     public LayerManager2D r_LM2D;
@@ -270,7 +340,8 @@ public class PerspectiveRoom : MonoBehaviour
                 m_LineWidth,
                 m_FarLineWidth)
         );
-
+        foreach (LineRenderer lr in perspectiveLines)
+        { r_LM2D?.PlaceObject(lr); }
 
         // ----------------------------------------------------
         // Init rows
@@ -290,7 +361,51 @@ public class PerspectiveRoom : MonoBehaviour
             float objectScale = ComputeRowObjectScale(frac);
             m_Rows.Add(BuildRow(name, rowArea, lineWidth, zDepth, i, objectScale));
         }
+        foreach (RoomRow rr in m_Rows)
+        { r_LM2D?.PlaceObject(rr.lineTracer); }
 
+        // ----------------------------------------------------
+        // Init Room meshes
+        cubemap.Init();
+        MeshRenderer mr_ground = GOBuilder.Create()
+                            .WithName("Ground")
+                            .WithParent(transform)
+                            .WithPosition(Vector3.zero)
+                            .WithMeshFilter(cubemap.BuildGround(this), false)
+                            .WithRenderer(groundMat)
+                            .BuildAs<MeshRenderer>();
+        mr_ground.sortingLayerName = Constants.LYR_PROOM;
+        r_LM2D?.PlaceObject(mr_ground);
+
+        MeshRenderer mr_far = GOBuilder.Create()
+                            .WithName("Backroom")
+                            .WithParent(transform)
+                            .WithPosition(Vector3.zero)
+                            .WithMeshFilter(cubemap.BuildFar(this), false)
+                            .WithRenderer(backMat)
+                            .BuildAs<MeshRenderer>();
+        mr_far.sortingLayerName = Constants.LYR_PROOM;
+        r_LM2D?.PlaceObject(mr_far);
+
+        MeshRenderer mr_wallLeft = GOBuilder.Create()
+                            .WithName("LeftWall")
+                            .WithParent(transform)
+                            .WithPosition(Vector3.zero)
+                            .WithMeshFilter(cubemap.BuildLeftWall(this), false)
+                            .WithRenderer(wallMat_Left)
+                            .BuildAs<MeshRenderer>();
+        mr_wallLeft.sortingLayerName = Constants.LYR_PROOM;
+        r_LM2D?.PlaceObject(mr_wallLeft);
+
+        MeshRenderer mr_wallRight = GOBuilder.Create()
+                            .WithName("RightWall")
+                            .WithParent(transform)
+                            .WithPosition(Vector3.zero)
+                            .WithMeshFilter(cubemap.BuildRightWall(this), false)
+                            .WithRenderer(wallMat_Right)
+                            .BuildAs<MeshRenderer>();
+        mr_wallRight.sortingLayerName = Constants.LYR_PROOM;
+        r_LM2D?.PlaceObject(mr_wallRight);
 
     }
 
@@ -317,10 +432,10 @@ public class PerspectiveRoom : MonoBehaviour
                         .BuildAs<LineRenderer>();
 
         Vector3[] pos = new Vector3[4];
-        pos[0] = transform.position + new Vector3(iArea.max.x, iArea.max.y, iZDepth);
-        pos[1] = transform.position + new Vector3(iArea.max.x, iArea.min.y, iZDepth);
-        pos[2] = transform.position + new Vector3(iArea.min.x, iArea.min.y, iZDepth);
-        pos[3] = transform.position + new Vector3(iArea.min.x, iArea.max.y, iZDepth);
+        pos[0] = new Vector3(iArea.max.x, iArea.max.y, iZDepth);
+        pos[1] = new Vector3(iArea.max.x, iArea.min.y, iZDepth);
+        pos[2] = new Vector3(iArea.min.x, iArea.min.y, iZDepth);
+        pos[3] = new Vector3(iArea.min.x, iArea.max.y, iZDepth);
 
         ret.lineTracer.positionCount = 4;
         ret.lineTracer.loop = true;
@@ -349,10 +464,10 @@ public class PerspectiveRoom : MonoBehaviour
                             .BuildAs<LineRenderer>();
 
         Vector3[] pos = new Vector3[4];
-        pos[0] = transform.position + new Vector3(iPlan.area.max.x, iPlan.area.max.y, iPlan.zDepth);
-        pos[1] = transform.position + new Vector3(iPlan.area.max.x, iPlan.area.min.y, iPlan.zDepth);
-        pos[2] = transform.position + new Vector3(iPlan.area.min.x, iPlan.area.min.y, iPlan.zDepth);
-        pos[3] = transform.position + new Vector3(iPlan.area.min.x, iPlan.area.max.y, iPlan.zDepth);
+        pos[0] = new Vector3(iPlan.area.max.x, iPlan.area.max.y, iPlan.zDepth);
+        pos[1] = new Vector3(iPlan.area.max.x, iPlan.area.min.y, iPlan.zDepth);
+        pos[2] = new Vector3(iPlan.area.min.x, iPlan.area.min.y, iPlan.zDepth);
+        pos[3] = new Vector3(iPlan.area.min.x, iPlan.area.max.y, iPlan.zDepth);
 
         oLineTracer.positionCount = 4;
         oLineTracer.loop = true;
@@ -374,8 +489,8 @@ public class PerspectiveRoom : MonoBehaviour
                             .BuildAs<LineRenderer>();
 
         Vector3[] pos = new Vector3[2];
-        pos[0] = transform.position + iMin;
-        pos[1] = transform.position + iMax;
+        pos[0] = iMin;
+        pos[1] = iMax;
 
         line.positionCount = 2;
         line.loop = false;
@@ -384,7 +499,7 @@ public class PerspectiveRoom : MonoBehaviour
         line.SetPositions(pos);
         line.sortingOrder = 0;
         line.sortingLayerName = m_TracesSortingLayer;
-        line.rendererPriority = 9;
+        //line.rendererPriority = 9;
 
         return line;
 

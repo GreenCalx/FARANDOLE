@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: UITimeBarMat
-  m_Shader: {fileID: 4800000, guid: 6f8dafb7291d8ac45855c47261333f90, type: 3}
+  m_Shader: {fileID: 4800000, guid: ca6e32ca5fe19b64ebdb49a82d9bf85e, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -16,7 +16,7 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 3000
   stringTagMap: {}
   disabledShaderPasses: []
   m_LockedProperties: 
@@ -66,6 +66,7 @@ Material:
     m_Ints:
     - _CullMode: 0
     m_Floats:
+    - _AlphaCutoff: 0.5
     - _BlendDst: 7
     - _BlendSrc: 5
     - _Brightness: 1

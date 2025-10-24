@@ -8,12 +8,14 @@ public class GameData : MonoBehaviour
     public MiniGameBankSO gameBank;
     public UIThemeSO UITheme;
     public AccessibilitySettingsSO accessibilitySettingsSO;
+    public GlobalSettingsSO globalSettingsSO;
     private static GameData instance = null;
     public static GameData Get => instance;
     public static GameSettingsSO GetSettings => instance.gameSettings;
     public static MiniGameBankSO GetMGBank => instance.gameBank;
     public static UIThemeSO GetUITheme => instance.UITheme;
     public static AccessibilitySettingsSO GetAccessibilitySettings => instance.accessibilitySettingsSO;
+    public static GlobalSettingsSO GetGlobalSettings => instance.globalSettingsSO;
 
     void Awake()
     {
@@ -27,8 +29,14 @@ public class GameData : MonoBehaviour
             instance = this;
             DontDestroyOnLoad(this.gameObject);
 
+            ApplyGlobalSettings();
             LoadUserData();
         }
+    }
+
+    void ApplyGlobalSettings()
+    {
+        Application.targetFrameRate = globalSettingsSO.targetFrameRate;
     }
 
     void LoadUserData()

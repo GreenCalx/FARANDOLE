@@ -6023,6 +6023,8 @@ MonoBehaviour:
   gameSettings: {fileID: 11400000, guid: 55846b72a52e9754f9b3893e872a06b4, type: 2}
   gameBank: {fileID: 11400000, guid: 26aa58725297ac6448b9c3a3b00aa7c9, type: 2}
   UITheme: {fileID: 11400000, guid: 535085c4bf1c1cc4e96bb3098ffd1b3e, type: 2}
+  accessibilitySettingsSO: {fileID: 11400000, guid: e8842810c25cc954aa0efc3d3860cc69, type: 2}
+  globalSettingsSO: {fileID: 11400000, guid: b27978389deed6146981241a12ef86ee, type: 2}
 --- !u!4 &1765342134
 Transform:
   m_ObjectHideFlags: 0

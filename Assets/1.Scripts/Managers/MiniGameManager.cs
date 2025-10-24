@@ -14,7 +14,6 @@ public class MiniGameManager : MonoBehaviour, IManager
     [Header("MGM Set")]
     public List<GameObject> prefab_miniGames;
     [Header("Internals")]
-    //public List<MiniGame> miniGames; // > TODO : Make 'MGLoop' 
     public MiniGameLoop MGLoop;
     public GameClock gameClock;
     public int miniGamesDifficulty
@@ -65,6 +64,7 @@ public class MiniGameManager : MonoBehaviour, IManager
 
     public void LoadLoop()
     {
+        #if UNITY_EDITOR
         if (MiniGameToTest != null)
         {
             Debug.LogWarning("MINI GAME TEST : Be sure to have a loopSize of 1 in the settings");
@@ -75,6 +75,10 @@ public class MiniGameManager : MonoBehaviour, IManager
         { // Random seed
             prefab_miniGames = GameData.GetMGBank.GetRandom(GameData.GetSettings.loopSize);
         }
+        #else
+        prefab_miniGames = GameData.GetMGBank.GetRandom(GameData.GetSettings.loopSize);
+        #endif
+        
         BuildLoop();
     }
 
@@ -84,11 +88,6 @@ public class MiniGameManager : MonoBehaviour, IManager
         MGLoop.Init(this, prefab_miniGames);
     }
 
-    // public void Restart()
-    // {
-    //     // gameClock.Reset();
-    //     // MGLoop.Start();
-    // }
     public async UniTask Launch()
     {
         MGLoop.Start();
@@ -114,7 +113,6 @@ public class MiniGameManager : MonoBehaviour, IManager
         }
         PC.UnFreeze();
 
-        //MGLoop.Current.Reset();
         MGLoop.Current.Play();
 
         gameClock.Reset();

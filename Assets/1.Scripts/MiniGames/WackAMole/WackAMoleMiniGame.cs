@@ -38,11 +38,11 @@ public class WackAMoleMiniGame : MiniGame
         float tempMaxHoleDuration = maxHoleDuration[MGM.miniGamesDifficulty - 1];
         target = targets[MGM.miniGamesDifficulty - 1];
 
-                // room
+        // room
         inst_PerspectiveRoom = GOBuilder.Create(prefab_PerspectiveRoom)
                                 .WithParent(transform)
                                 .BuildAs<PerspectiveRoom>();
-        inst_PerspectiveRoom.Init(MGM.LM2D, rowSize);
+        inst_PerspectiveRoom.Init(MGM.LM2D, rowSize+1);
         inst_PerspectiveRoom.Build();
         inst_PerspectiveRoom.InitRoomPlacer(colSize, true);
 
@@ -62,7 +62,7 @@ public class WackAMoleMiniGame : MiniGame
                     .BuildAs<Mole>();
                 currMole.Init(tempMinHoleDuration, tempMaxHoleDuration);
                 PC.AddTapTracker(currMole);
-                inst_PerspectiveRoom.AddToRoom(currMole.transform, i, currMole.GetRenderer());
+                inst_PerspectiveRoom.AddToRoom(currMole.transform, i+1, currMole.GetRenderer());
 
                 currMole.transform.position = new Vector3(
                     inst_PerspectiveRoom.GetXRowLerp(i, inst_PerspectiveRoom.m_RoomRowPlacer.At(j)),

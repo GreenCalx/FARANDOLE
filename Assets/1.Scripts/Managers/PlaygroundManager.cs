@@ -8,6 +8,7 @@ using UnityEngine.Rendering.PostProcessing;
 using Cysharp.Threading.Tasks;
 using System.Threading.Tasks;
 using static Utils;
+using static Constants;
 
 public class PlaygroundManager : MonoBehaviour, IManager
 {
@@ -87,7 +88,7 @@ public class PlaygroundManager : MonoBehaviour, IManager
 
     void InitRendering()
     {
-        PGPatternFader.Init(FG_MR.material, diff1Pattern, diff2Pattern);
+        PGPatternFader.Init(FG_MR.sharedMaterial, diff1Pattern, diff2Pattern);
     }
 
     void BuildPlayground()
@@ -115,6 +116,7 @@ public class PlaygroundManager : MonoBehaviour, IManager
                             .WithRenderer(forgroundMat)
                             .Build();
         FG_MR = go_fg.GetComponent<MeshRenderer>();
+        FG_MR.sortingLayerName = Constants.LYR_FORGROUND;
 
 
         go_playfield = GOBuilder.Create()
@@ -125,6 +127,7 @@ public class PlaygroundManager : MonoBehaviour, IManager
                             .WithRenderer(playFieldMat)
                             .Build();
         PF_MR = go_playfield.GetComponent<MeshRenderer>();
+        PF_MR.sortingLayerName = Constants.LYR_BACKGROUND;
         bounds = PF_MR.bounds;
 
         Mesh halfWidthMesh = CreateHalfWidthMesh();
@@ -133,20 +136,22 @@ public class PlaygroundManager : MonoBehaviour, IManager
                         .WithParent(transform)
                         .WithPosition(new Vector2(0f, bounds.min.y))
                         .Build().AddComponent<DoorAnim>();
-        GameObject doorLeft = GOBuilder.Create()
+        MeshRenderer doorLeft = GOBuilder.Create()
                                 .WithName("DoorLeft")
                                 .WithParent(doorAnimation.transform)
                                 .WithLocalPosition(new Vector3(bounds.min.x, 0f))
                                 .WithMeshFilter(halfWidthMesh, false)
                                 .WithRenderer(clearAnimMat)
-                                .Build();
-        GameObject doorRight = GOBuilder.Create()
+                                .BuildAs<MeshRenderer>();
+        MeshRenderer doorRight = GOBuilder.Create()
                                 .WithName("DoorRight")
                                 .WithParent(doorAnimation.transform)
                                 .WithLocalPosition(Vector3.zero)
                                 .WithMeshFilter(halfWidthMesh, false)
                                 .WithRenderer(clearAnimMat)
-                                .Build();
+                                .BuildAs<MeshRenderer>();
+        doorLeft.sortingLayerName = Constants.LYR_FORGROUND;
+        doorRight.sortingLayerName = Constants.LYR_FORGROUND;
         doorAnimation.Init(doorLeft.transform, doorRight.transform, bounds.size.x / 2f);
         doorAnimation.ForceOpen();
 
@@ -156,13 +161,14 @@ public class PlaygroundManager : MonoBehaviour, IManager
         //                     .WithParent(transform)
         //                     .WithPosition(new Vector2(bounds.min.x, bounds.min.y))
         //                     .Build().AddComponent<FinalClapAnim>();
-        GameObject doorUp = GOBuilder.Create()
+        MeshRenderer doorUp = GOBuilder.Create()
                             .WithName("DoorUp")
                             .WithParent(finalClapAnimation.transform)
                             .WithPosition(new Vector2(bounds.min.x, bounds.min.y))
                             .WithMeshFilter(CreateFullScreenMesh(), false)
                             .WithRenderer(clearAnimMat)
-                            .Build();
+                            .BuildAs<MeshRenderer>();
+        doorUp.sortingLayerName = Constants.LYR_FORGROUND;
         finalClapAnimation.Init(doorUp.transform, bounds.size.y);
         finalClapAnimation.ForceOpen();
 
@@ -173,7 +179,7 @@ public class PlaygroundManager : MonoBehaviour, IManager
                                     .WithLocalPosition(Vector3.zero)
                                     .WithLineRenderer(forgroundFrameMat)
                                     .BuildAs<LineRenderer>();
-
+        forgroundFrameLR.sortingLayerName = Constants.LYR_FORGROUND;
 
         LM2D.PlaceForgroundReserve(doorLeft.GetComponent<Renderer>());
         LM2D.PlaceForgroundReserve(doorRight.GetComponent<Renderer>());

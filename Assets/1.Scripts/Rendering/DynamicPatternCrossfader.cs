@@ -34,8 +34,9 @@ public Material renderedMat;
         renderedMat.SetFloat("_Angle", Utils.Lerp(patternA.angle, patternB.angle, crossfader));
         renderedMat.SetFloat("_BoxSize", Utils.Lerp(patternA.boxSize, patternB.boxSize, crossfader));
         renderedMat.SetFloat("_Tiling", Utils.Lerp(patternA.tiling, patternB.tiling, crossfader));
+
         Vector2 lerpOffset = Vector2.Lerp(patternA.offset, patternB.offset, crossfader);
-        renderedMat.SetFloatArray("_Offset", new float[4]{patternA.offset.x, patternA.offset.y, 0f, 0f} );
+        renderedMat.SetVector("_PatternOffset", new Vector4(lerpOffset.x, lerpOffset.y, 0f, 0f) );
 
         _faderLock = false;
     }
@@ -58,12 +59,14 @@ public Material renderedMat;
     async UniTaskVoid GoToA()
     {
         renderedMat.SetInt("_PatternA", (int)patternA.pattern);
+        await UniTask.NextFrame();
         await CrossfadeTask(1f, 0f, fading_duration);
     }
 
     async UniTaskVoid GoToB()
     {
         renderedMat.SetInt("_PatternB", (int)patternB.pattern);
+        await UniTask.NextFrame();
         await CrossfadeTask(0f, 1f, fading_duration);
     }
 
@@ -72,7 +75,7 @@ public Material renderedMat;
         float frac = 0f;
         float startTime = Time.time;
         crossfader = from;
-        while (frac < 1f)
+        while (frac <= 1f)
         {
             frac = (Time.time - startTime) / duration;
             crossfader = Utils.Lerp(from, to, frac);
