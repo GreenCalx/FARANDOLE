@@ -60,12 +60,12 @@ public class DogHead : MonoBehaviour, ITapTracker
     }
     public bool OnTap(Vector2 iVec2)
     {
-        if (Vector3.Distance(transform.position, new Vector3(iVec2.x, iVec2.y, 0f)) < tapRadius)
-        {
+        // if (Vector3.Distance(transform.position, new Vector3(iVec2.x, iVec2.y, 0f)) < tapRadius)
+        // {
             tapCB.Invoke();
             OnPetPS.Play();
-            return true;
-        }
+            // return true;
+        // }
         return false;
     }
     public void TapEffect(int force)
