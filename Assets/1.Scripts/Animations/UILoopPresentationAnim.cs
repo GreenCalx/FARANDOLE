@@ -168,13 +168,13 @@ public class UILoopPresentationAnim : ManagedAnimation
 
     public async UniTask ShowLights(MiniGameLoop iMGLoop, bool iState, CancellationToken iCT)
     {
-        Debug.Log("Show Lights !");
         if (!init)
         { return; }
 
         float delay = 1f / uiImages.Count;
         int delay_step_in_ms = (int)(delay * GameData.GetSettings.ShowLightTotalTimeInMs);
-        
+        delay_step_in_ms = Mathf.Min(delay_step_in_ms, GameData.GetSettings.MaxLightUpMiniGameThumbnailTime);
+
         if (delay_step_in_ms <= 0)
         {
             foreach (UIMiniGamePresentationImage img in uiImages)
@@ -197,9 +197,8 @@ public class UILoopPresentationAnim : ManagedAnimation
         while (q.Count > 0)
         {
             UniTask.Run(q.Dequeue());
-            await UniTask.Delay(delay_step_in_ms);
-            if (iCT.IsCancellationRequested)
-                return;
+            if (!iCT.IsCancellationRequested)
+                await UniTask.Delay(delay_step_in_ms);
         }
         //await WaitAnimState(showLightStateName, 1f, iCT);
     }

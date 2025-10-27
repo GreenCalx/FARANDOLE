@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Reflection;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -11,6 +12,20 @@ public enum MiniGameSuccessState
     PENDING = 1,
     PASSED = 2,
     FAILED = 3
+}
+
+public enum EMiniGameTags
+{
+    NONE = 0,
+    REGULAR = 1,
+    SPAWNER = 2,
+    DOG = 3,
+    EXTENDABLE = 4,
+    ARCADE = 5,
+    SCIENCE = 6,
+    PHYSICS = 7,
+    THEATER = 8,
+    CHESS = 9
 }
 
 public class MiniGame : MonoBehaviour, IMiniGame
@@ -28,6 +43,30 @@ public class MiniGame : MonoBehaviour, IMiniGame
     public MiniGameSuccessState successState;
 
 
+    // Use Reflection to retrieve all interface deriving from IMiniGame for current MiniGame
+    private static readonly MethodInfo AssociatedTagMethod =
+        typeof(IMiniGameMod).GetMethod(nameof(IMiniGameMod.AssociatedTag));
+    public List<EMiniGameTags> GetTags()
+    {
+        List<EMiniGameTags> retval = new List<EMiniGameTags>();
+        foreach (Type tinterface in this.GetType().GetInterfaces())
+        {
+            if (typeof(IMiniGameMod).IsAssignableFrom(tinterface) && tinterface != typeof(IMiniGameMod))
+            {
+                MethodInfo method = tinterface.GetMethod(
+                    AssociatedTagMethod.Name,
+                    BindingFlags.Public | BindingFlags.Instance
+                );
+                if (method != null)
+                {
+                    EMiniGameTags tag = (EMiniGameTags)method.Invoke(this, null);
+                    retval.Add(tag);
+                }
+            }
+        }
+        return retval;
+    }
+
     public bool hasIntro = false;
 
 
@@ -37,7 +76,7 @@ public class MiniGame : MonoBehaviour, IMiniGame
     }
     public virtual void Reset()
     {
-        
+
     }
     public virtual void Play()
     {
@@ -61,7 +100,7 @@ public class MiniGame : MonoBehaviour, IMiniGame
     {
         return false;
     }
-    
+
     public virtual async UniTask IntroAnim()
     {
         return;

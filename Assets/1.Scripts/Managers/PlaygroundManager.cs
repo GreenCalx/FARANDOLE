@@ -34,6 +34,7 @@ public class PlaygroundManager : MonoBehaviour, IManager
     MeshRenderer FG_MR, PF_MR;
     Coroutine AnimationCoroutine;
     Coroutine LerpColorCoroutine;
+    Coroutine LerpToNextStateCoroutine;
     LayerManager2D LM2D;
     MiniGameManager MGM;
     AnimationManager ANIM;
@@ -88,7 +89,7 @@ public class PlaygroundManager : MonoBehaviour, IManager
 
     void InitRendering()
     {
-        PGPatternFader.Init(FG_MR.sharedMaterial, diff1Pattern, diff2Pattern);
+        PGPatternFader.Init(FG_MR.material, diff1Pattern, diff2Pattern);
     }
 
     void BuildPlayground()
@@ -302,59 +303,61 @@ public class PlaygroundManager : MonoBehaviour, IManager
         finalClapAnimation.OpenAnim();
     }
 
-    public void RefreshMatFromDiff(LoopRank iLoopRank)
+    public void RefreshRendering(int iLoopLevel,bool iRankedUp, LoopRank iLoopRank)
     {
-        if (FG_MR == null)
-            return;
-        switch (iLoopRank)
+        if (LerpToNextStateCoroutine != null)
         {
-            case LoopRank.I:
-                PGPatternFader.FadeToNewPattern(diff1Pattern);
-                break;
-            case LoopRank.II:
-                PGPatternFader.FadeToNewPattern(diff2Pattern);
-                break;
-            case LoopRank.III:
-                PGPatternFader.FadeToNewPattern(diff3Pattern);
-                break;
-            default:
-                PGPatternFader.FadeToNewPattern(diff1Pattern);
-                break;
+            StopCoroutine(LerpToNextStateCoroutine);
+            LerpToNextStateCoroutine = null;
         }
+        LerpToNextStateCoroutine = StartCoroutine(LerpToNextStateCo(iLoopLevel,iRankedUp, iLoopRank));
     }
 
-    public void RefreshMatFromLoopLevel(int iLoopLevel)
-    {
-        // Color c = (iLoopLevel >= loopLevelColors.Count) ? loopLevelColors[loopLevelColors.Count - 1] : loopLevelColors[iLoopLevel];
-        // FG_MR.material.SetColor("_Color", c);
-        // forgroundFrameLR.material.SetColor("_Color", c);
-        if (LerpColorCoroutine != null)
-        {
-            StopCoroutine(LerpColorCoroutine);
-            LerpColorCoroutine = null;
-        }
-        LerpColorCoroutine = StartCoroutine(LerpColorCo(iLoopLevel));
-        //currAnimationDeltaTime = AnimationDeltaTime / iLoopLevel;
-    }
-
-    IEnumerator LerpColorCo(int iLoopLevel)
+    IEnumerator LerpToNextStateCo(int iLoopLevel, bool iRankedUp,LoopRank iLoopRank)
     {
         float startTime = Time.time;
         float frac = 0f;
 
-        Color current = (iLoopLevel > 0) ? loopLevelColors[iLoopLevel - 1] : loopLevelColors[0];
-        Color target = (iLoopLevel >= loopLevelColors.Count) ? loopLevelColors[loopLevelColors.Count - 1] : loopLevelColors[iLoopLevel];
-        Color c = current;
+        Color currentC = (iLoopLevel > 0) ? loopLevelColors[iLoopLevel - 1] : loopLevelColors[0];
+        Color targetC = (iLoopLevel >= loopLevelColors.Count) ? loopLevelColors[loopLevelColors.Count - 1] : loopLevelColors[iLoopLevel];
+
+        bool fadePattern = false;
+        if (iRankedUp)
+            fadePattern = PGPatternFader.TrySetNewCrossfadeTarget(GetRankPattern(iLoopRank));
         while (frac < 1f)
         {
             frac = Mathf.Clamp01((Time.time - startTime) / GameData.GetSettings.PlayGroundColorLerpTimeSec);
-            c = Color.Lerp(current, target, frac);
-            FG_MR.material.SetColor("_Tint", c);
-            forgroundFrameLR.material.SetColor("_Color", c);
+            LerpColor(currentC, targetC, frac);
+            if (iRankedUp && fadePattern)
+                PGPatternFader.Crossfade(frac);
             yield return null;
         }
-        FG_MR.material.SetColor("_Tint", target);
-        forgroundFrameLR.material.SetColor("_Color", target);
+
+        LerpColor(currentC, targetC, 1f);
+        if (iRankedUp)
+            PGPatternFader.SetToNewPattern(GetRankPattern(iLoopRank));
+    }
+
+    void LerpColor(Color A, Color B, float iLerp)
+    {
+        Color c = Color.Lerp(A, B, iLerp);
+        FG_MR.material.SetColor("_Tint", c);
+        forgroundFrameLR.material.SetColor("_Color", c);
+    }
+
+    public DynamicPatternSO GetRankPattern(LoopRank iLoopRank)
+    {
+        switch (iLoopRank)
+        {
+            case LoopRank.I:
+                return diff1Pattern;
+            case LoopRank.II:
+                return diff2Pattern;
+            case LoopRank.III:
+                return diff3Pattern;
+            default:
+                return diff1Pattern;
+        }        
     }
 
     IEnumerator AnimateCo()

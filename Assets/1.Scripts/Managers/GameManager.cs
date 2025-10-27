@@ -149,18 +149,10 @@ public class GameManager : MonoBehaviour
 
     void OnLoopDepthUpdate()
     {
-        playerData.loopHistory.AddSnapshot(MGM.MGLoop);
+        // playGround Mat update
+        PG.RefreshRendering(MGM.MGLoop.depth, MGM.MGLoop.HasRankChanged, MGM.MGLoop.rank);
 
-        bool loopSuccess = MGM.MGLoop.IsLoopPassed();
-
-        // Animate according to LoopSuccess
-        if (loopSuccess)
-        {
-            PG.RefreshMatFromDiff(MGM.MGLoop.rank);
-        }
-
-        PG.RefreshMatFromLoopLevel(MGM.MGLoop.depth);
-
+        // Global time scale update based on depth
         AnimationCurve timeScaleCurve = GameData.Get.gameSettings.timeScaleOverLoopLevel;
         if (MGM.MGLoop.depth > timeScaleCurve.keys[timeScaleCurve.length - 1].time)
             return;
@@ -192,9 +184,6 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        // if (Input.GetKey(KeyCode.Escape))
-        //     Application.Quit();
-
         if (!GameStarted)
             return;
 

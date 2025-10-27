@@ -36,7 +36,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: -2}
+  m_AnchoredPosition: {x: 0, y: -3}
   m_SizeDelta: {x: 2, y: 2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &7821180677548400815
@@ -294,18 +294,67 @@ MonoBehaviour:
   prefab_mole: {fileID: 7528823468832330446, guid: 48d5329a62bd09b40ab84b09a6eb5f35, type: 3}
   prefab_PerspectiveRoom: {fileID: 7413221358431396152, guid: 57b500e58b4820d42919660e759da4b7, type: 3}
   UIWorld_targetCounter: {fileID: 8319815142386184525}
-  colSizes: 0300000003000000030000000300000004000000
-  rowSizes: 0300000003000000030000000400000004000000
-  targets: 0300000004000000050000000a0000000c000000
-  maxHoleDuration:
-  - 6
-  - 7
-  - 9
-  - 11
-  - 12
-  minHoleDuration:
+  moleOutAnimCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  moleBackInAnimCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -3.350654
+      outSlope: -3.350654
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.022329912
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spawnInterval: 1
+  colSizes: 030000000300000003000000030000000400000004000000
+  rowSizes: 030000000300000003000000040000000400000004000000
+  targets: 0300000004000000050000000a0000000c0000000c000000
+  maxOutDuration:
+  - 1.5
+  - 1
+  - 0.5
   - 0.25
   - 0.25
+  minOutDuration:
+  - 1
+  - 0.5
   - 0.25
-  - 0.25
-  - 0.25
+  - 0
+  - 0

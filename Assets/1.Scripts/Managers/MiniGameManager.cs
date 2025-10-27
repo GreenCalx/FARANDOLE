@@ -172,6 +172,8 @@ public class MiniGameManager : MonoBehaviour, IManager
 
         if (!MGLoop.MoveNext())
         {
+            PData.loopHistory.AddSnapshot(MGLoop);
+            
             MGLoop.depth++;
             OnLoopComplete.Invoke();
 

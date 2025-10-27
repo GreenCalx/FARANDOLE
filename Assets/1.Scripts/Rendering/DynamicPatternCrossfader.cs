@@ -17,7 +17,7 @@ public Material renderedMat;
     public float crossfader = 0f;
     public DynamicPatternSO patternA;
     public DynamicPatternSO patternB;
-    
+    private int fadeDir = 0;
     private bool _faderLock = false;
 
     public void Init(Material iTargetMat, DynamicPatternSO iPatternA, DynamicPatternSO iPatternB)
@@ -40,7 +40,59 @@ public Material renderedMat;
 
         _faderLock = false;
     }
-    public void FadeToNewPattern(DynamicPatternSO iNewPattern)
+    // public void FadeToNewPattern(DynamicPatternSO iNewPattern)
+    // {
+    //     if (!_faderLock)
+    //     {
+    //         _faderLock = true;
+    //         if (crossfader >= 1f)
+    //         {
+    //             patternA = iNewPattern;
+    //             GoToA();
+    //         } else {
+    //             patternB = iNewPattern;
+    //             GoToB();
+    //         }
+    //     }
+    // }
+
+    // async UniTaskVoid GoToA()
+    // {
+    //     renderedMat.SetInt("_PatternA", (int)patternA.pattern);
+    //     await UniTask.NextFrame();
+    //     await CrossfadeTask(1f, 0f, fading_duration);
+    // }
+
+    // async UniTaskVoid GoToB()
+    // {
+    //     renderedMat.SetInt("_PatternB", (int)patternB.pattern);
+    //     await UniTask.NextFrame();
+    //     await CrossfadeTask(0f, 1f, fading_duration);
+    // }
+
+    // async UniTask CrossfadeTask(float from, float to, float duration)
+    // {
+    //     float frac = 0f;
+    //     float startTime = Time.time;
+    //     crossfader = from;
+    //     while (frac <= 1f)
+    //     {
+    //         frac = (Time.time - startTime) / duration;
+    //         crossfader = Utils.Lerp(from, to, frac);
+
+    //         renderedMat.SetFloat("_LerpPatternAB", crossfader);
+    //         renderedMat.SetFloat("_Angle", Utils.Lerp(patternA.angle, patternB.angle, crossfader));
+    //         renderedMat.SetFloat("_BoxSize", Utils.Lerp(patternA.boxSize, patternB.boxSize, crossfader));
+    //         renderedMat.SetFloat("_Tiling", Utils.Lerp(patternA.tiling, patternB.tiling, crossfader));
+    //         Vector2 lerpOffset = Vector2.Lerp(patternA.offset, patternB.offset, crossfader);
+    //         renderedMat.SetFloatArray("_Offset", new float[] { lerpOffset.x, lerpOffset.y });
+    //         await Task.Yield();
+    //     }
+    //     crossfader = to;
+    //     _faderLock = false;
+    // }
+
+    public bool TrySetNewCrossfadeTarget(DynamicPatternSO iNewPattern)
     {
         if (!_faderLock)
         {
@@ -48,47 +100,37 @@ public Material renderedMat;
             if (crossfader >= 1f)
             {
                 patternA = iNewPattern;
-                GoToA();
-            } else {
-                patternB = iNewPattern;
-                GoToB();
+                fadeDir = -1;
             }
+            else
+            {
+                patternB = iNewPattern;
+                fadeDir = 1;
+            }
+            return true;
         }
+        fadeDir = 0;
+        return false;
     }
 
-    async UniTaskVoid GoToA()
+    public void SetToNewPattern(DynamicPatternSO iNewPattern)
     {
-        renderedMat.SetInt("_PatternA", (int)patternA.pattern);
-        await UniTask.NextFrame();
-        await CrossfadeTask(1f, 0f, fading_duration);
-    }
-
-    async UniTaskVoid GoToB()
-    {
-        renderedMat.SetInt("_PatternB", (int)patternB.pattern);
-        await UniTask.NextFrame();
-        await CrossfadeTask(0f, 1f, fading_duration);
-    }
-
-    async UniTask CrossfadeTask(float from, float to, float duration)
-    {
-        float frac = 0f;
-        float startTime = Time.time;
-        crossfader = from;
-        while (frac <= 1f)
-        {
-            frac = (Time.time - startTime) / duration;
-            crossfader = Utils.Lerp(from, to, frac);
-
-            renderedMat.SetFloat("_LerpPatternAB", crossfader);
-            renderedMat.SetFloat("_Angle", Utils.Lerp(patternA.angle, patternB.angle, crossfader));
-            renderedMat.SetFloat("_BoxSize", Utils.Lerp(patternA.boxSize, patternB.boxSize, crossfader));
-            renderedMat.SetFloat("_Tiling", Utils.Lerp(patternA.tiling, patternB.tiling, crossfader));
-            Vector2 lerpOffset = Vector2.Lerp(patternA.offset, patternB.offset, crossfader);
-            renderedMat.SetFloatArray("_Offset", new float[]{lerpOffset.x, lerpOffset.y} );
-            await Task.Yield();
-        }
-        crossfader = to;
+        Crossfade(1f);
         _faderLock = false;
+        fadeDir = 0;
+    }
+    
+    public void Crossfade(float iLerp)
+    {
+        if (fadeDir == 0)
+            return;
+        crossfader = fadeDir > 0 ? iLerp : 1f - iLerp;
+        crossfader = Mathf.Clamp01(crossfader);
+        renderedMat.SetFloat("_LerpPatternAB", crossfader);
+        renderedMat.SetFloat("_Angle", Utils.Lerp(patternA.angle, patternB.angle, crossfader));
+        renderedMat.SetFloat("_BoxSize", Utils.Lerp(patternA.boxSize, patternB.boxSize, crossfader));
+        renderedMat.SetFloat("_Tiling", Utils.Lerp(patternA.tiling, patternB.tiling, crossfader));
+        Vector2 lerpOffset = Vector2.Lerp(patternA.offset, patternB.offset, crossfader);
+        renderedMat.SetFloatArray("_Offset", new float[] { lerpOffset.x, lerpOffset.y });
     }
 }

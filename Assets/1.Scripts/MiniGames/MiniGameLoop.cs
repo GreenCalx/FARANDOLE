@@ -25,12 +25,19 @@ public class MiniGameLoop : IEnumerator<MiniGame>
         get { return rankUpdateRequest; }
     }
     bool rankUpdateRequest = false;
+
+    public bool HasRankChanged
+    {
+        get { return rankChanged; }
+    }
+    bool rankChanged = false;
     public MiniGameLoop()
     {
         depth = 0;
         rank = LoopRank.I;
         index = 0;
         rankUpdateRequest = false;
+        rankChanged = false;
         inst_miniGames = new List<MiniGame>();
     }
 
@@ -85,6 +92,7 @@ public class MiniGameLoop : IEnumerator<MiniGame>
         index = 0;
         miniGame = inst_miniGames[index];
         rankUpdateRequest = false;
+        rankChanged = false;
     }
 
     public MiniGame At(int i)
@@ -155,34 +163,35 @@ public class MiniGameLoop : IEnumerator<MiniGame>
         rankUpdateRequest = false;
 
         switch (rank)
-            {
-                case LoopRank.I:
-                    if (IsLoopPerfect())
-                        RankUp();
-                    break;
-                case LoopRank.II:
-                    if (!IsLoopPassed())
-                        RankDown();
-                    else if (IsLoopPerfect())
-                        RankUp();
-                    break;
-                case LoopRank.III:
+        {
+            case LoopRank.I:
+                if (IsLoopPerfect())
+                    RankUp();
+                break;
+            case LoopRank.II:
+                if (!IsLoopPassed())
+                    RankDown();
+                else if (IsLoopPerfect())
+                    RankUp();
+                break;
+            case LoopRank.III:
 
-                    if (!IsLoopPassed())
-                        RankDown();
-                    else if (IsLoopPerfect())
-                    {
-                        // super loop check
-                        return;
-                    }
-                    break;
-                case LoopRank.S:
-                    // master loop check
-                    break;
-                default:
-                    Debug.LogWarning("tryRankUp:: Unkown loop rank : " + (int)rank);
-                    break;
-            }
+                if (!IsLoopPassed())
+                    RankDown();
+                else if (IsLoopPerfect())
+                {
+                    // super loop check
+                    return;
+                }
+                break;
+            case LoopRank.S:
+                // master loop check
+                break;
+            default:
+                Debug.LogWarning("tryRankUp:: Unkown loop rank : " + (int)rank);
+                return;
+        }
+        rankChanged = true;
     }
 
     public void RankUp()
