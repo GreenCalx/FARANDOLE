@@ -8,9 +8,9 @@ public class Knight : ChessPiece
     override public List<Tile> GetLegalMoves()
     {
         List<Tile> moves = new List<Tile>();
-        int[] dx = {1,2,2,1,-1,-2,-2,-1};
-        int[] dy = {2,1,-1,-2,-2,-1,1,2};
-        for (int i=0;i<8;i++)
+        int[] dx = { 1, 2, 2, 1, -1, -2, -2, -1 };
+        int[] dy = { 2, 1, -1, -2, -2, -1, 1, 2 };
+        for (int i = 0; i < 8; i++)
         {
             int nx = x + dx[i];
             int ny = y + dy[i];
@@ -23,5 +23,11 @@ public class Knight : ChessPiece
             }
         }
         return moves;
+    }
+    
+    override
+    public Vector2 GetExpulsionVector()
+    {
+        return -1f * Vector2.right;
     }
 }

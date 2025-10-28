@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3748664974724036102}
   - component: {fileID: 6429755202112447435}
   - component: {fileID: -8964734053359694772}
+  - component: {fileID: -412274422271720970}
   m_Layer: 0
   m_Name: Tower
   m_TagString: Untagged
@@ -105,8 +106,37 @@ MonoBehaviour:
   y: 0
   normalPose: {fileID: 21300000, guid: 5a237787b86579f4d94f939111fd8313, type: 3}
   attackPose: {fileID: 21300000, guid: 52f5dd74c344eed43be44b80bf1c136d, type: 3}
+  deathPose: {fileID: -8494282737241094760, guid: 46cb8b1c5547b574cab371120575043b, type: 3}
   blackPiece: {fileID: 21300000, guid: 5a237787b86579f4d94f939111fd8313, type: 3}
+  deathPushAnim: 0.5
   poseTime: 0.5
+--- !u!50 &-412274422271720970
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2829037840282954039}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!1 &5492606428046084964
 GameObject:
   m_ObjectHideFlags: 0

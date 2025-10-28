@@ -8,8 +8,8 @@ public class Queen : ChessPiece
     public List<Tile> GetLegalMoves()
     {
         List<Tile> moves = new List<Tile>();
-        int[] dx = {1,1,0,-1,-1,-1,0,1};
-        int[] dy = {0,1,1,1,0,-1,-1,-1};
+        int[] dx = { 1, 1, 0, -1, -1, -1, 0, 1 };
+        int[] dy = { 0, 1, 1, 1, 0, -1, -1, -1 };
 
 
         for (int dir = 0; dir < 8; dir++)
@@ -30,12 +30,18 @@ public class Queen : ChessPiece
                 }
                 else
                 {
-                if (t.GetOccupant().color != this.color)
-                    moves.Add(t);
+                    if (t.GetOccupant().color != this.color)
+                        moves.Add(t);
                     break;
                 }
             }
         }
         return moves;
+    }
+
+    override
+    public Vector2 GetExpulsionVector()
+    {
+        return -1f * Vector2.up;
     }
 }

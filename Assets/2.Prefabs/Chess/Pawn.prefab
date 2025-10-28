@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6429755202112447435}
   - component: {fileID: 936744636591303203}
   - component: {fileID: 4549248937777650129}
+  - component: {fileID: 2748734037836051817}
   m_Layer: 0
   m_Name: Pawn
   m_TagString: Untagged
@@ -106,7 +107,9 @@ MonoBehaviour:
   y: 0
   normalPose: {fileID: 4673960649569720265, guid: d76ba876eee209a4fa7359847d6a704b, type: 3}
   attackPose: {fileID: 8905924618992812153, guid: ee2eaf64bc3b5fe49af7372c876ec6b8, type: 3}
+  deathPose: {fileID: 7219136842242055025, guid: fbd43c1b89795574191bc0ae98475c28, type: 3}
   blackPiece: {fileID: 7219136842242055025, guid: fbd43c1b89795574191bc0ae98475c28, type: 3}
+  deathPushAnim: 0.5
   poseTime: 0.5
   queenComponent: {fileID: 4549248937777650129}
 --- !u!114 &4549248937777650129
@@ -125,8 +128,37 @@ MonoBehaviour:
   y: 0
   normalPose: {fileID: 7895035077845509358, guid: 0f553aa2e5aa7f349ad66d4628b0870c, type: 3}
   attackPose: {fileID: 5179280487295057036, guid: 01632144a4261e144a1ec354f5cff46c, type: 3}
+  deathPose: {fileID: 7219136842242055025, guid: fbd43c1b89795574191bc0ae98475c28, type: 3}
   blackPiece: {fileID: -2362334153447027875, guid: 247acef02f6e483448b6cea314874dea, type: 3}
+  deathPushAnim: 0.5
   poseTime: 0.5
+--- !u!50 &2748734037836051817
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2829037840282954039}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!1 &5235063339547510331
 GameObject:
   m_ObjectHideFlags: 0

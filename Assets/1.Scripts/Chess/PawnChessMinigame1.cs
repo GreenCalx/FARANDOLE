@@ -15,14 +15,14 @@ public class PawnChessMinigame : MiniGame
         board = GOBuilder.Create(boardPrefab)
             .WithName("board")
             .WithParent(this.transform)
-            .WithPosition(new Vector3(PG.bounds.center.x,PG.bounds.center.y, 0))
+            .WithPosition(new Vector3(PG.bounds.center.x, PG.bounds.center.y, 0))
             .Build().GetComponent<ChessBoard>();
 
         board.GenerateBoard(boardSizes[MGM.miniGamesDifficulty - 1], ShapeBoard());
         Tile[,] tiles = board.GetTiles();
         foreach (Tile t in tiles)
         {
-            if(t != null)
+            if (t != null)
                 PC.AddTapTracker(t);
         }
 
@@ -71,11 +71,12 @@ public class PawnChessMinigame : MiniGame
     {
         int n_enemies = enemyCounters[MGM.miniGamesDifficulty - 1];
 
-        board.SpawnPiece(board.getRandomUnoccupiedTile(new Vector2Int(1,1)), PlayerColor.White, PieceType.Pawn);
+
         for (int i = 1; i <= n_enemies; i++)
         {
             board.SpawnPiece(board.getRandomUnoccupiedTile(Vector2Int.zero), PlayerColor.Black, PieceType.King);
         }
+        board.SpawnPiece(board.getRandomUnoccupiedTile(new Vector2Int(1, 1)), PlayerColor.White, PieceType.Pawn);
         board.blackPlays = true;
 
     }
@@ -86,4 +87,5 @@ public class PawnChessMinigame : MiniGame
         bool[,] removeTile = new bool[boardSize.x, boardSize.y];
         return removeTile;
     }
+
 }

@@ -25,14 +25,15 @@ public class ChessBoard : MonoBehaviour
     private Tile[,] tiles;
 
     public List<ChessPiece> enemies = new List<ChessPiece>();
-    private List<ChessPiece> playerPieces = new List<ChessPiece>();
+    public List<ChessPiece> playerPieces = new List<ChessPiece>();
     private ChessPiece selectedPiece;
 
+    private List<ChessPiece> promotedPawns = new List<ChessPiece>();
     private List<Tile> legalMoves = new List<Tile>();
 
     public bool blackPlays = false;
 
-    
+
     public void GenerateBoard(Vector2Int size, bool[,] removeTiles)
     {
         boardSize = size;
@@ -127,7 +128,7 @@ public class ChessBoard : MonoBehaviour
             if (other != null && other.color != selectedPiece.color)
             {
                 enemies.Remove(other);
-                other.GetComponent<ChessPiece>().Die();
+                other.GetComponent<ChessPiece>().Die(selectedPiece.GetExpulsionVector());
                 selectedPiece.SpecialPose().Forget();
             }
             else
@@ -138,8 +139,13 @@ public class ChessBoard : MonoBehaviour
 
         CheckWinCondition();
 
+        CheckForPromotedPawns();
         if (blackPlays)
+        {
             MoveBlacks();
+            CheckForPromotedPawns();
+        }
+
 
         FindLegalMoves();
     }
@@ -159,7 +165,7 @@ public class ChessBoard : MonoBehaviour
             positions = bcp.GetLegalMoves();
             Utils.Shuffle(positions);
 
-            foreach(Tile pos in positions)
+            foreach (Tile pos in positions)
             {
                 if (!pos.IsOccupied())
                 {
@@ -178,13 +184,14 @@ public class ChessBoard : MonoBehaviour
         piece.SetPosition(to.x, to.y);
         to.SetOccupant(piece);
 
-                
+
         if (piece is Pawn pawn)
         {
-            if (to.y == boardSize.y - 1 || to.y == 0) // Promotion selon la hauteur du plateau
+            if (to.y == boardSize.y - 1 || to.y == 0) // Promotion
             {
                 piece.playParticles();
                 piece = pawn.Promote();
+                promotedPawns.Add(piece);
             }
         }
     }
@@ -251,5 +258,28 @@ public class ChessBoard : MonoBehaviour
         } while (tiles[x, y] == null || tiles[x, y].IsOccupied());
 
         return tiles[x, y];
+    }
+
+    public void CheckForPromotedPawns()
+    {
+        if (promotedPawns.Count != 0)
+        {
+            foreach (ChessPiece queen in promotedPawns)
+            {
+                if (queen.color == PlayerColor.White)
+                {
+                    playerPieces.Remove(queen.gameObject.GetComponent<Pawn>());
+                    playerPieces.Add(queen);
+                    selectedPiece = queen;
+                }
+                else
+                {
+
+                    enemies.Remove(queen.gameObject.GetComponent<Pawn>());
+                    enemies.Add(queen);
+                }
+            }
+            promotedPawns.Clear();
+        }
     }
 }

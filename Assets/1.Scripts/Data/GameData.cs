@@ -58,3 +58,4 @@ public class GameData : MonoBehaviour
         gameSettings = gameModes.GetSettings(iMode);
     }
 }
+ 

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3748664974724036102}
   - component: {fileID: 6429755202112447435}
   - component: {fileID: -2582148712249672056}
+  - component: {fileID: 5526019973545898821}
   m_Layer: 0
   m_Name: BlackKing
   m_TagString: Untagged
@@ -105,8 +106,37 @@ MonoBehaviour:
   y: 0
   normalPose: {fileID: 5812936510164466748, guid: 5554d583755656642a5c18d7c6d2654e, type: 3}
   attackPose: {fileID: 5812936510164466748, guid: 5554d583755656642a5c18d7c6d2654e, type: 3}
+  deathPose: {fileID: 5812936510164466748, guid: 5554d583755656642a5c18d7c6d2654e, type: 3}
   blackPiece: {fileID: 5812936510164466748, guid: 5554d583755656642a5c18d7c6d2654e, type: 3}
+  deathPushAnim: 0.5
   poseTime: 0.5
+--- !u!50 &5526019973545898821
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2829037840282954039}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 0.59
+  m_LinearDamping: 0.28
+  m_AngularDamping: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!1 &8698594164461223861
 GameObject:
   m_ObjectHideFlags: 0

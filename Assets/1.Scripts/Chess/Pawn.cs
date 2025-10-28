@@ -32,7 +32,7 @@ public class Pawn : ChessPiece
 
         return moves;
     }
-    
+
     public Queen Promote()
     {
         queenComponent.enabled = true;
@@ -41,5 +41,11 @@ public class Pawn : ChessPiece
         Tile tile = board.GetTile(x, y);
         tile.SetOccupant(queenComponent);
         return queenComponent;
+    }
+    
+    override
+    public Vector2 GetExpulsionVector()
+    {
+        return Vector2.up;
     }
 }

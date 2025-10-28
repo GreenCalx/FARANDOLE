@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3748664974724036102}
   - component: {fileID: 6429755202112447435}
   - component: {fileID: 5723359493101114818}
+  - component: {fileID: 8181826030634428909}
   m_Layer: 0
   m_Name: Queen
   m_TagString: Untagged
@@ -105,8 +106,37 @@ MonoBehaviour:
   y: 0
   normalPose: {fileID: 7895035077845509358, guid: 0f553aa2e5aa7f349ad66d4628b0870c, type: 3}
   attackPose: {fileID: 5179280487295057036, guid: 01632144a4261e144a1ec354f5cff46c, type: 3}
+  deathPose: {fileID: 3167352272360232376, guid: 6bff7ffa8a99cd94aabda0fc16553631, type: 3}
   blackPiece: {fileID: -2362334153447027875, guid: 247acef02f6e483448b6cea314874dea, type: 3}
+  deathPushAnim: 0.5
   poseTime: 0.5
+--- !u!50 &8181826030634428909
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2829037840282954039}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!1 &4245513489251737226
 GameObject:
   m_ObjectHideFlags: 0

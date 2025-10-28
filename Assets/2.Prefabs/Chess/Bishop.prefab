@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3748664974724036102}
   - component: {fileID: 6429755202112447435}
   - component: {fileID: 7013134752243212455}
+  - component: {fileID: 7846703394606603337}
   m_Layer: 0
   m_Name: Bishop
   m_TagString: Untagged
@@ -105,8 +106,37 @@ MonoBehaviour:
   y: 0
   normalPose: {fileID: -2214702665700477271, guid: 97561a3e377790b45b20fcefd56235db, type: 3}
   attackPose: {fileID: -5808279384172525405, guid: af6fdf5d1bc54ec42b999a0141a50d03, type: 3}
+  deathPose: {fileID: -5808279384172525405, guid: af6fdf5d1bc54ec42b999a0141a50d03, type: 3}
   blackPiece: {fileID: -2214702665700477271, guid: 97561a3e377790b45b20fcefd56235db, type: 3}
+  deathPushAnim: 0.5
   poseTime: 0
+--- !u!50 &7846703394606603337
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2829037840282954039}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &3145947571403122908
 GameObject:
   m_ObjectHideFlags: 0

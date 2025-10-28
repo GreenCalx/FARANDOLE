@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3748664974724036102}
   - component: {fileID: 6429755202112447435}
   - component: {fileID: 2722435248421872918}
+  - component: {fileID: 4157824501438401443}
   m_Layer: 0
   m_Name: Horse
   m_TagString: Untagged
@@ -105,8 +106,37 @@ MonoBehaviour:
   y: 0
   normalPose: {fileID: 21300000, guid: 78294e06dce1abd40a87508b5fbbf5e8, type: 3}
   attackPose: {fileID: 21300000, guid: a3c55d157ceb3304da8293698b5ffd20, type: 3}
+  deathPose: {fileID: 3167352272360232376, guid: 6bff7ffa8a99cd94aabda0fc16553631, type: 3}
   blackPiece: {fileID: 21300000, guid: 009f67543ea2fbb4aab8c60e6c700b70, type: 3}
+  deathPushAnim: 0.1
   poseTime: 0.5
+--- !u!50 &4157824501438401443
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2829037840282954039}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!1 &6884821356460070490
 GameObject:
   m_ObjectHideFlags: 0
