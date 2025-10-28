@@ -173,7 +173,7 @@ public class MiniGameManager : MonoBehaviour, IManager
         if (!MGLoop.MoveNext())
         {
             PData.loopHistory.AddSnapshot(MGLoop);
-            
+
             MGLoop.depth++;
             OnLoopComplete.Invoke();
 
@@ -184,6 +184,7 @@ public class MiniGameManager : MonoBehaviour, IManager
             // Rank update
             UI.inst_loopPresentationAnim.rankMedalAnimation.UpdateCurrentRank(MGLoop);
             MGLoop.RankUpdate();
+            MGLoop.ComboUpdate();
             if (MGLoop.IsRankUpdateRequested)
             {
                 UI.inst_loopPresentationAnim.rankMedalAnimation.UpdateNewRank(MGLoop);

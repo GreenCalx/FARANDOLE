@@ -21,6 +21,7 @@ public class MiniGameLoop : IEnumerator<MiniGame>
     public int index = 0;
     public LoopRank rank;
     public int depth;
+    public int combo;
     public bool IsRankUpdateRequested {
         get { return rankUpdateRequest; }
     }
@@ -33,6 +34,7 @@ public class MiniGameLoop : IEnumerator<MiniGame>
     bool rankChanged = false;
     public MiniGameLoop()
     {
+        combo = 0;
         depth = 0;
         rank = LoopRank.I;
         index = 0;
@@ -81,6 +83,7 @@ public class MiniGameLoop : IEnumerator<MiniGame>
         Reset();
         depth = 0;
         rank = LoopRank.I;
+        combo = 0;
     }
     public void Reset()
     {
@@ -116,7 +119,6 @@ public class MiniGameLoop : IEnumerator<MiniGame>
         {
             return n_passed >= GameData.GetSettings.loopPassThreshold; ;
         }
-
     }
 
     public bool IsLoopPerfect()
@@ -158,6 +160,14 @@ public class MiniGameLoop : IEnumerator<MiniGame>
 
     }
 
+    public void ComboUpdate()
+    {
+        if (IsLoopPerfect())
+            combo++;
+        else
+            combo = 0;
+    }
+
     public void RankUpdate()
     {
         rankUpdateRequest = false;
@@ -167,25 +177,49 @@ public class MiniGameLoop : IEnumerator<MiniGame>
             case LoopRank.I:
                 if (IsLoopPerfect())
                     RankUp();
+                else
+                    return;
                 break;
             case LoopRank.II:
                 if (!IsLoopPassed())
                     RankDown();
                 else if (IsLoopPerfect())
                     RankUp();
+                else
+                    return;
                 break;
             case LoopRank.III:
-
                 if (!IsLoopPassed())
                     RankDown();
                 else if (IsLoopPerfect())
                 {
                     // super loop check
+                    if (combo >= GameData.GetSettings.ComboRequirementForSuper)
+                        RankUp();
+                } else
+                {
                     return;
                 }
                 break;
             case LoopRank.S:
-                // master loop check
+                if (!IsLoopPassed())
+                    RankDown();
+                else if (IsLoopPerfect())
+                {
+                    // master loop check
+                    // TODO : not a simple combo requirement
+                    if (combo >= GameData.GetSettings.ComboRequirementForMaster)
+                        RankUp();
+                } else
+                {
+                    return;
+                }
+                break;
+            case LoopRank.M:
+                if (!IsLoopPassed())
+                    RankDown();
+                else
+                    return;
                 break;
             default:
                 Debug.LogWarning("tryRankUp:: Unkown loop rank : " + (int)rank);

@@ -15,6 +15,9 @@ public class LabyrinthMiniGame : MiniGame
     public List<GameObject> diff1Layouts;
     public List<GameObject> diff2Layouts;
     public List<GameObject> diff3Layouts;
+    public List<GameObject> diffSLayouts;
+    public List<GameObject> diffMLayouts;
+    public List<float> ballSizeDownScalesPerDiff;
     LabyrinthLayout selectedLayout;
 
     public void ClearLayout()
@@ -42,6 +45,12 @@ public class LabyrinthMiniGame : MiniGame
                 break;
             case 3:
                 selectedLayoutPrefab = diff3Layouts[UnityEngine.Random.Range(0, diff3Layouts.Count)];
+                break;
+            case 4:
+                selectedLayoutPrefab = diffSLayouts[UnityEngine.Random.Range(0, diffSLayouts.Count)];
+                break;
+            case 5:
+                selectedLayoutPrefab = diffMLayouts[UnityEngine.Random.Range(0, diffMLayouts.Count)];
                 break;
             default:
                 Debug.LogError("Very bad error on layout pick for labyrinth with " + MGM.miniGamesDifficulty + " mini game difficutly. NO LAYOUTS !!");
@@ -82,9 +91,9 @@ public class LabyrinthMiniGame : MiniGame
                         GameObject.Destroy(newBall.gameObject);
                     }
                 );
+            newBall.transform.localScale *= ballSizeDownScalesPerDiff[MGM.miniGamesDifficulty-1];
             inst_RollingBalls.Add(newBall.gameObject);
         }
-
         rotater.Init();
         PC.AddPositionTracker(rotater);
     }
