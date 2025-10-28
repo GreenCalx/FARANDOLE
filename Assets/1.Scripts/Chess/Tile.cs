@@ -11,7 +11,8 @@ public class Tile : MonoBehaviour, ITapTracker
 
     private BoxCollider2D col;
     Color normalColor = new Color(1f,1f,1f,1f);
-    Color highlightColor = new Color(0.6f,1f,0.6f,1f);
+    Color blackHighlightColor = new Color(0.47f, 0.87f, 0.47f, 1f);
+    Color whiteHighlightColor = new Color(0.6f, 1f, 0.6f, 1f);
 
     public void Init(int x, int y, ChessBoard board)
     {
@@ -29,10 +30,10 @@ public class Tile : MonoBehaviour, ITapTracker
     public void Highlight(bool on)
     {
         if (sr == null) return;
-        if (on) sr.color = highlightColor;
+        bool dark = (x + y) % 2 == 1;
+        if (on) sr.color = sr.color = dark ? blackHighlightColor : whiteHighlightColor;
         else
         {
-            bool dark = (x + y) % 2 == 1;
             sr.color = dark ? new Color(0.5f,0.5f,0.5f,1f) : new Color(1f,1f,1f,1f);
         }
     }

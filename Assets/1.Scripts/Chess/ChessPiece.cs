@@ -70,12 +70,13 @@ public abstract class ChessPiece : MonoBehaviour
     public async void Die(Vector2 expulsionVector)
     {
 
-        rb.AddForce(expulsionVector, ForceMode2D.Impulse);
+        rb.AddForce(expulsionVector * 5f, ForceMode2D.Impulse);
         sr.sprite = deathPose;
         await UniTask.WaitForSeconds(deathPushAnim);
         playParticles();
-        await UniTask.WaitForSeconds(particles.main.startLifetime.constantMax);
         sr.enabled = false;
+        await UniTask.WaitForSeconds(particles.main.startLifetime.constantMax);
+      
         Destroy(this.gameObject);
     }
 

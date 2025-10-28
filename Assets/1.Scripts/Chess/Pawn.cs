@@ -29,7 +29,7 @@ public class Pawn : ChessPiece
             moves.Add(diagLeft);
         if (diagRight != null && (enPassant || diagRight.IsOccupied() && diagRight.GetOccupant().color != this.color))
             moves.Add(diagRight);
-
+        enPassant = false;
         return moves;
     }
 
