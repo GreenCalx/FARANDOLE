@@ -17,6 +17,8 @@ public class DragLabyrinthMiniGame : MiniGame
     public List<GameObject> diff1Layouts;
     public List<GameObject> diff2Layouts;
     public List<GameObject> diff3Layouts;
+    public List<GameObject> diff4Layouts;
+    public List<GameObject> diff5Layouts;
     LabyrinthLayout selectedLayout;
 
 
@@ -24,6 +26,8 @@ public class DragLabyrinthMiniGame : MiniGame
     {
         if (selectedLayout.gameObject != null)
             Destroy(selectedLayout.gameObject);
+
+        inst_Labyrinth.ClearOutlines();
         if (inst_Labyrinth.visualLab != null)
             Destroy(inst_Labyrinth.visualLab.gameObject);
     }
@@ -41,6 +45,12 @@ public class DragLabyrinthMiniGame : MiniGame
                 break;
             case 3:
                 selectedLayoutPrefab = diff3Layouts[UnityEngine.Random.Range(0, diff3Layouts.Count)];
+                break;
+            case 4:
+                selectedLayoutPrefab = diff4Layouts[UnityEngine.Random.Range(0, diff3Layouts.Count)];
+                break;
+            case 5:
+                selectedLayoutPrefab = diff5Layouts[UnityEngine.Random.Range(0, diff3Layouts.Count)];
                 break;
             default:
                 Debug.LogError("Very bad error on layout pick for labyrinth with " + MGM.miniGamesDifficulty + " mini game difficutly. NO LAYOUTS !!");

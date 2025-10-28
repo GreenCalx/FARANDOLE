@@ -581,10 +581,9 @@ MonoBehaviour:
   IsInPostGame: 0
   successState: 0
   hasIntro: 0
+  electrifyDuration: 1
   finishLine: {fileID: 2639687645726103807}
   prefab_ballToEscape: {fileID: 4784646498703449647, guid: 0d739d971aabeca459808abace071bc5, type: 3}
-  ballClosedSprite: {fileID: 21300000, guid: 72ec9b67f37c50f409fc2874a85d48da, type: 3}
-  ballOpenSprite: {fileID: 21300000, guid: 07c498e3321ce0f4fa0b02c191d9a130, type: 3}
   inst_Labyrinth: {fileID: 8487501759319076828}
   diff1Layouts:
   - {fileID: 4726206639710619473, guid: add235bbb1d47394db43cd70fe028554, type: 3}
@@ -592,6 +591,10 @@ MonoBehaviour:
   - {fileID: 4726206639710619473, guid: bee4e1360e08a064aa86c29328cc7a1e, type: 3}
   diff3Layouts:
   - {fileID: 4726206639710619473, guid: 090ac158e709c4d40a9da7b33e4d3183, type: 3}
+  diff4Layouts:
+  - {fileID: 4726206639710619473, guid: 9b5c3156a09197b4daf1f670c46f12cf, type: 3}
+  diff5Layouts:
+  - {fileID: 4726206639710619473, guid: 585dd4af726ef5448a5430d12ddb48c7, type: 3}
 --- !u!1 &3278629205828269616
 GameObject:
   m_ObjectHideFlags: 0
@@ -6188,7 +6191,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LabMat: {fileID: 2100000, guid: a78d3f0b5ce2d324a917bba26a1600be, type: 2}
+  LabMatOutline: {fileID: 2100000, guid: 6fab9e92a266a2a448bf8444cfc0570a, type: 2}
   visualLab: {fileID: 0}
+  m_Renderer: {fileID: 0}
+  m_OutlineRenderers: []
+  m_OutlineLR: []
 --- !u!50 &7618993489830231932
 Rigidbody2D:
   serializedVersion: 5

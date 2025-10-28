@@ -32,7 +32,7 @@ public class Labyrinth : MonoBehaviour, IRendered
 
     public void ClearOutlines()
     {
-                if (m_OutlineLR!=null)
+        if (m_OutlineLR!=null)
         {
             m_OutlineLR.ForEach(e => GameObject.DestroyImmediate(e));
             m_OutlineLR.Clear();
