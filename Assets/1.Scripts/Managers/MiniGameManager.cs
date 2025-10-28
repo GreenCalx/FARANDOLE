@@ -215,6 +215,16 @@ public class MiniGameManager : MonoBehaviour, IManager
         return new LoopHighScore(GameData.Get.currentGameMode, gameIDs, PData.score, DateTime.Now);
     }
 
+    public Color GetCurrentColor()
+    {
+        return PG.GetCurrentColor(MGLoop.depth);
+    }
+
+    public Color GetPreviousColor()
+    {
+        return PG.GetPreviousColor(MGLoop.depth);
+    }
+
     void Update()
     {
         UI.RefreshTimeIndicator(gameClock);

@@ -1,9 +1,15 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class RollingBall : MiniGameEntity, IRacer
+public class RollingBall : MiniGameEntity, IRacer, IRendered
 {
     public UnityEvent OnFinishCB;
+    public SpriteRenderer m_Renderer;
+
+    public void InitColor(Color iColor)
+    {
+        m_Renderer.material.SetColor("_Color", iColor);
+    }
     public void OnFinish()
     {
         if (!MG.IsActiveMiniGame)
@@ -30,5 +36,10 @@ public class RollingBall : MiniGameEntity, IRacer
         {
             OnFinish();
         }
+    }
+
+    public Renderer GetRenderer()
+    {
+        return m_Renderer;
     }
 }

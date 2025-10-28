@@ -72,7 +72,8 @@ public class LabyrinthMiniGame : MiniGame
     public override void Reset()
     {
         PickLayout();
-        inst_movingLabyrinth.SetFromLayout(selectedLayout);
+        inst_movingLabyrinth.SetFromLayout(selectedLayout, MGM.LM2D);
+        inst_movingLabyrinth.InitColor(MGM.GetCurrentColor());
         inst_movingLabyrinth.transform.rotation = Quaternion.identity;
 
         for (int i = 0; i < MGM.miniGamesDifficulty; i++)
@@ -91,7 +92,8 @@ public class LabyrinthMiniGame : MiniGame
                         GameObject.Destroy(newBall.gameObject);
                     }
                 );
-            newBall.transform.localScale *= ballSizeDownScalesPerDiff[MGM.miniGamesDifficulty-1];
+            newBall.transform.localScale *= ballSizeDownScalesPerDiff[MGM.miniGamesDifficulty - 1];
+            newBall.InitColor(MGM.GetPreviousColor());
             inst_RollingBalls.Add(newBall.gameObject);
         }
         rotater.Init();

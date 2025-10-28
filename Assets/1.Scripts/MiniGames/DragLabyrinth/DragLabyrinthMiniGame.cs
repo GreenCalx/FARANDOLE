@@ -60,7 +60,7 @@ public class DragLabyrinthMiniGame : MiniGame
     public override void Reset()
     {
         PickLayout();
-        inst_Labyrinth.SetFromLayout(selectedLayout);
+        inst_Labyrinth.SetFromLayout(selectedLayout, MGM.LM2D);
         inst_Labyrinth.transform.rotation = Quaternion.identity;
 
         inst_ballToEscape = Instantiate(prefab_ballToEscape);

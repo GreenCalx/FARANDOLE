@@ -303,14 +303,24 @@ public class PlaygroundManager : MonoBehaviour, IManager
         finalClapAnimation.OpenAnim();
     }
 
-    public void RefreshRendering(int iLoopLevel,bool iRankedUp, LoopRank iLoopRank)
+    public void RefreshRendering(int iLoopLevel, bool iRankedUp, LoopRank iLoopRank)
     {
         if (LerpToNextStateCoroutine != null)
         {
             StopCoroutine(LerpToNextStateCoroutine);
             LerpToNextStateCoroutine = null;
         }
-        LerpToNextStateCoroutine = StartCoroutine(LerpToNextStateCo(iLoopLevel,iRankedUp, iLoopRank));
+        LerpToNextStateCoroutine = StartCoroutine(LerpToNextStateCo(iLoopLevel, iRankedUp, iLoopRank));
+    }
+
+    public Color GetPreviousColor(int iLoopLevel)
+    {
+        return (iLoopLevel > 0) ? loopLevelColors[iLoopLevel - 1] : loopLevelColors[0];
+    }
+    
+    public Color GetCurrentColor(int iLoopLevel)
+    {
+        return (iLoopLevel >= loopLevelColors.Count) ? loopLevelColors[loopLevelColors.Count - 1] : loopLevelColors[iLoopLevel];
     }
 
     IEnumerator LerpToNextStateCo(int iLoopLevel, bool iRankedUp,LoopRank iLoopRank)
@@ -318,8 +328,8 @@ public class PlaygroundManager : MonoBehaviour, IManager
         float startTime = Time.time;
         float frac = 0f;
 
-        Color currentC = (iLoopLevel > 0) ? loopLevelColors[iLoopLevel - 1] : loopLevelColors[0];
-        Color targetC = (iLoopLevel >= loopLevelColors.Count) ? loopLevelColors[loopLevelColors.Count - 1] : loopLevelColors[iLoopLevel];
+        Color prevC   = GetPreviousColor(iLoopLevel);
+        Color newC    = GetCurrentColor(iLoopLevel);
 
         bool fadePattern = false;
         if (iRankedUp)
@@ -327,13 +337,13 @@ public class PlaygroundManager : MonoBehaviour, IManager
         while (frac < 1f)
         {
             frac = Mathf.Clamp01((Time.time - startTime) / GameData.GetSettings.PlayGroundColorLerpTimeSec);
-            LerpColor(currentC, targetC, frac);
+            LerpColor(prevC, newC, frac);
             if (iRankedUp && fadePattern)
                 PGPatternFader.Crossfade(frac);
             yield return null;
         }
 
-        LerpColor(currentC, targetC, 1f);
+        LerpColor(prevC, newC, 1f);
         if (iRankedUp)
             PGPatternFader.SetToNewPattern(GetRankPattern(iLoopRank));
     }

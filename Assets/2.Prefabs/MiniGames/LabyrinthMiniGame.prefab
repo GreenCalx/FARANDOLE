@@ -652,9 +652,9 @@ MonoBehaviour:
   ballSizeDownScalesPerDiff:
   - 1
   - 1
-  - 0.9
-  - 0.75
+  - 0.8
   - 0.6
+  - 0.5
 --- !u!1 &3278629205828269616
 GameObject:
   m_ObjectHideFlags: 0
@@ -6251,7 +6251,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LabMat: {fileID: 2100000, guid: 3605a5b0a6afc9949bfeab4432ac1384, type: 2}
+  LabMatOutline: {fileID: 2100000, guid: 76e93c408d99f3e459db8d210a4baa45, type: 2}
   visualLab: {fileID: 0}
+  visualLabOutline: {fileID: 0}
+  m_Renderer: {fileID: 0}
 --- !u!50 &7618993489830231932
 Rigidbody2D:
   serializedVersion: 5
