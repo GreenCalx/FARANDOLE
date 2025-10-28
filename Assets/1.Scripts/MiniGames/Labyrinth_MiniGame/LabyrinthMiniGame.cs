@@ -22,8 +22,11 @@ public class LabyrinthMiniGame : MiniGame
 
     public void ClearLayout()
     {
+
         if (selectedLayout.gameObject != null)
             Destroy(selectedLayout.gameObject);
+
+        inst_movingLabyrinth.ClearOutlines();
         if (inst_movingLabyrinth.visualLab != null)
             Destroy(inst_movingLabyrinth.visualLab.gameObject);
     }

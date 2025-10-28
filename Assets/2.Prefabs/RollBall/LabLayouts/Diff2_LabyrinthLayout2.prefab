@@ -361,8 +361,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   refreshPreviewMesh: 0
-  cleanPreview: 1
-  previewMeshMat: {fileID: 0}
+  cleanPreview: 0
+  previewMeshMat: {fileID: 2100000, guid: 3605a5b0a6afc9949bfeab4432ac1384, type: 2}
+  previewOutlineMat: {fileID: 2100000, guid: 6fab9e92a266a2a448bf8444cfc0570a, type: 2}
   CC2D: {fileID: 3193834241320168808}
   spawnPoint: {fileID: 4398163701138074936}
   rangePoint: {fileID: 3245776199441922832}

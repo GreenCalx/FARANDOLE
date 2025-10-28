@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 using static Utils;
 
 public class Labyrinth : MonoBehaviour, IRendered
@@ -8,9 +9,9 @@ public class Labyrinth : MonoBehaviour, IRendered
     Rigidbody2D RB;
     Quaternion currRot, startRot;
     public GameObject visualLab;
-    public GameObject visualLabOutline;
     public Renderer m_Renderer;
-
+    public List<GameObject> m_OutlineRenderers;
+    public List<LineRenderer> m_OutlineLR;
     void Start()
     {
         RB = GetComponent<Rigidbody2D>();
@@ -29,8 +30,23 @@ public class Labyrinth : MonoBehaviour, IRendered
         m_Renderer.material.SetColor("_Color", iColor);
     }
 
+    public void ClearOutlines()
+    {
+                if (m_OutlineLR!=null)
+        {
+            m_OutlineLR.ForEach(e => GameObject.DestroyImmediate(e));
+            m_OutlineLR.Clear();
+        }
+        if (m_OutlineRenderers != null)
+        {
+            m_OutlineRenderers.ForEach(e => GameObject.DestroyImmediate(e));
+            m_OutlineRenderers.Clear();
+        }
+    }
+
     public void SetFromLayout(LabyrinthLayout iLayout, LayerManager2D iLM2D)
     {
+        // Draw Lab
         visualLab = GOBuilder.Create()
                 .WithName("CompositeColliderRenderer")
                 .WithParent(transform)
@@ -42,20 +58,54 @@ public class Labyrinth : MonoBehaviour, IRendered
         Mesh m = visualLab.GetComponent<MeshFilter>()?.mesh;
         Utils.BoundedUnwrapMesh(m);
 
-        visualLabOutline = GOBuilder.Create()
-                    .WithName("LabOutlineRenderer")
-                    .WithParent(visualLab.transform)
-                    .WithLocalPosition(Vector3.zero)
-                    .WithMeshFilter(m, false)
-                    .WithRenderer(LabMatOutline)
-                    .Build();
+        // Draw Outlines
+        m_OutlineLR = new List<LineRenderer>();
+        int n_path = iLayout.CC2D.pathCount;
+        for (int i = 0; i < n_path; i++)
+        {
+            LineRenderer OutlineLR = GOBuilder.Create()
+                                .WithName("Outline LR " + i)
+                                .WithParent(transform)
+                                .WithLocalPosition(Vector3.zero)
+                                .WithLineRenderer(LabMatOutline)
+                                .BuildAs<LineRenderer>();
+            Vector2[] points = new Vector2[iLayout.CC2D.GetPathPointCount(i)];
+            iLayout.CC2D.GetPath(i, points);
 
+            OutlineLR.positionCount = points.Length;
+            OutlineLR.SetPositions(Utils.ToVec3(points));
+            OutlineLR.startWidth = 0.01f;
+            OutlineLR.endWidth = 0.01f;
+            OutlineLR.loop = true;
+            OutlineLR.alignment = LineAlignment.TransformZ;
+            OutlineLR.numCapVertices = 0;
+            OutlineLR.numCornerVertices = 2;
+            m_OutlineLR.Add(OutlineLR);
+        }
+        
+        m_OutlineRenderers = new List<GameObject>();
+        foreach (LineRenderer LR in m_OutlineLR)
+        {
+            Mesh OutlineMesh = new Mesh(); // scope doubt
+            LR.BakeMesh(OutlineMesh, true);
+            m_OutlineRenderers.Add( 
+                GOBuilder.Create()
+                            .WithName("LabOutlinePreview")
+                            .WithParent(transform)
+                            .WithLocalPosition(Vector3.zero)
+                            .WithMeshFilter(OutlineMesh, true)
+                            .WithRenderer(LabMatOutline)
+                            .Build()
+                            );
+            DestroyImmediate(LR.gameObject);
+        }
+        m_OutlineLR.Clear();
     }
+    
 
     public void Reset()
     {
-        // transform.rotation = Quaternion.identity;
-        // RB.freezeRotation = true;
+        
     }
 
     void Update()

@@ -4,7 +4,7 @@ using UnityEngine.Rendering.Universal;
 
 public class SpriteOutlineFeature : ScriptableRendererFeature
 {
-    class OutlinePass : ScriptableRenderPass
+    private class OutlinePass : ScriptableRenderPass
     {
         private Material outlineMaterial;
         private FilteringSettings filteringSettings;

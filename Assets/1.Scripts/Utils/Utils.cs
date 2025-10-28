@@ -3,6 +3,22 @@ using System;
 using System.Collections.Generic;
 public static class Utils
 {
+    public static Vector2[] ToVec2(Vector3[] iVec3)
+    {
+        Vector2[] oVec2 = new Vector2[iVec3.Length];
+        for (int i = 0; i < iVec3.Length; i++)
+        { oVec2[i] = new Vector2(iVec3[i].x, iVec3[i].y); }
+        return oVec2;
+    }
+
+    public static Vector3[] ToVec3(Vector2[] iVec2)
+    {
+        Vector3[] oVec3 = new Vector3[iVec2.Length];
+        for (int i = 0; i < iVec2.Length; i++)
+        { oVec3[i] = new Vector3(iVec2[i].x, iVec2[i].y, 0f); }
+        return oVec3;
+    }
+
     public static Vector2 GetWorldPos(Vector3 iScreenPos)
     {
         Vector3 proj = Camera.main.ScreenToWorldPoint(iScreenPos);

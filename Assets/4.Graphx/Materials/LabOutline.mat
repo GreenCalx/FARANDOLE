@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: SpriteOutline
-  m_Shader: {fileID: 4800000, guid: 0c6ae37ae96175543a69a7583e29e8dd, type: 3}
+  m_Name: LabOutline
+  m_Shader: {fileID: 4800000, guid: ca6e32ca5fe19b64ebdb49a82d9bf85e, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -16,7 +16,7 @@ Material:
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 3000
   stringTagMap: {}
   disabledShaderPasses: []
   m_LockedProperties: 
@@ -62,7 +62,9 @@ Material:
     m_Ints: []
     m_Floats:
     - _AlphaCutoff: 0.5
+    - _BlendDst: 0
     - _BlendOp: 0
+    - _BlendSrc: 1
     - _Brightness: 1
     - _BumpScale: 1
     - _CameraFadingEnabled: 0
@@ -89,6 +91,8 @@ Material:
     - _OcclusionStrength: 1
     - _Outline: 0.03
     - _OutlineSize: 1.61
+    - _OutlineThickness: 0.69
+    - _OutlineWidth: 0.66
     - _Parallax: 0.02
     - _Shine: 1
     - _ShineAngle: 0.75
@@ -108,7 +112,7 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _ColorAddSubDiff: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _OutlineColor: {r: 1, g: 0.2882568, b: 0, a: 1}
+    - _OutlineColor: {r: 1, g: 0.91838396, b: 0, a: 1}
     - _ShineColor: {r: 1, g: 0, b: 0, a: 1}
     - _SoftParticleFadeParams: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
