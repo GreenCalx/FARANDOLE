@@ -156,21 +156,36 @@ MonoBehaviour:
   IsActiveMiniGame: 0
   IsInPostGame: 0
   successState: 0
+  hasIntro: 0
   prefabs_unoStickers: {fileID: 4801012445247314565, guid: 8a6b77a5fe9e94a4cb3dc8f5b0598871, type: 3}
   prefab_bloikSticker: {fileID: 1163066599452052819, guid: f302cd2c99655fc419c55935f4c2a388, type: 3}
-  numberOfDecoySticker: 140000001e0000002800000032000000
+  numberOfDecoySticker: 1400000021000000420000005800000064000000
   unoStickers: []
   maxStickerSpeed:
   - 1
   - 1.5
   - 1.8
   - 2
+  - 2.2
   minStickerSpeed:
   - 0.5
   - 0.7
   - 0.9
   - 1
+  - 1.5
   bloikSticker: {fileID: 0}
+  bloikStickerSpeed:
+  - 1.2
+  - 1.8
+  - 2.5
+  - 3
+  - 4
+  bloikStickerScale:
+  - {x: 1, y: 1, z: 1}
+  - {x: 1, y: 1, z: 1}
+  - {x: 1, y: 1, z: 1}
+  - {x: 0.9, y: 0.9, z: 1}
+  - {x: 0.75, y: 0.75, z: 1}
   stickersHit: 
   spawnMargin: 0.5
 --- !u!1 &871258679608148241

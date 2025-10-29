@@ -292,6 +292,13 @@ MonoBehaviour:
   successState: 0
   hasIntro: 0
   prefab_dogHead: {fileID: 2552087635930286327, guid: c4141d031335370439c23e6e7c103037, type: 3}
-  difficultyTapForces: 030000000400000006000000080000000c000000
-  bounceOnRandomTreshold: 2
+  difficultyTapForces: 030000000500000005000000080000000a000000
+  SpringAnchorDrag: 0000000101
+  SpringAnchorDragStrength:
+  - 0
+  - 0
+  - 0
+  - 2
+  - 4
+  bounceOnRandomTreshold: 3
   UIworld_petCounter: {fileID: 5601667270289216680}

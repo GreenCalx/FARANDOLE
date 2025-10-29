@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System;
 using Unity.VisualScripting;
 
-public class FindBloik_MiniGame : MiniGame
+public class FindBloik_MiniGame : MiniGame, IDogMod, IRegularMod
 {
     [Header("FindBloikMiniGame")]
     public GameObject prefabs_unoStickers;
@@ -15,6 +15,8 @@ public class FindBloik_MiniGame : MiniGame
     public float[] maxStickerSpeed;
     public float[] minStickerSpeed;
     public BouncySticker bloikSticker;
+    public float[] bloikStickerSpeed;
+    public Vector3[] bloikStickerScale;
 
     public int[] stickersHit;
 
@@ -28,18 +30,20 @@ public class FindBloik_MiniGame : MiniGame
 
     public override void Reset()
     {
-        int n_spawns = numberOfDecoySticker[MGM.miniGamesDifficulty];
+        int n_spawns = numberOfDecoySticker[MGM.miniGamesDifficulty-1];
         unoStickers = new BouncySticker[n_spawns];
 
         bloikSticker = GOBuilder.Create(prefab_bloikSticker)
                     .WithName("bloik")
                     .WithParent(transform)
                     .WithPosition(new Vector2(
-                        UnityEngine.Random.Range(PG.bounds.min.x + spawnMargin, PG.bounds.max.x- spawnMargin),
+                        UnityEngine.Random.Range(PG.bounds.min.x + spawnMargin, PG.bounds.max.x - spawnMargin),
                         UnityEngine.Random.Range(PG.bounds.min.y + spawnMargin, PG.bounds.max.y - spawnMargin)))
                     .Build().GetComponent<BouncySticker>();
+        Vector3 scale = bloikSticker.transform.localScale;
+        bloikSticker.transform.localScale = new Vector3(scale.x*bloikStickerScale[MGM.miniGamesDifficulty-1].x, scale.y*bloikStickerScale[MGM.miniGamesDifficulty-1].y, 0f);
         bloikSticker.tapCB.AddListener(StickerHit);
-        bloikSticker.speed = UnityEngine.Random.Range(minStickerSpeed[MGM.miniGamesDifficulty], maxStickerSpeed[MGM.miniGamesDifficulty]);
+        bloikSticker.speed = bloikStickerSpeed[MGM.miniGamesDifficulty-1];
         MGM.LM2D.PlaceObject(bloikSticker.sr);
         PC.AddTapTracker(bloikSticker);
 
@@ -52,7 +56,7 @@ public class FindBloik_MiniGame : MiniGame
                 UnityEngine.Random.Range(PG.bounds.min.x + spawnMargin, PG.bounds.max.x - spawnMargin),
                 UnityEngine.Random.Range(PG.bounds.min.y + spawnMargin, PG.bounds.max.y - spawnMargin)))
             .Build().GetComponent<BouncySticker>();
-            unoStickers[i].speed = UnityEngine.Random.Range(minStickerSpeed[MGM.miniGamesDifficulty], maxStickerSpeed[MGM.miniGamesDifficulty]);
+            unoStickers[i].speed = UnityEngine.Random.Range(minStickerSpeed[MGM.miniGamesDifficulty-1], maxStickerSpeed[MGM.miniGamesDifficulty-1]);
             MGM.LM2D.PlaceObject(unoStickers[i].sr);
         }
     }
@@ -103,5 +107,12 @@ public class FindBloik_MiniGame : MiniGame
         Destroy(bloikSticker.gameObject);
     }
 
+    #region MODS
+    public void ApplyMod()
+    {
+
+    }
+
+    #endregion
 
 }

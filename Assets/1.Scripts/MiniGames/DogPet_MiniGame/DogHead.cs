@@ -5,9 +5,12 @@ using UnityEngine.Events;
 
 public class DogHead : MonoBehaviour, ITapTracker
 {
-    float tapRadius = 1f;
+    float fadeOutAnimDuration = 0.5f;
+
     public UnityEvent tapCB;
     Rigidbody2D rb2d;
+    public Collider2D h_C2D;
+    public Rigidbody2D AnchorPointRB;
     public SpriteRenderer SR;
     public Sprite idleSprite;
     public Sprite tapSprite;
@@ -24,9 +27,23 @@ public class DogHead : MonoBehaviour, ITapTracker
     Vector3 animScale;
     public bool stopPropagation => true;
     public int GetDisplayPriority() { return 0; }
-
+    Bounds m_Bounds;
+    bool isBounded = false;
     public bool bounceRandomOnTap = false;
-
+    SpringJoint2D m_Spring;
+    public bool DrawSpring;
+    LineRenderer m_SpringLR;
+    bool m_SpringAnchorDrag = false;
+    public bool SpringAnchorDrag
+    {
+        get { return ((AnchorPointRB != null) && m_SpringAnchorDrag); }
+        set { m_SpringAnchorDrag = value; }
+    }
+    public float m_SpringAnchorDragStrength;
+    public Material springMat;
+    public float springLRWidthStart = 0.1f;
+    public float springLRWidthEnd = 0.1f;
+    Vector3[] springPoints;
     public void Init()
     {
         rb2d = GetComponent<Rigidbody2D>();
@@ -35,14 +52,54 @@ public class DogHead : MonoBehaviour, ITapTracker
         baseScale = SR.transform.localScale;
         animScale = baseScale * 0.9f;
         baseRot = transform.rotation;
+
+        springPoints = new Vector3[2];
+    }
+
+    public void InitBounds(Bounds iBounds)
+    {
+        m_Bounds = iBounds;
+        isBounded = true;
     }
 
     public void Reset()
     {
+        rb2d.constraints = RigidbodyConstraints2D.None;
         SR.transform.localScale = baseScale;
         SR.sprite = idleSprite;
+
+        transform.position = Vector3.zero;
         transform.rotation = baseRot;
+
+        AnchorPointRB.linearVelocity = Vector3.zero;
+        AnchorPointRB.transform.position = Vector3.zero;
+        
+        m_Spring = GetComponent<SpringJoint2D>();
+        if (DrawSpring)
+        {
+            m_SpringLR = GOBuilder.Create()
+                    .WithName("SpringLR")
+                    .WithParent(transform)
+                    .WithPosition(Vector3.zero)
+                    .WithLineRenderer(springMat)
+                    .BuildAs<LineRenderer>();
+            m_SpringLR.positionCount = 2;
+            m_SpringLR.startWidth = springLRWidthStart;
+            m_SpringLR.endWidth = springLRWidthEnd;
+            SpringLRUpdate();
+        }
+            
     }
+    
+    void SpringLRUpdate()
+    {
+        if (m_SpringLR==null)
+            return;
+        springPoints[0] = transform.position;
+        springPoints[1] = AnchorPointRB!=null ? AnchorPointRB.transform.position : Vector3.zero;
+        m_SpringLR.SetPositions(springPoints);
+    }
+
 
     void OnDestroy()
     {
@@ -50,6 +107,37 @@ public class DogHead : MonoBehaviour, ITapTracker
         {
             StopCoroutine(tapAnimCo);
             tapAnimCo = null;
+        }
+
+    }
+
+    void OnDisable()
+    {
+        if (m_SpringLR != null)
+            Destroy(m_SpringLR.gameObject);
+    }
+    void FixedUpdate()
+    {
+        if (isBounded)
+        {
+            if (!m_Bounds.Contains(transform.position))
+            {
+                transform.position = m_Bounds.ClosestPoint(transform.position);
+                return;
+            }
+        }
+
+        if (m_SpringAnchorDrag)
+        {
+            m_Spring.anchor = AnchorPointRB.transform.position;
+        }
+    }
+
+    void Update()
+    {
+        if (DrawSpring)
+        {
+            SpringLRUpdate();
         }
     }
 
@@ -60,12 +148,12 @@ public class DogHead : MonoBehaviour, ITapTracker
     }
     public bool OnTap(Vector2 iVec2)
     {
-        // if (Vector3.Distance(transform.position, new Vector3(iVec2.x, iVec2.y, 0f)) < tapRadius)
-        // {
-            tapCB.Invoke();
-            OnPetPS.Play();
-            // return true;
-        // }
+        if (!h_C2D.bounds.Contains(iVec2))
+            return false;
+
+        tapCB.Invoke();
+        OnPetPS.Play();
+
         return false;
     }
     public void TapEffect(int force)
@@ -73,13 +161,14 @@ public class DogHead : MonoBehaviour, ITapTracker
         SR.sprite = tapSprite;
         if (rb2d)
         {
-            if (bounceRandomOnTap)
+            Vector3 force_dir = Vector3.zero;
+            force_dir = bounceRandomOnTap ? UnityEngine.Random.insideUnitCircle.normalized : -Vector3.up;
+            force_dir *= force;
+            rb2d.AddForce(force_dir, ForceMode2D.Impulse);
+            if (m_SpringAnchorDrag)
             {
-                rb2d.AddForce(UnityEngine.Random.insideUnitCircle.normalized * force, ForceMode2D.Impulse);
+                AnchorPointRB.AddForce(force_dir * m_SpringAnchorDragStrength, ForceMode2D.Impulse);
             }
-            else
-                rb2d.AddForce(-Vector3.up * force, ForceMode2D.Impulse);
-
         }
         if (tapAnimCo != null)
         {
@@ -110,14 +199,12 @@ public class DogHead : MonoBehaviour, ITapTracker
     public void FadeOutAnim()
     {
         if (tapAnimCo != null)
-            return;
+            StopCoroutine(tapAnimCo);
         tapAnimCo = StartCoroutine(FadeOutAnimCo());
     }
 
     IEnumerator FadeOutAnimCo()
     {
-        float animationDuration = GameData.GetSettings.PostMiniGameLatchInMs / 1000f;
-        Vector3 baseScale = transform.localScale;
         rb2d.linearVelocity = Vector3.zero;
         rb2d.constraints = RigidbodyConstraints2D.FreezePosition;
         // spin
@@ -129,8 +216,12 @@ public class DogHead : MonoBehaviour, ITapTracker
         {
             rb2d.AddTorque(torque, ForceMode2D.Impulse);
 
-            lerpFactor = 1f - ((Time.time - startAnimTime) / animationDuration);
+            lerpFactor = 1f - ((Time.time - startAnimTime) / fadeOutAnimDuration);
             SR.transform.localScale = baseScale * lerpFactor;
+            if (DrawSpring)
+            {
+                m_SpringLR.startWidth = Utils.Lerp(0f , springLRWidthStart, lerpFactor);
+            }
             yield return null;
         }
         rb2d.constraints = RigidbodyConstraints2D.None;
