@@ -3,12 +3,13 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class CounterObject : MonoBehaviour, ITapTracker
+public class CounterObject : MonoBehaviour, ITapTracker, ISpawnable
 {
     public SpriteRenderer sr;
     public SpriteRenderer bodySR;
     public SpriteRenderer stickerSR;
     public Sprite[] countSprite;
+    public Sprite[] fantasyNumbersSprite;
     public int count = 0;
     public Collider2D counterCollider;
     public UnityEvent<int> tapCB;
@@ -23,7 +24,7 @@ public class CounterObject : MonoBehaviour, ITapTracker
         counterCollider = GetComponent<Collider2D>();
     }
 
-    public void Setup(int index)
+    public void Setup(int index, bool iFantasyNumber)
     {
         count = index + 1;
         if (index > countSprite.Length)
@@ -32,7 +33,11 @@ public class CounterObject : MonoBehaviour, ITapTracker
         }
         else
         {
-            sr.sprite = countSprite[index];
+            sr.sprite = iFantasyNumber ? fantasyNumbersSprite[index] : countSprite[index];
+            if (iFantasyNumber)
+                sr.color = Color.black;
+            else
+                sr.color = Color.white;
         }
     }
     public bool OnTap(Vector2 vector2)

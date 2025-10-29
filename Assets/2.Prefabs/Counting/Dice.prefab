@@ -290,13 +290,22 @@ MonoBehaviour:
   - {fileID: 21300000, guid: d2db7cc002eb5d740ba34743e664f8e8, type: 3}
   - {fileID: 21300000, guid: 8bd8bafe0e15df3489e5d56d64e8460e, type: 3}
   - {fileID: 21300000, guid: 49adf473d0477ad4b8740364b35961c7, type: 3}
+  fantasyNumbersSprite:
+  - {fileID: 21300000, guid: 8bc75e441b6bf4b419b2acb93d29e18e, type: 3}
+  - {fileID: 21300000, guid: 5ddb67e994483f8439e4d222acb49210, type: 3}
+  - {fileID: 21300000, guid: 4f68f66beeb32de41a4f4dab8a7b0fdc, type: 3}
+  - {fileID: 21300000, guid: 922c760e08798214cb457359b3a0c300, type: 3}
+  - {fileID: 21300000, guid: cc5a8e00fe1b7564f9a3f259a86c460b, type: 3}
+  - {fileID: 21300000, guid: 93404a68747775b429021ba9d9820cc3, type: 3}
+  - {fileID: 21300000, guid: 8c03927b93cefcf43923131d8f5e7db1, type: 3}
+  - {fileID: 21300000, guid: 1f85f75eec16b534393dde274f939830, type: 3}
+  - {fileID: 21300000, guid: 6cd5514976a32e44382b7f8915b5140a, type: 3}
   count: 0
   counterCollider: {fileID: 0}
   tapCB:
     m_PersistentCalls:
       m_Calls: []
   shrinkAnimDuration: 0.3
-  selectedParticles: {fileID: 0}
 --- !u!61 &7441388375721007583
 BoxCollider2D:
   m_ObjectHideFlags: 0

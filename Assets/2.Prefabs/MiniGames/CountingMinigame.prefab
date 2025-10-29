@@ -55,6 +55,7 @@ MonoBehaviour:
   prefabs_dice: {fileID: 6129067086907016567, guid: 1ad9aaac3ef8c1747ae57d3034b16423, type: 3}
   prefab_poolBall: {fileID: 0}
   prefab_OnTapParticles: {fileID: 9125531775423090316, guid: 52bfb5bbc13e55544b2beb1dd17bd6d8, type: 3}
-  numberCounterObjects: 06000000070000000800000009000000
+  numberCounterObjects: 0500000007000000090000000500000007000000
+  fantasyNumberThreshold: 3
   randomTiltRangeMin: -7
   randomTiltRangeMax: 7

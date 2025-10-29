@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using Unity.VisualScripting;
 
-public class Counting_MiniGame : MiniGame
+public class Counting_MiniGame : MiniGame, IRegularMod, ISpawnerMod<CounterObject>
 {
     [Header("CountingMiniGame")]
     public GameObject prefabs_dice;
@@ -17,6 +17,7 @@ public class Counting_MiniGame : MiniGame
     private int counter = 1;
     private Vector2[] counterObjectsPositions;
     List<ParticleSystem> inst_OnTapPS;
+    public int fantasyNumberThreshold = 3;
     public float randomTiltRangeMin = -25f,
                  randomTiltRangeMax = 25f;
     public override void Init()
@@ -53,7 +54,7 @@ public class Counting_MiniGame : MiniGame
             .WithPosition(counterObjectsPositions[i])
             .WithZRotation(UnityEngine.Random.Range(randomTiltRangeMin * MGM.miniGamesDifficulty, randomTiltRangeMax* MGM.miniGamesDifficulty))
             .BuildAs<CounterObject>();
-            counterObjects[i].Setup(i);
+            counterObjects[i].Setup(i, (MGM.miniGamesDifficulty > fantasyNumberThreshold));
             
             PC.AddTapTracker(counterObjects[i]);
             counterObjects[i].tapCB.AddListener(diceSelected);
@@ -157,5 +158,17 @@ public class Counting_MiniGame : MiniGame
             } while (hasOverlap && safetyCounter < 10); // 50 tentatives max
         }
     }
+
+    #region MODS
+    public void ApplyMod()
+    {
+
+    }
+    public CounterObject Spawn(GameObject iPrefab)
+    {
+        // no impl atm
+        return null;
+    }
+    #endregion
 
 }
