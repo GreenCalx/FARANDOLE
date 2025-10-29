@@ -3,7 +3,7 @@ using UnityEngine.Events;
 using System.Collections.Generic;
 using System;
 using Cysharp.Threading.Tasks;
-public class MemoryMiniGame : MiniGame
+public class MemoryMiniGame : MiniGame, IDogMod, IRegularMod
 {
     [Header("MemoryMiniGame")]
     public GameObject[] prefabs_card;
@@ -15,11 +15,12 @@ public class MemoryMiniGame : MiniGame
     private int cardsCount = 1;
     public int[] cardsCounts;
     public float[] rotsSpeeds;
+    public float[] timeCardsShowedOnIntro;
     private int pairs = 0;
 
     public float distFromCenter = 1.5f;
 
-    public float timeCardsShowedOnIntro;
+    
 
     public override void Init()
     {
@@ -28,7 +29,7 @@ public class MemoryMiniGame : MiniGame
 
     public override void Reset()
     {
-        cardsCount = cardsCounts[MGM.miniGamesDifficulty];
+        cardsCount = cardsCounts[MGM.miniGamesDifficulty-1];
 
         cards = new Card[cardsCount];
 
@@ -44,7 +45,7 @@ public class MemoryMiniGame : MiniGame
                     .WithPosition(transform.position)
                     .BuildAs<Pivot>();
 
-        pivot.rotSpeed = rotsSpeeds[MGM.miniGamesDifficulty];
+        pivot.rotSpeed = rotsSpeeds[MGM.miniGamesDifficulty-1];
 
         for (int i = 0; i < cardsCount; i++)
         {
@@ -168,10 +169,17 @@ public class MemoryMiniGame : MiniGame
         {
             StartCoroutine(card.TapAnim());
         }
-        await UniTask.WaitForSeconds(timeCardsShowedOnIntro);
+        await UniTask.WaitForSeconds(timeCardsShowedOnIntro[MGM.miniGamesDifficulty-1]);
         foreach (Card card in cards)
         {
             StartCoroutine(card.TapAnim());
         }
     }
+
+    #region MODS
+    public void ApplyMod()
+    {
+
+    }
+    #endregion
 }
