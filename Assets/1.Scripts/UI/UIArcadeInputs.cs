@@ -7,18 +7,43 @@ using TMPro;
 
 public class UIArcadeInputs : MonoBehaviour
 {
+    [Header("ButtonA")]
+    public bool activateButton1 = true;
+    public Transform h_Button1;
     public Color32 highlightTextColor;
     public UIArcadeButton button1;
     public TextMeshProUGUI text1;
     Color32 text1_normalColor;
+    [Header("Joystick")]
+    public bool activateXYController = false;
+    public Transform h_xyController;
+    public XYController xyController;
 
     void OnEnable()
     {
-        text1_normalColor = text1.color;
+        h_Button1.gameObject.SetActive(TryEnableBtn1());
+        h_xyController.gameObject.SetActive(TryEnableXY());
     }
-
     void OnDisable()
     {
+        TryDisableBtn1();
+        TryDisableXY();
+    }
+
+    #region Button1
+    bool TryEnableBtn1()
+    {
+        if (!activateButton1)
+        {
+            return false;
+        }
+        text1_normalColor = text1.color;
+        return true;
+    }
+    void TryDisableBtn1()
+    {
+        if (!activateButton1)
+            return;
         text1.color = text1_normalColor;
     }
 
@@ -37,4 +62,30 @@ public class UIArcadeInputs : MonoBehaviour
         button1.m_OnReleaseCB.AddListener(iCB);
         button1.m_OnReleaseCB.AddListener(() => { text1.color = text1_normalColor; text1.UpdateVertexData(); });
     }
+    #endregion
+
+    #region XYController
+    bool TryEnableXY()
+    {
+        if (!activateXYController)
+        {
+            return false;
+        }
+        return true;
+    }
+    void TryDisableXY()
+    {
+        if (!activateXYController)
+            return;
+    }
+
+    public void XYBind( UnityAction<Vector2> iCB)
+    {
+        xyController.PositionChangedCB.AddListener(iCB);
+    }
+    public void XYUnbind()
+    {
+        xyController.PositionChangedCB.RemoveAllListeners();
+    }
+    #endregion
 }

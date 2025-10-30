@@ -1,44 +1,58 @@
+using System;
+using System.Collections;
 using UnityEngine;
-
-public class WaveformMatcherMiniGame : MiniGame
+using UnityEngine.UI;
+using UnityEngine.Events;
+using static Utils;
+public class WaveformMatcherMiniGame : MiniGame, IArcadeMod, IScienceMod
 {
+    internal enum EWaveForms
+    {
+        SIN = 0,
+        SQR = 1,
+        TRI = 2
+    }
     private struct Waveshape
     {
         public float freq;
         public float amp;
-        public Waveshape(float iFreq, float iAmp) { freq = iFreq; amp = iAmp; }
+        public EWaveForms form;
+        public Waveshape(float iFreq, float iAmp, EWaveForms iForm) { freq = iFreq; amp = iAmp; form = iForm; }
     }
 
     [Header("WaveformMatcherMiniGame")]
+    public UIArcadeInputs m_ArcadeInputs;
     public Vector2 windowSize;
+    [Header("Tweaks")]
     public float minAmp = 0f;
     public float maxAmp = 1f;
     public float minFreq = 1f;
     public float maxFreq = 2f;
-
+    public float[] ampRangeMulByDiff;
+    public float[] freqRangeMulByDiff;
+    [Range(0f, 1f)]
+    public float targetRandGround = 0.1f; // unit ircle center exclusion
     [Range(0f,1f)]
-    public float ampDiffCoefRangeExtension;
-    [Range(0f,1f)]
-    public float freqDiffCoefRangeExtension;
+    public float precisionDiff = 0f;
 
-    public XYController xyController;
+    [Header("Func Draw")]
     public int resolution = 60;
     // Careful if changing below range
     // Upper bound must be reachable by XY Controller
     // current clamp code doesn't check if the 'limited' randpoint
     // is still reachable within unit circle
     // Examples : diagonals 
-    [Range(0f, 1f)]
-    public float targetRandGround = 0.1f; // unit ircle center exclusion
-    public float targetRandGroundExtension = 0.1f;
-
-    [Range(0f,0.02f)]
-    public float precisionDiff = 0f;
     public Transform targetWaveformPoint;
     public Transform controlledWaveformPoint;
     public Material LRTargetMat;
     public Material LRControllerMat;
     public Material LROnMatchMat;
+    [Header("GameUI Feedbacks")]
+    public Material defaultFormMat;
+    public Material selectedFormMat;
+    public Image sinImgSelector;
+    public Image sqrImgSelector;
+    public Image triImgSelector;
 
     Waveshape target;
     LineRenderer targetLR;
@@ -47,43 +61,33 @@ public class WaveformMatcherMiniGame : MiniGame
     float minAmpByDiff, maxAmpByDiff;
     float minFreqByDiff, maxFreqByDiff;
     float freqCentroid, ampCentroid;
-
-    int selectedFunc;
+    Vector2 successPoint;
     public override void Init()
     {
-        int rank = MGM.miniGamesDifficulty - 1;
-        minAmpByDiff = minAmp * Mathf.Pow(1- ampDiffCoefRangeExtension, rank);
-        minFreqByDiff = minFreq * Mathf.Pow(1 - freqDiffCoefRangeExtension, rank);
-        maxFreqByDiff = maxFreq * Mathf.Pow(1 - freqDiffCoefRangeExtension, rank);
-        maxAmpByDiff = maxAmp *  Mathf.Pow( 1 - ampDiffCoefRangeExtension, rank);
-
-        freqCentroid = (maxFreqByDiff + minFreqByDiff) / 2f;
-        ampCentroid = (maxAmpByDiff + minAmpByDiff) / 2f;
-
-        Reset();
+        //Reset();
     }
 
     public override void Reset()
     {
+        int rank = MGM.miniGamesDifficulty - 1;
+        minAmpByDiff = Mathf.Max(0f, minAmp - (minAmp*ampRangeMulByDiff[rank]));
+        maxAmpByDiff = maxAmp + (maxAmp*ampRangeMulByDiff[rank]);
+                
+        minFreqByDiff   = Mathf.Max(0f, minFreq - (minFreq*freqRangeMulByDiff[rank]));
+        maxFreqByDiff   = maxFreq +  (maxFreq*freqRangeMulByDiff[rank]);
+
+        freqCentroid = (maxFreqByDiff + minFreqByDiff) / 2f;
+        ampCentroid = (maxAmpByDiff + minAmpByDiff) / 2f;
+
         // Get a random target value, excluding centroid values
         // A targetRandGround too high transform the random range to a 'box'
         // leading to unreachable values via XY circle controller
 
-        Vector2 randPoint = Random.insideUnitCircle;
-        int i = 0;
-        while(i < 50 || ((randPoint.x <= targetRandGround) && (randPoint.x >= -targetRandGround)) || ((randPoint.y <= targetRandGround) && (randPoint.y >= -targetRandGround)))
-        {
-            randPoint = Random.insideUnitCircle;
-            i++;
-        }
-        if(i == 50){
-            randPoint.x = targetRandGround;
-            randPoint.y = targetRandGround;
-        }
-
+        successPoint = Utils.RandomInsideDisc(1f, targetRandGround);
         target = new Waveshape(
-            Utils.Remap(randPoint.x, -1f, 1f, minFreqByDiff, maxFreqByDiff),
-            Utils.Remap(randPoint.y, -1f, 1f, minAmpByDiff, maxAmpByDiff)
+            Utils.Remap(successPoint.x, -1f, 1f, minFreqByDiff, maxFreqByDiff),
+            Utils.Remap(successPoint.y, -1f, 1f, minAmpByDiff, maxAmpByDiff),
+            PickRandomFormFunc()
             );
 
         targetLR = GOBuilder.Create()
@@ -94,9 +98,9 @@ public class WaveformMatcherMiniGame : MiniGame
                     .BuildAs<LineRenderer>();
         targetLR.startWidth = 0.05f;
         targetLR.endWidth = 0.05f;
-        //targetLR.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
 
-        controlled = new Waveshape(freqCentroid, ampCentroid);
+
+        controlled = new Waveshape(freqCentroid, ampCentroid, PickRandomFormFunc());
         controlledLR = GOBuilder.Create()
                     .WithName("ControlledWaveform")
                     .WithParent(transform)
@@ -105,9 +109,24 @@ public class WaveformMatcherMiniGame : MiniGame
                     .BuildAs<LineRenderer>();
         controlledLR.startWidth = 0.05f;
         controlledLR.endWidth = 0.05f;
-        //controlledLR.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
 
-        PC.AddPositionTracker(xyController);
+
+        // Arcade inputs
+        // Form
+        m_ArcadeInputs.Btn1Unbind();
+        m_ArcadeInputs.OnBtn1Press(() => { ChangeSelectedFunc(); });
+        m_ArcadeInputs.OnBtn1Release(() => {  });
+        
+        // XY
+        PC.AddPositionTracker(m_ArcadeInputs.xyController);
+        UnityAction<Vector2> xyListener = (v) =>
+                                    {
+                                        Debug.Log("controller : " + v);
+                                        controlled.freq = Utils.Remap(v.x, -1f, 1f, minFreqByDiff, maxFreqByDiff);
+                                        controlled.amp  = Utils.Remap(v.y, -1f, 1f, minAmpByDiff, maxAmpByDiff);
+                                        DrawControlled();
+                                    };
+        m_ArcadeInputs.XYBind(xyListener);
 
         FuncSelect();
     }
@@ -129,14 +148,15 @@ public class WaveformMatcherMiniGame : MiniGame
         Destroy(controlledLR.gameObject);
         controlledLR = null;
 
-        xyController.Reset();
-        PC.RemovePositionTracker(xyController);
+        m_ArcadeInputs.xyController.Reset();
+        PC.RemovePositionTracker(m_ArcadeInputs.xyController);
         IsActiveMiniGame = false;
     }
+    
     public override void Win()
     {
         MGM.WinMiniGame();
-        PC.RemovePositionTracker(xyController);
+        PC.RemovePositionTracker(m_ArcadeInputs.xyController);
 
         controlled.freq = target.freq;
         controlled.amp = target.amp;
@@ -150,64 +170,85 @@ public class WaveformMatcherMiniGame : MiniGame
     }
     public override bool SuccessCheck()
     {
-        bool eq_freq = Mathf.Abs(controlled.freq - target.freq) < 0.02f - precisionDiff * MGM.miniGamesDifficulty;
-        bool eq_amp = Mathf.Abs(controlled.amp - target.amp) < 0.02f - precisionDiff * MGM.miniGamesDifficulty;
-        return eq_freq && eq_amp;
+        bool eq_values = Vector2.Distance(successPoint, m_ArcadeInputs.xyController.XY ) < precisionDiff;
+        bool eq_form = controlled.form == target.form;
+        return eq_values && eq_form;
     }
 
     void Update()
     {
         if (!IsActiveMiniGame || IsInPostGame)
             return;
-
-        controlled.freq = Utils.Remap(xyController.XY.x, -1f, 1f, minFreqByDiff, maxFreqByDiff);
-        controlled.amp = Utils.Remap(xyController.XY.y, -1f, 1f, minAmpByDiff, maxAmpByDiff);
-        DrawControlled();
         if (SuccessCheck())
             Win();
     }
 
     void FuncSelect()
     {
-        switch (MGM.miniGamesDifficulty)
-        {
-            case 2:
-                selectedFunc = Random.Range(0, 2);
-                break;
-            case 3:
-                selectedFunc = Random.Range(0, 3);
-                break;
-            default:
-                selectedFunc = 0;
-                break;
-        }
+        PickRandomFormFunc();
+        SetSelectedUIForm();
     }
+
+    void ChangeSelectedFunc()
+    {
+        Array enum_values = Enum.GetValues(typeof(EWaveForms));
+        int current = (int)controlled.form;
+        if (++current >= enum_values.Length)
+        {
+            current = 0;
+        }
+        controlled.form = (EWaveForms)current;
+        SetSelectedUIForm();
+        DrawControlled();
+    }
+
+    EWaveForms PickRandomFormFunc()
+    {
+        Array enum_values = Enum.GetValues(typeof(EWaveForms));
+        int range = Math.Min(enum_values.Length, MGM.miniGamesDifficulty);
+        return (EWaveForms)enum_values.GetValue(UnityEngine.Random.Range(0, range));
+    }
+
+    public void SetSelectedUIForm()
+    {
+        bool isSin = controlled.form == EWaveForms.SIN;
+        bool isTri = controlled.form == EWaveForms.TRI;
+        bool isSqr = controlled.form == EWaveForms.SQR;
+
+        sqrImgSelector.material = isSqr ? selectedFormMat : defaultFormMat;
+        triImgSelector.material = isTri ? selectedFormMat : defaultFormMat;
+        sinImgSelector.material = isSin ? selectedFormMat : defaultFormMat;
+    }
+
     void DrawControlled()
     {
-        DrawFunc(selectedFunc, controlledLR, controlled);
+        DrawFunc(controlledLR, controlled);
+
     }
     void DrawTarget()
     {
-        DrawFunc(selectedFunc, targetLR, target);
+        DrawFunc(targetLR, target);
     }
 
-    void DrawFunc(int func, LineRenderer line, Waveshape wave)
+    void DrawFunc(LineRenderer line, Waveshape wave)
     {
-        if (func == 0) //Sin
+        switch (wave.form)
         {
-            line.SetPositions(GetSinWave(wave.amp, wave.freq, controlledWaveformPoint.position, line));
+            case EWaveForms.SIN:
+                line.SetPositions(GetSinWave(wave.amp, wave.freq, controlledWaveformPoint.position, line));
+                break;
+            case EWaveForms.SQR:
+                line.SetPositions(GetSquaredWave(wave.amp, wave.freq, controlledWaveformPoint.position, line));
+                break;
+            case EWaveForms.TRI:
+                line.SetPositions(GetTriangularWave(wave.amp, wave.freq, controlledWaveformPoint.position, line));
+                break;
+            default:
+                line.SetPositions(GetSinWave(wave.amp, wave.freq, controlledWaveformPoint.position, line));
+                break;
         }
-        else if (func == 1)//tri
-        {
-            line.SetPositions(GetTriangularWave(wave.amp, wave.freq, controlledWaveformPoint.position, line));
-        }
-        else//Squared by default
-        {
-
-            line.SetPositions(GetSquaredWave(wave.amp, wave.freq, controlledWaveformPoint.position, line));
-        }
-        
     }
+    
     public Vector3[] GetSinWave(float iAmp, float iFreq, Vector3 iWorldAnchor, LineRenderer line)
     {
         Vector3[] positions = new Vector3[resolution];
@@ -259,7 +300,7 @@ public Vector3[] GetSquaredWave(float iAmp, float iFreq, Vector3 iWorldAnchor, L
     {
         int peakCount = Mathf.FloorToInt(2 / iFreq) + 2;
         line.positionCount = peakCount;
-        float xStep = windowSize.x * iFreq / 2f ;
+        float xStep = windowSize.x * iFreq / 2f;
         Vector3[] peaks = new Vector3[peakCount];
         float x = 0;
         float y = iAmp;
@@ -278,4 +319,12 @@ public Vector3[] GetSquaredWave(float iAmp, float iFreq, Vector3 iWorldAnchor, L
 
         return peaks;
     }
+    
+    #region MODS
+    public void ApplyMod()
+    {
+
+    }
+
+    #endregion
 }

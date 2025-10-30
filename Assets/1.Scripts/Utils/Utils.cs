@@ -167,6 +167,37 @@ public static class Utils
 
     public static bool IsContained2D(Vector2 iPos, Bounds iBounds)
     {
-        return iBounds.Contains(new Vector3( iPos.x, iPos.y, iBounds.center.z));
+        return iBounds.Contains(new Vector3(iPos.x, iPos.y, iBounds.center.z));
     }
+
+    public static Vector2 Uniform2DVec(float iXY)
+    {
+        return new Vector2(iXY, iXY);
+    }
+
+    public static Vector2 RandomInsideDisc(float iRadius, float iExclusionRadius)
+    {
+        Vector2 randPoint = UnityEngine.Random.insideUnitCircle * iRadius;
+        if (iExclusionRadius <= 0f)
+        {
+            return randPoint; // asking for a circle
+        }
+        float exclusionRadius = Mathf.Clamp(iExclusionRadius, 0f, iRadius);
+        if (randPoint.magnitude < exclusionRadius)
+        {
+            float randX = UnityEngine.Random.Range(iExclusionRadius - randPoint.magnitude, iRadius - randPoint.magnitude);
+            if (randPoint.x > 0f)
+                randPoint.x += randX;
+            else
+                randPoint.x -= randX;
+
+            float randY = UnityEngine.Random.Range(iExclusionRadius - randPoint.magnitude, iRadius - randPoint.magnitude);
+            if (randPoint.y > 0f)
+                randPoint.y += randY;
+            else
+                randPoint.y -= randY;
+        }
+        return randPoint;
+    }
+
 }
