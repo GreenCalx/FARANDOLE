@@ -163,7 +163,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: cc635dbf529ba4a4f9b6dd90c52c23b6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -187,6 +187,7 @@ GameObject:
   - component: {fileID: 1596762483184853583}
   - component: {fileID: 6562924151301154737}
   - component: {fileID: 8870268228290193596}
+  - component: {fileID: 6821419647080017622}
   m_Layer: 0
   m_Name: Rock
   m_TagString: Untagged
@@ -223,6 +224,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   patrolTime: 3
+  randomAngleRange: 80
   faces:
   - {fileID: 21300000, guid: a9c5e501eb37b914ba120884f7774e35, type: 3}
   - {fileID: 21300000, guid: 58e34a2f6ecfc5241b209ce684999a4b, type: 3}
@@ -313,7 +315,7 @@ PolygonCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -337,3 +339,39 @@ PolygonCollider2D:
       - {x: -1.532348, y: 4.6347036}
       - {x: -3.8679905, y: 2.7679682}
   m_UseDelaunayMesh: 0
+--- !u!58 &6821419647080017622
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9008469230258281967}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 4608
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0.6298589}
+  m_Radius: 4.4901414

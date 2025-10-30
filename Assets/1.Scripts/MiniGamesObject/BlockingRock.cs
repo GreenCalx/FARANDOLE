@@ -6,6 +6,8 @@ public class BlockingRock : MonoBehaviour
 {
     public float patrolTime;
 
+    public float randomAngleRange;
+
     public List<Sprite> faces;
     public SpriteRenderer faceSR;
 
@@ -25,11 +27,17 @@ public class BlockingRock : MonoBehaviour
                  });
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    void OnTriggerEnter2D(Collider2D col)
     {
-        if (collision.gameObject.GetComponent<Throwable>())
-        {
-            Destroy(collision.gameObject);
+
+        if (col.gameObject.GetComponent<Throwable>())
+        {        
+            Debug.Log("trigger");
+            Rigidbody2D dartRB = col.gameObject.GetComponent<Rigidbody2D>();
+
+
+            float randomAngle = Random.Range(-randomAngleRange, randomAngleRange);
+            dartRB.linearVelocity = Quaternion.Euler(0, 0, randomAngle) * dartRB.linearVelocity;
         }
     }
 }

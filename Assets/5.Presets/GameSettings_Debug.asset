@@ -15,7 +15,9 @@ MonoBehaviour:
   PlayerHP: 4
   loopSize: 6
   percentOfLoopSizeToPass: 0.5
-  MiniGameTime: 99
+  ComboRequirementForSuper: 2
+  ComboRequirementForMaster: 5
+  MiniGameTime: 6
   MaxTimeScale: 2
   timeScaleOverLoopLevel:
     serializedVersion: 2
@@ -54,3 +56,4 @@ MonoBehaviour:
   BGMRankLerpTimeSec: 1
   GameClockScaleAnimDuration: 0.25
   ShowLightTotalTimeInMs: 2000
+  MaxLightUpMiniGameThumbnailTime: 250
