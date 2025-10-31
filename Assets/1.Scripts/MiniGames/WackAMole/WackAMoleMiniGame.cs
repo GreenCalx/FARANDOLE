@@ -3,7 +3,7 @@ using UnityEngine.Events;
 using System.Collections.Generic;
 using System;
 using TMPro;
-public class WackAMoleMiniGame : MiniGame, ISpawnerMod<Mole>
+public class WackAMoleMiniGame : MiniGame, ISpawnerMod<Mole>, ITheaterMod
 {
     [Header("WackAMoleGame")]
 

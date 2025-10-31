@@ -4,7 +4,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine.Events;
 
 using DG.Tweening;
-public class Cowboy : MonoBehaviour, ITapTracker, IRendered
+public class Cowboy : MonoBehaviour, ITapTracker, IRendered, ISpawnable
 {
     public enum State
     {
@@ -39,23 +39,25 @@ public class Cowboy : MonoBehaviour, ITapTracker, IRendered
 
     private State currentState = State.Iddle;
     public bool stopPropagation => true;
+    float xMinBound, xMaxBound, startX;
+    float firstDestination, secondDestination;
     public int GetDisplayPriority() { return cowboySR.sortingOrder; }
     void Start()
     {
-        SetState(State.Iddle);
         baseScale = transform.localScale;
     }
 
     public void SetMovement(float minBound, float maxBound)
     {
-        float startX = Random.Range(minBound, maxBound);
-
-        transform.position = new Vector3(startX, transform.position.y, transform.position.z);
+        xMinBound = minBound;
+        xMaxBound = maxBound;
+        startX = Random.Range(xMinBound, xMaxBound);
         bool startGoingLeft = Random.value > 0.5f;
-        float firstDestination = startGoingLeft ? minBound : maxBound;
-        float secondDestination = startGoingLeft ? maxBound : minBound;
+        transform.position = new Vector3(startX, transform.position.y, transform.position.z);
+        firstDestination = startGoingLeft ? xMinBound : xMaxBound;
+        secondDestination = startGoingLeft ? xMaxBound : xMinBound;
 
-        transform.DOMoveX(firstDestination, patrolTime * Mathf.Abs(startX - firstDestination) / (maxBound - minBound))
+        transform.DOMoveX(firstDestination, patrolTime * Mathf.Abs(startX - firstDestination) / (xMaxBound - xMinBound))
                  .SetEase(Ease.Linear)
                  .OnComplete(() =>
                  {
@@ -63,21 +65,30 @@ public class Cowboy : MonoBehaviour, ITapTracker, IRendered
                               .SetEase(Ease.Linear)
                               .SetLoops(-1, LoopType.Yoyo); // boucle infinie
                  });
+
+        SetState(State.Iddle);
+    }
+    
+    public void DoMovement()
+    {
+        transform.DOPlay();
     }
 
     public void StopMovement()
     {
-        transform.DOKill();
+        transform.DOPause();
     }
 
     public void DeathAnimation(Vector2 iDestination)
     {
-        transform.DOMove(iDestination, deathAnimDuration, false)
-            .SetEase(Ease.Linear)
-            .OnComplete(() => GameObject.Destroy(gameObject));
+        // transform.DOMove(iDestination, deathAnimDuration, false)
+        //     .SetEase(Ease.Linear)
+        //     .OnComplete(() => GameObject.Destroy(gameObject));
         transform.DOScale(Vector3.zero, deathAnimDuration)
-            .SetEase(Ease.Linear);
-        //transform.DORotate(new Vector3(0f, 0f, 900f), deathAnimDuration, RotateMode.FastBeyond360);
+            .SetEase(Ease.InOutQuint);
+        // transform.DORotate(new Vector3(0f, 0f, 360f), deathAnimDuration, RotateMode.FastBeyond360)
+        //             .SetEase(Ease.Linear)
+        //             .OnComplete(() => GameObject.Destroy(gameObject));
     }
 
     void FixedUpdate()
@@ -88,7 +99,7 @@ public class Cowboy : MonoBehaviour, ITapTracker, IRendered
         {
             switch (currentState)
             {
-                case State.Iddle:
+                case State.Iddle:     
                     SetState(State.Distracted);
                     break;
                 case State.Dodge:
@@ -111,14 +122,17 @@ public class Cowboy : MonoBehaviour, ITapTracker, IRendered
             case State.Iddle:
                 cowboySR.sprite = iddleSprite;
                 nextStateTime = Random.Range(minIddleTime, maxIddleTime);
+                DoMovement();
                 break;
             case State.Dodge:
                 cowboySR.sprite = dodgeSprite;
                 nextStateTime = Random.Range(minDodgeTime, maxDodgeTime);
+                StopMovement();
                 break;
             case State.Distracted:
                 cowboySR.sprite = distractedSprite;
                 nextStateTime = Random.Range(minDistractedTime, maxDistractedTime);
+                StopMovement();
                 break;
             case State.Hit:
                 cowboySR.sprite = hitSprite;
@@ -150,5 +164,9 @@ public class Cowboy : MonoBehaviour, ITapTracker, IRendered
     public Renderer GetRenderer()
     {
         return cowboySR;
+    }
+    public Renderer GetStickerRenderer()
+    {
+        return null;
     }
 }

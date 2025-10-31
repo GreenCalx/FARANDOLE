@@ -7,19 +7,8 @@ public class Obstacle : MonoBehaviour, ITapTracker, IRendered
     public int GetDisplayPriority() { return sr.sortingOrder; }
 
     public SpriteRenderer sr;
+    public SpriteRenderer sr_sticker;
     public Collider2D col;
-
-    void Awake()
-    {
-        if (sr == null)
-        {
-            sr = GetComponent<SpriteRenderer>();
-        }
-        if (col == null)
-        {
-            col = GetComponent<Collider2D>();
-        }
-    }
 
     public bool OnTap(Vector2 vec)
     {
@@ -33,5 +22,9 @@ public class Obstacle : MonoBehaviour, ITapTracker, IRendered
     public Renderer GetRenderer()
     {
         return sr;
+    }
+    public Renderer GetStickerRenderer()
+    {
+        return sr_sticker;
     }
 }

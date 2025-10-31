@@ -77,4 +77,9 @@ public class Mole : MonoBehaviour, ITapTracker, IRendered, ISpawnable
     {
         return m_SR;
     }
+
+    public Renderer GetStickerRenderer()
+    {
+        return null;
+    }
 }

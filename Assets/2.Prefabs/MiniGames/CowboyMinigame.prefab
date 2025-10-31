@@ -142,10 +142,8 @@ MonoBehaviour:
   hasIntro: 0
   prefab_PerspectiveRoom: {fileID: 7413221358431396152, guid: 0dc1fe543b1162748bee11f4944a9954, type: 3}
   prefab_cowboy: {fileID: 1254674784674536253, guid: e40f0ca83aeb6a440b2c9241466c3340, type: 3}
-  prefab_obstacle: {fileID: 7061715364767946349, guid: 12cc4e7782e91cc47aa4508c0c550a9b, type: 3}
-  inst_obstacles: []
-  inst_cowboys: []
-  cowboysPerDifficulty: 01000000020000000300000004000000
-  maxObstaclesNumber: 1
-  perspectiveMarginDelta: 0.2
-  perspectiveShrinkDelta: 0.25
+  prefab_obstacles:
+  - {fileID: 6689518325421273726, guid: 0a633284b63448a4aaabf4d5464f3bb1, type: 3}
+  - {fileID: 4057040240511817284, guid: 6e83e27718c9cb945b5a0b57275c2eed, type: 3}
+  cowboysPerDifficulty: 0100000002000000030000000400000005000000
+  maxObstaclesNumber: 0000000001000000020000000300000004000000

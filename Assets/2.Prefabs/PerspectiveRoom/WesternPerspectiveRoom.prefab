@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 7413221358431396152}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -46,31 +46,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cmd_Build: 0
   cmd_Clean: 0
+  cmd_ContinuousRefresh: 0
   m_Depth: 5
   m_NearPlan:
     area:
       serializedVersion: 2
-      x: -2
-      y: -3.5
-      width: 4
-      height: 7
-    zDepth: 20
+      x: -2.5
+      y: -1.5
+      width: 5
+      height: 3
+    zDepth: 10
   m_FarPlan:
     area:
       serializedVersion: 2
       x: -1
-      y: -1
+      y: 0
       width: 2
-      height: 6
+      height: 2
     zDepth: 50
-  nearObjectScale: 0.7
+  nearObjectScale: 0.65
   farObjectScale: 0.15
   AutoScaleFromVanishingPoint: 0
-  m_TraceLines: 1
+  m_TraceLines: 0
   m_LineTracerMat: {fileID: 2100000, guid: 7e49a6b8b3415754d869225782a84df1, type: 2}
   m_RowTracerMat: {fileID: 2100000, guid: a9d8194e6ead1fd42818e6a452c1fab7, type: 2}
-  m_LineWidth: 0.1
+  m_LineWidth: 0
   m_LineWidthDepthFalloff: 4
   m_TracesSortingLayer: PerspectiveRoom
-  m_FOV: 74.0546
+  groundMat: {fileID: 2100000, guid: 53f4b8895d94f3942995915e87ca7529, type: 2}
+  backMat: {fileID: 2100000, guid: 9f5b529b11e79e94095d67d642d66d11, type: 2}
+  wallMat_Left: {fileID: 2100000, guid: 717c1d11dc533b146bbab24b91e02d56, type: 2}
+  wallMat_Right: {fileID: 2100000, guid: 64bbf7ed049de514bb59519e434eb167, type: 2}
+  m_FOV: 45
   r_LM2D: {fileID: 0}

@@ -3,37 +3,31 @@ using System.Collections.Generic;
 using UnityEngine.Events;
 using DG.Tweening;
 
-public class CowboyMiniGame : MiniGame
+public class CowboyMiniGame : MiniGame, ITheaterMod, ISpawnerMod<Cowboy>
 {
     [Header("CowboyMiniGame")]
     public GameObject prefab_PerspectiveRoom;
 
     public GameObject prefab_cowboy;
 
-    public GameObject prefab_obstacle;
+    public List<GameObject> prefab_obstacles;
 
     PerspectiveRoom inst_PerspectiveRoom;
-
-    public List<Obstacle> inst_obstacles;
-    public List<Cowboy> inst_cowboys;
 
     public int[] cowboysPerDifficulty;
 
     private int numberOfRows;
-    public int maxObstaclesNumber;
-
-    public float perspectiveMarginDelta; // En pourcentage de reduction
-    public float perspectiveShrinkDelta;// En pourcentage de reduction
-
+    public int[] maxObstaclesNumber;
+    List<Obstacle> inst_obstacles;
+    List<Cowboy> inst_cowboys;
     public override void Init()
     {
-        // Reset();
-       
+
     }
 
     public override void Reset()
     {
-        numberOfRows = cowboysPerDifficulty[MGM.miniGamesDifficulty - 1];
+        numberOfRows = MGM.miniGamesDifficulty;
 
         // room
         inst_PerspectiveRoom = GOBuilder.Create(prefab_PerspectiveRoom)
@@ -45,7 +39,6 @@ public class CowboyMiniGame : MiniGame
         // cowboys & obstacles
 
         inst_cowboys = new List<Cowboy>(numberOfRows);
-        inst_obstacles = new List<Obstacle>();
 
         for (int i = 0; i < numberOfRows; i++)
         {
@@ -59,6 +52,7 @@ public class CowboyMiniGame : MiniGame
 
             //MGM.LM2D.PlaceObject(newCowboy.cowboySR);
             inst_PerspectiveRoom.AddToRoom(newCowboy.transform, i, newCowboy.GetRenderer());
+
             newCowboy.SetMovement(
                 inst_PerspectiveRoom.XMinForRow(i),
                 inst_PerspectiveRoom.XMaxForRow(i)
@@ -80,16 +74,19 @@ public class CowboyMiniGame : MiniGame
 
         for (int i = 0; i < numberOfRows; i++)
         {
-            n_obstacles = Random.Range(1, maxObstaclesNumber + 1);
+            n_obstacles = Random.Range(1, maxObstaclesNumber[MGM.miniGamesDifficulty-1]);
             for (int j = 0; j < n_obstacles; j++)
             {
-                Obstacle newObstacle = GOBuilder.Create(prefab_obstacle)
+                int randObstacle = UnityEngine.Random.Range(0, prefab_obstacles.Count);
+                Obstacle newObstacle = GOBuilder.Create(prefab_obstacles[randObstacle])
                     .WithName("Obstacle " + i + j)
                     .WithParent(this.transform)
                     .BuildAs<Obstacle>();
 
                 PC.AddTapTracker(newObstacle);
+                inst_PerspectiveRoom.AddToRoom(newObstacle.transform, i, newObstacle.GetStickerRenderer());
                 RowInfo rowInfo = inst_PerspectiveRoom.AddToRoom(newObstacle.transform, i, newObstacle.GetRenderer());
+
                 newObstacle.transform.position = new Vector3(
                     Random.Range(rowInfo.min.x, rowInfo.max.x),
                     newObstacle.transform.position.y,
@@ -153,10 +150,16 @@ public class CowboyMiniGame : MiniGame
     {
         inst_cowboys.Remove(iHitCowboy);
         iHitCowboy.StopMovement();
-        iHitCowboy.DeathAnimation(
+        // iHitCowboy.DeathAnimation(
+        //         new Vector2(
+        //         inst_PerspectiveRoom.GetVanishingPoint().x,
+        //         inst_PerspectiveRoom.m_FarPlan.min.y
+        //         )
+        //     );
+                iHitCowboy.DeathAnimation(
                 new Vector2(
-                inst_PerspectiveRoom.GetVanishingPoint().x,
-                inst_PerspectiveRoom.m_FarPlan.min.y
+                iHitCowboy.transform.position.x,
+                -5f
                 )
             );
         PC.RemoveTapTracker(iHitCowboy);
@@ -166,4 +169,20 @@ public class CowboyMiniGame : MiniGame
             Win();
         }
     }
+
+    #region ISpawnerMod
+    public void ApplyMod()
+    {
+        // TODO : Change spawn Interval or spawn probability random range
+    }
+    public Cowboy Spawn(GameObject iPrefab)
+    {
+        Cowboy newCowboy = GOBuilder.Create(prefab_cowboy)
+            .WithName("Cowboy" )
+            .WithParent(this.gameObject.transform)
+            .BuildAs<Cowboy>();
+    
+        return newCowboy;
+    }
+    #endregion
 }

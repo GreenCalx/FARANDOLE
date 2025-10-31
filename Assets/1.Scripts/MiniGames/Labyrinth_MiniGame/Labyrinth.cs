@@ -22,6 +22,10 @@ public class Labyrinth : MonoBehaviour, IRendered
     {
         return m_Renderer;
     }
+    public Renderer GetStickerRenderer()
+    {
+        return null;
+    }
 
     public void InitColor(Color iColor)
     {

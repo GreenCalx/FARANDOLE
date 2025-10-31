@@ -42,4 +42,8 @@ public class RollingBall : MiniGameEntity, IRacer, IRendered
     {
         return m_Renderer;
     }
+    public Renderer GetStickerRenderer()
+    {
+        return null;
+    }
 }
