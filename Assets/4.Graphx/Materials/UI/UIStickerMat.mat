@@ -64,7 +64,7 @@ Material:
     - _AlphaCutoff: 0.5
     - _Brightness: 3.51
     - _BumpScale: 1
-    - _CullMode: 2
+    - _CullMode: 0
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0

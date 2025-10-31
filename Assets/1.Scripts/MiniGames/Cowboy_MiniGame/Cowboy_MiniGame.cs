@@ -88,7 +88,7 @@ public class CowboyMiniGame : MiniGame, ITheaterMod, ISpawnerMod<Cowboy>
                 RowInfo rowInfo = inst_PerspectiveRoom.AddToRoom(newObstacle.transform, i, newObstacle.GetRenderer());
 
                 newObstacle.transform.position = new Vector3(
-                    Random.Range(rowInfo.min.x, rowInfo.max.x),
+                    Random.Range(inst_PerspectiveRoom.XMinForRow(i), inst_PerspectiveRoom.XMaxForRow(i)),
                     newObstacle.transform.position.y,
                     newObstacle.transform.position.z
                 );

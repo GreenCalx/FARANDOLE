@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine.Events;
 
@@ -29,7 +30,6 @@ public class Cowboy : MonoBehaviour, ITapTracker, IRendered, ISpawnable
     public float maxDistractedTime;
 
     public float deathAnimDuration;
-
     public float patrolTime;
     private Vector3 baseScale;
     public Collider2D hitbox;
@@ -41,10 +41,12 @@ public class Cowboy : MonoBehaviour, ITapTracker, IRendered, ISpawnable
     public bool stopPropagation => true;
     float xMinBound, xMaxBound, startX;
     float firstDestination, secondDestination;
+    CancellationTokenSource cts;
     public int GetDisplayPriority() { return cowboySR.sortingOrder; }
     void Start()
     {
         baseScale = transform.localScale;
+        cts = new CancellationTokenSource();
     }
 
     public void SetMovement(float minBound, float maxBound)
@@ -85,7 +87,7 @@ public class Cowboy : MonoBehaviour, ITapTracker, IRendered, ISpawnable
         //     .SetEase(Ease.Linear)
         //     .OnComplete(() => GameObject.Destroy(gameObject));
         transform.DOScale(Vector3.zero, deathAnimDuration)
-            .SetEase(Ease.InOutQuint);
+            .SetEase(Ease.Linear);
         // transform.DORotate(new Vector3(0f, 0f, 360f), deathAnimDuration, RotateMode.FastBeyond360)
         //             .SetEase(Ease.Linear)
         //             .OnComplete(() => GameObject.Destroy(gameObject));
@@ -120,24 +122,46 @@ public class Cowboy : MonoBehaviour, ITapTracker, IRendered, ISpawnable
         switch (currentState)
         {
             case State.Iddle:
+                cts?.Cancel();
                 cowboySR.sprite = iddleSprite;
                 nextStateTime = Random.Range(minIddleTime, maxIddleTime);
                 DoMovement();
+                cowboySR.material.SetInt("_Shine", 0);
                 break;
             case State.Dodge:
+                cts?.Cancel();
                 cowboySR.sprite = dodgeSprite;
                 nextStateTime = Random.Range(minDodgeTime, maxDodgeTime);
+                cowboySR.material.SetInt("_Shine", 0);
                 StopMovement();
                 break;
             case State.Distracted:
                 cowboySR.sprite = distractedSprite;
                 nextStateTime = Random.Range(minDistractedTime, maxDistractedTime);
                 StopMovement();
+                cowboySR.material.SetInt("_Shine", 1);
+                cts = new CancellationTokenSource();
+                DistractedAnim(nextStateTime,cts.Token);
                 break;
             case State.Hit:
+                cts?.Cancel();
                 cowboySR.sprite = hitSprite;
                 nextStateTime = deathAnimDuration;
+                cowboySR.material.SetInt("_Shine", 0);
                 break;
+        }
+    }
+
+    public async UniTaskVoid DistractedAnim(float animDuration, CancellationToken iCT)
+    {
+        float startTime = Time.time;
+        cowboySR.flipX = false;
+        await UniTask.WaitForSeconds(animDuration / 2f);
+        if (!iCT.IsCancellationRequested)
+        {
+            cowboySR.flipX = true;
+            await UniTask.WaitForSeconds(animDuration / 2f);
+            cowboySR.flipX = false;
         }
     }
 

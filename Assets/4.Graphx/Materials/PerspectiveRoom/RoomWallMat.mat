@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: RoomWallRightMat
+  m_Name: RoomWallMat
   m_Shader: {fileID: 4800000, guid: e260cfa7296ee7642b167f1eb5be5023, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -28,7 +28,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 97bef5023146a814eb68f857488afc6e, type: 3}
+        m_Texture: {fileID: 2800000, guid: 052b50ef8d81921418191a2cc91c84a3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskTex:
@@ -42,6 +42,9 @@ Material:
     m_Ints: []
     m_Floats:
     - PixelSnap: 0
+    - _AlphaCutoff: 0.5
+    - _Brightness: 1
+    - _CullMode: 0
     - _EnableExternalAlpha: 0
     - _ZWrite: 0
     m_Colors:

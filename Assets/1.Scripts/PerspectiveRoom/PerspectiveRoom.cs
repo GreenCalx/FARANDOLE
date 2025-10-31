@@ -62,7 +62,7 @@ public struct RoomCubemap
     public readonly Mesh ground => meshes[0];
     public Mesh BuildGround(PerspectiveRoom iRoom)
     {
-        meshes[0] = MeshUtils.QuadMesh(
+        meshes[0] = MeshUtils.WallQuad_FullRect(
             iRoom.m_NearPlan.UpperLeftPoint,
             iRoom.m_NearPlan.UpperRightPoint,
             iRoom.m_FarPlan.UpperLeftPoint,
@@ -74,7 +74,7 @@ public struct RoomCubemap
     public readonly Mesh far => meshes[2];
     public Mesh BuildFar(PerspectiveRoom iRoom)
     {
-            meshes[2] = MeshUtils.QuadMesh(
+            meshes[2] = MeshUtils.WallQuad_FullRect(
             iRoom.m_FarPlan.UpperLeftPoint,
             iRoom.m_FarPlan.UpperRightPoint,
             iRoom.m_FarPlan.BottomLeftPoint,
@@ -86,22 +86,26 @@ public struct RoomCubemap
     public readonly Mesh leftWall => meshes[4];
     public Mesh BuildLeftWall(PerspectiveRoom iRoom)
     {
-            meshes[4] = MeshUtils.QuadMesh(
-            iRoom.m_NearPlan.UpperLeftPoint,
+        Debug.Log("BuildLeftWall");
+            meshes[4] = MeshUtils.WallQuad_FullRect(
             iRoom.m_FarPlan.UpperLeftPoint,
-            iRoom.m_NearPlan.BottomLeftPoint,
-            iRoom.m_FarPlan.BottomLeftPoint
+            iRoom.m_NearPlan.UpperLeftPoint,
+
+            iRoom.m_FarPlan.BottomLeftPoint,
+            iRoom.m_NearPlan.BottomLeftPoint
+
         );
         return meshes[4];
     }
     public readonly Mesh rightWall => meshes[5];
     public Mesh BuildRightWall(PerspectiveRoom iRoom)
     {
-            meshes[5] = MeshUtils.QuadMesh(
-            iRoom.m_NearPlan.UpperRightPoint,
-            iRoom.m_FarPlan.UpperRightPoint,
-            iRoom.m_NearPlan.BottomRightPoint,
-            iRoom.m_FarPlan.BottomRightPoint
+        Debug.Log("BuildRightWall");
+        meshes[5] = MeshUtils.WallQuad_FullRect(
+        iRoom.m_FarPlan.UpperRightPoint,
+        iRoom.m_NearPlan.UpperRightPoint,
+        iRoom.m_FarPlan.BottomRightPoint,
+        iRoom.m_NearPlan.BottomRightPoint
         );
         return meshes[5];
     }
@@ -126,6 +130,7 @@ public class RoomRow
 {
     public List<RoomObject> objects;
     public Vector2 min, max;
+    public float range => max.x - min.x;
     public Rect area;
     public int rowDepth;
     public float objectScale;
@@ -233,6 +238,8 @@ public class PerspectiveRoom : MonoBehaviour
     public RoomPlan m_FarPlan;
     public float nearObjectScale = 1f;
     public float farObjectScale = 0.2f;
+    [Range(0f,1f)]
+    public float m_XDeadZone = 0f;
     public bool AutoScaleFromVanishingPoint = false;
 
     public bool m_TraceLines = true;
@@ -599,14 +606,21 @@ public class PerspectiveRoom : MonoBehaviour
         return false;
     }
 
+    // Sets the inaccessible percentage of a row
+    //from Xmin and from Xmax
+    public void SetXDeadzone(float iDeadzone)
+    {
+        m_XDeadZone = iDeadzone;
+    }
+
     public float XMinForRow(int iRowDepth)
     {
-        return m_Rows[iRowDepth].min.x;
+        return m_Rows[iRowDepth].min.x + (m_XDeadZone*m_Rows[iRowDepth].range/2f);
     }
 
     public float XMaxForRow(int iRowDepth)
     {
-        return m_Rows[iRowDepth].max.x;
+        return m_Rows[iRowDepth].max.x - + (m_XDeadZone*m_Rows[iRowDepth].range/2f);
     }
 
     public float GetXRowLerp(int iRowDepth, float iLerpValue)
