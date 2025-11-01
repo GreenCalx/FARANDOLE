@@ -77,7 +77,7 @@ public class Card : MonoBehaviour, ITapTracker
         float startTime = Time.time;
         baseScale = transform.localScale;
 
-        winParticles.Play();
+
         while ((Time.time - startTime) < shrinkAnimDuration)
         {
             float frac = (Time.time - startTime) / shrinkAnimDuration;
@@ -85,6 +85,9 @@ public class Card : MonoBehaviour, ITapTracker
             yield return null;
 
         }
+        winParticles.Play();
+        transform.rotation = transform.rotation * Quaternion.Euler(0, transform.rotation.y + 90,0);
+        yield return new WaitForSeconds(winParticles.startLifetime);
         transform.position = new Vector3(10, 0, 0);
     }
 

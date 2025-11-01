@@ -33,7 +33,7 @@ public class MemoryMiniGame : MiniGame, IDogMod, IRegularMod
 
         cards = new Card[cardsCount];
 
-        int[] randomPos = { 1, 2, 3, 4, 5, 6 };
+        int[] randomPos = { 1, 2, 3, 4, 5, 6,7,8 };
 
         float stepAngle = Mathf.PI * 2f / cardsCount;
         float angle;
@@ -76,7 +76,6 @@ public class MemoryMiniGame : MiniGame, IDogMod, IRegularMod
     }
     public override void Win()
     {
-        deleteCards();
         MGM.WinMiniGame();
     }
     public override void Lose()

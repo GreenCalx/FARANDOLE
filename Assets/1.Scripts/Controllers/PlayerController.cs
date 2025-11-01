@@ -161,7 +161,7 @@ public class PlayerController : MonoBehaviour
             {
                 float deltaTime = lastTimeTouch - firstTimeTouch;
                 //Tap sur la même position et moins d'une seconde
-                if (deltaTime < 0.1 || ((lastTouchWorldPos - firstTouchWorldPos).sqrMagnitude < 0.01f && deltaTime <= 1))
+                if (deltaTime < 0.1 || ((lastTouchWorldPos - firstTouchWorldPos).sqrMagnitude < 0.05f && deltaTime <= 1))
                     Tap(touch);
                 // Swipe(touch);
             }
