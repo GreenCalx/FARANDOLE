@@ -17,6 +17,8 @@ public class PlaygroundManager : MonoBehaviour, IManager
     public DynamicPatternSO diff1Pattern;
     public DynamicPatternSO diff2Pattern;
     public DynamicPatternSO diff3Pattern;
+    public DynamicPatternSO diff4Pattern;
+    public DynamicPatternSO diff5Pattern;
     public Material forgroundMat;
     public Material playFieldMat;
     public Material clearAnimMat;
@@ -365,6 +367,10 @@ public class PlaygroundManager : MonoBehaviour, IManager
                 return diff2Pattern;
             case LoopRank.III:
                 return diff3Pattern;
+            case LoopRank.S:
+                return diff4Pattern;
+            case LoopRank.M:
+                return diff5Pattern;
             default:
                 return diff1Pattern;
         }        

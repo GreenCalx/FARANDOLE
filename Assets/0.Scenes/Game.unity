@@ -163,7 +163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80b8b58d2f403e84aa6ce22d65c5011f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MiniGameToTest: {fileID: 2266623309687070485, guid: 575f7970487fac143a69a938017db93e, type: 3}
+  MiniGameToTest: {fileID: 7980881531806890130, guid: 3fcac724025ce3b469c5cebcf81e9f4b, type: 3}
   prefab_miniGames:
   - {fileID: 6891743480671891591, guid: ca650ba5ffb5e9c4d8e5e5b7a7fdaeae, type: 3}
   - {fileID: 5205109001117507003, guid: ef698d4e9557cd14dbc5770833ba666b, type: 3}
@@ -899,6 +899,8 @@ MonoBehaviour:
   diff1Pattern: {fileID: 11400000, guid: c8152ed6644d30c43887c2642f867aa4, type: 2}
   diff2Pattern: {fileID: 11400000, guid: d55dfaed82ef78046aed37696cfe035b, type: 2}
   diff3Pattern: {fileID: 11400000, guid: 2d148bf1b03b946409e7e2c4497b73d7, type: 2}
+  diff4Pattern: {fileID: 11400000, guid: c3901d316935d154f9a4ec9281be4c8f, type: 2}
+  diff5Pattern: {fileID: 11400000, guid: c4daf73cc8bb72849b721334b91513af, type: 2}
   forgroundMat: {fileID: 2100000, guid: 85f130548d231f148be3b875de155db5, type: 2}
   playFieldMat: {fileID: 2100000, guid: 10297d9c3a9557e43a58da2bfeefbfb0, type: 2}
   clearAnimMat: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
@@ -1563,7 +1565,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2857134964581060119, guid: df5d7df267dc5bc4ba1454afb1ad01cf, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2857134964581060119, guid: df5d7df267dc5bc4ba1454afb1ad01cf, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -1595,7 +1597,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7782491275208354475, guid: df5d7df267dc5bc4ba1454afb1ad01cf, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7782491275208354475, guid: df5d7df267dc5bc4ba1454afb1ad01cf, type: 3}
       propertyPath: m_AnchoredPosition.x

@@ -42,12 +42,12 @@ Material:
     m_Ints: []
     m_Floats:
     - _AlphaCutoff: 0.5
-    - _CullMode: 2
+    - _CullMode: 0
     - _EnableExternalAlpha: 0
     - _OutlineSize: 5.36
-    - _Shine: 0
+    - _Shine: 1
     - _ShineAngle: 0.725
-    - _ShineBandWidth: 0.9
+    - _ShineBandWidth: 3.94
     - _ShineSpeedX: 1
     - _ShineSpeedY: 2
     - _ZWrite: 1

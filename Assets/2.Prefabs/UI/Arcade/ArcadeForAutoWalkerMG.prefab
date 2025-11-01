@@ -8,9 +8,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3818345839310534612, guid: cc276ce9ca6512f4b9be5be9f0f317e2, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.66
+      objectReference: {fileID: 0}
+    - target: {fileID: 3818345839310534612, guid: cc276ce9ca6512f4b9be5be9f0f317e2, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3859772762774789645, guid: cc276ce9ca6512f4b9be5be9f0f317e2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4201444553405478008, guid: cc276ce9ca6512f4b9be5be9f0f317e2, type: 3}
       propertyPath: m_Name
-      value: UI_ArcadeInputs Variant
+      value: ArcadeForAutoWalkerMG
       objectReference: {fileID: 0}
     - target: {fileID: 8302583862245883702, guid: cc276ce9ca6512f4b9be5be9f0f317e2, type: 3}
       propertyPath: m_Pivot.x
@@ -74,11 +86,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8302583862245883702, guid: cc276ce9ca6512f4b9be5be9f0f317e2, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1.27
+      value: 0.503
       objectReference: {fileID: 0}
     - target: {fileID: 8302583862245883702, guid: cc276ce9ca6512f4b9be5be9f0f317e2, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -3.54
+      value: -2.824
       objectReference: {fileID: 0}
     - target: {fileID: 8302583862245883702, guid: cc276ce9ca6512f4b9be5be9f0f317e2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
