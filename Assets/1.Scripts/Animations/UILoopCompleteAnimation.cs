@@ -34,6 +34,7 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
     public const string OnFailedTextValue = "FAILED";
     public UITextFaderAnimation loopPassedTextAnim;
     public TextMeshProUGUI loopPassedTxt;
+    public TextMeshProUGUI loopComboTxt;
     [Header("Loop Depth")]
     public TextMeshProUGUI loopDepthValueTxt;
     [Header("Callbacks")]
@@ -67,6 +68,7 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
     public void Init(MiniGameLoop iMGLoop, UILoopPresentationAnim iLoopPresentationAnim)
     {
         loopDepthValueTxt.text = iMGLoop.depth.ToString();
+        loopComboTxt.text = iMGLoop.combo.ToString();
         MGLoop = iMGLoop;
         loopPresentationAnim = iLoopPresentationAnim;
 
@@ -203,8 +205,8 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
             await UniTask.WhenAll(
                 loopPresentationAnim.Hide(iCT),
                 UniTask.WhenAny(
-                    WaitHideFromRankUpAnimTask(1f, iCT),
-                    WaitHideAnimTask(1f, iCT)
+                    WaitHideFromRankUpAnimTask(0.75f, iCT),
+                    WaitHideAnimTask(0.75f, iCT)
                 )
             );
 
