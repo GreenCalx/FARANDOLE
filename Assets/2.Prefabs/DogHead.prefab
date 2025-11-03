@@ -4967,12 +4967,12 @@ SpriteRenderer:
   m_SortingLayerID: -1321468233
   m_SortingLayer: 2
   m_SortingOrder: 2
-  m_Sprite: {fileID: 1122011520763072041, guid: f8ad2c0f53ddeb04f92f1a0b1090a897, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f8ad2c0f53ddeb04f92f1a0b1090a897, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 9.1, y: 9.19}
+  m_Size: {x: 10.24, y: 10.24}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -5034,9 +5034,9 @@ MonoBehaviour:
   h_C2D: {fileID: 7121326345304490683}
   AnchorPointRB: {fileID: 9178932775109136264}
   SR: {fileID: 6377746750821080866}
-  idleSprite: {fileID: 1122011520763072041, guid: f8ad2c0f53ddeb04f92f1a0b1090a897, type: 3}
-  tapSprite: {fileID: 7260491879129262532, guid: 4a4441b679e07144eab55f50a85784dd, type: 3}
-  onWinSprite: {fileID: -7272982623699810399, guid: a8f01bfb6433e3b4c9f309ba98d680cd, type: 3}
+  idleSprite: {fileID: 21300000, guid: f8ad2c0f53ddeb04f92f1a0b1090a897, type: 3}
+  tapSprite: {fileID: 21300000, guid: 4a4441b679e07144eab55f50a85784dd, type: 3}
+  onWinSprite: {fileID: 21300000, guid: a8f01bfb6433e3b4c9f309ba98d680cd, type: 3}
   tapAnimDuration: 0.2
   PS: {fileID: 0}
   OnPetPS: {fileID: 7820607985404748127}

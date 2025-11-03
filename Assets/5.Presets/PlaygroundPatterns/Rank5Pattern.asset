@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29ddc3d223a194d4191ca9a438f1aab7, type: 3}
   m_Name: Rank5Pattern
   m_EditorClassIdentifier: 
-  pattern: 1
-  angle: 1.2
-  boxSize: 0.5
-  tiling: 5
+  pattern: 2
+  angle: 0
+  boxSize: 1
+  tiling: 3
   offset: {x: 0, y: 0}
+  truchetAngles: {x: 0.5, y: 1, z: -0.5, w: 0}

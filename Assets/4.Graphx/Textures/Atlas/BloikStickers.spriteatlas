@@ -31,26 +31,14 @@ SpriteAtlas:
       enableAlphaDilation: 0
     secondaryTextureSettings: {}
     variantMultiplier: 1
-    packables:
-    - {fileID: 1122011520763072041, guid: f8ad2c0f53ddeb04f92f1a0b1090a897, type: 3}
-    - {fileID: 7260491879129262532, guid: 4a4441b679e07144eab55f50a85784dd, type: 3}
-    - {fileID: -7272982623699810399, guid: a8f01bfb6433e3b4c9f309ba98d680cd, type: 3}
+    packables: []
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
-    packedSpriteRenderDataKeys:
-    - 4a4441b679e07144eab55f50a85784dd: 7260491879129262532
-    - a8f01bfb6433e3b4c9f309ba98d680cd: -7272982623699810399
-    - f8ad2c0f53ddeb04f92f1a0b1090a897: 1122011520763072041
+    packedSpriteRenderDataKeys: []
   m_MasterAtlas: {fileID: 0}
-  m_PackedSprites:
-  - {fileID: 7260491879129262532, guid: 4a4441b679e07144eab55f50a85784dd, type: 3}
-  - {fileID: -7272982623699810399, guid: a8f01bfb6433e3b4c9f309ba98d680cd, type: 3}
-  - {fileID: 1122011520763072041, guid: f8ad2c0f53ddeb04f92f1a0b1090a897, type: 3}
-  m_PackedSpriteNamesToIndex:
-  - zeik_pet_1
-  - zeik_tongue_0
-  - zeik_idle_0
+  m_PackedSprites: []
+  m_PackedSpriteNamesToIndex: []
   m_RenderDataMap: {}
   m_Tag: BloikStickers
   m_IsVariant: 0

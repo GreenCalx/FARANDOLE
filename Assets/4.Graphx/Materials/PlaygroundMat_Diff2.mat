@@ -62,9 +62,9 @@ Material:
     m_Ints:
     - _CullMode: 0
     m_Floats:
-    - _Angle: 0.75
+    - _Angle: 0
     - _BlendOp: 0
-    - _BoxSize: 0.71
+    - _BoxSize: 1
     - _Brightness: 1
     - _BumpScale: 1
     - _CameraFadingEnabled: 0
@@ -93,7 +93,7 @@ Material:
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _Pattern: 1
-    - _PatternA: 1
+    - _PatternA: 2
     - _PatternB: 0
     - _SmoothnessTextureChannel: 0
     - _SoftParticlesEnabled: 0
@@ -101,7 +101,7 @@ Material:
     - _SoftParticlesNearFadeDistance: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _Tiling: 1.12
+    - _Tiling: 4
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
@@ -112,7 +112,9 @@ Material:
     - _ColorPattern2: {r: 0.6313726, g: 0.6313726, b: 0.6313726, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Offset: {r: 0, g: 0, b: 0, a: 0}
+    - _PatternOffset: {r: 0, g: 0, b: 0, a: 0}
     - _SoftParticleFadeParams: {r: 0, g: 0, b: 0, a: 0}
     - _Tint: {r: 1, g: 1, b: 1, a: 1}
+    - _TruchetRotations: {r: 1, g: -0.5, b: 0, a: 0.5}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

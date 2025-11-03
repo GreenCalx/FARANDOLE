@@ -11,13 +11,14 @@ Shader "XL/MobileDynamicPattern"
         [Enum(UnityEngine.Rendering.CullMode)] _CullMode("CullMode", Int) = 0.
         [Enum(Off,0,On,1)] _ZWrite("ZWrite", Int) = 1
 
-        [Enum(Checker,0,Boxes,1)] _PatternA("PatternA", Int) = 1
-        [Enum(Checker,0,Boxes,1)] _PatternB("PatternB", Int) = 0
+        [Enum(Checker,0,Boxes,1, Truchet,2)] _PatternA("PatternA", Int) = 1
+        [Enum(Checker,0,Boxes,1, Truchet, 2)] _PatternB("PatternB", Int) = 0
         [Enum(Off,0,On,1)] _InvertColors("InvertColors", Int) = 0
         _Tiling("Tiling",Float) = 4
         _BoxSize("BoxSize", Float) = 0.7
         _Angle("Angle", Float) = 0.25
         [ShowAsVector2] _PatternOffset("PatternOffset", Vector) = (0,0,0,0)
+        [ShowAsVector4] _TruchetRotations("TruchetRotations", Vector) = (0,0,0,0)
     }
     SubShader
     {
@@ -47,6 +48,11 @@ Shader "XL/MobileDynamicPattern"
             float4 vertex : SV_POSITION;
         };
 
+        float mod(float x, float y)
+        {
+            return x - y * floor(x/y);
+        }
+
         float2 rotate2D(float2 _st, float _angle)
         {
             _st -= 0.5;
@@ -57,6 +63,46 @@ Shader "XL/MobileDynamicPattern"
                         );
             _st =  mul(inter ,_st);
             _st += 0.5;
+            return _st;
+        }
+
+        float2 rotateTilePattern(float2 _st, float4 _truchetRots)
+        {
+            //  Scale the coordinate system by 2x2
+            _st *= 2.0;
+
+            //  Give each cell an index number
+            //  according to its position
+            float index = 0.0;
+            index += step(1., mod(_st.x,2.0));
+            index += step(1., mod(_st.y,2.0))*2.0;
+
+            //      |
+            //  2   |   3
+            //      |
+            //--------------
+            //      |
+            //  0   |   1
+            //      |
+
+            // Make each cell between 0.0 - 1.0
+            _st = frac(_st);
+
+            // Rotate each cell according to the index
+            if(index == 1.0){
+                //  Rotate cell 1 by 90 degrees
+                _st = rotate2D(_st,PI*_truchetRots[1]);
+            } else if(index == 2.0){
+                //  Rotate cell 2 by -90 degrees
+                _st = rotate2D(_st,PI*_truchetRots[2]);
+            } else if(index == 3.0){
+                //  Rotate cell 3 by 180 degrees
+                _st = rotate2D(_st,PI* _truchetRots[3]);
+            } else 
+            {
+                _st = rotate2D(_st,PI*_truchetRots[0]);
+            }
+
             return _st;
         }
 
@@ -83,6 +129,13 @@ Shader "XL/MobileDynamicPattern"
             chessboard*=2;
             return chessboard;
         }
+
+        float2 truchet(float2 _st, float _zoom, float4 _truchetRots)
+        {
+            _st *= _zoom;
+            float2 ret = rotateTilePattern(frac(_st), _truchetRots);
+            return step(ret.x,ret.y);
+        }
         ENDCG
 
         Pass
@@ -102,7 +155,8 @@ Shader "XL/MobileDynamicPattern"
             float _Angle;
             float _BoxSize;
             float _Tiling;
-            vector _PatternOffset;
+            float2 _PatternOffset;
+            float4 _TruchetRotations;
 
             fixed _PatternA;
             fixed _PatternB;
@@ -120,18 +174,23 @@ Shader "XL/MobileDynamicPattern"
             {
                 float checker_col   = checker(i.uv, _Tiling);
                 float box_col       = box(_st, float2(_BoxSize,_BoxSize),0.01);
+                float truchet_col   = truchet(_st, _BoxSize, _TruchetRotations);
 
                 float patA_col = 0;
                 if (_PatternA == 0)
                     patA_col = checker_col; 
                 else if (_PatternA == 1)
                     patA_col = box_col; 
+                else if (_PatternA == 2)
+                    patA_col = truchet_col;
 
                 float patB_col = 0;
                 if (_PatternB == 0)
                     patB_col = checker_col; 
                 else if (_PatternB == 1)
                     patB_col = box_col; 
+                else if (_PatternB == 2)
+                    patB_col = truchet_col;
 
                 return lerp(patA_col, patB_col, _LerpPatternAB);
             }

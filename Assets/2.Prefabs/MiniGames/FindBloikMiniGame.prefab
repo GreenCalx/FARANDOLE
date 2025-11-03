@@ -159,20 +159,20 @@ MonoBehaviour:
   hasIntro: 0
   prefabs_unoStickers: {fileID: 4801012445247314565, guid: 8a6b77a5fe9e94a4cb3dc8f5b0598871, type: 3}
   prefab_bloikSticker: {fileID: 1163066599452052819, guid: f302cd2c99655fc419c55935f4c2a388, type: 3}
-  numberOfDecoySticker: 1400000021000000420000005800000064000000
+  numberOfDecoySticker: 1400000021000000420000004b00000055000000
   unoStickers: []
   maxStickerSpeed:
   - 1
+  - 1.2
   - 1.5
-  - 1.8
+  - 1.75
   - 2
-  - 2.2
   minStickerSpeed:
   - 0.5
   - 0.7
   - 0.9
   - 1
-  - 1.5
+  - 1.25
   bloikSticker: {fileID: 0}
   bloikStickerSpeed:
   - 1.2
@@ -328,7 +328,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1122011520763072041, guid: f8ad2c0f53ddeb04f92f1a0b1090a897, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f8ad2c0f53ddeb04f92f1a0b1090a897, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
