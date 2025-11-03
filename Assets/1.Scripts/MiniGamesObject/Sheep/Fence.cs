@@ -1,30 +1,33 @@
 using UnityEngine;
 using UnityEngine.Events;
+using System.Collections.Generic;
 
 public class Fence : MonoBehaviour
 {
 
-    public int numberOfSheepInside = 0;
+    public List<Sheep> SheepsInside = new List<Sheep>();
     [HideInInspector]
     public int totalSheepsNumber;
     [HideInInspector]
-    public UnityEvent fenceFull;
-    [HideInInspector]
-    public bool isFull = false;
+    public bool isFull => (SheepsInside.Count >= totalSheepsNumber);
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        numberOfSheepInside += 1;
-        if (numberOfSheepInside >= totalSheepsNumber)
-        {
-            isFull = true;
-            fenceFull.Invoke();
-        }
+        Sheep s = collision.gameObject.GetComponent<Sheep>();
+        if (s == null)
+            return;
+        s.SetInTargetZone();
+
+        SheepsInside.Add(s);
     }
 
     void OnTriggerExit2D(Collider2D collision)
     {
-        numberOfSheepInside -= 1;
+        Sheep s = collision.gameObject.GetComponent<Sheep>();
+        if (s == null)
+            return;
+        s.SetOutTargetZone();
+        SheepsInside.Remove(s);
     }
 
     

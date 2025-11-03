@@ -1,7 +1,10 @@
 using UnityEngine;
+using Cysharp.Threading.Tasks;
 
-public class Sheep : MonoBehaviour
+public class Sheep : Dragable
 {
+    public Color outlineInFence;
+    public Color outlineOutFence;
     public float minIddleTime;
 
     public float maxIddleTime;
@@ -11,58 +14,53 @@ public class Sheep : MonoBehaviour
 
     public float runSpeed;
 
-    private Rigidbody2D rb;
-
     public bool isIdle;
     public float stateTimer;
     public Vector2 moveDirection;
     public Animator anim;
-    public Dragable drag;
-
-    private bool selected = false;
     public SpriteRenderer sr;
+    public ClampInPlayground PGClamper;
+
+    Vector3 initScale = Vector3.zero;
 
     void Start()
     {
+        base.InitDragable();
+
         if (anim == null)
         {
             anim = GetComponent<Animator>();
         }
-        if (drag == null)
-        {
-            drag = GetComponent<Dragable>();
-        }
-        if (rb == null)
-        {
-            rb = GetComponent<Rigidbody2D>();
-        }
-        drag.droppedEvent.AddListener(SheepDropped);
-        drag.selectedEvent.AddListener(SheepPicked);
+        droppedEvent.AddListener(SheepDropped);
+        selectedEvent.AddListener(SheepPicked);
         isIdle = true;
         stateTimer = Random.Range(minIddleTime, maxIddleTime);
-        selected = false;
+        initScale = transform.localScale;
     }
+    
 
     void SheepPicked()
     {
-        selected = true;
         anim.SetBool("Grabbed", true);
-        sr.sortingOrder += 100;
+        sr.sortingLayerName = Constants.LYR_FORGROUND;
+
+        transform.localScale = initScale * 1.2f;
     }
 
     void SheepDropped()
     {
-        selected = false;
         anim.SetBool("Grabbed", false);
-        sr.sortingOrder -= 100;
+        sr.sortingLayerName = Constants.LYR_GAME;
+
+        transform.localScale = initScale;
     }
 
-    void FixedUpdate()
+    void Update()
     {
         if (selected)
             return;
-            
-        stateTimer -= Time.fixedDeltaTime;
+
+        stateTimer -= Time.deltaTime;
 
         if (stateTimer <= 0f)
         {
@@ -82,7 +80,16 @@ public class Sheep : MonoBehaviour
                 anim.SetBool("Running", false);
             }
         }
-
         rb.MovePosition(rb.position + moveDirection * runSpeed * Time.fixedDeltaTime);
+    }
+
+    public void SetInTargetZone()
+    {
+        sr.material.SetColor("_OutlineColor", outlineInFence);
+    }
+
+    public void SetOutTargetZone()
+    {
+        sr.material.SetColor("_OutlineColor", outlineOutFence);
     }
 }

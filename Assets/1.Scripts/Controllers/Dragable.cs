@@ -16,7 +16,7 @@ public class Dragable : MonoBehaviour, IPositionTracker
     private Vector2 dragDirection;
     public bool selected = false;
 
-    private Rigidbody2D rb;
+    protected Rigidbody2D rb;
 
     private Collider2D dragCollider;
     public SpriteRenderer m_SpriteRenderer;
@@ -63,8 +63,9 @@ public class Dragable : MonoBehaviour, IPositionTracker
             }
             else if (dragMode == DragMode.MoveToCursor)
             {
-                rb.MovePosition(dragDirection);
-            }       
+                transform.position = dragDirection;
+                //rb.MovePosition(dragDirection);
+            } 
         }
     }
 
@@ -86,7 +87,7 @@ public class Dragable : MonoBehaviour, IPositionTracker
                 rb.bodyType = RigidbodyType2D.Kinematic;
                 rb.useFullKinematicContacts = false;
             }
-            selectedEvent.Invoke();
+            selectedEvent?.Invoke();
         }
 
 
@@ -104,7 +105,7 @@ public class Dragable : MonoBehaviour, IPositionTracker
             rb.bodyType = RigidbodyType2D.Dynamic;
             rb.useFullKinematicContacts = true;
         }
-        droppedEvent.Invoke();
+        droppedEvent?.Invoke();
     }
     
     void OnCollisionEnter2D(Collision2D iOther)

@@ -24,17 +24,24 @@ public class SheepMiniGame : MiniGame
         inst_fence = GOBuilder.Create(prefab_fence)
                     .WithParent(transform)
                     .BuildAs<Fence>();
-        
+
         inst_fence.totalSheepsNumber = sheepCount;
-        inst_fence.fenceFull.AddListener(Win);
-        
 
         inst_sheeps = GOSpawner.SpawnAtRandom<Sheep>(transform, prefab_sheep, PG.bounds, sheepCount, "sheep", inst_fence.GetComponent<SpriteRenderer>().bounds);
         foreach (Sheep sheep in inst_sheeps)
         {
-            PC.AddPositionTracker(sheep.drag);
+            sheep.droppedEvent.AddListener(() => { if (SuccessCheck()) { Win(); } });
+            if (sheep.PGClamper != null)
+            {
+                sheep.PGClamper.PG = MGM.PG;
+                sheep.PGClamper.OnClamp.AddListener(() => sheep.OnStopTracking(sheep.transform.position));
+            }
+                
+            sheep.SetOutTargetZone();
+            PC.AddPositionTracker(sheep);
         }
     }
+
     public override void Play()
     {
         IsActiveMiniGame = true;
@@ -65,11 +72,12 @@ public class SheepMiniGame : MiniGame
         {
             if (inst_sheeps[i] != null)
             {
-                PC.RemovePositionTracker(inst_sheeps[i].drag);
+                PC.RemovePositionTracker(inst_sheeps[i]);
                 Destroy(inst_sheeps[i].gameObject);
             }
-            if(inst_fence != null)
+            if (inst_fence != null)
                 Destroy(inst_fence.gameObject);
         }
     }
+    
 }

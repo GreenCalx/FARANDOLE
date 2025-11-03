@@ -17,7 +17,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1272013407294520480
 Transform:
@@ -172,7 +172,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &5161005880826456772
 Transform:
@@ -255,16 +255,6 @@ CompositeCollider2D:
   m_GenerationType: 0
   m_EdgeRadius: 0
   m_ColliderPaths:
-  - m_Collider: {fileID: 6768862492083273011}
-    m_ColliderPaths:
-    - - X: 7918875
-        Y: 9235678
-      - X: -8162241
-        Y: 8911482
-      - X: -10216413
-        Y: -3359306
-      - X: 10692695
-        Y: -4127689
   - m_Collider: {fileID: 4823008179169057908}
     m_ColliderPaths:
     - - X: 12423160
@@ -275,12 +265,26 @@ CompositeCollider2D:
         Y: 10384759
       - X: -12054839
         Y: -11319401
+  - m_Collider: {fileID: 6768862492083273011}
+    m_ColliderPaths:
+    - - X: 7918875
+        Y: 9200000
+      - X: -8162241
+        Y: 8911482
+      - X: -10250000
+        Y: -3250000
+      - X: 10692695
+        Y: -3250000
   m_CompositePaths:
     m_Paths:
     - - {x: -1.2054793, y: -1.131906}
       - {x: 1.2423103, y: -1.1319048}
       - {x: 0.8839428, y: 1.0708948}
       - {x: -0.91751534, y: 1.0384517}
+    - - {x: 1.0692611, y: -0.32496262}
+      - {x: -1.0249939, y: -0.3249645}
+      - {x: -0.81620073, y: 0.8911485}
+      - {x: 0.7918926, y: 0.9199775}
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.00005
   m_UseDelaunayMesh: 0
@@ -382,8 +386,8 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 1.583775, y: 1.8471355}
+    - - {x: 1.583775, y: 1.84}
       - {x: -1.6324483, y: 1.7822964}
-      - {x: -2.0432825, y: -0.6718613}
-      - {x: 2.138539, y: -0.82553786}
+      - {x: -2.05, y: -0.65}
+      - {x: 2.138539, y: -0.65}
   m_UseDelaunayMesh: 0

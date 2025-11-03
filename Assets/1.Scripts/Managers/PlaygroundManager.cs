@@ -391,7 +391,7 @@ public class PlaygroundManager : MonoBehaviour, IManager
 
     public bool IsWorldPosOOB(Vector2 iWorldPos)
     {
-        return bounds.Contains(new Vector3(iWorldPos.x, iWorldPos.y, 0f));
+        return !bounds.Contains(new Vector3(iWorldPos.x, iWorldPos.y, bounds.center.z));
     }
 
     public bool IsScreenPosOOB(Vector2 iScreenPos)
