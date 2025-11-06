@@ -129,6 +129,8 @@ public class WaveformMatcherMiniGame : MiniGame, IArcadeMod, IScienceMod
         m_ArcadeInputs.XYBind(xyListener);
 
         FuncSelect();
+
+        DisableUnavailableFunc();
     }
     public override void Play()
     {
@@ -192,8 +194,9 @@ public class WaveformMatcherMiniGame : MiniGame, IArcadeMod, IScienceMod
     void ChangeSelectedFunc()
     {
         Array enum_values = Enum.GetValues(typeof(EWaveForms));
+        int range = Math.Min(enum_values.Length, MGM.miniGamesDifficulty);
         int current = (int)controlled.form;
-        if (++current >= enum_values.Length)
+        if (++current >= range)
         {
             current = 0;
         }
@@ -202,6 +205,34 @@ public class WaveformMatcherMiniGame : MiniGame, IArcadeMod, IScienceMod
         DrawControlled();
     }
 
+    void DisableUnavailableFunc()
+    {
+        sinImgSelector.transform.parent.gameObject.SetActive(true);
+        sqrImgSelector.transform.parent.gameObject.SetActive(true);
+        triImgSelector.transform.parent.gameObject.SetActive(true);
+        Array enum_values = Enum.GetValues(typeof(EWaveForms));
+        int start = Math.Min(enum_values.Length, MGM.miniGamesDifficulty);
+        for(int i = start; i < enum_values.Length; i++)
+        {
+            switch (enum_values.GetValue(i))
+            {
+                case EWaveForms.SIN:
+                    sinImgSelector.transform.parent.gameObject.SetActive(false);
+                    break;
+                case EWaveForms.SQR:
+                    sqrImgSelector.transform.parent.gameObject.SetActive(false);
+                    break;
+                case EWaveForms.TRI:
+                    triImgSelector.transform.parent.gameObject.SetActive(false);
+                    break;
+                default:
+                    break;                
+            }
+
+
+        }
+             
+    }
     EWaveForms PickRandomFormFunc()
     {
         Array enum_values = Enum.GetValues(typeof(EWaveForms));

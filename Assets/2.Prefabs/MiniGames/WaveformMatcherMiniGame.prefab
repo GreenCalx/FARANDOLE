@@ -601,7 +601,7 @@ MonoBehaviour:
   - 0.2
   - 0.5
   targetRandGround: 0.25
-  precisionDiff: 0.025
+  precisionDiff: 0.035
   resolution: 80
   targetWaveformPoint: {fileID: 4006086730372813668}
   controlledWaveformPoint: {fileID: 4006086730372813668}
