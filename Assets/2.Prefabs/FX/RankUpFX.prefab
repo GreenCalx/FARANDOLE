@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7820383784519025411
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3280303179790057421}
+  - component: {fileID: 6179870346742471463}
+  m_Layer: 0
+  m_Name: RankUpFX
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3280303179790057421
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7820383784519025411}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -346.78528, y: -92.64111, z: 13.670088}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6179870346742471463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7820383784519025411}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 574669578480ca34e99a1fa2fe24f688, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rippleMat: {fileID: 2100000, guid: d4a329b276116e94388b1c85338204c8, type: 2}
+  duration: 1
+  RippleStrengthOverTime:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2.7695022
+      outSlope: 2.7695022
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.04284315
+    - serializedVersion: 3
+      time: 0.4
+      value: 0.5
+      inSlope: 0.00459847
+      outSlope: -2.5247154
+      tangentMode: 1
+      weightedMode: 1
+      inWeight: 0.7248781
+      outWeight: 0.051806547
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -0.14671595
+      outSlope: -0.14671595
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.11143718
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  ForcePlay: 0
+  StartOnEnabled: 0

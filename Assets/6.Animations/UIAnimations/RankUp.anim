@@ -100,13 +100,22 @@ AnimationClip:
         outWeight: {x: 0.04087615, y: 0.01896298, z: 0.03676474}
       - serializedVersion: 3
         time: 0.71666664
-        value: {x: 1.1815993, y: 1, z: 1.4451883}
-        inSlope: {x: -2.0893233, y: -0.9044335, z: -2.6347566}
-        outSlope: {x: -2.0893233, y: 0, z: -2.6347566}
+        value: {x: 1.0695097, y: 1, z: 1.4451883}
+        inSlope: {x: -2.6953976, y: -0.9044335, z: -2.6347566}
+        outSlope: {x: -2.6953976, y: 0, z: -2.6347566}
         tangentMode: 0
         weightedMode: 0
         inWeight: {x: 0.33333334, y: 0.35769558, z: 0.33333334}
         outWeight: {x: 0.33333334, y: 0.4690257, z: 0.33333334}
+      - serializedVersion: 3
+        time: 0.8333333
+        value: {x: 0.9, y: 1.0004878, z: 1.1745417}
+        inSlope: {x: -0.1733326, y: 0.005435522, z: -1.9188092}
+        outSlope: {x: -0.1733326, y: 0.005435522, z: -1.9188092}
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+        outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
       - serializedVersion: 3
         time: 1
         value: {x: 1, y: 1, z: 1}
@@ -128,15 +137,6 @@ AnimationClip:
       - serializedVersion: 3
         time: 0
         value: 0
-        inSlope: Infinity
-        outSlope: Infinity
-        tangentMode: 103
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 0.5
-        value: 1
         inSlope: Infinity
         outSlope: Infinity
         tangentMode: 103
@@ -165,16 +165,7 @@ AnimationClip:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 0.6666667
-        value: 1
-        inSlope: Infinity
-        outSlope: Infinity
-        tangentMode: 103
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
+        time: 0.5833333
         value: 1
         inSlope: Infinity
         outSlope: Infinity
@@ -185,11 +176,11 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: m_IsActive
-    path: RankUpFX
-    classID: 1
-    script: {fileID: 0}
-    flags: 16
+    attribute: doRankUpFX
+    path: 
+    classID: 114
+    script: {fileID: 11500000, guid: 5b8f8f1c5d279894f81ff39bfebae68e, type: 3}
+    flags: 0
   m_PPtrCurves: []
   m_SampleRate: 60
   m_WrapMode: 0
@@ -226,10 +217,10 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 3897418352
-      attribute: 2086281974
-      script: {fileID: 0}
-      typeID: 1
+      path: 0
+      attribute: 892583696
+      script: {fileID: 11500000, guid: 5b8f8f1c5d279894f81ff39bfebae68e, type: 3}
+      typeID: 114
       customType: 0
       isPPtrCurve: 0
       isIntCurve: 0
@@ -405,6 +396,15 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.04087615
       - serializedVersion: 3
+        time: 0.8333333
+        value: 0.9
+        inSlope: -0.1733326
+        outSlope: -0.1733326
+        tangentMode: 1
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
         time: 1
         value: 1
         inSlope: -0.00664758
@@ -539,15 +539,6 @@ AnimationClip:
         weightedMode: 0
         inWeight: 0
         outWeight: 0
-      - serializedVersion: 3
-        time: 0.5
-        value: 1
-        inSlope: Infinity
-        outSlope: Infinity
-        tangentMode: 103
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -570,16 +561,7 @@ AnimationClip:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 0.6666667
-        value: 1
-        inSlope: Infinity
-        outSlope: Infinity
-        tangentMode: 103
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
+        time: 0.5833333
         value: 1
         inSlope: Infinity
         outSlope: Infinity
@@ -590,11 +572,11 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: m_IsActive
-    path: RankUpFX
-    classID: 1
-    script: {fileID: 0}
-    flags: 16
+    attribute: doRankUpFX
+    path: 
+    classID: 114
+    script: {fileID: 11500000, guid: 5b8f8f1c5d279894f81ff39bfebae68e, type: 3}
+    flags: 0
   m_EulerEditorCurves:
   - serializedVersion: 2
     curve:

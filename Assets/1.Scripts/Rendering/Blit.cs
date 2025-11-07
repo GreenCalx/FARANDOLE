@@ -42,6 +42,7 @@ public class BlitRendererFeature : ScriptableRendererFeature
         private readonly Material material;
         private readonly int passIndex;
         private readonly BlitSettings settings;
+        public static bool EnableRipple = false;
 
         // persistent temp RTHandle
         RTHandle tempTarget;
@@ -69,6 +70,10 @@ public class BlitRendererFeature : ScriptableRendererFeature
 
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
+            if (!EnableRipple)
+                return;
+            
+
             if (material == null)
                 return;
              
@@ -100,6 +105,7 @@ public class BlitRendererFeature : ScriptableRendererFeature
 
             CoreUtils.SetRenderTarget(cmd, cameraColor);
 
+    
             material.SetTexture("_MainTex", tempTarget);
 
             cmd.DrawMesh(fullScreenQuad, Matrix4x4.identity, material, 0, passIndex);

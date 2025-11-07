@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
 using System.Threading;
@@ -10,10 +11,15 @@ public class UIRankMedalAnim : ManagedAnimation
     readonly string RankDownState = "RankDown";
     readonly string RankUpTrigger = "RankUp";
     readonly string RankDownTrigger = "RankDown";
+    public GameObject prefab_RankUpFX;
     public TextMeshProUGUI currentRankText;
     public TextMeshProUGUI newRankText;
     public Image currentRankImage;
     public Image newRankImage;
+    public bool doRankUpFX = false;
+    RippleEffect rankUpFX;
+    bool m_RankUpFXLock = false;
+    public UnityEvent OnFXDone;
     public async UniTask RankUp(CancellationToken iCT)
     {
         m_Animator.SetTrigger(RankUpTrigger);
@@ -49,5 +55,23 @@ public class UIRankMedalAnim : ManagedAnimation
         newRankImage.sprite = GameData.GetSettings.RankSettings.GetImageFromRank(iMGLoop.rank);
     }
 
+    void Update()
+    {
+        if (doRankUpFX && !m_RankUpFXLock)
+        {
+            m_RankUpFXLock = true;
+
+            rankUpFX = GOBuilder.Create(prefab_RankUpFX)
+                .BuildAs<RippleEffect>();
+            rankUpFX.StartRipple(OnFXDone);
+            
+            doRankUpFX = false;
+        }
+    }
+
+    public void UnlockFX()
+    {
+        m_RankUpFXLock = false;
+    }
 
 }

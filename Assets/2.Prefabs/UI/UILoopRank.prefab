@@ -180,7 +180,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2706145091618140877
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5149,55 +5149,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &1978496874422681709
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6518792983413554339}
-  - component: {fileID: 4931157688959348784}
-  m_Layer: 0
-  m_Name: RankUpFX
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &6518792983413554339
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1978496874422681709}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -346.78528, y: -92.64111, z: 13.670088}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6122347551000143432}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4931157688959348784
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1978496874422681709}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6dce4d58bd989ae4fa0ee14e4b21fbc8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  blitSettings:
-    renderPassEvent: 600
-    blitMaterial: {fileID: 2100000, guid: d4a329b276116e94388b1c85338204c8, type: 2}
-    blitShaderPassName: Blit
-    mainTexPropertyName: _MainTex
 --- !u!1 &3712273254598922809
 GameObject:
   m_ObjectHideFlags: 0
@@ -5270,7 +5221,6 @@ RectTransform:
   - {fileID: 1728006977927378954}
   - {fileID: 4165359470046711100}
   - {fileID: 2706145091618140877}
-  - {fileID: 6518792983413554339}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -5314,10 +5264,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Animator: {fileID: 9018796940828872127}
   IsShown: 0
+  prefab_RankUpFX: {fileID: 7820383784519025411, guid: 8b66d308026fe154a96cf6784ba47a3d, type: 3}
   currentRankText: {fileID: 366280597507842356}
   newRankText: {fileID: 4972224823737320137}
   currentRankImage: {fileID: 5232297040872550077}
   newRankImage: {fileID: 8654511750568190512}
+  doRankUpFX: 0
+  OnFXDone:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1771930105913439776}
+        m_TargetAssemblyTypeName: UIRankMedalAnim, FarandoleAsm
+        m_MethodName: UnlockFX
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!223 &7758153657072107680
 Canvas:
   m_ObjectHideFlags: 0
