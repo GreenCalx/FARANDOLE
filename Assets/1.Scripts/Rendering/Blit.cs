@@ -34,7 +34,6 @@ public class BlitRendererFeature : ScriptableRendererFeature
         if (blitPass == null) return;
         if (renderingData.cameraData.isSceneViewCamera || renderingData.cameraData.isPreviewCamera) return;
         
-
         renderer.EnqueuePass(blitPass);
     }
 
@@ -44,7 +43,7 @@ public class BlitRendererFeature : ScriptableRendererFeature
         private readonly int passIndex;
         private readonly BlitSettings settings;
 
-        // persistent temp RTHandle (reallocated/resized as needed)
+        // persistent temp RTHandle
         RTHandle tempTarget;
         static Mesh fullScreenQuad;
 
@@ -60,15 +59,11 @@ public class BlitRendererFeature : ScriptableRendererFeature
                 fullScreenQuad = GenerateFullscreenQuad();
         }
 
-
-
         public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
         {
-            // Allocate / reallocate tempTarget to match camera descriptor (keeps persistent RTHandle)
             var desc = renderingData.cameraData.cameraTargetDescriptor;
             desc.depthBufferBits = 0;
 
-            // Use RenderingUtils helper to allocate or reallocate RTHandle if needed
             RenderingUtils.ReAllocateIfNeeded(ref tempTarget, desc, name: "_BlitTemp");
         }
 
@@ -84,48 +79,39 @@ public class BlitRendererFeature : ScriptableRendererFeature
 
             CommandBuffer cmd = CommandBufferPool.Get("BlitRendererFeature");
 
-            // Provide screen size info
-
+            // To match mobile resolution that is not square at all
+            // If we want not adaptation to screen size we can probably make this optional
             cmd.SetGlobalVector("_MainTex_TexelSize",
                 new Vector4(1f / Screen.width, 1f / Screen.height, Screen.width, Screen.height));
 
-            // Choose safe color format for gamma projects
             GraphicsFormat colorFormat = cameraColor.rt.graphicsFormat;
             bool projectIsGamma = (QualitySettings.activeColorSpace == ColorSpace.Gamma);
             if (projectIsGamma && GraphicsFormatUtility.IsSRGBFormat(colorFormat))
                 colorFormat = GraphicsFormatUtility.GetGraphicsFormat(RenderTextureFormat.Default, false);
 
-            // Temporary RT
-            // tempTarget = RTHandles.Alloc(Vector2.one,
-            //     colorFormat: colorFormat,
-            //     dimension: TextureDimension.Tex2D,
-            //     useDynamicScale: true,
-            //     name: "BlitTemp");
-
-            // 1️⃣ Copy scene into temp
             Blitter.BlitCameraTexture(cmd, cameraColor, tempTarget);
 
+            // Ensures that the texture is in readable format for the shader
             if (!string.IsNullOrEmpty(settings.mainTexPropertyName))
             {
                 Texture tex = tempTarget.rt != null ? (Texture)tempTarget.rt : (Texture)tempTarget;
                 cmd.SetGlobalTexture(settings.mainTexPropertyName, tex);
             }
 
-            // 2️⃣ Draw quad with shader → back into cameraColor
             CoreUtils.SetRenderTarget(cmd, cameraColor);
 
             material.SetTexture("_MainTex", tempTarget);
 
             cmd.DrawMesh(fullScreenQuad, Matrix4x4.identity, material, 0, passIndex);
 
-            //RTHandles.Release(tempTarget);
+            // Release RT only in Dispose to avoid leaks
             context.ExecuteCommandBuffer(cmd);
             CommandBufferPool.Release(cmd);
         }
 
          public override void OnCameraCleanup(CommandBuffer cmd)
         {
-
+            // No clean up to do as we keep the temp RT allocation alive between frames
         }
 
         public void Dispose()
@@ -137,7 +123,12 @@ public class BlitRendererFeature : ScriptableRendererFeature
             }
         }
 
-        // Generates a real fullscreen quad (two triangles, full UV coverage)
+        // Generates a real fullscreen quad
+        // This is because of a weird unity fuckery where the UV is defined
+        // in a different space or some shit
+        // This result on wrong coordinates and displays only half screen
+        // in a triangle.
+        // Using a quad mesh ensures that our UV are correct.
         private static Mesh GenerateFullscreenQuad()
         {
             var mesh = new Mesh { name = "FullScreenQuad" };
