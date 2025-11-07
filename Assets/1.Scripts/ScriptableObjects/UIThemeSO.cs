@@ -13,6 +13,11 @@ public class UIThemeSO : ScriptableObject
     [Header("Action Button")]
     public Color normalActionBtnColor;
     public Color pressedActionBtnColor;
+    [Header("Thumbnail Button")]
+    public Color normalThumbnailColor;
+    public Color pressedThumbnailColor;
+    public Color thumbnailSuccessLightColor;
+    public Color thumbnailFailLightColor;
     [Header("Clock")]
     public Color PositiveTimeColor;
     public Color LastSecondTimeColor;

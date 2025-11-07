@@ -71,6 +71,9 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
         loopComboTxt.text = iMGLoop.combo.ToString();
         MGLoop = iMGLoop;
         loopPresentationAnim = iLoopPresentationAnim;
+        
+        if (GameData.Get.currentGameMode == GAME_MODE.DAILY_SEED)
+            loopPresentationAnim.DisableThumbnailButtons();
 
         // Init ani text
         if (iMGLoop.IsLoopPerfect())

@@ -159,7 +159,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: UIAlphaInOut
+  m_Name: UIEnabler
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: show
@@ -233,7 +233,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 05121838deafd9549a697815a1824e15, type: 2}
+  m_Motion: {fileID: 7400000, guid: ef6167b516d7e8c4ab47f3dbfc8e3843, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

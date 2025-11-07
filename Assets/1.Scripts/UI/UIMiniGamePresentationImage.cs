@@ -2,19 +2,24 @@ using UnityEngine;
 using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
 using System.Threading;
-
+using TMPro;
 public class UIMiniGamePresentationImage : ManagedAnimation
 {
     [Header("UIMiniGamePresentationImage")]
+    public bool infoBubbleEnabled = true;
     public UICustomSquircle MiniGameThumbnail;
-    public Image light;
+    public UICustomSquircle light;
     public UICustomSquircle BG;
+    public UIButton infoBubbleBtn;
+    public RectTransform h_InfoBubbleAnchor;
+    public TextMeshProUGUI h_InfoBubbleText;
     public Sprite defaultSprite;
     [Header("Internals")]
     public MiniGameSO selfDesc;
     readonly string showLightStateName = "MiniGameImageShowLight";
     readonly string hideLightStateName = "MiniGameImageHideLight";
     readonly string showLightParam = "showlight";
+    bool bubbleShown = false;
     public void SetFromMiniGameDesc(MiniGameSO iMGDesc)
     {
         selfDesc = iMGDesc;
@@ -22,6 +27,15 @@ public class UIMiniGamePresentationImage : ManagedAnimation
             MiniGameThumbnail.sprite = iMGDesc.thumbNailImg;
         else
             MiniGameThumbnail.sprite = defaultSprite;
+
+        infoBubbleBtn.onClick.AddListener(() => { bubbleShown = !bubbleShown; h_InfoBubbleAnchor.gameObject.SetActive(bubbleShown); });
+        h_InfoBubbleText.text = selfDesc.goal;
+    }
+    
+    public void DisableButton()
+    { 
+        infoBubbleBtn.interactable = false;
+        infoBubbleBtn.enabled = false;
     }
 
     public void UpdateLightColor(Color iColor)
@@ -37,6 +51,8 @@ public class UIMiniGamePresentationImage : ManagedAnimation
 
     public override async UniTask DefaultHide(CancellationToken iCT)
     {
+        h_InfoBubbleAnchor.gameObject.SetActive(false);
+
         m_Animator.SetBool(DefaultShowAnimParm, false);
         m_Animator.SetBool(showLightParam, false);
 
@@ -46,5 +62,6 @@ public class UIMiniGamePresentationImage : ManagedAnimation
         );
         IsShown = false;
     }
+
 
 }

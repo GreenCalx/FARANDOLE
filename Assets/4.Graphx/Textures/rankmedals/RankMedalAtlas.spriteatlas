@@ -38,31 +38,31 @@ SpriteAtlas:
     cachedData: {fileID: 0}
     packedSpriteRenderDataKeys:
     - 7a612610b60a3ed4cb9587e8e5e71b50: 21300000
-    - 74e69090f19fc5449a10c1c76c233195: -2935846804084577621
+    - 74e69090f19fc5449a10c1c76c233195: 21300000
     - ee0da362350f0484280012e08c8475c7: 21300000
     - db565f62525c7674b8c5d203d6751ac2: 21300000
     - 3dbe73b340ca06d438379b0e862e4e8e: 21300000
     - 85a060f481599c448a0d3ae854190ca6: 2052150712852028022
-    - 6d5ef149eab429045b2a561b23c023b3: 1951936039633413545
+    - 6d5ef149eab429045b2a561b23c023b3: 21300000
     - bd17a19bc26a2d944b496ab7fbb420a6: 21300000
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: 7a612610b60a3ed4cb9587e8e5e71b50, type: 3}
-  - {fileID: -2935846804084577621, guid: 74e69090f19fc5449a10c1c76c233195, type: 3}
+  - {fileID: 21300000, guid: 74e69090f19fc5449a10c1c76c233195, type: 3}
   - {fileID: 21300000, guid: ee0da362350f0484280012e08c8475c7, type: 3}
   - {fileID: 21300000, guid: db565f62525c7674b8c5d203d6751ac2, type: 3}
   - {fileID: 21300000, guid: 3dbe73b340ca06d438379b0e862e4e8e, type: 3}
   - {fileID: 2052150712852028022, guid: 85a060f481599c448a0d3ae854190ca6, type: 3}
-  - {fileID: 1951936039633413545, guid: 6d5ef149eab429045b2a561b23c023b3, type: 3}
+  - {fileID: 21300000, guid: 6d5ef149eab429045b2a561b23c023b3, type: 3}
   - {fileID: 21300000, guid: bd17a19bc26a2d944b496ab7fbb420a6, type: 3}
   m_PackedSpriteNamesToIndex:
   - gold
-  - basic_0
+  - basic
   - super
   - silver
   - bronze
   - MedalMask_0
-  - MedalDotMask_0
+  - MedalDotMask
   - master
   m_RenderDataMap: {}
   m_Tag: RankMedalAtlas

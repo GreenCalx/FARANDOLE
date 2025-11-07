@@ -18,6 +18,10 @@ MonoBehaviour:
   pressedMainBtnColor: {r: 0.7157727, g: 0.98039216, b: 0.4862745, a: 1}
   normalActionBtnColor: {r: 1, g: 0.47771692, b: 0.1372549, a: 1}
   pressedActionBtnColor: {r: 0.745, g: 0.35643137, b: 0.1022549, a: 0.8}
+  normalThumbnailColor: {r: 1, g: 1, b: 1, a: 1}
+  pressedThumbnailColor: {r: 0.71637195, g: 0.7264151, b: 0.66816485, a: 1}
+  thumbnailSuccessLightColor: {r: 0.12904951, g: 0.9433962, b: 0.13558322, a: 1}
+  thumbnailFailLightColor: {r: 0.7735849, g: 0.18609823, b: 0.18609823, a: 0.7490196}
   PositiveTimeColor: {r: 0.48593804, g: 0.9811321, b: 0.6148211, a: 1}
   LastSecondTimeColor: {r: 1, g: 0.63569504, b: 0, a: 1}
   NegativeTimeColor: {r: 1, g: 0, b: 0.4448824, a: 1}

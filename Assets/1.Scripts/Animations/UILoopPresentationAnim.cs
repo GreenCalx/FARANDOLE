@@ -64,6 +64,10 @@ public class UILoopPresentationAnim : ManagedAnimation
             uiImages.Add(newImg);
             index++;
         }
+
+        // rank medals
+        rankMedalAnimation.UpdateCurrentRank(iMGLoop);
+
         DrawUtils.DrawUICircle(handle_LR, radius);
         UpdateLights(iMGLoop);
 
@@ -152,10 +156,10 @@ public class UILoopPresentationAnim : ManagedAnimation
             switch (iMGLoop.GetSuccessState(img.selfDesc))
             {
                 case MiniGameSuccessState.PASSED:
-                    light_color = GameData.GetSettings.LoopPassedColor;
+                    light_color = GameData.GetUITheme.thumbnailSuccessLightColor;
                     break;
                 case MiniGameSuccessState.FAILED:
-                    light_color = GameData.GetSettings.LoopFailedColor;
+                    light_color = GameData.GetUITheme.thumbnailFailLightColor;
                     break;
                 default:
                     light_color = new Color(1f, 1f, 1f, 0f);
@@ -186,7 +190,7 @@ public class UILoopPresentationAnim : ManagedAnimation
         Queue<Func<UniTask>> q = new Queue<Func<UniTask>>();
         foreach (UIMiniGamePresentationImage img in uiImages)
         {
-            q.Enqueue( async () =>
+            q.Enqueue(async () =>
                 {
                     await UniTask.SwitchToMainThread();
                     img.ShowLight(iState);
@@ -201,5 +205,13 @@ public class UILoopPresentationAnim : ManagedAnimation
                 await UniTask.Delay(delay_step_in_ms);
         }
         //await WaitAnimState(showLightStateName, 1f, iCT);
+    }
+    
+    public void DisableThumbnailButtons()
+    {
+        foreach (UIMiniGamePresentationImage img in uiImages)
+        {
+            img.DisableButton();
+        }
     }
 }

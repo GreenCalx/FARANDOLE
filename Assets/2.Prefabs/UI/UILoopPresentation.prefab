@@ -9,6 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8392689232544831756}
+  - component: {fileID: 2710764109216286810}
+  - component: {fileID: 2966628315365320331}
+  - component: {fileID: 982155403413969919}
   m_Layer: 5
   m_Name: UILoopShow
   m_TagString: Untagged
@@ -36,6 +39,58 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!223 &2710764109216286810
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 761138934151881458}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
+--- !u!114 &2966628315365320331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 761138934151881458}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 0
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!225 &982155403413969919
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 761138934151881458}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &4292596922526960985
 GameObject:
   m_ObjectHideFlags: 0
@@ -49,6 +104,7 @@ GameObject:
   - component: {fileID: 4484042373633296733}
   - component: {fileID: 7711772038915873768}
   - component: {fileID: 323168037223584891}
+  - component: {fileID: 4305971000213384788}
   m_Layer: 5
   m_Name: UILoopLR
   m_TagString: Untagged
@@ -97,7 +153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: 70036718bfde71945bb9ac5cec59e7d9, type: 2}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.12941177}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -145,6 +201,29 @@ MonoBehaviour:
   target: {fileID: 4484042373633296733}
   continuousRefresh: 1
   currentColor: {r: 0, g: 0, b: 0, a: 0}
+--- !u!223 &4305971000213384788
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4292596922526960985}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 1
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 10
+  m_TargetDisplay: 0
 --- !u!1 &7362093815402750873
 GameObject:
   m_ObjectHideFlags: 0
@@ -190,7 +269,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   propertyName: _Color
-  propertyValue: {r: 1, g: 1, b: 1, a: 0}
+  propertyValue: {r: 1, g: 1, b: 1, a: 1}
   isHDR: 0
 --- !u!1 &9146333944164088359
 GameObject:
@@ -203,6 +282,9 @@ GameObject:
   - component: {fileID: 8903141416635487356}
   - component: {fileID: 289530761544596789}
   - component: {fileID: 95151980047292723}
+  - component: {fileID: 4504318114259810136}
+  - component: {fileID: 8565193619917310394}
+  - component: {fileID: 6744583110528051286}
   m_Layer: 5
   m_Name: UILoopPresentation
   m_TagString: Untagged
@@ -275,7 +357,58 @@ MonoBehaviour:
   timeBetweenShowLinesInMs: 1000
   radius: 300
   LR_resolution: 4
-  IsShown: 0
+--- !u!225 &4504318114259810136
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9146333944164088359}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
+--- !u!223 &8565193619917310394
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9146333944164088359}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 1
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 10
+  m_TargetDisplay: 0
+--- !u!114 &6744583110528051286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9146333944164088359}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1001 &6148106468472290640
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -284,32 +417,12 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8903141416635487356}
     m_Modifications:
-    - target: {fileID: 366280597507842356, guid: 75ce5ad7fd78dab4993fd9faf90d14ad, type: 3}
-      propertyPath: m_fontColor.a
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 366280597507842356, guid: 75ce5ad7fd78dab4993fd9faf90d14ad, type: 3}
-      propertyPath: m_fontColor32.rgba
-      value: 16777215
-      objectReference: {fileID: 0}
     - target: {fileID: 4541439056278336586, guid: 75ce5ad7fd78dab4993fd9faf90d14ad, type: 3}
       propertyPath: m_Name
       value: UILoopRank
       objectReference: {fileID: 0}
-    - target: {fileID: 4541439056278336586, guid: 75ce5ad7fd78dab4993fd9faf90d14ad, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4972224823737320137, guid: 75ce5ad7fd78dab4993fd9faf90d14ad, type: 3}
-      propertyPath: m_fontColor.a
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4972224823737320137, guid: 75ce5ad7fd78dab4993fd9faf90d14ad, type: 3}
-      propertyPath: m_fontColor32.rgba
-      value: 16777215
-      objectReference: {fileID: 0}
-    - target: {fileID: 5232297040872550077, guid: 75ce5ad7fd78dab4993fd9faf90d14ad, type: 3}
-      propertyPath: m_Color.a
+    - target: {fileID: 5114370491019736916, guid: 75ce5ad7fd78dab4993fd9faf90d14ad, type: 3}
+      propertyPath: m_SortingLayer
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6122347551000143432, guid: 75ce5ad7fd78dab4993fd9faf90d14ad, type: 3}
@@ -390,10 +503,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6122347551000143432, guid: 75ce5ad7fd78dab4993fd9faf90d14ad, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8654511750568190512, guid: 75ce5ad7fd78dab4993fd9faf90d14ad, type: 3}
-      propertyPath: m_Color.a
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

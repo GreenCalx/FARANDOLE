@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb4f14cff497f464d8b7e9711b8e7311, type: 3}
   m_Name: Default_LoopRank
   m_EditorClassIdentifier: 
-  rankMedal_default: {fileID: 0}
+  rankMedal_default: {fileID: 21300000, guid: 74e69090f19fc5449a10c1c76c233195, type: 3}
   rankMedal_I: {fileID: 21300000, guid: 3dbe73b340ca06d438379b0e862e4e8e, type: 3}
   rankMedal_II: {fileID: 21300000, guid: db565f62525c7674b8c5d203d6751ac2, type: 3}
   rankMedal_III: {fileID: 21300000, guid: 7a612610b60a3ed4cb9587e8e5e71b50, type: 3}

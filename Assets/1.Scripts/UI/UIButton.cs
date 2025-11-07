@@ -60,6 +60,9 @@ public class UIButton : Button, IPointerUpHandler, IPointerDownHandler, IPointer
                 case EUITag.ActionBtn:
                     ui_img.color = pressed ? GameData.GetUITheme.pressedActionBtnColor : GameData.GetUITheme.normalActionBtnColor;
                     break;
+                case EUITag.ThumbnailBtn:
+                    ui_img.color = pressed ? GameData.GetUITheme.pressedThumbnailColor : GameData.GetUITheme.normalThumbnailColor;
+                    break;
                 default:
                     ui_img.color = pressed ? GameData.GetUITheme.pressedBtnColor : GameData.GetUITheme.normalBtnColor;
                     break;
@@ -79,6 +82,9 @@ public class UIButton : Button, IPointerUpHandler, IPointerDownHandler, IPointer
                 break;
             case EUITag.ActionBtn:
                 squircle_img.color = pressed ? GameData.GetUITheme.pressedActionBtnColor : GameData.GetUITheme.normalActionBtnColor;
+                break;
+            case EUITag.ThumbnailBtn:
+                squircle_img.color = pressed ?  GameData.GetUITheme.pressedThumbnailColor : GameData.GetUITheme.normalThumbnailColor ;
                 break;
             default:
                 squircle_img.color = pressed ? GameData.GetUITheme.pressedBtnColor : GameData.GetUITheme.normalBtnColor;
