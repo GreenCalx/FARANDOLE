@@ -181,6 +181,7 @@ public class UILoopPresentationAnim : ManagedAnimation
         foreach (UIMiniGamePresentationImage img in uiImages)
         {
             img.UpdateMGState(iMGLoop.GetSuccessState(img.selfDesc));
+            img.UpdateLightColor();
         }
     }
 

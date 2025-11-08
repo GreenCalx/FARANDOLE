@@ -42,7 +42,7 @@ public class UIMiniGamePresentationImage : ManagedAnimation
         infoBubbleBtn.enabled = false;
     }
 
-    public void UpdateLightColor(Color iColor)
+    public void UpdateLightColor()
     {
         Color c = new Color(1f, 1f, 1f, 0f);
         switch (MGSuccessState)
