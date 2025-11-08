@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
 using System.Threading.Tasks;
@@ -25,6 +26,24 @@ public class UILoopPresentationAnim : ManagedAnimation
     bool init = false;
     [Header("Internals")]
     UILoopStartImage inst_loopStartImage;
+    public int DisplayedSuccessLights
+    {
+        get
+        {
+            if (uiImages == null)
+                return 0;
+
+            int retval = 0;
+            foreach (var img in uiImages)
+            {
+                if (!img.LightShown)
+                    return retval;
+                if (img.Successed)
+                    retval++;
+            }
+            return retval;
+        }
+    }
 
     public void Init(MiniGameLoop iMGLoop)
     {
@@ -145,28 +164,23 @@ public class UILoopPresentationAnim : ManagedAnimation
         IsShown = false;
     }
 
+    public void ResetLights()
+    {
+        foreach (UIMiniGamePresentationImage img in uiImages)
+        {
+            img.LightShown = false;
+            img.UpdateMGState(MiniGameSuccessState.PENDING);
+        }
+    }
+
     public void UpdateLights(MiniGameLoop iMGLoop)
     {
         if (!init)
         { return; }
 
-        Color light_color = new Color(0f, 0f, 0f, 0f);
         foreach (UIMiniGamePresentationImage img in uiImages)
         {
-            switch (iMGLoop.GetSuccessState(img.selfDesc))
-            {
-                case MiniGameSuccessState.PASSED:
-                    light_color = GameData.GetUITheme.thumbnailSuccessLightColor;
-                    break;
-                case MiniGameSuccessState.FAILED:
-                    light_color = GameData.GetUITheme.thumbnailFailLightColor;
-                    break;
-                default:
-                    light_color = new Color(1f, 1f, 1f, 0f);
-                    break;
-            }
-            light_color.a = 0f;
-            img.UpdateLightColor(light_color);
+            img.UpdateMGState(iMGLoop.GetSuccessState(img.selfDesc));
         }
     }
 

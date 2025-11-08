@@ -43,8 +43,9 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
     public UnityEvent OnNewRankDisplayedCB;
 
     // internals
+    [Header("Internals")]
     MiniGameLoop MGLoop;
-    UILoopPresentationAnim loopPresentationAnim;
+    public UILoopPresentationAnim loopPresentationAnim;
 
     void Start()
     {
@@ -68,12 +69,13 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
     public void Init(MiniGameLoop iMGLoop, UILoopPresentationAnim iLoopPresentationAnim)
     {
         loopDepthValueTxt.text = iMGLoop.depth.ToString();
-        loopComboTxt.text = iMGLoop.combo.ToString();
+        loopComboTxt.text =  "X" + iMGLoop.previousCombo.ToString();
         MGLoop = iMGLoop;
         loopPresentationAnim = iLoopPresentationAnim;
-        
+
         if (GameData.Get.currentGameMode == GAME_MODE.DAILY_SEED)
             loopPresentationAnim.DisableThumbnailButtons();
+        loopPresentationAnim.ResetLights();
 
         // Init ani text
         if (iMGLoop.IsLoopPerfect())
@@ -143,6 +145,8 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
         {
             await UniTask.SwitchToMainThread();
             cancelCB.AddListener(() => loopPresentationAnim.Cancel());
+            
+            // Show Loop
             await
             UniTask.WhenAll(
                 loopPresentationAnim.Show(MGLoop, iCT),
@@ -153,6 +157,9 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
                 cancelCB.Invoke();
                 return;
             }
+
+            // Show Lights
+           
             await loopPresentationAnim.ShowLights(MGLoop, true, iCT);
             if (iCT.IsCancellationRequested)
             {
@@ -170,6 +177,7 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
             await UniTask.SwitchToMainThread();
 
             CancellationTokenSource ctsTextAnim = new CancellationTokenSource();
+            loopComboTxt.text =  "X" + MGLoop.combo.ToString();
             loopPassedTextAnim.Animate(ctsTextAnim.Token, iCT);
             await WaitShowSuccessAnimTask(1f, iCT);
             //ctsTextAnim.Cancel();

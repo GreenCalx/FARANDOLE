@@ -23,4 +23,8 @@ public class UIThemeSO : ScriptableObject
     public Color LastSecondTimeColor;
     public Color NegativeTimeColor;
     public Color FrozenTimeColor;
+    [Header("Color")]
+    public Color PowerBarFailSection    = Color.red;
+    public Color PowerBarPassedSection  = Color.green;
+    public Color PowerBarYellowSection  = Color.yellow;
 }

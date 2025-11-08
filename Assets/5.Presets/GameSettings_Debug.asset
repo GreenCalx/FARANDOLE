@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GameSettings_Debug
   m_EditorClassIdentifier: 
   PlayerHP: 4
-  loopSize: 6
+  loopSize: 3
   percentOfLoopSizeToPass: 0.5
   ComboRequirementForSuper: 2
   ComboRequirementForMaster: 5

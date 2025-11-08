@@ -22,6 +22,8 @@ public class MiniGameLoop : IEnumerator<MiniGame>
     public LoopRank rank;
     public int depth;
     public int combo;
+    public int previousCombo;
+    public int count => inst_miniGames!=null ? inst_miniGames.Count : 0;
     public bool IsRankUpdateRequested {
         get { return rankUpdateRequest; }
     }
@@ -35,6 +37,7 @@ public class MiniGameLoop : IEnumerator<MiniGame>
     public MiniGameLoop()
     {
         combo = 0;
+        previousCombo = 0;
         depth = 0;
         rank = LoopRank.I;
         index = 0;
@@ -84,6 +87,7 @@ public class MiniGameLoop : IEnumerator<MiniGame>
         depth = 0;
         rank = LoopRank.I;
         combo = 0;
+        previousCombo = 0;
     }
     public void Reset()
     {
@@ -162,6 +166,7 @@ public class MiniGameLoop : IEnumerator<MiniGame>
 
     public void ComboUpdate()
     {
+        previousCombo = combo;
         if (IsLoopPerfect())
             combo++;
         else

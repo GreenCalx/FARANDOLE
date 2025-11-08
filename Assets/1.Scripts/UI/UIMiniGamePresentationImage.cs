@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
 using System.Threading;
@@ -15,6 +16,9 @@ public class UIMiniGamePresentationImage : ManagedAnimation
     public TextMeshProUGUI h_InfoBubbleText;
     public Sprite defaultSprite;
     [Header("Internals")]
+    public MiniGameSuccessState MGSuccessState;
+    public bool Successed => MGSuccessState == MiniGameSuccessState.PASSED;
+    public bool LightShown = false;
     public MiniGameSO selfDesc;
     readonly string showLightStateName = "MiniGameImageShowLight";
     readonly string hideLightStateName = "MiniGameImageHideLight";
@@ -40,13 +44,31 @@ public class UIMiniGamePresentationImage : ManagedAnimation
 
     public void UpdateLightColor(Color iColor)
     {
-        light.color = iColor;
-        //BG.color = iColor;
+        Color c = new Color(1f, 1f, 1f, 0f);
+        switch (MGSuccessState)
+        {
+            case MiniGameSuccessState.PASSED:
+                c = GameData.GetUITheme.thumbnailSuccessLightColor;
+                break;
+            case MiniGameSuccessState.FAILED:
+                c = GameData.GetUITheme.thumbnailFailLightColor;
+                break;
+            default:
+                break;
+        }
+        c.a = 0f;
+        light.color = c;
+    }
+
+    public void UpdateMGState(MiniGameSuccessState iMGState)
+    {
+        MGSuccessState = iMGState;
     }
 
     public void ShowLight(bool iShow)
     {
         m_Animator.SetBool(showLightParam, iShow);
+        LightShown = iShow;
     }
 
     public override async UniTask DefaultHide(CancellationToken iCT)

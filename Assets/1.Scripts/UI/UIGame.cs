@@ -27,6 +27,8 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
     [Header("Loop Presentation")]
     public GameObject prefab_loopPresentationAnim;
     public UILoopPresentationAnim inst_loopPresentationAnim;
+    [Header("PowerBar")]
+    public UIPowerBar powerBar;
 
     [Header("Launch Game")]
     public UIButton launchGameBtn;
@@ -65,6 +67,7 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
                                     .WithAnchoredPosition(Vector3.zero)
                                     .BuildAs<UILoopPresentationAnim>();
         inst_loopPresentationAnim.Init(MGM.MGLoop);
+
 
         ShowMiniGameMode(false);
         
@@ -161,7 +164,8 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         handle_animLoopSuccess.Init(iMGLoop, inst_loopPresentationAnim);
         handle_animLoopSuccess.OnBeforeLoopDepth = new UnityEvent();
         handle_animLoopSuccess.OnBeforeLoopDepth.AddListener(()=>OnBeforeLoopDepth?.Invoke());
-
+        powerBar.Setup(iMGLoop, handle_animLoopSuccess.loopPresentationAnim);
+                
         float newRank = (float)iMGLoop.rank;
         float prevRank = iMGLoop.rank > 0 ? newRank - 1f : 0f;
         handle_animLoopSuccess.OnNewRankDisplayedCB = new UnityEvent();
@@ -174,7 +178,8 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         await ANIM.PlayAnim(handle_animLoopSuccess.m_Animator);
         ANIM.StopTrackAnimator(handle_animLoopSuccess.m_Animator);
         //await handle_animLoopSuccess.Animate(colors, iLoopPassed, iRankUp, iLoopDepth, iCT);
-
+        powerBar.StopProgress();
+        
         handle_animLoopSuccess.OnBeforeLoopDepth.RemoveListener(()=>OnBeforeLoopDepth?.Invoke());
         handle_animLoopSuccess.OnNewRankDisplayedCB.RemoveListener(()=> { AUDIO.LerpRank(prevRank, newRank); });
     }
