@@ -17,6 +17,7 @@ public class CowboyMiniGame : MiniGame, ITheaterMod, ISpawnerMod<Cowboy>
     public int[] cowboysPerDifficulty;
 
     private int numberOfRows;
+    public int[] minObstaclesNumber;
     public int[] maxObstaclesNumber;
     List<Obstacle> inst_obstacles;
     List<Cowboy> inst_cowboys;
@@ -74,7 +75,7 @@ public class CowboyMiniGame : MiniGame, ITheaterMod, ISpawnerMod<Cowboy>
 
         for (int i = 0; i < numberOfRows; i++)
         {
-            n_obstacles = Random.Range(1, maxObstaclesNumber[MGM.miniGamesDifficulty-1]);
+            n_obstacles = Random.Range(minObstaclesNumber[MGM.miniGamesDifficulty-1], maxObstaclesNumber[MGM.miniGamesDifficulty-1]);
             for (int j = 0; j < n_obstacles; j++)
             {
                 int randObstacle = UnityEngine.Random.Range(0, prefab_obstacles.Count);
@@ -84,6 +85,13 @@ public class CowboyMiniGame : MiniGame, ITheaterMod, ISpawnerMod<Cowboy>
                     .BuildAs<Obstacle>();
 
                 PC.AddTapTracker(newObstacle);
+                newObstacle.OnTapDo.AddListener( () =>
+                    {
+                        PC.RemoveTapTracker(newObstacle);
+                        newObstacle.Kill();
+                    }
+                );
+
                 inst_PerspectiveRoom.AddToRoom(newObstacle.transform, i, newObstacle.GetStickerRenderer());
                 RowInfo rowInfo = inst_PerspectiveRoom.AddToRoom(newObstacle.transform, i, newObstacle.GetRenderer());
 

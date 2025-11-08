@@ -102,13 +102,15 @@ public class PlayerController : MonoBehaviour
             if (tapTrackersModified)
             {
                 tapTrackers = tapTrackers
-                .Where(e => e.enabled)
+                .Where(e => (e!=null) && e.enabled)
                 .OrderByDescending(e => e.GetDisplayPriority())
                 .ToList();
                 tapTrackersModified = false;
             }
             foreach (ITapTracker tracker in tapTrackers)
             {
+                if (tracker == null)
+                    continue;
                 if (tracker.OnTap(tapPos) && tracker.stopPropagation)
                 {
                     return;

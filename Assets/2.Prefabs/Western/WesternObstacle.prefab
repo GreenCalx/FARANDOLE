@@ -221,6 +221,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0b5144da51da5f4f8a83d2d543d9ad3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DestroyOnTap: 1
   sr: {fileID: 7096153844305152928}
   sr_sticker: {fileID: 4466390342267657061}
   col: {fileID: 1522180298952364924}

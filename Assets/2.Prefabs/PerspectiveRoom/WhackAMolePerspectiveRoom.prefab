@@ -62,10 +62,11 @@ MonoBehaviour:
       x: -1.3
       y: 0
       width: 2.6
-      height: 3
+      height: 1.8
     zDepth: 6
   nearObjectScale: 0.16
   farObjectScale: 0.1
+  m_XDeadZone: 0
   AutoScaleFromVanishingPoint: 0
   m_TraceLines: 0
   m_LineTracerMat: {fileID: 2100000, guid: 7e49a6b8b3415754d869225782a84df1, type: 2}
@@ -76,6 +77,6 @@ MonoBehaviour:
   groundMat: {fileID: 2100000, guid: 6ea9822b4f76d1745aaf57de5e1a8e98, type: 2}
   backMat: {fileID: 2100000, guid: fffbd8d618d77ef4ca9868c1fff7c31d, type: 2}
   wallMat_Left: {fileID: 2100000, guid: 717c1d11dc533b146bbab24b91e02d56, type: 2}
-  wallMat_Right: {fileID: 2100000, guid: 64bbf7ed049de514bb59519e434eb167, type: 2}
+  wallMat_Right: {fileID: 2100000, guid: 717c1d11dc533b146bbab24b91e02d56, type: 2}
   m_FOV: 71.146835
   r_LM2D: {fileID: 0}
