@@ -119,6 +119,8 @@ public class UILoopPresentationAnim : ManagedAnimation
         if (!init)
         { return; }
 
+        rankMedalAnimation.AnimateRankChange(iMGLoop.IsRankUpdateRequested);
+
         UpdateLights(iMGLoop);
 
         List<UniTask> l = new List<UniTask>();

@@ -35,7 +35,7 @@ public class UIMiniGamePresentationImage : ManagedAnimation
         infoBubbleBtn.onClick.AddListener(() => { bubbleShown = !bubbleShown; h_InfoBubbleAnchor.gameObject.SetActive(bubbleShown); });
         h_InfoBubbleText.text = selfDesc.goal;
     }
-    
+
     public void DisableButton()
     { 
         infoBubbleBtn.interactable = false;

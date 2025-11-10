@@ -55,5 +55,7 @@ MonoBehaviour:
   PlayGroundColorLerpTimeSec: 1
   BGMRankLerpTimeSec: 1
   GameClockScaleAnimDuration: 0.25
+  PostShowLoopResultDelayInMs: 500
+  PostShowNewRankDelayInMs: 1000
   ShowLightTotalTimeInMs: 2000
   MaxLightUpMiniGameThumbnailTime: 250

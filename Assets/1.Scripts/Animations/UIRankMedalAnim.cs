@@ -11,6 +11,9 @@ public class UIRankMedalAnim : ManagedAnimation
     readonly string RankDownState = "RankDown";
     readonly string RankUpTrigger = "RankUp";
     readonly string RankDownTrigger = "RankDown";
+    readonly string ShakeTrigger = "shake";
+    readonly string rankChangeRequestedParam = "RankChangeRequested";
+    readonly string shaderParmShine = "_Shine";
     public GameObject prefab_RankUpFX;
     public TextMeshProUGUI currentRankText;
     public TextMeshProUGUI newRankText;
@@ -39,20 +42,36 @@ public class UIRankMedalAnim : ManagedAnimation
             WaitAnimState(DefaultHideStateName, 1f, iCT),
             WaitAnimState(HideFlippedState, 1f, iCT)
         );
-        
+
         IsShown = false;
+        m_Animator.ResetTrigger(ShakeTrigger);
+    }
+    public void AnimateRankChange(bool iDoAnim)
+    {
+        m_Animator.SetBool(rankChangeRequestedParam, iDoAnim);
+    }
+    public void AnimateShake()
+    {
+        m_Animator.SetTrigger(ShakeTrigger);
     }
 
+    public void AnimateNewRankShine()
+    {
+        //newRankImage.material.SetInt(shaderParmShine, 1);
+    }
     public void UpdateCurrentRank(MiniGameLoop iMGLoop)
     {
         currentRankText.text = iMGLoop.GetRankStr();
         currentRankImage.sprite = GameData.GetSettings.RankSettings.GetImageFromRank(iMGLoop.rank);
+        //currentRankImage.material.SetInt(shaderParmShine, 0);
+        
     }
 
     public void UpdateNewRank(MiniGameLoop iMGLoop)
     {
         newRankText.text = iMGLoop.GetRankStr();
         newRankImage.sprite = GameData.GetSettings.RankSettings.GetImageFromRank(iMGLoop.rank);
+        //newRankImage.material.SetInt(shaderParmShine, 0);
     }
 
     void Update()

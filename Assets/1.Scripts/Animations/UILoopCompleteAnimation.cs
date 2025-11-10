@@ -146,7 +146,7 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
             await UniTask.SwitchToMainThread();
             cancelCB.AddListener(() => loopPresentationAnim.Cancel());
             
-            // Show Loop
+            // Show Presentation Loop
             await
             UniTask.WhenAll(
                 loopPresentationAnim.Show(MGLoop, iCT),
@@ -158,8 +158,7 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
                 return;
             }
 
-            // Show Lights
-           
+            // Show Thumbnail Lights and fill power bar
             await loopPresentationAnim.ShowLights(MGLoop, true, iCT);
             if (iCT.IsCancellationRequested)
             {
@@ -172,12 +171,14 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
         };
         q.Enqueue(step2);
 
+        // Show loop result canvas
         Func<UniTask> step3 = async () =>
         {
             await UniTask.SwitchToMainThread();
 
             CancellationTokenSource ctsTextAnim = new CancellationTokenSource();
-            loopComboTxt.text =  "X" + MGLoop.combo.ToString();
+            loopComboTxt.text = "X" + MGLoop.combo.ToString();
+            loopPresentationAnim.rankMedalAnimation.AnimateShake();
             loopPassedTextAnim.Animate(ctsTextAnim.Token, iCT);
             await WaitShowSuccessAnimTask(1f, iCT);
             //ctsTextAnim.Cancel();
@@ -187,9 +188,11 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
                 cancelCB.Invoke();
                 return;
             }
+            await UniTask.Delay(GameData.GetSettings.PostShowLoopResultDelayInMs);
         };
         q.Enqueue(step3);
 
+        // Rank Up/Down
         if (MGLoop.IsRankUpdateRequested)
         {
             Func<UniTask> step4 = async () =>
@@ -204,11 +207,17 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
                     cancelCB.Invoke();
                     return;
                 }
-                
+
+                loopPresentationAnim.rankMedalAnimation.AnimateNewRankShine();
+                await UniTask.Delay(GameData.GetSettings.PostShowNewRankDelayInMs);
+
             };
             q.Enqueue(step4);
         }
 
+        // TODO Mutation & mods here
+
+        // Hide Loop Complete UI
         Func<UniTask> step6 = async () =>
         {
             await UniTask.SwitchToMainThread();
@@ -230,6 +239,7 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
         };
         q.Enqueue(step6);
 
+        // Show new Loop depth introduciton
         Func<UniTask> step7 = async () =>
         {
             await UniTask.SwitchToMainThread();
@@ -241,6 +251,7 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
         };
         q.Enqueue(step7);
 
+        // Hide Loop Depth Introduction and finish animation
         Func<UniTask> step8 = async () =>
         {
             await UniTask.SwitchToMainThread();

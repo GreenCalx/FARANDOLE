@@ -31,6 +31,7 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
     public UIPowerBar powerBar;
 
     [Header("Launch Game")]
+    public CanvasGroup h_LaunchGameCanvas;
     public UIButton launchGameBtn;
     [Header("Pause Menu")]
     public UIPauseMenu h_PauseMenu;
@@ -117,8 +118,29 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
     public async UniTask PresentLoop()
     {
         launchGameBtn.gameObject.SetActive(false);
+        h_LaunchGameCanvas.alpha = 0f;
+
         await inst_loopPresentationAnim.Show(MGM.MGLoop);
+
         launchGameBtn.gameObject.SetActive(true);
+
+        await ShowLaunchGameCanvas();
+        
+    }
+
+    public async UniTask ShowLaunchGameCanvas()
+    {
+        h_LaunchGameCanvas.alpha = 0f;
+        float alpha = 0f;
+        float startTime = Time.time;
+        float frac = 0f;
+        while (frac < 1f)
+        {
+            frac = Mathf.Clamp01((Time.time - startTime) / GameData.GetSettings.ShowLaunchGameButtonInSec);
+            h_LaunchGameCanvas.alpha = frac;
+            await UniTask.Yield();
+        }
+        h_LaunchGameCanvas.alpha = 1f;
     }
 
     public async UniTask HideLoopPresentation()

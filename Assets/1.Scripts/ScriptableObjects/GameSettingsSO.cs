@@ -32,11 +32,14 @@ public class GameSettingsSO : ScriptableObject
     public LoopRankSO RankSettings;
 
     [Header("GameFlow Tweaks")]
+    public float ShowLaunchGameButtonInSec = 0.5f;
     public int PostMiniGameLatchInMs = 500;
     public int PreMiniGameLatchInMs = 500;
     public float PlayGroundColorLerpTimeSec = 1f;
     public float BGMRankLerpTimeSec = 1f;
     public float GameClockScaleAnimDuration = 0.25f;
+    public int PostShowLoopResultDelayInMs = 1000;
+    public int PostShowNewRankDelayInMs = 1000;
     public float ShowLightTotalTimeInMs = 2000f;
     public int MaxLightUpMiniGameThumbnailTime = 250;
 
