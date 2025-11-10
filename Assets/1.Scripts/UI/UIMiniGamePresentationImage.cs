@@ -68,7 +68,6 @@ public class UIMiniGamePresentationImage : ManagedAnimation
     public void ShowLight(bool iShow)
     {
         m_Animator.SetBool(showLightParam, iShow);
-        LightShown = iShow;
     }
 
     public override async UniTask DefaultHide(CancellationToken iCT)

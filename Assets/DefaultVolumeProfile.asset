@@ -144,6 +144,25 @@ MonoBehaviour:
   maxNits:
     m_OverrideState: 1
     m_Value: 1000
+--- !u!114 &-5024246410374359960
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8959b7ed89e09104e8fc681392181705, type: 3}
+  m_Name: CustomVolumeComponent
+  m_EditorClassIdentifier: 
+  active: 1
+  horizontalBlur:
+    m_OverrideState: 1
+    m_Value: 0.05
+  verticalBlur:
+    m_OverrideState: 1
+    m_Value: 0.05
 --- !u!114 &-4047545610312462133
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -287,7 +306,7 @@ MonoBehaviour:
   - {fileID: 7103021156404523568}
   - {fileID: -4047545610312462133}
   - {fileID: 2108057176127915749}
-  - {fileID: -8481866092910310960}
+  - {fileID: -5024246410374359960}
 --- !u!114 &358458741939287131
 MonoBehaviour:
   m_ObjectHideFlags: 3
