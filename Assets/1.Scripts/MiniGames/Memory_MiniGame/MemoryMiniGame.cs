@@ -3,6 +3,7 @@ using UnityEngine.Events;
 using System.Collections.Generic;
 using System;
 using Cysharp.Threading.Tasks;
+using System.Threading;
 public class MemoryMiniGame : MiniGame, IDogMod, IRegularMod
 {
     [Header("MemoryMiniGame")]
@@ -17,6 +18,7 @@ public class MemoryMiniGame : MiniGame, IDogMod, IRegularMod
     public float[] rotsSpeeds;
     public float[] timeCardsShowedOnIntro;
     private int pairs = 0;
+
 
     public float distFromCenter = 1.5f;
 
@@ -162,13 +164,23 @@ public class MemoryMiniGame : MiniGame, IDogMod, IRegularMod
         }
     }
     override
-    public async UniTask IntroAnim()
-    {
+    public async UniTask IntroAnim(CancellationToken token)
+    {        
+        List<UniTask> tasks = new List<UniTask>();
         foreach (Card card in cards)
         {
-            StartCoroutine(card.TapAnim());
+            tasks.Add(card.TapAnim().ToUniTask());
         }
-        await UniTask.WaitForSeconds(timeCardsShowedOnIntro[MGM.miniGamesDifficulty-1]);
+        await UniTask.WhenAll(tasks);
+        Debug.Log("cards turned");
+        try
+        {
+            await UniTask.WaitForSeconds(timeCardsShowedOnIntro[MGM.miniGamesDifficulty - 1], false, cancellationToken: token);
+        }
+        catch (OperationCanceledException)
+        {
+            Debug.Log("getCanceled");
+        }
         foreach (Card card in cards)
         {
             StartCoroutine(card.TapAnim());

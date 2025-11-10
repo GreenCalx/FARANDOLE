@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using Cysharp.Threading.Tasks;
+using System.Threading;
 
 public enum MiniGameSuccessState
 {
@@ -23,7 +24,7 @@ public enum EMiniGameTags
     EXTENDABLE = 4,
     ARCADE = 5,
     SCIENCE = 6,
-    PHYSICS = 7,
+    PHYSICS = 7, 
     THEATER = 8,
     CHESS = 9
 }
@@ -41,6 +42,8 @@ public class MiniGame : MonoBehaviour, IMiniGame
     // Might want to implement a full FSM..
     public bool IsInPostGame;
     public MiniGameSuccessState successState;
+    
+    protected CancellationTokenSource introCTS;
 
 
     // Use Reflection to retrieve all interface deriving from IMiniGame for current MiniGame
@@ -101,7 +104,7 @@ public class MiniGame : MonoBehaviour, IMiniGame
         return false;
     }
 
-    public virtual async UniTask IntroAnim()
+    public virtual async UniTask IntroAnim(CancellationToken token)
     {
         return;
     }

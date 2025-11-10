@@ -7,14 +7,14 @@ using EnhancedTouch = UnityEngine.InputSystem.EnhancedTouch;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 using static Utils;
 using System.Linq;
+using UnityEngine.Events;
 public class PlayerController : MonoBehaviour
 {
     // public RectTransform ui_tracked;
     // public Transform game_tracked;
     PlayerInput playerInput;
 
-    InputAction touchPositionAction;
-    InputAction touchPressAction;
+    public UnityEvent onInputEvent = new UnityEvent();
     List<IPositionTracker> positionTrackers;
     List<ITapTracker> tapTrackers;
     List<ITapTracker> sortedTapTrackers;
@@ -153,14 +153,16 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (freezeInputs)
-            return;
-
         foreach (EnhancedTouch.Touch touch in EnhancedTouch.Touch.activeTouches)
         {
 
             if ((touch.phase == UnityEngine.InputSystem.TouchPhase.Ended)) //tapCount >= 1, problemes avec time scale?
             {
+                if (freezeInputs)
+                {
+                    TapInput(); // Call onInputEvent
+                    return;
+                }
                 float deltaTime = lastTimeTouch - firstTimeTouch;
                 //Tap sur la même position et moins d'une seconde
                 if (deltaTime < 0.1 || ((lastTouchWorldPos - firstTouchWorldPos).sqrMagnitude < 0.05f && deltaTime <= 1))
@@ -242,5 +244,10 @@ public class PlayerController : MonoBehaviour
         {
             swipeTrackers.Remove(iTracker);
         }
+    }
+
+    public void TapInput()
+    {
+        onInputEvent.Invoke();   
     }
 }

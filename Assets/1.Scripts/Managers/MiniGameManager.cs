@@ -37,6 +37,7 @@ public class MiniGameManager : MonoBehaviour, IManager
     public UIGame UI;
     CancellationTokenSource LoopCompleteAnimCTS;
     CancellationTokenSource LoopClearAnimCTS;
+    CancellationTokenSource introAnimCancelCTS;
     public List<SpriteSwapOnWin> autoSwappersOnWin;
 
     #region IManager
@@ -53,6 +54,7 @@ public class MiniGameManager : MonoBehaviour, IManager
         UI = iGameManager.UI;
 
         autoSwappersOnWin = new List<SpriteSwapOnWin>();
+        introAnimCancelCTS = new CancellationTokenSource();
         LoadLoop();
     }
     
@@ -91,7 +93,7 @@ public class MiniGameManager : MonoBehaviour, IManager
     public async UniTask Launch()
     {
         MGLoop.Start();
-        PlayCurrent();
+        await PlayCurrent();
     }
 
     public void GameOver()
@@ -109,10 +111,21 @@ public class MiniGameManager : MonoBehaviour, IManager
         await PG.OpenPlaygroundAnim();
         if (MGLoop.Current.hasIntro)
         {
-            await MGLoop.Current.IntroAnim();
-        }
-        PC.UnFreeze();
+            introAnimCancelCTS = new CancellationTokenSource();
 
+            UnityAction cancelIntro = () =>
+            {
+                Debug.Log("cancel");
+                introAnimCancelCTS.Cancel();
+            };
+            PC.onInputEvent.AddListener(cancelIntro);
+            
+            await MGLoop.Current.IntroAnim(introAnimCancelCTS.Token);
+            PC.onInputEvent.RemoveListener(cancelIntro);
+            introAnimCancelCTS.Dispose();
+        }
+        
+        PC.UnFreeze();
         MGLoop.Current.Play();
 
         gameClock.Reset();
