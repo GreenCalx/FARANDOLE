@@ -7,15 +7,6 @@ public enum SCREEN_ORIENTATION
     BOTH = 2
 }
 
-public enum MINIGAME_TAGS
-{
-    ANY = 0,
-    AGILITY = 1,
-    REFLEX = 2,
-    BRAIN = 3,
-    SCIENCE = 4
-}
-
 [CreateAssetMenu(fileName = "MiniGameSO", menuName = "Scriptable Objects/MiniGameSO")]
 public class MiniGameSO : ScriptableObject
 {
@@ -24,6 +15,7 @@ public class MiniGameSO : ScriptableObject
     public string goal;
     public Sprite thumbNailImg;
     public GameObject prefab_MiniGame;
-    public List<MINIGAME_TAGS> tags;
+    public List<EMiniGameTags> tags => prefab_MiniGame?.GetComponent<MiniGame>()?.GetTags();
+    public MiniGame implementation;
     public SCREEN_ORIENTATION orientationRequirement = SCREEN_ORIENTATION.PORTRAIT;
 }

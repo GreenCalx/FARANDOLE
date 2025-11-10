@@ -43,7 +43,7 @@ public class ManagedAnimation : MonoBehaviour
     public virtual async UniTask DefaultShow(CancellationToken iCT)
     {
         m_Animator.SetBool(DefaultShowAnimParm, true);
-        await WaitAnimState(DefaultShowStateName, 0.5f, iCT);
+        await WaitAnimState(DefaultShowStateName, 0.8f, iCT);
         if (iCT.IsCancellationRequested)
         {
             m_Animator.SetBool(DefaultShowAnimParm, false);

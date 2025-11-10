@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1756262515745767524}
   - component: {fileID: 7096153844305152928}
+  - component: {fileID: 933298299860713987}
   m_Layer: 6
   m_Name: SR
   m_TagString: Untagged
@@ -87,6 +88,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &933298299860713987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 423545204572085176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5923877240fbdbd4eade895857658a86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shatterDuration: 1
+  fadeDuration: 1
 --- !u!1 &4421988479554411220
 GameObject:
   m_ObjectHideFlags: 0
@@ -225,6 +240,9 @@ MonoBehaviour:
   sr: {fileID: 7096153844305152928}
   sr_sticker: {fileID: 4466390342267657061}
   col: {fileID: 1522180298952364924}
+  OnTapDo:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!61 &1522180298952364924
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -13,10 +13,14 @@ public class RippleEffect : MonoBehaviour
     public bool ForcePlay = false;
     public bool StartOnEnabled = false;
     UnityEvent m_CallbackOnDone;
+    bool pendingRipple = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void OnEnable()
     {
+        pendingRipple = false;
+        isPlaying = false;
+        
         // Prewarm
         if (rippleMat != null)
         {
@@ -40,15 +44,18 @@ public class RippleEffect : MonoBehaviour
         if (isPlaying)
         {
             rippleTime += Time.deltaTime;
-            float frac = Mathf.Clamp01(rippleTime / duration);
-            rippleMat.SetFloat("_RippleTime", rippleTime);
-            rippleMat.SetFloat("_RippleStrength", RippleStrengthOverTime.Evaluate(frac));
+
             if (rippleTime >= duration)
             {
-                rippleTime = 0f;
+                rippleTime = duration;
                 isPlaying = false;
                 rippleMat.SetFloat("_RippleTime", 0f); // reset
                 StopRipple();
+            } else
+            {
+                float frac = Mathf.Clamp01(rippleTime / duration);
+                rippleMat.SetFloat("_RippleTime", rippleTime);
+                rippleMat.SetFloat("_RippleStrength", RippleStrengthOverTime.Evaluate(frac));
             }
         }
 
@@ -69,21 +76,27 @@ public class RippleEffect : MonoBehaviour
 
     public void StartRipple(UnityEvent iCallbackOnDone = null)
     {
+        if (pendingRipple || isPlaying)
+            return;
+
         rippleTime = 0f;
         m_CallbackOnDone = iCallbackOnDone;
         StartCoroutine(RippleCo());
     }
 
     IEnumerator RippleCo()
-    {   
+    {
+        pendingRipple = true;
         rippleMat.SetFloat("_RippleTime", 0f);
         rippleMat.SetVector("_FocalPoint", new Vector2(0.5f, 0.5f)); // screen center
         rippleMat.SetFloat("_RippleStrength", 0f);
 
         BlitRendererFeature.BlitPass.EnableRipple = true;
 
+        // Wait a frame
         yield return null;
-
+        
+        pendingRipple = false;
         isPlaying = true;
     }
 }

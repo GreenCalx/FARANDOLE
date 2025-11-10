@@ -26,5 +26,5 @@ public class UIThemeSO : ScriptableObject
     [Header("Color")]
     public Color PowerBarFailSection    = Color.red;
     public Color PowerBarPassedSection  = Color.green;
-    public Color PowerBarYellowSection  = Color.yellow;
+    public Color PowerBarPerfectSection  = Color.yellow;
 }

@@ -106,6 +106,7 @@ public class GameManager : MonoBehaviour
     {
         UI.launchGameBtn?.clickCallback.RemoveListener(() => StartGame());
         UI.launchGameBtn.gameObject.SetActive(false);
+        UI.h_LaunchGameCanvas.gameObject.SetActive(false);
         if ((UI.inst_loopPresentationAnim.IsShown!=null) && UI.inst_loopPresentationAnim.IsShown)
             await UI.HideLoopPresentation();
 

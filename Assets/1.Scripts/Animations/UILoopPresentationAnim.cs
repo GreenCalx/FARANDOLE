@@ -119,6 +119,8 @@ public class UILoopPresentationAnim : ManagedAnimation
         if (!init)
         { return; }
 
+        rankMedalAnimation.AnimateRankChange(iMGLoop.IsRankUpdateRequested);
+
         UpdateLights(iMGLoop);
 
         List<UniTask> l = new List<UniTask>();
@@ -168,8 +170,8 @@ public class UILoopPresentationAnim : ManagedAnimation
     {
         foreach (UIMiniGamePresentationImage img in uiImages)
         {
-            img.LightShown = false;
             img.UpdateMGState(MiniGameSuccessState.PENDING);
+            img.LightShown = false;
         }
     }
 
@@ -205,19 +207,25 @@ public class UILoopPresentationAnim : ManagedAnimation
         Queue<Func<UniTask>> q = new Queue<Func<UniTask>>();
         foreach (UIMiniGamePresentationImage img in uiImages)
         {
+            img.LightShown = !iState;
             q.Enqueue(async () =>
                 {
                     await UniTask.SwitchToMainThread();
                     img.ShowLight(iState);
+                    
                 }
             );
+            q.Enqueue(async () => img.LightShown = iState);
         }
 
         while (q.Count > 0)
         {
             UniTask.Run(q.Dequeue());
             if (!iCT.IsCancellationRequested)
-                await UniTask.Delay(delay_step_in_ms);
+            {
+                 await UniTask.Delay(delay_step_in_ms);
+            }
+             UniTask.Run(q.Dequeue());
         }
         //await WaitAnimState(showLightStateName, 1f, iCT);
     }

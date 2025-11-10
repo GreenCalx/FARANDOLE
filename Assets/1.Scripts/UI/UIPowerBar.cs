@@ -6,9 +6,9 @@ using Cysharp.Threading.Tasks;
 using static Utils;
 public class UIPowerBar : MonoBehaviour
 {
-    // public GameObject prefab_PowerBarSection;
+    public ParticleSystem OnPerfectPS;
+    public Image FillImage;
     public RectTransform layoutHandle;
-    // public List<Image> inst_PowerBarSections;
     public Slider progressBar;
     public float Current
     {
@@ -43,6 +43,7 @@ public class UIPowerBar : MonoBehaviour
         if (Source == null)
             return;
         m_IsTrackingProgress = true;
+        progressBar.value = 0f;
         ProgressTracker();
     }
     public void StopProgress()
@@ -63,11 +64,18 @@ public class UIPowerBar : MonoBehaviour
             if (progressBar.value != m_TargetValue)
             {
                 progressBar.value = Lerp(progressBar.value, m_TargetValue, elapsedLerp / LerpTime);
-            } else
+            }
+            else
             {
                 elapsedLerp = 0f;
             }
+
+
             await UniTask.Yield();
+        }
+        if (progressBar.value >= 1f)
+        {
+            OnPerfectPS?.Play();
         }
     }
 }

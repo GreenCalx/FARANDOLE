@@ -12,6 +12,8 @@ public class BlitRendererFeature : ScriptableRendererFeature
         public Material blitMaterial;
         public string blitShaderPassName = "Blit";
         public string mainTexPropertyName = "_MainTex";
+        public bool opt_HalfResolution = true;
+        public bool opt_GraphicFormat = true;
     }
 
     public BlitSettings settings = new BlitSettings();
@@ -64,6 +66,19 @@ public class BlitRendererFeature : ScriptableRendererFeature
         {
             var desc = renderingData.cameraData.cameraTargetDescriptor;
             desc.depthBufferBits = 0;
+            desc.msaaSamples = 1;
+
+            // Divide resolution by 2 to perform post fx operation faster
+            if (settings.opt_HalfResolution)
+            {
+                desc.width /= 2;
+                desc.height /= 2;
+            }
+            if (settings.opt_GraphicFormat)
+            {
+                desc.graphicsFormat = GraphicsFormatUtility.GetGraphicsFormat(RenderTextureFormat.ARGB32, false);    
+            }
+            
 
             RenderingUtils.ReAllocateIfNeeded(ref tempTarget, desc, name: "_BlitTemp");
         }
