@@ -5485,6 +5485,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 132882073119280073, guid: 5a3aab14e58c90046baf5fde2130fce6, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 6200000, guid: f7bc59e502d14124b9c8b49790f55fc1, type: 2}
+    - target: {fileID: 132882073119280073, guid: 5a3aab14e58c90046baf5fde2130fce6, type: 3}
       propertyPath: m_GravityScale
       value: 0.3
       objectReference: {fileID: 0}
@@ -5625,6 +5629,7 @@ MonoBehaviour:
   OnFinishCB:
     m_PersistentCalls:
       m_Calls: []
+  m_Renderer: {fileID: 0}
 --- !u!114 &3036890412659604652
 MonoBehaviour:
   m_ObjectHideFlags: 0

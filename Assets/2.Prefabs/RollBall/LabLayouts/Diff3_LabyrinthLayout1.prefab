@@ -1007,12 +1007,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   refreshPreviewMesh: 0
-  cleanPreview: 1
+  cleanPreview: 0
   previewMeshMat: {fileID: 2100000, guid: 3605a5b0a6afc9949bfeab4432ac1384, type: 2}
   previewOutlineMat: {fileID: 2100000, guid: 6fab9e92a266a2a448bf8444cfc0570a, type: 2}
   CC2D: {fileID: 3193834241320168808}
   spawnPoint: {fileID: 4398163701138074936}
   rangePoint: {fileID: 7394952977817132610}
+  ballNumber: 3
+  ballScale: 0.8
 --- !u!58 &8233041128408479997
 CircleCollider2D:
   m_ObjectHideFlags: 0

@@ -20,6 +20,9 @@ public class LabyrinthLayout : MonoBehaviour
     public Transform spawnPoint;
     public Transform rangePoint;
 
+    public int ballNumber = 1;
+    public float ballScale =1;
+
     public Vector3 GetSpawnInRange()
     {
         if (rangePoint == null)

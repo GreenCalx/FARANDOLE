@@ -1905,6 +1905,8 @@ MonoBehaviour:
   CC2D: {fileID: 3193834241320168808}
   spawnPoint: {fileID: 4398163701138074936}
   rangePoint: {fileID: 1851317482164365025}
+  ballNumber: 6
+  ballScale: 0.6
 --- !u!70 &6704578035894945146
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

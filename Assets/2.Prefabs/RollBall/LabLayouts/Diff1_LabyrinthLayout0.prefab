@@ -61,9 +61,9 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 2
 --- !u!66 &3193834241320168808
 CompositeCollider2D:
@@ -309,6 +309,8 @@ MonoBehaviour:
   CC2D: {fileID: 3193834241320168808}
   spawnPoint: {fileID: 4398163701138074936}
   rangePoint: {fileID: 0}
+  ballNumber: 1
+  ballScale: 1
 --- !u!1 &7453803601713162861
 GameObject:
   m_ObjectHideFlags: 0

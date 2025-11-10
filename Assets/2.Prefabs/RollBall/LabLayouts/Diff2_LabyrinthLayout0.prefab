@@ -426,6 +426,8 @@ MonoBehaviour:
   CC2D: {fileID: 3193834241320168808}
   spawnPoint: {fileID: 4398163701138074936}
   rangePoint: {fileID: 6472532666965544170}
+  ballNumber: 2
+  ballScale: 1
 --- !u!1 &5414326641000918841
 GameObject:
   m_ObjectHideFlags: 0

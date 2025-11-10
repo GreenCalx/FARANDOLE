@@ -7,7 +7,6 @@ public class Labyrinth : MonoBehaviour, IRendered
     public Material LabMat;
     public Material LabMatOutline;
     Rigidbody2D RB;
-    Quaternion currRot, startRot;
     public GameObject visualLab;
     public Renderer m_Renderer;
     public List<GameObject> m_OutlineRenderers;

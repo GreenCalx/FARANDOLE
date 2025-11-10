@@ -457,6 +457,8 @@ MonoBehaviour:
   CC2D: {fileID: 3193834241320168808}
   spawnPoint: {fileID: 4398163701138074936}
   rangePoint: {fileID: 1622151886076792339}
+  ballNumber: 4
+  ballScale: 0.6
 --- !u!58 &8233041128408479997
 CircleCollider2D:
   m_ObjectHideFlags: 0

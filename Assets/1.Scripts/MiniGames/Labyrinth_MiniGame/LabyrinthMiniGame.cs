@@ -8,16 +8,14 @@ public class LabyrinthMiniGame : MiniGame
     public FinishLine finishLine;
     public TorqueRotater rotater;
     public GameObject prefab_ballToEscape;
-    GameObject inst_ballToEscape;
     List<GameObject> inst_RollingBalls;
-    RollingBall inst_asBall;
     public Labyrinth inst_movingLabyrinth;
     public List<GameObject> diff1Layouts;
     public List<GameObject> diff2Layouts;
     public List<GameObject> diff3Layouts;
     public List<GameObject> diffSLayouts;
     public List<GameObject> diffMLayouts;
-    public List<float> ballSizeDownScalesPerDiff;
+    public List<float> ballSizeDownScalesPerBall;
     LabyrinthLayout selectedLayout;
 
     public void ClearLayout()
@@ -79,7 +77,7 @@ public class LabyrinthMiniGame : MiniGame
         inst_movingLabyrinth.InitColor(MGM.GetCurrentColor());
         inst_movingLabyrinth.transform.rotation = Quaternion.identity;
 
-        for (int i = 0; i < MGM.miniGamesDifficulty; i++)
+        for (int i = 0; i < selectedLayout.ballNumber ; i++)
         {
             RollingBall newBall = GOBuilder.Create(prefab_ballToEscape)
                                 .WithParent(transform)
@@ -95,7 +93,7 @@ public class LabyrinthMiniGame : MiniGame
                         GameObject.Destroy(newBall.gameObject);
                     }
                 );
-            newBall.transform.localScale *= ballSizeDownScalesPerDiff[MGM.miniGamesDifficulty - 1];
+            newBall.transform.localScale *= selectedLayout.ballScale;
             newBall.InitColor(MGM.GetPreviousColor());
             inst_RollingBalls.Add(newBall.gameObject);
         }
