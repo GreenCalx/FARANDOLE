@@ -35,7 +35,7 @@ public class MiniGameBankSO : ScriptableObject
         return GetRandomSelectionFromPool(GameBank,iNumber);
     }
 
-    public List<GameObject> GetByTags(int iNumber, List<MINIGAME_TAGS> iTags)
+    public List<GameObject> GetByTags(int iNumber, List<EMiniGameTags> iTags)
     {
         List<MiniGameSO> filtered = new List<MiniGameSO>();
         foreach (MiniGameSO go in GameBank)
@@ -43,7 +43,7 @@ public class MiniGameBankSO : ScriptableObject
             MiniGame as_mg = go.prefab_MiniGame.GetComponent<MiniGame>();
             if (as_mg == null)
                 continue;
-            foreach (MINIGAME_TAGS tag in iTags)
+            foreach (EMiniGameTags tag in iTags)
             {
                 if (as_mg.descriptor.tags.Contains(tag))
                 {

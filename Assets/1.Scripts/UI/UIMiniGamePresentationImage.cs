@@ -3,6 +3,7 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
 using System.Threading;
+using System.Collections.Generic;
 using TMPro;
 public class UIMiniGamePresentationImage : ManagedAnimation
 {
@@ -11,10 +12,14 @@ public class UIMiniGamePresentationImage : ManagedAnimation
     public UICustomSquircle MiniGameThumbnail;
     public UICustomSquircle light;
     public UICustomSquircle BG;
+    public Sprite defaultSprite;
+    [Header("InfoBubble")]
     public UIButton infoBubbleBtn;
     public RectTransform h_InfoBubbleAnchor;
     public TextMeshProUGUI h_InfoBubbleText;
-    public Sprite defaultSprite;
+    public RectTransform h_InfoBubbleTags;
+    public GameObject prefab_InfoBubbleTag;
+    List<TextMeshProUGUI> inst_infoBubbleTags;
     [Header("Internals")]
     public MiniGameSuccessState MGSuccessState;
     public bool Successed => MGSuccessState == MiniGameSuccessState.PASSED;
@@ -34,6 +39,16 @@ public class UIMiniGamePresentationImage : ManagedAnimation
 
         infoBubbleBtn.onClick.AddListener(() => { bubbleShown = !bubbleShown; h_InfoBubbleAnchor.gameObject.SetActive(bubbleShown); });
         h_InfoBubbleText.text = selfDesc.goal;
+
+        inst_infoBubbleTags = new List<TextMeshProUGUI>(iMGDesc.tags.Count);
+        foreach (EMiniGameTags tag in iMGDesc.tags)
+        {
+            TextMeshProUGUI newTagText = GOBuilder.Create(prefab_InfoBubbleTag)
+                                        .WithParent(h_InfoBubbleTags)
+                                        .BuildAs<TextMeshProUGUI>();
+            newTagText.text = "[" + tag.ToString() + "]";
+            inst_infoBubbleTags.Add(newTagText);
+        }
     }
 
     public void DisableButton()

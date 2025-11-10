@@ -123,9 +123,7 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         await inst_loopPresentationAnim.Show(MGM.MGLoop);
 
         launchGameBtn.gameObject.SetActive(true);
-
         await ShowLaunchGameCanvas();
-        
     }
 
     public async UniTask ShowLaunchGameCanvas()
@@ -146,6 +144,7 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
     public async UniTask HideLoopPresentation()
     {
         await inst_loopPresentationAnim.Hide();
+        
     }
 
     public void ShowMiniGameMode(bool iState)
