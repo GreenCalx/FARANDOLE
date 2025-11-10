@@ -2,93 +2,88 @@ using UnityEngine;
 
 public class TorqueRotater : MonoBehaviour, IPositionTracker
 {
-    public float RotSpeed = 10f;
-    public bool invertTorque = true;
     public Rigidbody2D targetRB;
-    float torque = 0f;
-    bool goingLeft = false;
-    bool directionChanged = false;
-    public UIVisualSlider visualSlider;
-    public float maxAngularVelocity = 10f;
-    
+    public float maxAngularSpeed = 180f;
+    public float rotationGain = 5f;
+    public float damping = 0.9f;
+
+    private bool isTracking;
+    private float initialRotation;
+
+    private float rawTargetAngle;
+    private float rawInitAngle;
+    private float lastRawTargetAngle;
+    private float cumulativeRawTargetAngle;
+
+    private float lastRawRotAngle;
+    private float cumilativeRotAngle;
 
     public void Init()
     {
-        torque = 0f;
+        isTracking = false;
+        targetRB.freezeRotation = true;
+        targetRB.bodyType = RigidbodyType2D.Kinematic;
         targetRB.angularVelocity = 0f;
-        targetRB.bodyType = RigidbodyType2D.Dynamic;
-
-        directionChanged = false;
+        cumilativeRotAngle = 0f;
+        targetRB.rotation = 0f;
+        lastRawTargetAngle = 0f;
+        lastRawRotAngle = 0f;
+        rawTargetAngle = 0f;
     }
 
-    public void OnStartTracking(Vector2 iVec2)
+    public void OnStartTracking(Vector2 pos)
     {
+        isTracking = true;
         targetRB.freezeRotation = false;
         targetRB.bodyType = RigidbodyType2D.Dynamic;
 
-        Vector3 delta = new Vector3(iVec2.x, iVec2.y, 0f) - transform.position;
-        if (delta.x > 0f)
-        {
-            goingLeft = false;
-        }
-        else if (delta.x < 0f)
-        {
-            goingLeft = true;
-        }
-        directionChanged = false;
-        torque = Mathf.Clamp(delta.x, -1f, 1f);
+        initialRotation = targetRB.rotation;
+        cumilativeRotAngle = initialRotation;
+
+        Vector2 center = transform.position;
+        Vector2 dirTarget = pos - center;
+
+        rawTargetAngle = Mathf.Atan2(dirTarget.y, dirTarget.x) * Mathf.Rad2Deg;
+        rawInitAngle = rawTargetAngle;
+        lastRawTargetAngle = rawTargetAngle;
+        cumulativeRawTargetAngle = rawTargetAngle;
     }
 
-    public void OnPositionChanged(Vector2 iVec2)
+    public void OnPositionChanged(Vector2 pos)
     {
-        Vector3 delta = new Vector3(iVec2.x, iVec2.y, 0f) - transform.position;
+        Vector2 center = transform.position;
+        Vector2 dirTarget = pos - center;
+        rawTargetAngle = Mathf.Atan2(dirTarget.y, dirTarget.x) * Mathf.Rad2Deg;
 
-        if (delta.x > 0f)
-        {
-            if (goingLeft && !directionChanged)
-            {
-                directionChanged = true;
-                goingLeft = false;
-            }
-        }
-        else if (delta.x < 0f)
-        {
-            if (!goingLeft && !directionChanged)
-            {
-                directionChanged = true;
-                goingLeft = true;
-            }
-        }
-        torque = Mathf.Clamp(delta.x, -1f, 1f);
-    }
-    public void OnStopTracking(Vector2 iVec2)
-    {
-       
+        float smallDelta = Mathf.DeltaAngle(lastRawTargetAngle, rawTargetAngle);
+        cumulativeRawTargetAngle += smallDelta;
+        lastRawTargetAngle = rawTargetAngle;
     }
 
-    void ClampAngularVelocity()
+    public void OnStopTracking(Vector2 pos)
     {
-        targetRB.angularVelocity = Mathf.Clamp(targetRB.angularVelocity, -maxAngularVelocity, maxAngularVelocity);
-    }
-
-    void Update()
-    {
-        visualSlider.UpdateVisual(torque);
+        isTracking = false;
+        targetRB.freezeRotation = true;
+        targetRB.bodyType = RigidbodyType2D.Kinematic;
+        targetRB.angularVelocity = 0f;
     }
 
     void FixedUpdate()
     {
-        if (directionChanged)
+        if (isTracking && targetRB != null)
         {
-            directionChanged = false;
-            targetRB.angularVelocity = 0f;
-            targetRB.AddTorque(torque * RotSpeed);
-        }
-        if (invertTorque)
-            targetRB.AddTorque(torque * -RotSpeed);
-        else
-            targetRB.AddTorque(torque * RotSpeed);
-        ClampAngularVelocity();
-    } 
+            float dRb = targetRB.rotation - lastRawRotAngle;
+            cumilativeRotAngle += dRb;
+            lastRawRotAngle = targetRB.rotation;
 
+            float targetAngle = initialRotation + (cumulativeRawTargetAngle - rawInitAngle);
+            float angleDiff = targetAngle - cumilativeRotAngle;
+
+            float desiredAngularVelocity = angleDiff * rotationGain;
+            desiredAngularVelocity = Mathf.Lerp(targetRB.angularVelocity, desiredAngularVelocity, 1f - damping);
+            desiredAngularVelocity = Mathf.Clamp(desiredAngularVelocity, -maxAngularSpeed, maxAngularSpeed);
+
+            targetRB.angularVelocity = desiredAngularVelocity;
+        }
+    }
 }

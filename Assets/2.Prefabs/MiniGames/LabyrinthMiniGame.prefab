@@ -572,11 +572,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 632587890f982ae4f8e777d824c59b9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RotSpeed: 4
-  invertTorque: 1
   targetRB: {fileID: 7618993489830231932}
-  visualSlider: {fileID: 4987230476453652537}
-  maxAngularVelocity: 100
+  maxAngularSpeed: 140
+  rotationGain: 5
+  damping: 0.9
 --- !u!1 &2266623309687070485
 GameObject:
   m_ObjectHideFlags: 0
@@ -6253,8 +6252,9 @@ MonoBehaviour:
   LabMat: {fileID: 2100000, guid: 3605a5b0a6afc9949bfeab4432ac1384, type: 2}
   LabMatOutline: {fileID: 2100000, guid: 6fab9e92a266a2a448bf8444cfc0570a, type: 2}
   visualLab: {fileID: 0}
-  visualLabOutline: {fileID: 0}
   m_Renderer: {fileID: 0}
+  m_OutlineRenderers: []
+  m_OutlineLR: []
 --- !u!50 &7618993489830231932
 Rigidbody2D:
   serializedVersion: 5
@@ -6293,6 +6293,10 @@ PrefabInstance:
     - target: {fileID: 369990457348243798, guid: c0da6225b0dd9174eb36e20da478c698, type: 3}
       propertyPath: m_Name
       value: UI_Slider
+      objectReference: {fileID: 0}
+    - target: {fileID: 369990457348243798, guid: c0da6225b0dd9174eb36e20da478c698, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2319710046288612780, guid: c0da6225b0dd9174eb36e20da478c698, type: 3}
       propertyPath: m_Pivot.x
@@ -6384,14 +6388,3 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2319710046288612780, guid: c0da6225b0dd9174eb36e20da478c698, type: 3}
   m_PrefabInstance: {fileID: 757760347047790627}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4987230476453652537 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5742697231441240090, guid: c0da6225b0dd9174eb36e20da478c698, type: 3}
-  m_PrefabInstance: {fileID: 757760347047790627}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a294cff2d3a006648a6c79ddb2547095, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
