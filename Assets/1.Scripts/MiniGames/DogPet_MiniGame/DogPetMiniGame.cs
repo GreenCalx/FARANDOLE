@@ -77,10 +77,12 @@ public class DogPetMiniGame : MiniGame, IDogMod, IRegularMod
     }
     public override void Lose()
     {
-
+        base.Lose();
     }
     public override bool SuccessCheck()
     {
+        if (GameIsLost)
+            return false;
         return pettings >= targetPetting;
     }
 

@@ -50,12 +50,14 @@ public class KnightChessMinigame : MiniGame
     }
     public override void Win()
     {
+        if (GameIsLost)
+            return;
         MGM.WinMiniGame();
     }
 
     public override void Lose()
     {
-
+        base.Lose();
     }
     public override bool SuccessCheck()
     {

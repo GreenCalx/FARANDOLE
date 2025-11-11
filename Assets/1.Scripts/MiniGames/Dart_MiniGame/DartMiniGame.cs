@@ -135,9 +135,12 @@ public class DartMiniGame : MiniGame
     public override void Lose()
     {
         //Destroy(inst_rock.gameObject);
+        base.Lose();
     }
     public override bool SuccessCheck()
     {
+        if (GameIsLost)
+            return false;
         return balloons.Count <= 0;
     }
 }

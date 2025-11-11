@@ -70,7 +70,7 @@ public class RippleEffect : MonoBehaviour
     public void StopRipple()
     {
         m_CallbackOnDone?.Invoke();
-        BlitRendererFeature.BlitPass.EnableRipple = false;
+        BlitRendererFeature.BlitPass.EnableBlit = false;
         Destroy(gameObject);
     }
 
@@ -91,7 +91,7 @@ public class RippleEffect : MonoBehaviour
         rippleMat.SetVector("_FocalPoint", new Vector2(0.5f, 0.5f)); // screen center
         rippleMat.SetFloat("_RippleStrength", 0f);
 
-        BlitRendererFeature.BlitPass.EnableRipple = true;
+        BlitRendererFeature.BlitPass.EnableBlit = true;
 
         // Wait a frame
         yield return null;

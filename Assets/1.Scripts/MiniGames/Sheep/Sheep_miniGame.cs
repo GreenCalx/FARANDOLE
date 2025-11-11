@@ -59,10 +59,12 @@ public class SheepMiniGame : MiniGame
     }
     public override void Lose()
     {
-        IsInPostGame = false;
+        base.Lose();
     }
     public override bool SuccessCheck()
     {
+        if (GameIsLost)
+            return false;
         return inst_fence.isFull;
     }
 

@@ -121,12 +121,20 @@ public class LabyrinthMiniGame : MiniGame
     }
     public override void Win()
     {
+
         PC.RemovePositionTracker(rotater);
         MGM.WinMiniGame();
     }
 
+    public override void Lose()
+    {
+        base.Lose();
+    }
+
     public override bool SuccessCheck()
     {
+        if (GameIsLost)
+            return false;
         //inst_RollingBalls = inst_RollingBalls.ForEach(e => e != null);
         return inst_RollingBalls.Where(e => e != null).ToList().Count == 0;
     }

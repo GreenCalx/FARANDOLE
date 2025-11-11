@@ -125,7 +125,11 @@ public class GameManager : MonoBehaviour
     void StopGame()
     {
         GameStarted = false;
-        MGM.StopCurrent();
+        PG.StopAnimation();
+        //MGM.StopCurrent();
+        //MGM.FreezeCurrent();
+        //Time.timeScale = 0f;
+        PC.Freeze();
         MGM.GameOver();
         RemoveCallbacks();
         UI.ShowMiniGameMode(false);

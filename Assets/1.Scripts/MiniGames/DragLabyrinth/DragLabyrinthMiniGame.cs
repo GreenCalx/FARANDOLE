@@ -116,12 +116,15 @@ public class DragLabyrinthMiniGame : MiniGame
     }
     public override void Win()
     {
+        if (GameIsLost)
+            return;
         PC.RemovePositionTracker(inst_asDragable);
         MGM.WinMiniGame();
     }
     public override void Lose()
     {
-
+        base.Lose();
+        inst_asBall.OnFinishCB.RemoveAllListeners();
     }
     public override bool SuccessCheck()
     {

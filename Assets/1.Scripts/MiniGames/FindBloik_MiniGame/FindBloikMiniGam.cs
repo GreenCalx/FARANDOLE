@@ -73,6 +73,9 @@ public class FindBloik_MiniGame : MiniGame, IDogMod, IRegularMod
     }
     public override void Win()
     {
+        if (GameIsLost)
+            return;
+            
         foreach (var sticker in unoStickers)
         {
             sticker.gameObject.SetActive(false);
@@ -84,7 +87,7 @@ public class FindBloik_MiniGame : MiniGame, IDogMod, IRegularMod
 
     public override void Lose()
     {
-        IsInPostGame = false;
+        base.Lose();
     }
     public override bool SuccessCheck()
     {

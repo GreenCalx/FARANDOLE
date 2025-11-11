@@ -143,7 +143,8 @@ public class DogHead : MonoBehaviour, ITapTracker
 
     public void StopAnim()
     {
-        StopCoroutine(tapAnimCo);
+        if (tapAnimCo!=null)
+            StopCoroutine(tapAnimCo);
         tapAnimCo = null;
     }
     public bool OnTap(Vector2 iVec2)

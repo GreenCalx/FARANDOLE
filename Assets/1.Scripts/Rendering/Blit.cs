@@ -44,7 +44,7 @@ public class BlitRendererFeature : ScriptableRendererFeature
         private readonly Material material;
         private readonly int passIndex;
         private readonly BlitSettings settings;
-        public static bool EnableRipple = false;
+        public static bool EnableBlit = false;
 
         // persistent temp RTHandle
         RTHandle tempTarget;
@@ -85,7 +85,7 @@ public class BlitRendererFeature : ScriptableRendererFeature
 
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
-            if (!EnableRipple)
+            if (!EnableBlit)
                 return;
             
 

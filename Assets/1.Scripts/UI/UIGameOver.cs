@@ -7,6 +7,7 @@ using TMPro;
 
 public class UIGameOver : MonoBehaviour
 {
+    public GameOverEffect GameOverFX;
     public RectTransform scoreDisplayHandle;
     public RectTransform newHighScoreDisplayHandle;
 
@@ -26,15 +27,27 @@ public class UIGameOver : MonoBehaviour
     {
         animator.SetTrigger(GameOverSkipTrigger);
     }
+
+    void OnDisable()
+    {
+        GameOverFX?.StopFX();
+    }
+    
+    void OnEnable()
+    {
+        GameOverFX?.StartFX();
+    }
     public async Task Animate(bool iIsHighScore, PlaygroundManager iPG, CancellationToken iCT)
     {
-        CancellationTokenRegistration ctr = iCT.Register(() => Skip());
+        // CancellationTokenRegistration ctr = iCT.Register(() => Skip());
 
-        iPG.FinalClapClose();
+        
 
-        await WaitClosePlayfield(1f, iCT); // full anim
-        if (iCT.IsCancellationRequested)
-        { return; }
+        // iPG.FinalClapClose();
+
+        // await WaitClosePlayfield(1f, iCT); // full anim
+        // if (iCT.IsCancellationRequested)
+        // { return; }
     }
 
     async Task WaitAnimState(string iStateName, float iCompletionFrac, CancellationToken iCT)
