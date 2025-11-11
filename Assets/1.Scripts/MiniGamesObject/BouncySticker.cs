@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-
+using DG.Tweening;
 public class BouncySticker : MonoBehaviour, ITapTracker
 {
     public UnityEvent tapCB;
@@ -17,9 +17,14 @@ public class BouncySticker : MonoBehaviour, ITapTracker
 
     private bool stopped = false;
     public bool stopPropagation => true;
-    public int GetDisplayPriority(){ return 0; }
+    public int GetDisplayPriority() { return 0; }
+
+    private Tween currentTween;
+
+    private ParticleSystem winParticles;
     void Awake()
     {
+        winParticles = GetComponentInChildren<ParticleSystem>();
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
     }
@@ -39,7 +44,7 @@ public class BouncySticker : MonoBehaviour, ITapTracker
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.contactCount > 0)
+        if (collision.contactCount > 0 && !stopped)
         {
 
             Vector2 normal = collision.GetContact(0).normal;
@@ -50,7 +55,7 @@ public class BouncySticker : MonoBehaviour, ITapTracker
 
     public bool OnTap(Vector2 iVec)
     {
-        if (stickerCollider.bounds.Contains(new Vector3(iVec.x, iVec.y, transform.position.z)))
+        if (stickerCollider.bounds.Contains(new Vector3(iVec.x, iVec.y, transform.position.z)) && !stopped)
         {
             tapCB.Invoke();
             return true;
@@ -71,5 +76,26 @@ public class BouncySticker : MonoBehaviour, ITapTracker
             // TODO : too expensive in update
             do { dir = Random.insideUnitCircle; } while (dir.x < 0.05f && dir.y < 0.05f); //des fois les stickers se coince dans les coins
         }
+    }
+
+    public void stickerWinAnim()
+    {
+        Sequence winSequence = DOTween.Sequence();
+
+        winSequence.Append(transform
+            .DORotate(new Vector3(0, 0, 360), 0.25f, RotateMode.FastBeyond360)
+            .SetEase(Ease.OutCubic));
+
+        winSequence.Append(transform
+            .DOJump(transform.position, 0.3f, 1, 0.25f)
+            .SetEase(Ease.OutQuad));
+
+        winSequence.OnComplete(() =>
+        {
+            if (winParticles != null)
+                winParticles.Play();
+        });
+
+        currentTween = winSequence;
     }
 }

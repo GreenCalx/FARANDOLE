@@ -175,11 +175,11 @@ MonoBehaviour:
   - 1.25
   bloikSticker: {fileID: 0}
   bloikStickerSpeed:
-  - 1.2
-  - 1.8
+  - 1
+  - 1.5
+  - 2
   - 2.5
-  - 3
-  - 4
+  - 2.5
   bloikStickerScale:
   - {x: 1, y: 1, z: 1}
   - {x: 1, y: 1, z: 1}

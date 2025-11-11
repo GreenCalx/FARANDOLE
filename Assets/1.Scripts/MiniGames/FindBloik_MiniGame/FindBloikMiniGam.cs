@@ -77,6 +77,7 @@ public class FindBloik_MiniGame : MiniGame, IDogMod, IRegularMod
         {
             sticker.gameObject.SetActive(false);
         }
+        bloikSticker.stickerWinAnim();
         bloikSticker.Stop();
         MGM.WinMiniGame();
     }
