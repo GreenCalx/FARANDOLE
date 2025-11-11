@@ -51,8 +51,8 @@ public class AutoWalker : MonoBehaviour
             if (Vector3.Distance(transform.position, to) <= 0.01f)
             {
                 transform.position = to;
-                OnReachCB.Invoke();
                 AutoWalk = false;
+                OnReachCB.Invoke();
             }
         }
     }

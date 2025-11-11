@@ -9,11 +9,15 @@ public class AutoWalkKiller : AutoWalkEffector
     public float delayTime = 0.5f;
     public float delayBeforeEnablingRB2D = 0.25f;
     Coroutine delayPhysxCo;
+    public bool preSimulated = false;
     protected void Start()
     {
         base.Start();
-        RB2D.bodyType = RigidbodyType2D.Kinematic;
-        delayPhysxCo = StartCoroutine(DelayedPhysxCo());
+        if (preSimulated)
+        {
+            RB2D.bodyType = RigidbodyType2D.Kinematic;
+            delayPhysxCo = StartCoroutine(DelayedPhysxCo());        
+        }
 
         OnTriggerEnterCB.AddListener( (walker) => KillWalker(walker));
         OnAnyCollisionEnterCB.AddListener(() => OnObjectCollision());

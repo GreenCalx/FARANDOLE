@@ -5,8 +5,11 @@ using UnityEngine.Events;
 using DG.Tweening;
 public class FireAutoWalker : AutoWalker
 {
+    public int nextPositionIndex;
     public Sprite deathSprite;
     public bool isDead = false;
+    public bool isOnCandle = false;
+    public float[] walkDurations;
     void Start()
     {
         base.Start();
@@ -46,7 +49,7 @@ public class FireAutoWalker : AutoWalker
 
     public override void Kill()
     {
-        if (isDead)
+        if (isDead || isOnCandle)
             return;
         isDead = true;
 
@@ -54,7 +57,7 @@ public class FireAutoWalker : AutoWalker
         RB2D.isKinematic = false;
         handle_Renderer.sprite = deathSprite;
         AutoWalk = false;
-        
+
     }
 
     void OnCollisionEnter2D(Collision2D iCollision)
@@ -63,4 +66,10 @@ public class FireAutoWalker : AutoWalker
             Destroy(gameObject);
     }
 
+    public void ResetWalker()
+    {
+        elapsedTime = 0;
+        walkDuration = walkDurations[nextPositionIndex - 1];
+        AutoWalk = true;
+    }
 }
