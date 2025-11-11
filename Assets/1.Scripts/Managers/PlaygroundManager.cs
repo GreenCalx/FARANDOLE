@@ -273,6 +273,22 @@ public class PlaygroundManager : MonoBehaviour, IManager
         AnimationCoroutine = StartCoroutine(AnimateCo());
     }
 
+    public void StopAnimation()
+    {
+        AnimateBG = false;
+        if (AnimationCoroutine != null)
+        {
+            StopCoroutine(AnimationCoroutine);
+            AnimationCoroutine = null;
+        }
+    }
+
+    public void StartAnimation()
+    {
+        AnimateBG = true;
+        ResetAnimation();
+    }
+
     public void ClearPlaygroundAnim()
     {
         // doorAnimation.OnCloseCB.AddListener(()=> MGM.Stop());

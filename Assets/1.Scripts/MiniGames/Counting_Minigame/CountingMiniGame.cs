@@ -85,13 +85,16 @@ public class Counting_MiniGame : MiniGame, IRegularMod, ISpawnerMod<CounterObjec
 
     public override void Lose()
     {
-        destroyObjects();
-        Reset();
-        counter = 1;
+        // destroyObjects();
+        // Reset();
+        // counter = 1;
+        base.Lose();
     }
     public override bool SuccessCheck()
     {
-        return false;
+        if (GameIsLost)
+            return false;
+        return (counter > numberCounterObjects[MGM.miniGamesDifficulty - 1]);
     }
 
     public void SpawnParticles(Vector3 iPosition)
@@ -113,7 +116,7 @@ public class Counting_MiniGame : MiniGame, IRegularMod, ISpawnerMod<CounterObjec
             counterObjects[count - 1].Selected();
 
             counter++;
-            if (counter > numberCounterObjects[MGM.miniGamesDifficulty - 1])
+            if (SuccessCheck())
             {
                 Win();
             }

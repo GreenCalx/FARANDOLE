@@ -74,10 +74,12 @@ public class RainDropsMiniGame : MiniGame
     }
     public override void Lose()
     {
-
+        base.Lose();
     }
     public override bool SuccessCheck()
     {
+        if (GameIsLost)
+            return false;
         return Mathf.Approximately(inst_walker.transform.position.x, handle_endLine.position.x);
     }
 

@@ -100,6 +100,7 @@ public class MiniGameManager : MonoBehaviour, IManager
     {
         gameClock.Freeze(true);
         gameClock.Reset();
+        MGLoop.Current.Lose();
     }
 
     public async UniTask PlayCurrent()

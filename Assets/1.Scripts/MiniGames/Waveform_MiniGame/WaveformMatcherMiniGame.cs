@@ -168,10 +168,13 @@ public class WaveformMatcherMiniGame : MiniGame, IArcadeMod, IScienceMod
     }
     public override void Lose()
     {
-
+        base.Lose();
     }
     public override bool SuccessCheck()
     {
+        if (GameIsLost)
+            return false;
+
         bool eq_values = Vector2.Distance(successPoint, m_ArcadeInputs.xyController.XY ) < precisionDiff;
         bool eq_form = controlled.form == target.form;
         return eq_values && eq_form;

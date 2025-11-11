@@ -41,6 +41,7 @@ public class MiniGame : MonoBehaviour, IMiniGame
     public bool IsActiveMiniGame;
     // Might want to implement a full FSM..
     public bool IsInPostGame;
+    public bool GameIsLost;
     public MiniGameSuccessState successState;
     
     protected CancellationTokenSource introCTS;
@@ -97,10 +98,12 @@ public class MiniGame : MonoBehaviour, IMiniGame
     }
     public virtual void Lose()
     {
-        IsInPostGame = false;
+        GameIsLost = false;
     }
     public virtual bool SuccessCheck()
     {
+        if (GameIsLost)
+            return false;
         return false;
     }
 

@@ -147,10 +147,12 @@ public class CowboyMiniGame : MiniGame, ITheaterMod, ISpawnerMod<Cowboy>
     }
     public override void Lose()
     {
-
+        base.Lose();
     }
     public override bool SuccessCheck()
     {
+        if (GameIsLost)
+            return false;
         return inst_cowboys.Count == 0;
     }
 

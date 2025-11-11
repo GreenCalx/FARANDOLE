@@ -82,10 +82,12 @@ public class MemoryMiniGame : MiniGame, IDogMod, IRegularMod
     }
     public override void Lose()
     {
-        IsInPostGame = false;
+        base.Lose();
     }
     public override bool SuccessCheck()
     {
+        if (GameIsLost)
+            return false;
         return pairs == cardsCount / 2;
     }
 

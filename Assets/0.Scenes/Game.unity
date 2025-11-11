@@ -232,6 +232,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d1517d99bb91dc42a60ce13047cca62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onInputEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &423414023
 MonoBehaviour:
   m_ObjectHideFlags: 0

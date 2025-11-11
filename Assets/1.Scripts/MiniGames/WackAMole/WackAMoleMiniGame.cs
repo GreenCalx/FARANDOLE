@@ -98,11 +98,12 @@ public class WackAMoleMiniGame : MiniGame, ISpawnerMod<Mole>, ITheaterMod
     }
     public override void Lose()
     {
-        Clean();
-        IsInPostGame = false;
+        base.Lose();
     }
     public override bool SuccessCheck()
     {
+        if (GameIsLost)
+            return false;
         return target <= 0;
     }
     #endregion
