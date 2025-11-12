@@ -8,17 +8,23 @@ public class BlitRendererFeature : ScriptableRendererFeature
     [System.Serializable]
     public class BlitSettings
     {
+        public string CommandBufferName = "BlitRendererFeature";
         public RenderPassEvent renderPassEvent = RenderPassEvent.AfterRenderingPostProcessing;
         public Material blitMaterial;
         public string blitShaderPassName = "Blit";
         public string mainTexPropertyName = "_MainTex";
+        public string tempRTName = "_BlitTemp";
         public bool opt_HalfResolution = true;
         public bool opt_GraphicFormat = true;
     }
 
     public BlitSettings settings = new BlitSettings();
     private BlitPass blitPass;
-
+    public bool EnableBlit
+    {
+        get { return blitPass.EnableBlit; }
+        set { blitPass.EnableBlit = value; }
+    }
     public override void Create()
     {
         if (settings.blitMaterial == null)
@@ -44,7 +50,7 @@ public class BlitRendererFeature : ScriptableRendererFeature
         private readonly Material material;
         private readonly int passIndex;
         private readonly BlitSettings settings;
-        public static bool EnableBlit = false;
+        [System.NonSerialized] public bool EnableBlit = false;
 
         // persistent temp RTHandle
         RTHandle tempTarget;
@@ -87,17 +93,17 @@ public class BlitRendererFeature : ScriptableRendererFeature
         {
             if (!EnableBlit)
                 return;
-            
 
             if (material == null)
                 return;
-             
+            Debug.Log($"Executing blit pass for material: {material.name}");
+
             var camData = renderingData.cameraData;
             RTHandle cameraColor = camData.renderer.cameraColorTargetHandle;
             if (cameraColor == null)
                 return;
 
-            CommandBuffer cmd = CommandBufferPool.Get("BlitRendererFeature");
+            CommandBuffer cmd = CommandBufferPool.Get(settings.CommandBufferName);
 
             // To match mobile resolution that is not square at all
             // If we want not adaptation to screen size we can probably make this optional

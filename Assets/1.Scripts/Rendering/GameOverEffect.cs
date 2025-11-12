@@ -29,14 +29,16 @@ public class GameOverEffect : MonoBehaviour
             RenderTexture.ReleaseTemporary(RenderTexture.GetTemporary(4, 4));
         }
         
-        // if (StartOnEnabled)
-        //     StartFX();
+        if (StartOnEnabled)
+            StartFX();
+        // else
+        //     FullScreenPassManager.Get.EnableMeltSolo(false);
     }
 
     // Update is called once per frame
     void OnDisable()
     {
-        
+        StopFX();
     }
 
     void Update()
@@ -70,7 +72,7 @@ public class GameOverEffect : MonoBehaviour
     {
         isPlaying = false;
         m_CallbackOnDone?.Invoke();
-        BlitRendererFeature.BlitPass.EnableBlit = false;
+        FullScreenPassManager.Get.EnableMeltSolo(false);
         Destroy(gameObject);
     }
 
@@ -91,7 +93,7 @@ public class GameOverEffect : MonoBehaviour
         //FXMat.SetVector("_FocalPoint", new Vector2(0.5f, 0.5f)); // screen center
         //FXMat.SetFloat("_RippleStrength", 0f);
 
-        BlitRendererFeature.BlitPass.EnableBlit = true;
+        FullScreenPassManager.Get.EnableMeltSolo(true);
 
         // Wait a frame
         yield return null;

@@ -65,14 +65,14 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _ControlledTime: 1.9840183
+    - _ControlledTime: 0
     - _Duration: 2
     - _ElapsedTime: 0.72805023
     - _EnableExternalAlpha: 0
     - _Frequency: 0.1
     - _Magnification: -0.25
     - _MeltScale: 19.5
-    - _OpeningSpeed: 6
+    - _OpeningSpeed: 8
     - _RIppleStrength: 0.19
     - _RippleDuration: 1
     - _RippleStrength: 0.0010286868
@@ -80,7 +80,7 @@ Material:
     - _Size: 0.16
     - _Speed: 1
     - _StartSize: 0
-    - _Strength: 0.292
+    - _Strength: 0.409
     - _ZWrite: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}

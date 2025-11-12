@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-7644161316502320675
+--- !u!114 &-6952915105052756271
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9,35 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9743abf8c70fdef448d56970bee07c29, type: 3}
+  m_Script: {fileID: 11500000, guid: 2d389c7501e75304dbcf7fca7fe176a0, type: 3}
   m_Name: GameOverRendererFeature
   m_EditorClassIdentifier: 
   m_Active: 1
   settings:
+    CommandBufferName: GameOverRendererFeature
     renderPassEvent: 600
     blitMaterial: {fileID: 2100000, guid: dcfdf4fba3ec8f841b02b93446bdc64d, type: 2}
-    blitShaderPassName: GameOverBlit
-    mainTexPropertyName: _MainTex
-    opt_HalfResolution: 1
-    opt_GraphicFormat: 1
---- !u!114 &-5362731441655451591
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9743abf8c70fdef448d56970bee07c29, type: 3}
-  m_Name: BlitRendererFeature
-  m_EditorClassIdentifier: 
-  m_Active: 1
-  settings:
-    renderPassEvent: 600
-    blitMaterial: {fileID: 2100000, guid: d4a329b276116e94388b1c85338204c8, type: 2}
     blitShaderPassName: Blit
     mainTexPropertyName: _MainTex
+    tempRTName: _MeltBlitTemp
     opt_HalfResolution: 1
     opt_GraphicFormat: 1
 --- !u!114 &11400000
@@ -65,9 +47,9 @@ MonoBehaviour:
     probeSamplingDebugTexture: {fileID: 0}
     probeVolumeBlendStatesCS: {fileID: 0}
   m_RendererFeatures:
-  - {fileID: -5362731441655451591}
-  - {fileID: -7644161316502320675}
-  m_RendererFeatureMap: 39f04eb22ac093b5ddc9187cc87bea95
+  - {fileID: 7807171793708581697}
+  - {fileID: -6952915105052756271}
+  m_RendererFeatureMap: 410373d861a5586cd1f6e1d18c48829f
   m_UseNativeRenderPass: 0
   m_TransparencySortMode: 3
   m_TransparencySortAxis: {x: 0, y: 0, z: 0}
@@ -109,10 +91,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Active: 0
   settings:
+    CommandBufferName: BlitRendererFeature
     renderPassEvent: 600
     blitMaterial: {fileID: 2100000, guid: d4a329b276116e94388b1c85338204c8, type: 2}
     blitShaderPassName: Blit
     mainTexPropertyName: _MainTex
+    tempRTName: _BlitTemp
     opt_HalfResolution: 1
     opt_GraphicFormat: 1
 --- !u!114 &7691180807117496691
@@ -132,3 +116,25 @@ MonoBehaviour:
   m_Settings:
     horizontalBlur: 0
     verticalBlur: 0
+--- !u!114 &7807171793708581697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f7f3ce538b3057469a2612ab841bb38, type: 3}
+  m_Name: RippleRendererFeature
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    CommandBufferName: RippleRendererFeature
+    renderPassEvent: 600
+    blitMaterial: {fileID: 2100000, guid: d4a329b276116e94388b1c85338204c8, type: 2}
+    blitShaderPassName: Blit
+    mainTexPropertyName: _MainTex
+    tempRTName: _RippleBlitTemp
+    opt_HalfResolution: 1
+    opt_GraphicFormat: 1
