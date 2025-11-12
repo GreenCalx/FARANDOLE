@@ -73,6 +73,7 @@ public class GameOverEffect : MonoBehaviour
         isPlaying = false;
         m_CallbackOnDone?.Invoke();
         FullScreenPassManager.Get.EnableMeltSolo(false);
+        FXMat.SetFloat("_ControlledTime", 0f);
         Destroy(gameObject);
     }
 
