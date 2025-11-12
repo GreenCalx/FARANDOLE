@@ -23,7 +23,7 @@ public class BlitRendererFeature : ScriptableRendererFeature
     public bool EnableBlit
     {
         get { return blitPass.EnableBlit; }
-        set { blitPass.EnableBlit = value; }
+        set { if (blitPass != null) { blitPass.EnableBlit = value; } }
     }
     public override void Create()
     {
@@ -96,7 +96,7 @@ public class BlitRendererFeature : ScriptableRendererFeature
 
             if (material == null)
                 return;
-            Debug.Log($"Executing blit pass for material: {material.name}");
+            //Debug.Log($"Executing blit pass for material: {material.name}");
 
             var camData = renderingData.cameraData;
             RTHandle cameraColor = camData.renderer.cameraColorTargetHandle;
