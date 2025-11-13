@@ -5,17 +5,21 @@ public class MiniGameLoopSnapshot
     public LoopRank completionRank;
     public int comboMultiplier;
     public int succeededStages;
+    public bool IsPerfect = false;
+    public bool IsFailed = false;
     public int LoopScore
     {
         get
         {
-            return (int)(completionRank + 1) * succeededStages;
+            return (((int)(completionRank)) + 1) * succeededStages * comboMultiplier;
         }
     }
     public MiniGameLoopSnapshot(MiniGameLoop iOriginator)
     {
         completionRank = iOriginator.rank;
         succeededStages = iOriginator.GetSuccessStates().Where(e => (e == MiniGameSuccessState.PASSED)).ToList().Count;
+        IsPerfect = iOriginator.IsLoopPerfect();
+        IsFailed = !iOriginator.IsLoopPassed();
         comboMultiplier = iOriginator.combo;
     }
 

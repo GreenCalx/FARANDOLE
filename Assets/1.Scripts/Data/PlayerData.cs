@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class PlayerData
 {
+    public bool FullLoopCompleted = false;
     public float HP;
     public int score {
         get

@@ -512,6 +512,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rankThumbnail: {fileID: 5485507761229025809}
+  lightThumbnail: {fileID: 1492657070724682767}
   shadowRankLevelText: {fileID: 8511684988941035471}
   rankLevelText: {fileID: 6976737905774426031}
   comboText: {fileID: 2846945133952077239}

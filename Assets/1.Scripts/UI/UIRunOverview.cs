@@ -6,9 +6,12 @@ public class UIRunOverview : MonoBehaviour
 {
     public GameObject prefab_UIRankLine;
     public GameObject prefab_UIStartThumbnail;
+    public GameObject prefab_UIFullLoopCompletedThumbnail;
+    public GameObject prefab_UIGameOverThumbnail;
     public RectTransform h_RunDisplay;
     RectTransform inst_startThumbnail;
     List<UIRankLine> inst_rankLines;
+    RectTransform inst_RunTailThumbnail;
     public UILineRenderer LR;
 
     public void Setup(PlayerData iPlayerData)
@@ -26,11 +29,10 @@ public class UIRunOverview : MonoBehaviour
 
         LR.Points = new Vector2[2];
         LR.Points[0] = inst_startThumbnail.anchoredPosition;
-        // TODO LR START POS
 
         // Add snapshots
         int index = 1;
-        Vector3 lastPos = Vector3.zero;
+
         foreach (MiniGameLoopSnapshot snap in history)
         {
             Vector3 anchoredPosition = new Vector3(0f, index * -64f, 0f);
@@ -40,17 +42,30 @@ public class UIRunOverview : MonoBehaviour
                                     .BuildAs<UIRankLine>();
             inst_rankLines.Add(newLine);
 
-            newLine.SetRankText(snap.completionRank.ToString());
-            newLine.SetRankImg(GameData.GetSettings.RankSettings.GetImageFromRank(snap.completionRank));
-            newLine.SetCombo(snap.comboMultiplier);
+            newLine.Setup(snap);
 
             newLine.gameObject.SetActive(true);
             index++;
-
-            lastPos = newLine.transform.localPosition;
         }
-        // TODO LR LAST POS
-        LR.Points[1] = lastPos;
+
+        // Game Over or Success Image
+        if (iPlayerData.FullLoopCompleted)
+        {
+            inst_RunTailThumbnail = GOBuilder.Create(prefab_UIFullLoopCompletedThumbnail)
+                .WithParent(h_RunDisplay)
+                .WithLocalPosition(new Vector3(0f, index * -64f, 0f))
+                .BuildAs<RectTransform>();
+        }
+        else
+        {
+            inst_RunTailThumbnail = GOBuilder.Create(prefab_UIGameOverThumbnail)
+                .WithParent(h_RunDisplay)
+                .WithLocalPosition(new Vector3(0f, index * -64f, 0f))
+                .BuildAs<RectTransform>();
+        }
+
+        // LR LAST POS
+        LR.Points[1] = inst_RunTailThumbnail.anchoredPosition;
         LR.gameObject.SetActive(true);
     }
 }
