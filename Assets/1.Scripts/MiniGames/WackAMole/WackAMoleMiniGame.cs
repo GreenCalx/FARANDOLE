@@ -94,6 +94,7 @@ public class WackAMoleMiniGame : MiniGame, ISpawnerMod<Mole>, ITheaterMod
     public override void Win()
     {
         //Clean();
+        AccumulateProbabilities(true);
         MGM.WinMiniGame();
     }
     public override void Lose()
@@ -138,12 +139,12 @@ public class WackAMoleMiniGame : MiniGame, ISpawnerMod<Mole>, ITheaterMod
             elapsedSpawnInterval += Time.deltaTime;
             if (elapsedSpawnInterval < spawnInterval)
                 return;
-            AccumulateProbabilities();
+            AccumulateProbabilities(false);
             elapsedSpawnInterval = 0f;
         }
     }
 
-    private void AccumulateProbabilities()
+    private void AccumulateProbabilities(bool gameIsWon)
     {
         for (int i = 0; i < rowSize; i++)
         {
@@ -155,7 +156,10 @@ public class WackAMoleMiniGame : MiniGame, ISpawnerMod<Mole>, ITheaterMod
                 m_SpawnProbabilities[i,j] += UnityEngine.Random.Range(0f,1f);
                 if (m_SpawnProbabilities[i, j] >= 1f)
                 {
-                    inst_moleMatrix[i,j].GoOut();
+                    if (gameIsWon)
+                        inst_moleMatrix[i, j].OnWin();
+                    else
+                    inst_moleMatrix[i, j].GoOut();
                 }
             }
         }

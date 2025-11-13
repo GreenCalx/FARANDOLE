@@ -5101,3 +5101,8 @@ MonoBehaviour:
   col: {fileID: 6536798148449097691}
   anim: {fileID: 5269898976974749262}
   bloodParticle: {fileID: 5933378659199635452}
+  OnHideCB:
+    m_PersistentCalls:
+      m_Calls: []
+  matrixCoordinates: {x: 0, y: 0}
+  isOut: 0

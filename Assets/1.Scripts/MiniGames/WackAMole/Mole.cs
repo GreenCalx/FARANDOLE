@@ -72,6 +72,10 @@ public class Mole : MonoBehaviour, ITapTracker, IRendered, ISpawnable
         return false;
     }
 
+    public void OnWin()
+    {
+        anim.SetTrigger("Win");
+    }
     // IRendered
     public Renderer GetRenderer()
     {
