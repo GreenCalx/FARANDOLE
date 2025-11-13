@@ -154,6 +154,9 @@ public class GameManager : MonoBehaviour
 
     void OnLoopDepthUpdate()
     {
+        // Check if Player reached the end
+        
+
         // playGround Mat update
         PG.RefreshRendering(MGM.MGLoop.depth, MGM.MGLoop.HasRankChanged, MGM.MGLoop.rank);
 
