@@ -7,6 +7,7 @@ using TMPro;
 
 public class UIGameOver : MonoBehaviour
 {
+    public UIRunOverview RunOverview;
     public GameOverEffect GameOverFX;
     public RectTransform scoreDisplayHandle;
     public RectTransform newHighScoreDisplayHandle;
@@ -21,6 +22,12 @@ public class UIGameOver : MonoBehaviour
     void Start()
     {
         animator = GetComponent<Animator>();
+
+    }
+    
+    public void Setup(GameManager iGameManager)
+    {
+        RunOverview.Setup(iGameManager.playerData);
     }
 
     void Skip()

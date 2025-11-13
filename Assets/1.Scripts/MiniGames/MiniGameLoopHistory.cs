@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class MiniGameLoopHistory : IEnumerable
 {
     List<MiniGameLoopSnapshot> snapshots;
+    public int Count => snapshots != null ? snapshots.Count : 0;
     public MiniGameLoopHistory()
     {
         snapshots = new List<MiniGameLoopSnapshot>();

@@ -3,6 +3,7 @@ using System.Linq;
 public class MiniGameLoopSnapshot
 {
     public LoopRank completionRank;
+    public int comboMultiplier;
     public int succeededStages;
     public int LoopScore
     {
@@ -15,6 +16,7 @@ public class MiniGameLoopSnapshot
     {
         completionRank = iOriginator.rank;
         succeededStages = iOriginator.GetSuccessStates().Where(e => (e == MiniGameSuccessState.PASSED)).ToList().Count;
+        comboMultiplier = iOriginator.combo;
     }
 
 

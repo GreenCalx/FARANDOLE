@@ -28,9 +28,11 @@ public class RippleEffect : MonoBehaviour
             Graphics.Blit(Texture2D.blackTexture, RenderTexture.GetTemporary(4, 4), rippleMat);
             RenderTexture.ReleaseTemporary(RenderTexture.GetTemporary(4, 4));
         }
-        
+
         if (StartOnEnabled)
             StartRipple();
+        else
+            FullScreenPassManager.Get.EnableRippleSolo(false);
     }
 
     // Update is called once per frame
@@ -70,7 +72,7 @@ public class RippleEffect : MonoBehaviour
     public void StopRipple()
     {
         m_CallbackOnDone?.Invoke();
-        BlitRendererFeature.BlitPass.EnableBlit = false;
+        FullScreenPassManager.Get.EnableRippleSolo(false);
         Destroy(gameObject);
     }
 
@@ -91,7 +93,7 @@ public class RippleEffect : MonoBehaviour
         rippleMat.SetVector("_FocalPoint", new Vector2(0.5f, 0.5f)); // screen center
         rippleMat.SetFloat("_RippleStrength", 0f);
 
-        BlitRendererFeature.BlitPass.EnableBlit = true;
+        FullScreenPassManager.Get.EnableRippleSolo(true);
 
         // Wait a frame
         yield return null;

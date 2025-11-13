@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87a63174ee8c328448bbdd11b0cb13ae, type: 3}
   m_Name: GameSettings_Debug
   m_EditorClassIdentifier: 
-  PlayerHP: 4
-  loopSize: 3
+  PlayerHP: 1
+  loopSize: 1
   percentOfLoopSizeToPass: 0.5
   ComboRequirementForSuper: 2
   ComboRequirementForMaster: 5
-  MiniGameTime: 90
+  MiniGameTime: 5
   MaxTimeScale: 2
   timeScaleOverLoopLevel:
     serializedVersion: 2
@@ -50,10 +50,13 @@ MonoBehaviour:
   LoopPassedColor: {r: 0.48593804, g: 0.9811321, b: 0.6148211, a: 1}
   LoopFailedColor: {r: 1, g: 0, b: 0.4448824, a: 1}
   RankSettings: {fileID: 11400000, guid: 6a32a64a12bcf2d4abaea25fad902b82, type: 2}
+  ShowLaunchGameButtonInSec: 0.5
   PostMiniGameLatchInMs: 250
   PreMiniGameLatchInMs: 250
   PlayGroundColorLerpTimeSec: 1
   BGMRankLerpTimeSec: 1
   GameClockScaleAnimDuration: 0.25
+  PostShowLoopResultDelayInMs: 500
+  PostShowNewRankDelayInMs: 1000
   ShowLightTotalTimeInMs: 2000
   MaxLightUpMiniGameThumbnailTime: 250

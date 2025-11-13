@@ -177,6 +177,7 @@ public class GameManager : MonoBehaviour
         CancellationTokenSource cts = new CancellationTokenSource();
 
         inst_UIGameOver = GOBuilder.Create(prefab_UIGameOver).BuildAs<UIGameOver>();
+        inst_UIGameOver.Setup(this);
         inst_UIGameOver.TryAgainBtn.onClick.AddListener(() => { cts.Cancel(); RestartGame(); });
         inst_UIGameOver.MenuBtn.onClick.AddListener(() => { cts.Cancel(); ExitToTitle(); });
 
