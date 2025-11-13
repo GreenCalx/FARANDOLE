@@ -48,6 +48,7 @@ public class Mole : MonoBehaviour, ITapTracker, IRendered, ISpawnable
     public void GoOut()
     {
         anim.ResetTrigger("In");
+        isOut = true;
         anim.SetTrigger("Out");
     }
 
@@ -74,7 +75,8 @@ public class Mole : MonoBehaviour, ITapTracker, IRendered, ISpawnable
 
     public void OnWin()
     {
-        anim.SetTrigger("Win");
+        if(isOut)
+            anim.SetTrigger("Win");
     }
     // IRendered
     public Renderer GetRenderer()

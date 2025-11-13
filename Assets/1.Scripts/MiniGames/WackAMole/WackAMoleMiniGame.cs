@@ -27,7 +27,7 @@ public class WackAMoleMiniGame : MiniGame, ISpawnerMod<Mole>, ITheaterMod
 
     private float[,] m_SpawnProbabilities;
     private float elapsedSpawnInterval = 0f;
-
+    private bool gameIsWon = false;
     #region MiniGame
     public override void Init()
     {
@@ -79,6 +79,8 @@ public class WackAMoleMiniGame : MiniGame, ISpawnerMod<Mole>, ITheaterMod
         m_SpawnProbabilities[ UnityEngine.Random.Range(0, rowSize), UnityEngine.Random.Range(0,colSize)] = 1f;
 
         inst_PerspectiveRoom.PlaceAllOnLayers();
+
+        gameIsWon = false;
     }
     public override void Play()
     {
@@ -94,7 +96,9 @@ public class WackAMoleMiniGame : MiniGame, ISpawnerMod<Mole>, ITheaterMod
     public override void Win()
     {
         //Clean();
-        AccumulateProbabilities(true);
+        gameIsWon = true;
+        foreach(Mole mole in inst_moleMatrix)
+            mole.OnWin();
         MGM.WinMiniGame();
     }
     public override void Lose()
@@ -134,31 +138,26 @@ public class WackAMoleMiniGame : MiniGame, ISpawnerMod<Mole>, ITheaterMod
 
     void Update()
     {
-        if (IsActiveMiniGame && !IsInPostGame)
+        if (IsActiveMiniGame && !IsInPostGame && !gameIsWon)
         {
             elapsedSpawnInterval += Time.deltaTime;
             if (elapsedSpawnInterval < spawnInterval)
                 return;
-            AccumulateProbabilities(false);
+            AccumulateProbabilities();
             elapsedSpawnInterval = 0f;
         }
     }
 
-    private void AccumulateProbabilities(bool gameIsWon)
+    private void AccumulateProbabilities()
     {
         for (int i = 0; i < rowSize; i++)
         {
             for (int j = 0; j < colSize; j++)
             {
-                if (m_SpawnProbabilities[i, j] >= 1f)
-                    continue;
-
                 m_SpawnProbabilities[i,j] += UnityEngine.Random.Range(0f,1f);
+
                 if (m_SpawnProbabilities[i, j] >= 1f)
                 {
-                    if (gameIsWon)
-                        inst_moleMatrix[i, j].OnWin();
-                    else
                     inst_moleMatrix[i, j].GoOut();
                 }
             }
