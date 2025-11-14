@@ -11,6 +11,8 @@ public class MiniGameManager : MonoBehaviour, IManager
 {
     [Header("Debug MiniGame")]
     public GameObject MiniGameToTest = null;
+    public bool infiniteTimeOnTest = false;
+
     [Header("MGM Set")]
     public List<GameObject> prefab_miniGames;
     [Header("Internals")]
@@ -72,6 +74,12 @@ public class MiniGameManager : MonoBehaviour, IManager
             Debug.LogWarning("MINI GAME TEST : Be sure to have a loopSize of 1 in the settings");
             prefab_miniGames.Clear();
             prefab_miniGames.Add(MiniGameToTest);
+            if (infiniteTimeOnTest)
+            {
+                GameData.GetSettings.MiniGameTime = 99;
+                gameClock.miniGameMaxTime = 99;                
+            }
+
         }
         else
         { // Random seed

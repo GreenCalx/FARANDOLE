@@ -21,12 +21,13 @@ public class Mole : MonoBehaviour, ITapTracker, IRendered, ISpawnable
     public ParticleSystem bloodParticle;
     public UnityEvent<int,int> OnHideCB;
     public Vector2Int matrixCoordinates;
-    public bool isOut;
+
+    private bool isOut;
     public void Init(float iTimeOut)
     {
         timeToSpendOut = iTimeOut;
         elapsedTimeOut = 0f;
-        isOut = false;
+
     }
 
     #region ISpawnable
@@ -48,12 +49,13 @@ public class Mole : MonoBehaviour, ITapTracker, IRendered, ISpawnable
     public void GoOut()
     {
         anim.ResetTrigger("In");
-        isOut = true;
         anim.SetTrigger("Out");
+        isOut = true;
     }
 
     public void GoIn()
     {
+        isOut = false;
         anim.SetTrigger("In");
         OnHideCB.Invoke(matrixCoordinates.x, matrixCoordinates.y);
         elapsedTimeOut = 0f;
@@ -61,7 +63,7 @@ public class Mole : MonoBehaviour, ITapTracker, IRendered, ISpawnable
 
     public bool OnTap(Vector2 pos)
     {
-        if (col.bounds.Contains(new Vector3(pos.x, pos.y, transform.position.z)))
+        if (col.isActiveAndEnabled && col.bounds.Contains(new Vector3(pos.x, pos.y, transform.position.z)))
         {
             bloodParticle.Play();
             tapCB.Invoke();
@@ -75,8 +77,7 @@ public class Mole : MonoBehaviour, ITapTracker, IRendered, ISpawnable
 
     public void OnWin()
     {
-        if(isOut)
-            anim.SetTrigger("Win");
+        anim.SetTrigger("Win");
     }
     // IRendered
     public Renderer GetRenderer()

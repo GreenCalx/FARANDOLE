@@ -154,10 +154,17 @@ public class WackAMoleMiniGame : MiniGame, ISpawnerMod<Mole>, ITheaterMod
         {
             for (int j = 0; j < colSize; j++)
             {
-                m_SpawnProbabilities[i,j] += UnityEngine.Random.Range(0f,1f);
+                if(m_SpawnProbabilities[i, j] < 1f)
+                {
+                    Debug.Log(i + "" + j + " = " + m_SpawnProbabilities[i,j]);
+                    m_SpawnProbabilities[i,j] += UnityEngine.Random.Range(0f,1f);
+                    Debug.Log(i + "" + j + " = " + m_SpawnProbabilities[i,j]);
+                }
+
 
                 if (m_SpawnProbabilities[i, j] >= 1f)
                 {
+                    Debug.Log(i + "" + j);
                     inst_moleMatrix[i, j].GoOut();
                 }
             }

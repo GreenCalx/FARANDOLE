@@ -289,6 +289,7 @@ MonoBehaviour:
   PG: {fileID: 0}
   IsActiveMiniGame: 0
   IsInPostGame: 0
+  GameIsLost: 0
   successState: 0
   hasIntro: 0
   prefab_mole: {fileID: 7528823468832330446, guid: 48d5329a62bd09b40ab84b09a6eb5f35, type: 3}
@@ -345,16 +346,16 @@ MonoBehaviour:
   spawnInterval: 1
   colSizes: 030000000300000003000000030000000400000004000000
   rowSizes: 030000000300000003000000040000000400000004000000
-  targets: 0300000004000000050000000a0000000c0000000c000000
+  targets: 0300000004000000060000000a0000000c000000
   maxOutDuration:
   - 1.5
   - 1
-  - 0.5
-  - 0.25
-  - 0.25
-  minOutDuration:
   - 1
+  - 1
+  - 1
+  minOutDuration:
+  - 1.5
   - 0.5
-  - 0.25
+  - 0.5
   - 0
   - 0

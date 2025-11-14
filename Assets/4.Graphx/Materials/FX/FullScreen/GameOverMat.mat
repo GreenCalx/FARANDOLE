@@ -69,7 +69,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _ControlledTime: 1.9989072
+    - _ControlledTime: 0
     - _Duration: 2
     - _ElapsedTime: 0.72805023
     - _EnableExternalAlpha: 0
