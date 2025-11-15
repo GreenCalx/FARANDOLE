@@ -163,7 +163,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80b8b58d2f403e84aa6ce22d65c5011f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MiniGameToTest: {fileID: 7478234881393395322, guid: 71d13dff3bf38ff4da5b090cba665e8f, type: 3}
+  MiniGameToTest: {fileID: 290077520304868199, guid: c462f14683fa9bf43b8e31a0ee4d53f3, type: 3}
+  infiniteTimeOnTest: 0
   prefab_miniGames:
   - {fileID: 6891743480671891591, guid: ca650ba5ffb5e9c4d8e5e5b7a7fdaeae, type: 3}
   - {fileID: 5205109001117507003, guid: ef698d4e9557cd14dbc5770833ba666b, type: 3}
@@ -681,7 +682,6 @@ MonoBehaviour:
   clearAnimMat: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   forgroundFrameMat: {fileID: 2100000, guid: 093ee1af864a9bc40a1c5cf0c81b1639, type: 2}
   clearAnimSprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
-  LoopLevelColorGrading: {fileID: 2800000, guid: 646f8794914852640ae82f11d8f46b30, type: 3}
   AnimateBG: 1
   finalClapAnimation: {fileID: 741548460}
   PGPatternFader: {fileID: 1286062460}

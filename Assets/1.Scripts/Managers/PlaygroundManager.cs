@@ -24,7 +24,6 @@ public class PlaygroundManager : MonoBehaviour, IManager
     public Material clearAnimMat;
     public Material forgroundFrameMat;
     public Sprite clearAnimSprite;
-    public Texture2D LoopLevelColorGrading;
     public bool AnimateBG = true;
     private float currAnimationDeltaTime;
     public FinalClapAnim finalClapAnimation;
@@ -81,7 +80,7 @@ public class PlaygroundManager : MonoBehaviour, IManager
 
     void InitColorGrading()
     {
-        Color32[] colors = LoopLevelColorGrading.GetPixels32(0);
+        Color32[] colors = GameData.GetSettings.LoopLevelColorGrading.GetPixels32(0);
         loopLevelColors = new List<Color>(colors.Length);
         for (int i = 0; i < colors.Length; i++)
         {

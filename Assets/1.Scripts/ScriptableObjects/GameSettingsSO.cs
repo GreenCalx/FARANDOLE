@@ -20,7 +20,8 @@ public class GameSettingsSO : ScriptableObject
     public float MiniGameTime = 5f;
     public float MaxTimeScale = 3f;
     public AnimationCurve timeScaleOverLoopLevel;
-
+    public Texture2D LoopLevelColorGrading;
+    public int MaxLoopDepth = 12;
 
     [Header("UI Tweaks")]
     public float titleScreenFadeoutTime = 1f;

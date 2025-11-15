@@ -43,6 +43,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  LoopLevelColorGrading: {fileID: 2800000, guid: 646f8794914852640ae82f11d8f46b30, type: 3}
+  MaxLoopDepth: 12
   titleScreenFadeoutTime: 3
   GameUIScreenProportion: 0.1
   GameFieldScreenProportion: 0.8

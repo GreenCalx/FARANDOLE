@@ -360,8 +360,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 40
-  m_fontSizeBase: 40
+  m_fontSize: 38
+  m_fontSizeBase: 38
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -863,14 +863,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: ca886a3df8e43ca4bb343ec161958476, type: 2}
-  m_Color: {r: 0, g: 0.07038808, b: 0.4528302, a: 0.42745098}
+  m_Color: {r: 0, g: 0.042260885, b: 0.27, a: 0.42745098}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 8238865112710426770, guid: a1c7acafa9c0fed4bbe36bbc6b3ce35d, type: 3}
   m_improveResolution: 0
   m_Resolution: 0
   m_useNativeSize: 0
@@ -1195,15 +1195,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: 10257
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 90ed94fb61b01f848af4a30eddcaf9e9, type: 2}
-  m_sharedMaterial: {fileID: 8686306176258706399, guid: 90ed94fb61b01f848af4a30eddcaf9e9, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c495507b201dc9c4c91797ff2fe5074a, type: 2}
+  m_sharedMaterial: {fileID: 8686306176258706399, guid: c495507b201dc9c4c91797ff2fe5074a, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4286709247
-  m_fontColor: {r: 1, g: 0.9909121, b: 0.504717, a: 1}
+    rgba: 4291231487
+  m_fontColor: {r: 1, g: 0.996481, b: 0.7783019, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1220,8 +1220,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
-  m_fontSizeBase: 50
+  m_fontSize: 55
+  m_fontSizeBase: 55
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1447,14 +1447,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: 96a18396c1c298e418f8d2d5aec0fff3, type: 2}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.9019608}
+  m_Color: {r: 0.066037714, g: 0.066037714, b: 0.066037714, a: 0.9019608}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 08399f7475215ed4c82172af39c26e74, type: 3}
   m_improveResolution: 0
   m_Resolution: 0
   m_useNativeSize: 0

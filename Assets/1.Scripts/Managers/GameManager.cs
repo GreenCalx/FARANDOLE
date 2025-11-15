@@ -126,11 +126,9 @@ public class GameManager : MonoBehaviour
     {
         GameStarted = false;
         PG.StopAnimation();
-        //MGM.StopCurrent();
-        //MGM.FreezeCurrent();
-        //Time.timeScale = 0f;
         PC.Freeze();
-        MGM.GameOver();
+        //MGM.GameOver();
+
         RemoveCallbacks();
         UI.ShowMiniGameMode(false);
     }
@@ -155,7 +153,11 @@ public class GameManager : MonoBehaviour
     void OnLoopDepthUpdate()
     {
         // Check if Player reached the end
-        
+        if (MGM.MGLoop.depth >= GameData.GetSettings.MaxLoopDepth)
+        {
+            playerData.FullLoopCompleted = true;
+            GameOver();
+        }
 
         // playGround Mat update
         PG.RefreshRendering(MGM.MGLoop.depth, MGM.MGLoop.HasRankChanged, MGM.MGLoop.rank);
@@ -181,8 +183,8 @@ public class GameManager : MonoBehaviour
 
         inst_UIGameOver = GOBuilder.Create(prefab_UIGameOver).BuildAs<UIGameOver>();
         inst_UIGameOver.Setup(this);
-        inst_UIGameOver.TryAgainBtn.onClick.AddListener(() => { cts.Cancel(); RestartGame(); });
-        inst_UIGameOver.MenuBtn.onClick.AddListener(() => { cts.Cancel(); ExitToTitle(); });
+        inst_UIGameOver.TryAgainBtn.clickCallback.AddListener(() => { cts.Cancel(); RestartGame(); });
+        inst_UIGameOver.MenuBtn.clickCallback.AddListener(() => { cts.Cancel(); ExitToTitle(); });
 
         bool IsHighScore = PostGameScoreProcessing();
 
@@ -190,6 +192,8 @@ public class GameManager : MonoBehaviour
 
         inst_UIGameOver.Animate(IsHighScore, PG, cts.Token);
     }
+
+
 
     void Update()
     {

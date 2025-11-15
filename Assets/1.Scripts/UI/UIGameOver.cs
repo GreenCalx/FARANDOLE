@@ -12,8 +12,8 @@ public class UIGameOver : MonoBehaviour
     public RectTransform scoreDisplayHandle;
     public RectTransform newHighScoreDisplayHandle;
 
-    public Button TryAgainBtn;
-    public Button MenuBtn;
+    public UIButton TryAgainBtn;
+    public UIButton MenuBtn;
     public TextMeshProUGUI scoreDisplayValue;
 
     Animator animator;
@@ -22,7 +22,6 @@ public class UIGameOver : MonoBehaviour
     void Start()
     {
         animator = GetComponent<Animator>();
-
     }
     
     public void Setup(GameManager iGameManager)

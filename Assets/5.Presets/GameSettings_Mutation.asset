@@ -15,6 +15,8 @@ MonoBehaviour:
   PlayerHP: 10
   loopSize: 7
   percentOfLoopSizeToPass: 0.5
+  ComboRequirementForSuper: 2
+  ComboRequirementForMaster: 5
   MiniGameTime: 6
   MaxTimeScale: 2.5
   timeScaleOverLoopLevel:
@@ -41,6 +43,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  LoopLevelColorGrading: {fileID: 2800000, guid: 646f8794914852640ae82f11d8f46b30, type: 3}
+  MaxLoopDepth: 12
   titleScreenFadeoutTime: 3
   GameUIScreenProportion: 0.1
   GameFieldScreenProportion: 0.8
@@ -48,9 +52,13 @@ MonoBehaviour:
   LoopPassedColor: {r: 0, g: 1, b: 0, a: 1}
   LoopFailedColor: {r: 1, g: 0, b: 0, a: 1}
   RankSettings: {fileID: 11400000, guid: 6a32a64a12bcf2d4abaea25fad902b82, type: 2}
+  ShowLaunchGameButtonInSec: 0.5
   PostMiniGameLatchInMs: 500
   PreMiniGameLatchInMs: 500
-  LoopCompleteAfterAnimDisplayTimeMs: 0
-  LoopCompleteShowDepthAnimDisplayTimeMs: 0
   PlayGroundColorLerpTimeSec: 1
   BGMRankLerpTimeSec: 1
+  GameClockScaleAnimDuration: 0.25
+  PostShowLoopResultDelayInMs: 1000
+  PostShowNewRankDelayInMs: 1000
+  ShowLightTotalTimeInMs: 2000
+  MaxLightUpMiniGameThumbnailTime: 250
