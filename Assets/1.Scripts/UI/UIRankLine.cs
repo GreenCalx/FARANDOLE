@@ -9,6 +9,7 @@ public class UIRankLine : MonoBehaviour
     public TextMeshProUGUI shadowRankLevelText;
     public TextMeshProUGUI rankLevelText;
     public TextMeshProUGUI comboText;
+    public TextMeshProUGUI savedTimeText;
 
     public void SetRankText(string iTxt)
     {
@@ -26,11 +27,23 @@ public class UIRankLine : MonoBehaviour
         comboText.text = "x" + iCombo;
     }
 
+    public void SetSavedTime(float iTotalSavedTime)
+    {
+        if (savedTimeText == null)
+            return;
+
+        Color c =  (iTotalSavedTime < 0f) ? GameData.GetSettings.LoopFailedColor : GameData.GetSettings.LoopPassedColor;
+        string prefix  =(iTotalSavedTime < 0f )? "" : "+";
+        savedTimeText.color = c;
+        savedTimeText.text = "("+prefix +iTotalSavedTime.ToString("#0.0")+"s)";
+    }
+
     public void Setup(MiniGameLoopSnapshot iSnap)
     {
         SetRankText(iSnap.completionRank.ToString());
         SetRankImg(GameData.GetSettings.RankSettings.GetImageFromRank(iSnap.completionRank));
         SetCombo(iSnap.comboMultiplier);
+        SetSavedTime(iSnap.SavedTime);
 
         // Light update
         if (iSnap.IsPerfect)

@@ -13,6 +13,7 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
     public RectTransform CameraSpace;
     [Header("Player UI")]
     //public TextMeshProUGUI miniGameClock;
+    public CanvasGroup UIPlayerInfo;
     public UIMiniGameClock miniGameClock;
     public Image m_HPImage;
     public Image timeIndicatorImg;
@@ -70,7 +71,7 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         inst_loopPresentationAnim.Init(MGM.MGLoop);
 
 
-        ShowMiniGameMode(false);
+        ShowMiniGameMode(true);
         
         handle_UIDoorAnim.Init();
         InitDone = true;
@@ -151,7 +152,10 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
     {
         miniGameClock.enabled = iState;
         m_HPImage.enabled = iState;
-        handle_UIDoorAnim.OpenAnim();
+
+        UIPlayerInfo.alpha = iState ? 1f : 0f;
+        if (iState)
+            handle_UIDoorAnim.OpenAnim();
     }
 
     public async UniTask StageClearAnimation(float iTime, CancellationToken iCT)
@@ -166,7 +170,6 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         else
         {
             successTimeTxt.color = GameData.GetUITheme.NegativeTimeColor;
-            //successTimeStr += "-";
         }
 
         successTimeStr += iTime.ToString("#0.0");

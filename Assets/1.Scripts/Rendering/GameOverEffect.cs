@@ -50,7 +50,7 @@ public class GameOverEffect : MonoBehaviour
             if (elapsedTime >= duration)
             {
                 //elapsedTime = duration;
-                //FXMat.SetFloat("_ControlledTime", 1f); // reset
+                //FXMat.SetFloat("_ControlledTime", duration); // reset
                 //StopFX();
             } else
             {
@@ -66,6 +66,12 @@ public class GameOverEffect : MonoBehaviour
             ForcePlay = false;
             StartFX();
         }
+    }
+
+    public void SetupFX(PlayerData iPlayerData)
+    {
+        // Shadergraph expose bool as floats..
+        FXMat.SetFloat("_UseWinGradient", iPlayerData.FullLoopCompleted ? 1f : 0f);
     }
 
     public void StopFX()
@@ -89,10 +95,15 @@ public class GameOverEffect : MonoBehaviour
 
     IEnumerator FXCo()
     {
+        Debug.Log("FX RUNNING");
         pendingFX = true;
         FXMat.SetFloat("_ControlledTime", 0f);
+        
         //FXMat.SetVector("_FocalPoint", new Vector2(0.5f, 0.5f)); // screen center
         //FXMat.SetFloat("_RippleStrength", 0f);
+
+        // Wait a frame
+        yield return null;
 
         FullScreenPassManager.Get.EnableMeltSolo(true);
 

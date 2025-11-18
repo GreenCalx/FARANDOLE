@@ -14,6 +14,8 @@ public class BlitRendererFeature : ScriptableRendererFeature
         public string blitShaderPassName = "Blit";
         public string mainTexPropertyName = "_MainTex";
         public string tempRTName = "_BlitTemp";
+        public bool req_lockFrame = false;
+        [Header("")]
         public bool opt_HalfResolution = true;
         public bool opt_GraphicFormat = true;
     }
@@ -53,7 +55,10 @@ public class BlitRendererFeature : ScriptableRendererFeature
         [System.NonSerialized] public bool EnableBlit = false;
 
         // persistent temp RTHandle
-        RTHandle tempTarget;
+        RTHandle    tempTarget;
+        RTHandle    lockedFrame;
+        bool frameLockActive = false;
+        RenderTextureDescriptor desc;
         static Mesh fullScreenQuad;
 
         public BlitPass(BlitSettings settings)
@@ -70,7 +75,7 @@ public class BlitRendererFeature : ScriptableRendererFeature
 
         public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
         {
-            var desc = renderingData.cameraData.cameraTargetDescriptor;
+            desc = renderingData.cameraData.cameraTargetDescriptor;
             desc.depthBufferBits = 0;
             desc.msaaSamples = 1;
 
@@ -85,17 +90,24 @@ public class BlitRendererFeature : ScriptableRendererFeature
                 desc.graphicsFormat = GraphicsFormatUtility.GetGraphicsFormat(RenderTextureFormat.ARGB32, false);    
             }
             
-
+            if (settings.req_lockFrame)
+            {
+                RenderingUtils.ReAllocateIfNeeded(ref lockedFrame, desc, name:"_LockedTemp");
+            }
             RenderingUtils.ReAllocateIfNeeded(ref tempTarget, desc, name: "_BlitTemp");
         }
 
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
             if (!EnableBlit)
+            {
+                frameLockActive = false;
                 return;
-
+            }
+                
             if (material == null)
                 return;
+
             //Debug.Log($"Executing blit pass for material: {material.name}");
 
             var camData = renderingData.cameraData;
@@ -115,8 +127,52 @@ public class BlitRendererFeature : ScriptableRendererFeature
             if (projectIsGamma && GraphicsFormatUtility.IsSRGBFormat(colorFormat))
                 colorFormat = GraphicsFormatUtility.GetGraphicsFormat(RenderTextureFormat.Default, false);
 
-            Blitter.BlitCameraTexture(cmd, cameraColor, tempTarget);
+            /// Minimal work if frame lock requested and processed
+            if (frameLockActive && settings.req_lockFrame)
+            {
+                CoreUtils.SetRenderTarget(cmd, cameraColor);
 
+               // material.SetTexture("_MainTex", lockedFrame);
+
+                cmd.DrawMesh(fullScreenQuad, Matrix4x4.identity, material, 0, passIndex);
+
+                // Release RT only in Dispose to avoid leaks
+                context.ExecuteCommandBuffer(cmd);
+                CommandBufferPool.Release(cmd);
+
+                return;
+            }
+            /// Freeze Frame and Lock if requested
+            if (!frameLockActive && settings.req_lockFrame)
+            {
+                RenderingUtils.ReAllocateIfNeeded(ref lockedFrame, desc, name:"_LockedTemp");
+                Blitter.BlitCameraTexture(cmd, cameraColor, lockedFrame);
+
+                // Ensures that the texture is in readable format for the shader
+                if (!string.IsNullOrEmpty(settings.mainTexPropertyName))
+                {
+                    Texture tex = tempTarget.rt != null ? (Texture)tempTarget.rt : (Texture)tempTarget;
+                    cmd.SetGlobalTexture(settings.mainTexPropertyName, tex);
+                }
+
+                CoreUtils.SetRenderTarget(cmd, cameraColor);
+
+                material.SetTexture("_MainTex", lockedFrame);
+
+                cmd.DrawMesh(fullScreenQuad, Matrix4x4.identity, material, 0, passIndex);
+
+                // Release RT only in Dispose to avoid leaks
+                context.ExecuteCommandBuffer(cmd);
+                CommandBufferPool.Release(cmd);
+
+                frameLockActive = true;
+                return;
+            }
+
+            /// Regular Blit
+            frameLockActive = false;
+            
+            Blitter.BlitCameraTexture(cmd, cameraColor, tempTarget);
             // Ensures that the texture is in readable format for the shader
             if (!string.IsNullOrEmpty(settings.mainTexPropertyName))
             {
@@ -126,7 +182,6 @@ public class BlitRendererFeature : ScriptableRendererFeature
 
             CoreUtils.SetRenderTarget(cmd, cameraColor);
 
-    
             material.SetTexture("_MainTex", tempTarget);
 
             cmd.DrawMesh(fullScreenQuad, Matrix4x4.identity, material, 0, passIndex);

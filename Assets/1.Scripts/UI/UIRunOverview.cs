@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class UIRunOverview : MonoBehaviour
 {
+    public float Spacing = -80f;
     public GameObject prefab_UIRankLine;
     public GameObject prefab_UIStartThumbnail;
     public GameObject prefab_UIFullLoopCompletedThumbnail;
@@ -19,23 +20,25 @@ public class UIRunOverview : MonoBehaviour
 
         MiniGameLoopHistory history = iPlayerData.loopHistory;
         inst_rankLines = new List<UIRankLine>(history.Count + 1);
+        int index = 1;
 
         // Add start thumbnail
         inst_startThumbnail = GOBuilder.Create(prefab_UIStartThumbnail)
                                 .WithParent(h_RunDisplay)
-                                .WithLocalPosition(Vector3.zero)
+                                .WithLocalPosition(new Vector3(0f, index * Spacing, 0f))
                                 .BuildAs<RectTransform>();
         inst_startThumbnail.gameObject.SetActive(true);
 
         LR.Points = new Vector2[2];
         LR.Points[0] = inst_startThumbnail.anchoredPosition;
-
+        index++;
+        
         // Add snapshots
-        int index = 1;
+
 
         foreach (MiniGameLoopSnapshot snap in history)
         {
-            Vector3 anchoredPosition = new Vector3(0f, index * -64f, 0f);
+            Vector3 anchoredPosition = new Vector3(0f, index * Spacing, 0f);
             UIRankLine newLine = GOBuilder.Create(prefab_UIRankLine)
                                     .WithParent(h_RunDisplay)
                                     .WithLocalPosition(anchoredPosition)
@@ -53,14 +56,14 @@ public class UIRunOverview : MonoBehaviour
         {
             inst_RunTailThumbnail = GOBuilder.Create(prefab_UIFullLoopCompletedThumbnail)
                 .WithParent(h_RunDisplay)
-                .WithLocalPosition(new Vector3(0f, index * -64f, 0f))
+                .WithLocalPosition(new Vector3(0f, index * Spacing, 0f))
                 .BuildAs<RectTransform>();
         }
         else
         {
             inst_RunTailThumbnail = GOBuilder.Create(prefab_UIGameOverThumbnail)
                 .WithParent(h_RunDisplay)
-                .WithLocalPosition(new Vector3(0f, index * -64f, 0f))
+                .WithLocalPosition(new Vector3(0f, index * Spacing, 0f))
                 .BuildAs<RectTransform>();
         }
 

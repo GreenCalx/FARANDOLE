@@ -20,7 +20,8 @@ MonoBehaviour:
     blitShaderPassName: Blit
     mainTexPropertyName: _MainTex
     tempRTName: _MeltBlitTemp
-    opt_HalfResolution: 1
+    req_lockFrame: 1
+    opt_HalfResolution: 0
     opt_GraphicFormat: 1
 --- !u!114 &11400000
 MonoBehaviour:
@@ -97,6 +98,7 @@ MonoBehaviour:
     blitShaderPassName: Blit
     mainTexPropertyName: _MainTex
     tempRTName: _BlitTemp
+    req_lockFrame: 0
     opt_HalfResolution: 1
     opt_GraphicFormat: 1
 --- !u!114 &7691180807117496691
@@ -136,5 +138,6 @@ MonoBehaviour:
     blitShaderPassName: Blit
     mainTexPropertyName: _MainTex
     tempRTName: _RippleBlitTemp
+    req_lockFrame: 0
     opt_HalfResolution: 1
     opt_GraphicFormat: 1

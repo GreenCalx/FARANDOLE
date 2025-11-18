@@ -127,7 +127,7 @@ public class GameManager : MonoBehaviour
         GameStarted = false;
         PG.StopAnimation();
         PC.Freeze();
-        //MGM.GameOver();
+        
 
         RemoveCallbacks();
         UI.ShowMiniGameMode(false);
@@ -175,10 +175,13 @@ public class GameManager : MonoBehaviour
     void GameOver()
     {
         Time.timeScale = 1f;
+
+        MGM.GameOver();
         playerData.loopHistory.AddSnapshot(MGM.MGLoop);
 
         StopGame();
-
+        UI.ShowMiniGameMode(false);
+        
         CancellationTokenSource cts = new CancellationTokenSource();
 
         inst_UIGameOver = GOBuilder.Create(prefab_UIGameOver).BuildAs<UIGameOver>();

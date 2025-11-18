@@ -15,6 +15,7 @@ public class UIGameOver : MonoBehaviour
     public UIButton TryAgainBtn;
     public UIButton MenuBtn;
     public TextMeshProUGUI scoreDisplayValue;
+    public TextMeshProUGUI headLineText;
 
     Animator animator;
     const string GameOverSkipTrigger = "GameOverSkip";
@@ -27,6 +28,8 @@ public class UIGameOver : MonoBehaviour
     public void Setup(GameManager iGameManager)
     {
         RunOverview.Setup(iGameManager.playerData);
+        GameOverFX.SetupFX(iGameManager.playerData);
+        headLineText.text =  iGameManager.playerData.FullLoopCompleted ? "FULL LOOP" : "GAME OVER";
     }
 
     void Skip()

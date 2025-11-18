@@ -33,6 +33,19 @@ public class MiniGameLoop : IEnumerator<MiniGame>
     {
         get { return rankChanged; }
     }
+
+    public float TotalSavedTime
+    {
+        get
+        {
+            float retval= 0f;
+            foreach (MiniGame mg in inst_miniGames)
+            {
+                retval += GameData.GetSettings.MiniGameTime - mg.CompletionTime;
+            }
+            return retval;
+        }
+    }
     bool rankChanged = false;
     public MiniGameLoop()
     {
@@ -167,15 +180,17 @@ public class MiniGameLoop : IEnumerator<MiniGame>
     public void ComboUpdate()
     {
         previousCombo = combo;
+
         if (IsLoopPerfect())
             combo++;
-        else
+        else if (!IsLoopPassed())
             combo = 0;
     }
 
     public void RankUpdate()
     {
         rankUpdateRequest = false;
+        rankChanged = false;
 
         switch (rank)
         {

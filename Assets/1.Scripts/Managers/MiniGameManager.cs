@@ -107,7 +107,8 @@ public class MiniGameManager : MonoBehaviour, IManager
     public void GameOver()
     {
         gameClock.Freeze(true);
-        gameClock.Reset();
+        //gameClock.Reset();
+        MGLoop.Current.CompletionTime = gameClock.GetElapsedTime();
         MGLoop.Current.Lose();
     }
 
@@ -167,6 +168,8 @@ public class MiniGameManager : MonoBehaviour, IManager
 
         MGLoop.Current.successState = (gameClock.GetElapsedTime() > GameData.Get.gameSettings.MiniGameTime) ?
             MiniGameSuccessState.FAILED : MiniGameSuccessState.PASSED;
+
+        MGLoop.Current.CompletionTime = gameClock.GetElapsedTime();
 
         OnMiniGameComplete.Invoke();
 

@@ -3087,6 +3087,7 @@ GameObject:
   - component: {fileID: 5262011153430807893}
   - component: {fileID: 5460813389314703047}
   - component: {fileID: 6211847992385031038}
+  - component: {fileID: 8521033663787954682}
   m_Layer: 5
   m_Name: UIPlayerInfo
   m_TagString: Untagged
@@ -3164,6 +3165,18 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!225 &8521033663787954682
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3041011253583632169}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &3044472990972012099
 GameObject:
   m_ObjectHideFlags: 0
@@ -3458,6 +3471,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   OverlaySpace: {fileID: 5947117843415238699}
   CameraSpace: {fileID: 3206059287346949142}
+  UIPlayerInfo: {fileID: 8521033663787954682}
   miniGameClock: {fileID: 4810562953438799937}
   m_HPImage: {fileID: 637431863129588419}
   timeIndicatorImg: {fileID: 4909375525986423983}

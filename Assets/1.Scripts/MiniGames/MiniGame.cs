@@ -43,7 +43,7 @@ public class MiniGame : MonoBehaviour, IMiniGame
     public bool IsInPostGame;
     public bool GameIsLost;
     public MiniGameSuccessState successState;
-    
+    public float CompletionTime = 0f;
     protected CancellationTokenSource introCTS;
 
 
@@ -77,6 +77,7 @@ public class MiniGame : MonoBehaviour, IMiniGame
     public virtual void Init()
     {
         successState = MiniGameSuccessState.NONE;
+        CompletionTime = 0f;
     }
     public virtual void Reset()
     {

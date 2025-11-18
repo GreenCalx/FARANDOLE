@@ -40,7 +40,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NoiseTexture:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 08399f7475215ed4c82172af39c26e74, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
@@ -70,13 +70,16 @@ Material:
     m_Ints: []
     m_Floats:
     - _ControlledTime: 0
-    - _Duration: 2
+    - _Duration: 1.37
     - _ElapsedTime: 0.72805023
     - _EnableExternalAlpha: 0
     - _Frequency: 0.1
+    - _LoopAnimationTime: 0
     - _Magnification: -0.25
-    - _MeltScale: 19.5
-    - _OpeningSpeed: 8
+    - _MeltScale: 20.3
+    - _OpeningDoneFrac: 0.5
+    - _OpeningDoneTime: 1
+    - _OpeningSpeed: 0.256
     - _RIppleStrength: 0.19
     - _RippleDuration: 1
     - _RippleStrength: 0.0010286868
@@ -84,11 +87,12 @@ Material:
     - _Size: 0.16
     - _Speed: 1
     - _StartSize: 0
-    - _Strength: 0.409
+    - _Strength: 1
+    - _UseWinGradient: 1
     - _ZWrite: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _FocalPoint: {r: 0.5, g: 0.27, b: 0, a: 0}
+    - _FocalPoint: {r: 0.5, g: 0.55, b: 0, a: 0}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _RippleColor: {r: 1, g: 0.9972117, b: 0, a: 1}
   m_BuildTextureStacks: []
