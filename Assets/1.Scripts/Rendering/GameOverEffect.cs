@@ -95,7 +95,7 @@ public class GameOverEffect : MonoBehaviour
 
     IEnumerator FXCo()
     {
-        Debug.Log("FX RUNNING");
+        //Debug.Log("FX RUNNING");
         pendingFX = true;
         FXMat.SetFloat("_ControlledTime", 0f);
         

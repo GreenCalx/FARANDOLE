@@ -7,6 +7,7 @@ public enum GAME_MODE
 {
     DAILY_SEED,
     MUTATION,
+    SINGLES,
     CUSTOM
 };
 
@@ -17,6 +18,7 @@ public class GameModesSO : ScriptableObject
     public class GameModeInfo
     {
         public GAME_MODE gameMode;
+        public List<int> Seeds;
         public GameSettingsSO settings;
     }
     public GameSettingsSO defaultSettings;

@@ -35,6 +35,19 @@ public class MiniGameBankSO : ScriptableObject
         return GetRandomSelectionFromPool(GameBank,iNumber);
     }
 
+    public List<GameObject> GetByDataSeeds(List<int> iSeeds)
+    {
+        List<GameObject> filtered = new List<GameObject>();
+        foreach (MiniGameSO go in GameBank)
+        {
+            if (GameData.Get.MiniGameSeeds.Contains(go.ID))
+            {
+                filtered.Add(go.prefab_MiniGame);
+            }
+        }
+        return filtered;
+    }
+
     public List<GameObject> GetByTags(int iNumber, List<EMiniGameTags> iTags)
     {
         List<MiniGameSO> filtered = new List<MiniGameSO>();

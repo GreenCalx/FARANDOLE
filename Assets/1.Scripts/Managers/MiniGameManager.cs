@@ -86,7 +86,17 @@ public class MiniGameManager : MonoBehaviour, IManager
             prefab_miniGames = GameData.GetMGBank.GetRandom(GameData.GetSettings.loopSize);
         }
         #else
-        prefab_miniGames = GameData.GetMGBank.GetRandom(GameData.GetSettings.loopSize);
+
+        prefab_miniGames.Clear();
+        if (GameData.Get.MiniGameSeeds != null && GameData.Get.MiniGameSeeds.Count > 0)
+        {
+            prefab_miniGames = GameData.GetMGBank.GetByDataSeeds();
+        } else
+        {
+            prefab_miniGames = GameData.GetMGBank.GetRandom(GameData.GetSettings.loopSize);
+        }
+        
+
         #endif
         
         BuildLoop();

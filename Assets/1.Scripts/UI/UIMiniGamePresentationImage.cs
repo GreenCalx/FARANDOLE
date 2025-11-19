@@ -57,6 +57,12 @@ public class UIMiniGamePresentationImage : ManagedAnimation
         infoBubbleBtn.enabled = false;
     }
 
+    public void HideInfoBubble()
+    {
+        bubbleShown = false;
+        h_InfoBubbleAnchor.gameObject.SetActive(false);
+    }
+
     public void UpdateLightColor()
     {
         Color c = new Color(1f, 1f, 1f, 0f);

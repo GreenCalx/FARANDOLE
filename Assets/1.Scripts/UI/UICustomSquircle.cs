@@ -28,6 +28,7 @@ public class UICustomSquircle : UIPrimitiveBase
         [Min(0)]
         public float radius = 1000;
 
+        public float SpriteTiling = 1f;
 
         private float a, b;
         private List<Vector2> vert = new List<Vector2>();
@@ -132,6 +133,7 @@ public class UICustomSquircle : UIPrimitiveBase
             
             vh.AddTriangle(i * 3, i * 3 + 1, i * 3 + 2);
         }
+
     }
 
 #if UNITY_EDITOR

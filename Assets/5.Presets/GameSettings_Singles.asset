@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 87a63174ee8c328448bbdd11b0cb13ae, type: 3}
-  m_Name: Sprint_GameSettings
+  m_Name: GameSettings_Singles
   m_EditorClassIdentifier: 
-  PlayerHP: 5
-  loopSize: 2
+  PlayerHP: 10
+  loopSize: 1
   percentOfLoopSizeToPass: 0.5
   ComboRequirementForSuper: 2
-  ComboRequirementForMaster: 5
-  MiniGameTime: 5
-  MaxTimeScale: 5
+  ComboRequirementForMaster: 3
+  MiniGameTime: 7
+  MaxTimeScale: 2
   timeScaleOverLoopLevel:
     serializedVersion: 2
     m_Curve:
@@ -32,42 +32,33 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0.08620094
     - serializedVersion: 3
-      time: 59.672173
-      value: 2.6353383
-      inSlope: 0.018223904
-      outSlope: 0.018223904
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 100
+      time: 16
       value: 3
-      inSlope: 0.0034876778
-      outSlope: 0.0034876778
+      inSlope: 0.28929704
+      outSlope: 0.28929704
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.120959945
-      outWeight: 0
+      inWeight: 0.035121977
+      outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   LoopLevelColorGrading: {fileID: 2800000, guid: 646f8794914852640ae82f11d8f46b30, type: 3}
   MaxLoopDepth: 12
-  titleScreenFadeoutTime: 1
-  GameUIScreenProportion: 0.05
+  titleScreenFadeoutTime: 3
+  GameUIScreenProportion: 0.1
   GameFieldScreenProportion: 0.8
   LoopPefectColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   LoopPassedColor: {r: 0, g: 1, b: 0, a: 1}
   LoopFailedColor: {r: 1, g: 0, b: 0, a: 1}
-  RankSettings: {fileID: 0}
+  RankSettings: {fileID: 11400000, guid: 6a32a64a12bcf2d4abaea25fad902b82, type: 2}
   ShowLaunchGameButtonInSec: 0.5
-  PostMiniGameLatchInMs: 250
-  PreMiniGameLatchInMs: 500
+  PostMiniGameLatchInMs: 500
+  PreMiniGameLatchInMs: 250
   PlayGroundColorLerpTimeSec: 1
   BGMRankLerpTimeSec: 1
   GameClockScaleAnimDuration: 0.25
-  PostShowLoopResultDelayInMs: 1000
+  PostShowLoopResultDelayInMs: 400
   PostShowNewRankDelayInMs: 1000
   ShowLightTotalTimeInMs: 2000
   MaxLightUpMiniGameThumbnailTime: 250

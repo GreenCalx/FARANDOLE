@@ -10,14 +10,11 @@ using TMPro;
 
 public class SignInService : MonoBehaviour
 {
-    public Transform m_SignInUI;
     public Button SignInBtn;
     public Button OfflineBtn;
     public TextMeshProUGUI connectionText;
     public UnityEvent OnSignIn;
-    public UIPlayerProfileCard playerCard;
-    // TODO : bad security maybe, just for quick testing atm.
-    bool signedIn = false;
+
     bool authentificationProcessed = false;
     bool userAuthentificationProcessed = false;
     bool retry = false;
@@ -29,13 +26,10 @@ public class SignInService : MonoBehaviour
     {
         if (PlayGamesPlatform.Instance.IsAuthenticated())
         {
-            EnableProfileCard();
             Destroy(gameObject);
         }
 
-        m_SignInUI.gameObject.SetActive(true);
-
-        signedIn = false;
+        SessionData.IsOnline = false;
         retry = true;
 
         PlayGamesPlatform.Activate();
@@ -44,7 +38,6 @@ public class SignInService : MonoBehaviour
         authentificationProcessed = false;
         SignInBtn?.onClick.AddListener(() => TrySignIn());
         OfflineBtn?.onClick.AddListener(() => OfflineMode());
-        OnSignIn.AddListener(() => EnableProfileCard());
 
         WaitSignIn();
     }
@@ -57,20 +50,15 @@ public class SignInService : MonoBehaviour
         kill = true;
     }
 
-    void EnableProfileCard()
-    {
-        playerCard.gameObject.SetActive(true);
-    }
     public void OfflineMode()
     {
-        signedIn = true;
+        SessionData.IsOnline = true;
     }
 
     public void TrySignIn()
     {
         authentificationProcessed = false;
         PlayGamesPlatform.Instance.Authenticate(ProcessAuthentication);
-        
     }
 
     async UniTaskVoid WaitSignIn()
@@ -80,7 +68,7 @@ public class SignInService : MonoBehaviour
     }
     async UniTask SignIn()
     {
-        while (!signedIn && !kill)
+        while (!SessionData.IsOnline && !kill)
         {
             //     if (retry)
             //     {
@@ -104,10 +92,9 @@ public class SignInService : MonoBehaviour
             // When google cloud connection is available, fetch user name and
             // sign in used through ProcessUserAuthentication
             
-            //localUser = PlayGamesPlatform.Instance.localUser;
+            //SessionData.LocalUser = PlayGamesPlatform.Instance.localUser;
             //localUser.Authenticate(ProcessUserAuthentication);
-            signedIn = true;
-            
+            SessionData.IsOnline = true;
         }
         else
         {
@@ -115,7 +102,7 @@ public class SignInService : MonoBehaviour
             // Disable your integration with Play Games Services or show a login button
             // to ask users to sign-in. Clicking it should call
             // PlayGamesPlatform.Instance.ManuallyAuthenticate(ProcessAuthentication).
-            signedIn = false;
+            SessionData.IsOnline = false;
             //retry = true;
         }
         authentificationProcessed = true;
@@ -125,14 +112,14 @@ public class SignInService : MonoBehaviour
     {
         if (status)
         {
-            string userName = localUser.userName;
-            connectionText.text = "Signed in as " + userName;
-            signedIn = true;
+            SessionData.UserName = PlayGamesPlatform.Instance.localUser.userName;
+            connectionText.text = "Signed in as " + SessionData.UserName;
+            SessionData.IsOnline = true;
         }
         else
         {
             connectionText.text = "Failed to connect to authenticate user";
-            signedIn = false;
+            SessionData.IsOnline = false;
         }
         userAuthentificationProcessed = true;
     }

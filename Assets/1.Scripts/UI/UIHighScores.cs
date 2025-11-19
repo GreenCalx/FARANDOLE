@@ -1,15 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
-
-public class UIHighScores : MonoBehaviour
+using Cysharp.Threading.Tasks;
+using System.Threading.Tasks;
+using System.Threading;
+public class UIHighScores : UIPanel
 {
     public GameObject prefab_scoreBlocks;
     public RectTransform handle_blockLayout;
     List<UIHighScoreBlock> inst_scoreBlocks;
 
-    void OnEnable()
+    public override void OnNavEnter(CancellationToken iCT)
     {
-        // OnDisable not called ?  TODO fixme
         if (inst_scoreBlocks != null)
         {
             inst_scoreBlocks.ForEach(e => Destroy(e.gameObject));
@@ -17,10 +18,12 @@ public class UIHighScores : MonoBehaviour
         }
         inst_scoreBlocks = new List<UIHighScoreBlock>();
         InitScores();
+        base.OnNavEnter(iCT);
     }
 
-    void OnDisable()
+    public override void OnNavExit(CancellationToken iCT)
     {
+        base.OnNavExit(iCT);
         inst_scoreBlocks.ForEach(e => Destroy(e.gameObject));
         inst_scoreBlocks.Clear();
     }

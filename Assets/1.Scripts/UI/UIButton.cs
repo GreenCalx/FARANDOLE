@@ -75,6 +75,12 @@ public class UIButton : Button, IPointerUpHandler, IPointerDownHandler, IPointer
         if (GameData.Get == null)
             return; // weird but happens..
 
+        if (!interactable)
+        {
+            squircle_img.color = GameData.GetUITheme.disabledBtnColor;
+            squircle_img.SetVerticesDirty();
+            return;
+        }
         switch (tag.tag)
         {
             case EUITag.MainBtn:
@@ -96,6 +102,9 @@ public class UIButton : Button, IPointerUpHandler, IPointerDownHandler, IPointer
     // IPointerDownHandler
     public void OnPointerDown(PointerEventData eventData)
     {
+        if (!interactable)
+            return;
+
         btn_animator.SetTrigger(animationTriggers.pressedTrigger);
         DoStateTransition(SelectionState.Pressed, true);
         clickCancelled = false;

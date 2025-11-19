@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d21e2d08c31820429c4354a8ec04274, type: 3}
   m_Name: Default_UITheme
   m_EditorClassIdentifier: 
+  disabledBtnColor: {r: 0.3018868, g: 0.26913494, b: 0.26913494, a: 1}
   normalBtnColor: {r: 1, g: 1, b: 1, a: 0.8}
   pressedBtnColor: {r: 0.735849, g: 0.73237807, b: 0.73237807, a: 0.9019608}
   normalMainBtnColor: {r: 1, g: 1, b: 1, a: 1}
@@ -22,7 +23,10 @@ MonoBehaviour:
   pressedThumbnailColor: {r: 0.71637195, g: 0.7264151, b: 0.66816485, a: 1}
   thumbnailSuccessLightColor: {r: 0.12904951, g: 0.9433962, b: 0.13558322, a: 1}
   thumbnailFailLightColor: {r: 0.7735849, g: 0.18609823, b: 0.18609823, a: 0.7490196}
-  PositiveTimeColor: {r: 0.48593804, g: 0.9811321, b: 0.6148211, a: 1}
+  PositiveTimeColor: {r: 0, g: 1, b: 0, a: 1}
   LastSecondTimeColor: {r: 1, g: 0.63569504, b: 0, a: 1}
-  NegativeTimeColor: {r: 1, g: 0, b: 0.4448824, a: 1}
+  NegativeTimeColor: {r: 1, g: 0, b: 0, a: 1}
   FrozenTimeColor: {r: 0, g: 0.5592723, b: 1, a: 1}
+  PowerBarFailSection: {r: 1, g: 0, b: 0, a: 1}
+  PowerBarPassedSection: {r: 0, g: 1, b: 0, a: 1}
+  PowerBarPerfectSection: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}

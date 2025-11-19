@@ -19,7 +19,7 @@ public class UIPlayerProfileCard : MonoBehaviour
     public void Refresh()
     {
         // Set premium features
-        bool isPremium = IAPManager.Get.CanAccessPremiumContent();
+        bool isPremium = SessionData.IsPremium;
         Debug.Log("Refresh premium = " + isPremium);
         m_HandlePremiumAcc.gameObject.SetActive(isPremium);
         m_HandleNotPremiumAcc.gameObject.SetActive(!isPremium);

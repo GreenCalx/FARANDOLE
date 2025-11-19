@@ -3,6 +3,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "UIThemeSO", menuName = "Scriptable Objects/UIThemeSO")]
 public class UIThemeSO : ScriptableObject
 {
+    [Header("Button Generics")]
+    public Color disabledBtnColor;
     [Header("Menu Button")]
     public Color normalBtnColor;
     public Color pressedBtnColor;

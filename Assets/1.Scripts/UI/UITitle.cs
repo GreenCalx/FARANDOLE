@@ -4,15 +4,17 @@ using UnityEngine.UI;
 using TMPro;
 using FMODUnity;
 using Cysharp.Threading.Tasks;
+using System.Collections;
+using System.Collections.Generic;
 
-public class UITitle : MonoBehaviour
+public class UITitle : UINavigator
 {
-    public RectTransform handle_titleBtns;
-    public RectTransform handle_gameModesBtns;
-    public RectTransform handle_UIHighScores;
-    public RectTransform handle_UISettings;
-    public RectTransform handle_backBtn;
-    public RectTransform handle_quitBtn;
+    [Header("UITitle")]
+    public UIPopupPanel handle_PopUpPanel;
+    public UIPanel handle_GameModePanel;
+    public UIPanel handle_UIHighScores;
+    public UIPanel handle_UISettings;
+    public UIPanel handle_UISingles;
     [Header("Title base buttons")]
     public UIButton playBtn;
     public UIButton highScoresBtn;
@@ -21,8 +23,13 @@ public class UITitle : MonoBehaviour
     public UIButton quitBtn;
     [Header("Game Modes Buttons")]
     public UIButton m_MutationMode;
+    public UIButton m_SinglesMode;
     public UIButton m_DailySeedMode;
     public UIButton m_CustomMode;
+    [Header("Launch Modes Button")]
+    public UIButton m_LaunchSinglesMode;
+    public UIMiniGameSelectionGrid m_LaunchSinglesGame;
+
     [Header("Transition")]
     public Image transitionImage;
     [Header("Audio")]
@@ -36,42 +43,26 @@ public class UITitle : MonoBehaviour
     //
     readonly string GameScene = "Game";
 
-    public void DisableAll()
-    {
-        handle_titleBtns.gameObject.SetActive(false);
-        handle_gameModesBtns.gameObject.SetActive(false);
-        handle_UIHighScores.gameObject.SetActive(false);
-        handle_backBtn.gameObject.SetActive(false);
-
-        handle_quitBtn.gameObject.SetActive(true);
-    }
-
-    public void EnableHome()
-    {
-        handle_titleBtns.gameObject.SetActive(true);
-        handle_gameModesBtns.gameObject.SetActive(false);
-        handle_UIHighScores.gameObject.SetActive(false);
-        handle_backBtn.gameObject.SetActive(false);
-
-        handle_quitBtn.gameObject.SetActive(true);
-    }
-
     void Start()
     {
-        playBtn?.clickCallback.AddListener(() => ShowGameModes());
-        highScoresBtn?.clickCallback.AddListener(() => ShowHighScores());
-        settingsBtn?.clickCallback.AddListener(() => ShowSettings());
+        base.Setup(m_Home);
+
+        playBtn?.clickCallback.AddListener(() => base.NavigateTo(handle_GameModePanel));
+        highScoresBtn?.clickCallback.AddListener(() => base.NavigateTo(handle_UIHighScores));
+        settingsBtn?.clickCallback.AddListener(() => base.NavigateTo(handle_UISettings));
+        m_SinglesMode?.clickCallback.AddListener(() => base.NavigateTo(handle_UISingles));
 
         m_MutationMode?.clickCallback.AddListener(() => StartMutationMode());
         m_DailySeedMode?.clickCallback.AddListener(() => StartDailySeed());
         m_CustomMode?.clickCallback.AddListener(() => StartCustom());
+        m_LaunchSinglesMode?.clickCallback.AddListener(() => StartSingles(m_LaunchSinglesGame.selectedGame.ID));
 
-        backBtn?.clickCallback.AddListener(() => BackToTitle());
+        backBtn?.clickCallback.AddListener(() => base.OnBack());
         quitBtn?.clickCallback.AddListener(() => QuitGame());
 
-        DisableAll();
-
         elapsedTime = 0f;
+        handle_PopUpPanel.SignInPopup();
+        NavigateTo(handle_PopUpPanel);
     }
 
     void Update()
@@ -84,38 +75,6 @@ public class UITitle : MonoBehaviour
         }
     }
 
-    void ShowGameModes()
-    {
-        handle_titleBtns.gameObject.SetActive(false);
-        handle_gameModesBtns.gameObject.SetActive(true);
-        handle_backBtn.gameObject.SetActive(true);
-        handle_quitBtn.gameObject.SetActive(false);
-    }
-    void ShowHighScores()
-    {
-        handle_UIHighScores.gameObject.SetActive(true);
-        handle_backBtn.gameObject.SetActive(true);
-        handle_quitBtn.gameObject.SetActive(false);
-        handle_titleBtns.gameObject.SetActive(false);
-    }
-    void ShowSettings()
-    {
-        handle_backBtn.gameObject.SetActive(true);
-        handle_UISettings.gameObject.SetActive(true);
-        handle_quitBtn.gameObject.SetActive(false);
-        handle_titleBtns.gameObject.SetActive(false);
-    }
-
-    void BackToTitle()
-    {
-        handle_titleBtns.gameObject.SetActive(true);
-        handle_UIHighScores.gameObject.SetActive(false);
-        handle_gameModesBtns.gameObject.SetActive(false);
-        handle_backBtn.gameObject.SetActive(false);
-        handle_UISettings.gameObject.SetActive(false);
-
-        handle_quitBtn.gameObject.SetActive(true);
-    }
     void StartMutationMode()
     {
         DelayedLaunch(GAME_MODE.MUTATION);
@@ -127,6 +86,14 @@ public class UITitle : MonoBehaviour
     void StartCustom()
     {
         DelayedLaunch(GAME_MODE.CUSTOM);
+    }
+
+    void StartSingles(int iMiniGameIndex)
+    {
+        GameData.Get.MiniGameSeeds = new List<int>(1);
+        GameData.Get.MiniGameSeeds.Add(iMiniGameIndex);
+
+        DelayedLaunch(GAME_MODE.SINGLES);
     }
 
     async UniTaskVoid DelayedLaunch(GAME_MODE iGameMode)

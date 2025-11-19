@@ -12,12 +12,11 @@ public class PremiumButtonLocker : MonoBehaviour
 
     public void Refresh()
     {
-        if (IAPManager.Get.CanAccessPremiumContent())
+        if (SessionData.IsPremium)
         {
-            m_HandleIsLockedFX.gameObject.SetActive(false);
             m_HandleLockedButton.enabled = true;
             m_HandleLockedButton.interactable = true;
-            
+            m_HandleIsLockedFX.gameObject.SetActive(false);
             return;
         }
         m_HandleIsLockedFX.gameObject.SetActive(true);

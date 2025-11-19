@@ -1,7 +1,10 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 public class GameData : MonoBehaviour
 {
+    public List<int> MiniGameSeeds;
     public GAME_MODE currentGameMode;
     public GameModesSO gameModes;
     public GameSettingsSO gameSettings;

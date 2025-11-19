@@ -10,6 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 5613143999160357569}
   - component: {fileID: 2400542002858702292}
+  - component: {fileID: 7451853156221671452}
+  - component: {fileID: 7984107049316883231}
+  - component: {fileID: 9115676464246354694}
+  - component: {fileID: 394224497548202948}
   m_Layer: 5
   m_Name: UIHighScores
   m_TagString: Untagged
@@ -50,8 +54,67 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcc76ba9838968b4fa45ca66a97e6cd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_PanelAnimation: {fileID: 9115676464246354694}
+  m_CanvasGroup: {fileID: 7451853156221671452}
+  m_Destinations: []
   prefab_scoreBlocks: {fileID: 4214711715503911917, guid: b1a4f082c84063346b3e57d6eafe29c1, type: 3}
   handle_blockLayout: {fileID: 1073541215497166510}
+--- !u!225 &7451853156221671452
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3577477607735500506}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!222 &7984107049316883231
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3577477607735500506}
+  m_CullTransparentMesh: 1
+--- !u!114 &9115676464246354694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3577477607735500506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02494750cddf3dd4d9ebfff4710affea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Animator: {fileID: 394224497548202948}
+  IsShown: 0
+--- !u!95 &394224497548202948
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3577477607735500506}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4921173970206561371
 GameObject:
   m_ObjectHideFlags: 0
@@ -109,8 +172,8 @@ MonoBehaviour:
   m_Spacing: 20
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
-  m_ChildControlWidth: 1
-  m_ChildControlHeight: 1
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0

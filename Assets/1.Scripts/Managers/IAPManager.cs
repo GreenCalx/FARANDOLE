@@ -20,7 +20,6 @@ public class IAPManager : MonoBehaviour
     readonly string kPremiumAccStoreKey = "premium_account";
     readonly string kLocalPremiumUnlocked = "PremiumFeatures";
     StandardPurchasingModule m_PurchasingModule;
-    public UnityEvent m_OnPremium;
     bool m_Initialized
     {
         get { return m_StoreController != null; }
@@ -172,7 +171,6 @@ public class IAPManager : MonoBehaviour
             {
                 Debug.Log("Product " + kPremiumAccStoreKey + " purchase found. ");
                 PlayerPrefs.SetInt(kLocalPremiumUnlocked, 1);
-                m_OnPremium.Invoke();
                 return true;
             }
         }

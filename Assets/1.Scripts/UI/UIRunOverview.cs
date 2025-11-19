@@ -17,7 +17,6 @@ public class UIRunOverview : MonoBehaviour
 
     public void Setup(PlayerData iPlayerData)
     {
-
         MiniGameLoopHistory history = iPlayerData.loopHistory;
         inst_rankLines = new List<UIRankLine>(history.Count + 1);
         int index = 1;
@@ -32,10 +31,8 @@ public class UIRunOverview : MonoBehaviour
         LR.Points = new Vector2[2];
         LR.Points[0] = inst_startThumbnail.anchoredPosition;
         index++;
-        
+
         // Add snapshots
-
-
         foreach (MiniGameLoopSnapshot snap in history)
         {
             Vector3 anchoredPosition = new Vector3(0f, index * Spacing, 0f);
