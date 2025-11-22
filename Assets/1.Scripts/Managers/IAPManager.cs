@@ -179,11 +179,12 @@ public class IAPManager : MonoBehaviour
 
     public void OpenStore()
     {
-        m_HandleStorePage.gameObject.SetActive(true);
+        //m_HandleStorePage.gameObject.SetActive(true);
     }
 
     public void CloseStore()
     {
-        m_HandleStorePage.gameObject.SetActive(false);
+        //m_HandleStorePage.gameObject.SetActive(false);
+        CheckPremiumPurchased();
     }
 }

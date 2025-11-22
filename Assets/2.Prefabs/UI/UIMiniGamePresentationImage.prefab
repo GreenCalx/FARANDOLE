@@ -395,6 +395,7 @@ MonoBehaviour:
   delta: 5
   quality: 0.1
   radius: 1000
+  SpriteTiling: 1
 --- !u!114 &334807790362447208
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -688,6 +689,7 @@ MonoBehaviour:
   delta: 5
   quality: 0.1
   radius: 1000
+  SpriteTiling: 1
 --- !u!114 &3600022699786274625
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -918,7 +920,7 @@ MonoBehaviour:
   MiniGameThumbnail: {fileID: 6257878755790239029}
   light: {fileID: 8473245674179717308}
   BG: {fileID: 2544000830564825186}
-  defaultSprite: {fileID: -7048377018462634714, guid: 094d874977a9c0f41a07414395f7e732, type: 3}
+  defaultSprite: {fileID: 21300000, guid: 438f102f85f2ed449b4634f1b87e3a3b, type: 3}
   infoBubbleBtn: {fileID: 8633530062930571679}
   h_InfoBubbleAnchor: {fileID: 2169752834008667776}
   h_InfoBubbleText: {fileID: 378773596334757472}
@@ -1259,6 +1261,7 @@ MonoBehaviour:
   delta: 5
   quality: 0.1
   radius: 1000
+  SpriteTiling: 1
 --- !u!223 &5186219085513726111
 Canvas:
   m_ObjectHideFlags: 0
@@ -1409,6 +1412,7 @@ MonoBehaviour:
   delta: 5
   quality: 0.1
   radius: 1000
+  SpriteTiling: 1
 --- !u!114 &6912820991414479179
 MonoBehaviour:
   m_ObjectHideFlags: 0

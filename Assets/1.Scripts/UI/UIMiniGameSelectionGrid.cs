@@ -34,8 +34,9 @@ public class UIMiniGameSelectionGrid : MonoBehaviour
                             selectedImage.HideInfoBubble();
                             selectedGame = null;
                             selectedImage = null;
+                            return;
                         }
-                        if (selectedImage!=null)
+                        else if (selectedImage!=null)
                         {
                             selectedImage.ShowLight(false);
                             selectedImage.HideInfoBubble();
@@ -49,9 +50,27 @@ public class UIMiniGameSelectionGrid : MonoBehaviour
             }
 
             //SelectGameValidationBtn.enabled      = selectedGame != null;
-            SelectGameValidationBtn.interactable = selectedGame != null;
-            SelectGameValidationBtn.onClick.AddListener(()=>{});
+            selectedGame = null;
+            selectedImage = null;
+            SelectGameValidationBtn.interactable = false;
+            SelectGameValidationBtn.UpdateImage();
+            //SelectGameValidationBtn.onClick.AddListener(()=>{});
         }
+    }
+
+    void Update()
+    {
+        bool mg_selected = selectedGame != null;
+        if (mg_selected && !SelectGameValidationBtn.interactable)
+        {
+            SelectGameValidationBtn.interactable = true;
+            SelectGameValidationBtn.UpdateImage();
+        } else if ((!mg_selected) && SelectGameValidationBtn.interactable)
+        {
+            SelectGameValidationBtn.interactable = false;
+            SelectGameValidationBtn.UpdateImage();
+        }
+        
     }
 
     void OnEnable()
@@ -66,5 +85,7 @@ public class UIMiniGameSelectionGrid : MonoBehaviour
             Destroy(mg.gameObject);
         }
         MGImages.Clear();
+        selectedImage = null;
+        selectedGame = null;
     }
 }

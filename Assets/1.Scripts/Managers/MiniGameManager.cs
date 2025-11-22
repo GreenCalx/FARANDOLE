@@ -79,26 +79,19 @@ public class MiniGameManager : MonoBehaviour, IManager
                 GameData.GetSettings.MiniGameTime = 99;
                 gameClock.miniGameMaxTime = 99;                
             }
-
+            BuildLoop();
+            return;
         }
-        else
-        { // Random seed
-            prefab_miniGames = GameData.GetMGBank.GetRandom(GameData.GetSettings.loopSize);
-        }
-        #else
+        #endif
 
         prefab_miniGames.Clear();
         if (GameData.Get.MiniGameSeeds != null && GameData.Get.MiniGameSeeds.Count > 0)
         {
-            prefab_miniGames = GameData.GetMGBank.GetByDataSeeds();
+            prefab_miniGames = GameData.GetMGBank.GetFromSeeds();
         } else
         {
             prefab_miniGames = GameData.GetMGBank.GetRandom(GameData.GetSettings.loopSize);
         }
-        
-
-        #endif
-        
         BuildLoop();
     }
 

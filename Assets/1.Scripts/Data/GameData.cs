@@ -4,7 +4,8 @@ using System.Collections.Generic;
 
 public class GameData : MonoBehaviour
 {
-    public List<int> MiniGameSeeds;
+    public List<int> m_MiniGameSeeds;
+    public List<int> MiniGameSeeds => m_MiniGameSeeds;
     public GAME_MODE currentGameMode;
     public GameModesSO gameModes;
     public GameSettingsSO gameSettings;
@@ -60,5 +61,13 @@ public class GameData : MonoBehaviour
         currentGameMode = iMode;
         gameSettings = gameModes.GetSettings(iMode);
     }
+
+    public void AddGameSeed(int iSeed)
+    {
+        if (m_MiniGameSeeds == null)
+            m_MiniGameSeeds = new List<int>();
+        m_MiniGameSeeds.Add(iSeed);
+    }
+    
 }
  

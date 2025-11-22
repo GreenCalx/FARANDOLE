@@ -35,7 +35,7 @@ public class MiniGameBankSO : ScriptableObject
         return GetRandomSelectionFromPool(GameBank,iNumber);
     }
 
-    public List<GameObject> GetByDataSeeds(List<int> iSeeds)
+    public List<GameObject> GetFromSeeds()
     {
         List<GameObject> filtered = new List<GameObject>();
         foreach (MiniGameSO go in GameBank)

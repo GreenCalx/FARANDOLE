@@ -21,7 +21,8 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
     public RectTransform infoArea;
     public UIDoorAnim handle_UIDoorAnim;
     public UILoopCompleteAnimation handle_animLoopSuccess; 
-
+    [Header("Transition")]
+    public UILoadingTransition h_UISceneTransition;
     [Header("Success")]
     public UIStageClearAnimation handle_animStageClear;
     public TextMeshProUGUI successTimeTxt;
@@ -74,6 +75,8 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         ShowMiniGameMode(true);
         
         handle_UIDoorAnim.Init();
+
+        h_UISceneTransition.FadeOut(1f);
         InitDone = true;
     }
 

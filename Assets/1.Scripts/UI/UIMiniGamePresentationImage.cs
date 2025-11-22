@@ -5,7 +5,7 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using System.Collections.Generic;
 using TMPro;
-public class UIMiniGamePresentationImage : ManagedAnimation
+public class UIMiniGamePresentationImage : ManagedAnimation, ITapTracker
 {
     [Header("UIMiniGamePresentationImage")]
     public bool infoBubbleEnabled = true;
@@ -21,6 +21,7 @@ public class UIMiniGamePresentationImage : ManagedAnimation
     public GameObject prefab_InfoBubbleTag;
     List<TextMeshProUGUI> inst_infoBubbleTags;
     [Header("Internals")]
+    public bool stopPropagation => false;
     public MiniGameSuccessState MGSuccessState;
     public bool Successed => MGSuccessState == MiniGameSuccessState.PASSED;
     public bool LightShown = false;
@@ -105,5 +106,15 @@ public class UIMiniGamePresentationImage : ManagedAnimation
         IsShown = false;
     }
 
+    public bool OnTap(Vector2 iPos)
+    {
+        if (bubbleShown)
+        {
+            HideInfoBubble();
+            return true;
+        }
+        return false;
+    }
+    public int GetDisplayPriority(){ return 0; }
 
 }

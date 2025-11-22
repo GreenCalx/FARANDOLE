@@ -60,6 +60,14 @@ public class PlayerController : MonoBehaviour
         EnhancedTouch.EnhancedTouchSupport.Disable();
     }
 
+    public void Flush()
+    {
+        positionTrackers.Clear();
+        tapTrackers.Clear();
+        sortedTapTrackers.Clear();
+        swipeTrackers.Clear();
+    }
+
     void FingerDown(EnhancedTouch.Finger finger)
     {
         if (freezeInputs)

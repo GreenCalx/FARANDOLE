@@ -7,6 +7,7 @@ using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 
+[RequireComponent(typeof(CanvasGroup))]
 public class UITitle : UINavigator
 {
     [Header("UITitle")]
@@ -15,6 +16,7 @@ public class UITitle : UINavigator
     public UIPanel handle_UIHighScores;
     public UIPanel handle_UISettings;
     public UIPanel handle_UISingles;
+    public UIPlayerProfileCard handle_profilePanel;
     [Header("Title base buttons")]
     public UIButton playBtn;
     public UIButton highScoresBtn;
@@ -31,7 +33,7 @@ public class UITitle : UINavigator
     public UIMiniGameSelectionGrid m_LaunchSinglesGame;
 
     [Header("Transition")]
-    public Image transitionImage;
+    public UILoadingTransition h_UISceneTransition;
     [Header("Audio")]
     public FMODUnity.StudioEventEmitter bgmEmitter;
     public float intensityGainTimeStep = 10f;
@@ -51,11 +53,16 @@ public class UITitle : UINavigator
         highScoresBtn?.clickCallback.AddListener(() => base.NavigateTo(handle_UIHighScores));
         settingsBtn?.clickCallback.AddListener(() => base.NavigateTo(handle_UISettings));
         m_SinglesMode?.clickCallback.AddListener(() => base.NavigateTo(handle_UISingles));
+        handle_profilePanel.m_ProfileCardButton?.clickCallback.AddListener(()=>
+        {
+            handle_PopUpPanel.PremiumPopup();
+            base.NavigateTo(handle_PopUpPanel);
+        });
 
         m_MutationMode?.clickCallback.AddListener(() => StartMutationMode());
         m_DailySeedMode?.clickCallback.AddListener(() => StartDailySeed());
         m_CustomMode?.clickCallback.AddListener(() => StartCustom());
-        m_LaunchSinglesMode?.clickCallback.AddListener(() => StartSingles(m_LaunchSinglesGame.selectedGame.ID));
+        m_LaunchSinglesMode?.onClick.AddListener(() => StartSingles(m_LaunchSinglesGame.selectedGame.ID));
 
         backBtn?.clickCallback.AddListener(() => base.OnBack());
         quitBtn?.clickCallback.AddListener(() => QuitGame());
@@ -90,33 +97,22 @@ public class UITitle : UINavigator
 
     void StartSingles(int iMiniGameIndex)
     {
-        GameData.Get.MiniGameSeeds = new List<int>(1);
-        GameData.Get.MiniGameSeeds.Add(iMiniGameIndex);
-
+        GameData.Get.AddGameSeed(iMiniGameIndex);
         DelayedLaunch(GAME_MODE.SINGLES);
     }
 
     async UniTaskVoid DelayedLaunch(GAME_MODE iGameMode)
     {
         bgmEmitter.SetParameter(ExitMenuParm, 1);
-        titleAnimations.ExitAnim();
-        await Transition();
+        GetComponent<CanvasGroup>().interactable = false;
+        GetComponent<CanvasGroup>().blocksRaycasts = false;
+        await UniTask.WhenAll(
+            h_UISceneTransition.FadeIn(GameData.GetSettings.titleScreenFadeoutTime),
+            titleAnimations.ExitAnim()
+        );
+        //titleAnimations.CancelAnimation();
         GameData.Get.PickGameMode(iGameMode);
         SceneManager.LoadScene(GameScene, LoadSceneMode.Single);
-    }
-
-    async UniTask Transition()
-    {
-        float startTime = Time.time;
-        float frac = 0f;
-        Color c = transitionImage.color;
-        while (frac < 1f)
-        {
-            frac = Mathf.Clamp01((Time.time - startTime) / GameData.GetSettings.titleScreenFadeoutTime);    
-            c.a = frac;
-            transitionImage.color = c;
-            await UniTask.Yield();
-        }
     }
 
     void QuitGame()

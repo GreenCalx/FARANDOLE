@@ -24,6 +24,8 @@ public class TitleAnim : MonoBehaviour
     public Image image;
     Material titleMat;
     CancellationTokenSource cts;
+     List<UniTask> tasks;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -45,10 +47,10 @@ public class TitleAnim : MonoBehaviour
         titleMat.SetFloat(sParmMinDist, initMinDist);
     }
 
-    public async UniTaskVoid ExitAnim()
+    public async UniTask ExitAnim()
     {
         cts = new CancellationTokenSource();
-        List<UniTask> tasks = new List<UniTask>();
+        tasks = new List<UniTask>();
 
         tasks.Add(  LerpTask(initImageScale, initImageScale * 4f,
                     GameData.GetSettings.titleScreenFadeoutTime,
@@ -61,5 +63,10 @@ public class TitleAnim : MonoBehaviour
                     cts.Token));
         
         await UniTask.WhenAll(tasks);
+    }
+
+    public void CancelAnimation()
+    {
+        cts.Cancel();
     }
 }
