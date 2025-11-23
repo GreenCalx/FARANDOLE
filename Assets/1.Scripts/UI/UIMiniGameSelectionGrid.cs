@@ -1,4 +1,6 @@
 using UnityEngine;
+using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
@@ -19,6 +21,7 @@ public class UIMiniGameSelectionGrid : MonoBehaviour
         if (LoadAll)
         {
             CancellationTokenSource cts = new CancellationTokenSource();
+            List<LoopHighScore> singlesHighScores = UserData.GetGameModeHighScores(GAME_MODE.SINGLES);
             foreach(MiniGameSO MGDesc in GameData.GetMGBank.GameBank)
             {
                 UIMiniGamePresentationImage newImg = GOBuilder.Create(prefab_MGThumbnail)
@@ -46,6 +49,21 @@ public class UIMiniGameSelectionGrid : MonoBehaviour
                         selectedImage.ShowLight(true);
                         }
                     );
+
+                LoopHighScore gameHS = null;
+                try
+                {
+                    gameHS = singlesHighScores.Single( e => e.ids[0] == MGDesc.ID);
+                } catch (InvalidOperationException exc)
+                {
+                    gameHS = null;
+                }
+                
+                if (gameHS==null)
+                    newImg.ShowRank(LoopRank.I);
+                else
+                    newImg.ShowRank(gameHS.maxRank);
+
                 MGImages.Add(newImg);
             }
 

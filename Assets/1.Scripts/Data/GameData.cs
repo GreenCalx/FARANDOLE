@@ -68,6 +68,14 @@ public class GameData : MonoBehaviour
             m_MiniGameSeeds = new List<int>();
         m_MiniGameSeeds.Add(iSeed);
     }
+
+    public void NewGameSeed()
+    {
+        if (m_MiniGameSeeds == null)
+            m_MiniGameSeeds = new List<int>();
+        else
+            m_MiniGameSeeds.Clear();
+    }
     
 }
  

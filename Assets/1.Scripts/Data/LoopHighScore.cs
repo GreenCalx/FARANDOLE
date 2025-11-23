@@ -8,7 +8,7 @@ public class LoopHighScore : ISaveLoad
     public GAME_MODE gameMode;
     public byte[] ids;
     public int score;
-
+    public LoopRank maxRank;
     public LoopHighScore()
     { }
     public LoopHighScore(GAME_MODE iGameMode, byte[] iIDs, int iScore, DateTime iDateTime)

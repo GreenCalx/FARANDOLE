@@ -176,6 +176,9 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 1f;
 
+        PC.Freeze();
+        PC.Flush();
+
         MGM.GameOver();
         playerData.loopHistory.AddSnapshot(MGM.MGLoop);
 
@@ -219,6 +222,7 @@ public class GameManager : MonoBehaviour
     public bool PostGameScoreProcessing()
     {
         int score = playerData.GetLoopScore();
+        LoopRank maxRank = playerData.GetMaxRank();
 
         int loopSize = GameData.GetSettings.loopSize;
         byte[] gameIDs = new byte[loopSize];
@@ -227,6 +231,7 @@ public class GameManager : MonoBehaviour
             gameIDs[i] = MGM.MGLoop.At(i).descriptor.ID;
         }
         LoopHighScore lhs = new LoopHighScore(GameData.Get.currentGameMode, gameIDs, score, DateTime.Now);
+        lhs.maxRank = maxRank;
         LoopHighScore replacedHS = null;
         if (UserData.IsNewHighScore(lhs, out replacedHS))
         {

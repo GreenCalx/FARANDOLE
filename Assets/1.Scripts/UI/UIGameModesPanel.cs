@@ -12,6 +12,11 @@ public class UIGameModesPanel : UIPanel
             PremiumButtonLocker locker = child.GetComponent<PremiumButtonLocker>();
             if (locker != null)
                 locker.Refresh();
+            
+            UIButton btn = child.GetComponent<UIButton>();
+            if (btn)
+                btn.UpdateImage();
+            
         }
     }
 }

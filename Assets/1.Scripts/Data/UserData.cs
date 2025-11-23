@@ -180,5 +180,10 @@ public static class UserData
     {
         userHighScores.RemoveHighScore(iLHS);
     }
+
+    public static List<LoopHighScore> GetGameModeHighScores(GAME_MODE iMode)
+    {
+        return userHighScores.GetGameModeHighScores(iMode);
+    }
     #endregion
 }

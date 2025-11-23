@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 [System.Serializable]
 public class UserHighScores
@@ -23,5 +24,10 @@ public class UserHighScores
         if (!highScores.Contains(iLHS))
             return;
         highScores.Remove(iLHS);
+    }
+
+    public List<LoopHighScore> GetGameModeHighScores(GAME_MODE iMode)
+    {
+        return highScores.Where(e => (e.gameMode == iMode)).ToList();
     }
 }

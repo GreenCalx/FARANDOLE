@@ -3,6 +3,8 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
 using System.Threading;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 public class UIMiniGamePresentationImage : ManagedAnimation, ITapTracker
@@ -20,9 +22,13 @@ public class UIMiniGamePresentationImage : ManagedAnimation, ITapTracker
     public RectTransform h_InfoBubbleTags;
     public GameObject prefab_InfoBubbleTag;
     List<TextMeshProUGUI> inst_infoBubbleTags;
+    [Header("RankMedal")]
+    public RectTransform h_RankMedalAnchor;
+    public Image h_RankMedalImage;
+    public List<TextMeshProUGUI> h_rankTexts;
     [Header("Internals")]
-    public bool stopPropagation => false;
     public MiniGameSuccessState MGSuccessState;
+    public bool stopPropagation => false;
     public bool Successed => MGSuccessState == MiniGameSuccessState.PASSED;
     public bool LightShown = false;
     public MiniGameSO selfDesc;
@@ -104,6 +110,23 @@ public class UIMiniGamePresentationImage : ManagedAnimation, ITapTracker
             WaitAnimState(hideLightStateName, 1f, iCT)
         );
         IsShown = false;
+    }
+
+    public void ShowRank(LoopRank iRank)
+    {
+        h_RankMedalAnchor.gameObject.SetActive(true);
+        h_RankMedalImage.sprite = GameData.GetSettings.RankSettings.GetImageFromRank(iRank);
+        if (h_rankTexts!=null)
+        {
+            foreach( TextMeshProUGUI tmp in h_rankTexts)
+            {
+                tmp.text = iRank.ToString();
+            }
+        }
+    }
+    public void HideRank()
+    {
+      h_RankMedalAnchor.gameObject.SetActive(false);
     }
 
     public bool OnTap(Vector2 iPos)

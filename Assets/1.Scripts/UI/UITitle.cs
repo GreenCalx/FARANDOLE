@@ -97,6 +97,7 @@ public class UITitle : UINavigator
 
     void StartSingles(int iMiniGameIndex)
     {
+        GameData.Get.NewGameSeed();
         GameData.Get.AddGameSeed(iMiniGameIndex);
         DelayedLaunch(GAME_MODE.SINGLES);
     }

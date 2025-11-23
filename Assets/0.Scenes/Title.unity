@@ -4878,7 +4878,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dd5653dcff0b304ea5cf7eb66c6c545, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MiniGameSeeds: 
+  m_MiniGameSeeds: 
   currentGameMode: 0
   gameModes: {fileID: 11400000, guid: 17461e972d2631e4ab59b1fdac70c5b4, type: 2}
   gameSettings: {fileID: 11400000, guid: 55846b72a52e9754f9b3893e872a06b4, type: 2}

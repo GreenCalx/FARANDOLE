@@ -38,6 +38,7 @@ public class PlayerController : MonoBehaviour
         positionTrackers = new List<IPositionTracker>();
         tapTrackers = new List<ITapTracker>();
         swipeTrackers = new List<ISwipeTracker>();
+        sortedTapTrackers = new List<ITapTracker>();
         Touch.onFingerDown += FingerDown;
         Touch.onFingerUp += FingerUp;
 

@@ -33,4 +33,15 @@ public class PlayerData
         }
         return ls;
     }
+
+    public LoopRank GetMaxRank()
+    {
+        LoopRank maxRank = LoopRank.I;
+        foreach (MiniGameLoopSnapshot snap in loopHistory)
+        {
+            if (snap.completionRank > maxRank)
+                maxRank = snap.completionRank;
+        }
+        return maxRank;
+    }
 }
