@@ -88,7 +88,7 @@ Material:
     - _Speed: 1
     - _StartSize: 0
     - _Strength: 1
-    - _UseWinGradient: 1
+    - _UseWinGradient: 0
     - _ZWrite: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}

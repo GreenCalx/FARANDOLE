@@ -48,13 +48,16 @@ public class UITitle : UINavigator
     void Start()
     {
         base.Setup(m_Home);
-
+        elapsedTime = 0f;
+        
         playBtn?.clickCallback.AddListener(() => base.NavigateTo(handle_GameModePanel));
         highScoresBtn?.clickCallback.AddListener(() => base.NavigateTo(handle_UIHighScores));
         settingsBtn?.clickCallback.AddListener(() => base.NavigateTo(handle_UISettings));
         m_SinglesMode?.clickCallback.AddListener(() => base.NavigateTo(handle_UISingles));
         handle_profilePanel.m_ProfileCardButton?.clickCallback.AddListener(()=>
         {
+            if (handle_PopUpPanel.PopupActive)
+                return;
             handle_PopUpPanel.PremiumPopup();
             base.NavigateTo(handle_PopUpPanel);
         });
@@ -64,10 +67,13 @@ public class UITitle : UINavigator
         m_CustomMode?.clickCallback.AddListener(() => StartCustom());
         m_LaunchSinglesMode?.onClick.AddListener(() => StartSingles(m_LaunchSinglesGame.selectedGame.ID));
 
+        
+        handle_PopUpPanel.NavigateBackCB.AddListener(()=> base.OnBack());
+
         backBtn?.clickCallback.AddListener(() => base.OnBack());
         quitBtn?.clickCallback.AddListener(() => QuitGame());
 
-        elapsedTime = 0f;
+        // Start with sign in pop up active
         handle_PopUpPanel.SignInPopup();
         NavigateTo(handle_PopUpPanel);
     }

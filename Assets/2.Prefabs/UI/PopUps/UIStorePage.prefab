@@ -165,14 +165,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: 14cb50d19e132ad409633795867cd74a, type: 2}
-  m_Color: {r: 0.5377358, g: 0.5377358, b: 0.5377358, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 88b5ed015df5b8143aa99c5ff64eb436, type: 3}
+  m_Sprite: {fileID: 6640432193136509359, guid: fca9e60f56188dc4b954222cfcd402cf, type: 3}
   m_Type: 2
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -181,7 +181,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 10.79
+  m_PixelsPerUnitMultiplier: 5.29
 --- !u!114 &5926105106690276257
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -259,7 +259,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: PREMIUM
+  m_text: store
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 19c522eb0d9f59648b563e8d4fb506bc, type: 2}
   m_sharedMaterial: {fileID: 8686306176258706399, guid: 19c522eb0d9f59648b563e8d4fb506bc, type: 2}
@@ -292,7 +292,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 32
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -587,7 +587,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   propertyName: _Color
-  propertyValue: {r: 0.2830189, g: 0.2830189, b: 0.2830189, a: 1}
+  propertyValue: {r: 0.31132078, g: 0.31132078, b: 0.31132078, a: 1}
   isHDR: 0
 --- !u!1 &3007360866513856626
 GameObject:
@@ -599,6 +599,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6552675803335375621}
   - component: {fileID: 7172790220149691348}
+  - component: {fileID: 2263742935381281734}
   m_Layer: 5
   m_Name: UIStorePage
   m_TagString: Untagged
@@ -635,6 +636,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3007360866513856626}
   m_CullTransparentMesh: 1
+--- !u!114 &2263742935381281734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3007360866513856626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bd9ca28e1132c842b9f102927c0a355, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnPopUpValidation:
+    m_PersistentCalls:
+      m_Calls: []
+  ValidatingButtons:
+  - {fileID: 3615932969139935265}
 --- !u!1 &3232135447454077289
 GameObject:
   m_ObjectHideFlags: 0
@@ -1177,15 +1195,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Buy the full version to unlock all the content.
-
-    - Mutation Game Mode
-
-    -
-    Custom Game Mode
-
-
-'
+  m_text: "Buy the full game to unlock all the content : \n\n\u25CF Game Mode : Single
+    Challenges \n\u25CF Game Mode : Mutation \n\u25CF Game Mode : Custom Loop\n\u25CF
+    Any upcoming additions to the game\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 90ed94fb61b01f848af4a30eddcaf9e9, type: 2}
   m_sharedMaterial: {fileID: 8686306176258706399, guid: 90ed94fb61b01f848af4a30eddcaf9e9, type: 2}
@@ -1321,10 +1333,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: PREMIUM
+  m_text: store
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 90ed94fb61b01f848af4a30eddcaf9e9, type: 2}
-  m_sharedMaterial: {fileID: 8686306176258706399, guid: 90ed94fb61b01f848af4a30eddcaf9e9, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9ae68f842e7f6c0418a80e0781feafb3, type: 2}
+  m_sharedMaterial: {fileID: -8059723878865950534, guid: 9ae68f842e7f6c0418a80e0781feafb3, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1335,10 +1347,10 @@ MonoBehaviour:
   m_enableVertexGradient: 1
   m_colorMode: 2
   m_fontColorGradient:
-    topLeft: {r: 0.94640785, g: 1, b: 0.4481132, a: 1}
-    topRight: {r: 0.94640785, g: 1, b: 0.4481132, a: 1}
-    bottomLeft: {r: 1, g: 0.6946566, b: 0, a: 1}
-    bottomRight: {r: 1, g: 0.6946566, b: 0, a: 1}
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 0.9622642, g: 0.6679246, b: 0, a: 1}
+    bottomRight: {r: 0.9622642, g: 0.6679246, b: 0, a: 1}
   m_fontColorGradientPreset: {fileID: 0}
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
@@ -1354,7 +1366,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 32
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -1450,7 +1462,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_Color: {r: 1, g: 0.98039216, b: 0.57254905, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1512,7 +1524,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   propertyName: _Color
-  propertyValue: {r: 1, g: 0.99156135, b: 0.8160377, a: 1}
+  propertyValue: {r: 1, g: 1, b: 1, a: 1}
   isHDR: 0
 --- !u!1 &6852808138212095180
 GameObject:
@@ -1579,10 +1591,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: purchase
+  m_text: buy
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 90ed94fb61b01f848af4a30eddcaf9e9, type: 2}
-  m_sharedMaterial: {fileID: 8686306176258706399, guid: 90ed94fb61b01f848af4a30eddcaf9e9, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9ae68f842e7f6c0418a80e0781feafb3, type: 2}
+  m_sharedMaterial: {fileID: -8059723878865950534, guid: 9ae68f842e7f6c0418a80e0781feafb3, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1606,8 +1618,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 40
-  m_fontSizeBase: 40
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

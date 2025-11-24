@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5716581780458720563}
   - component: {fileID: 7732301902712146113}
   - component: {fileID: 795903659301373358}
+  - component: {fileID: 1244837337999652204}
   m_Layer: 0
   m_Name: UISignInPopUp
   m_TagString: Untagged
@@ -71,6 +72,23 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &1244837337999652204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 689752366937883888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bb00bc64756bf342b1be0ae499e7425, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnPopUpValidation:
+    m_PersistentCalls:
+      m_Calls: []
+  ValidatingButtons:
+  - {fileID: 8258558810010296884}
 --- !u!1 &850123166898340707
 GameObject:
   m_ObjectHideFlags: 0
@@ -1025,7 +1043,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fd0e83c22e97024699206fd50a8e125, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SignInUI: {fileID: 0}
   SignInBtn: {fileID: 324254002600578380}
   OfflineBtn: {fileID: 8258558810010296884}
   connectionText: {fileID: 4717328150654716682}
@@ -1068,7 +1085,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-  playerCard: {fileID: 0}
 --- !u!1 &8747548231171475853
 GameObject:
   m_ObjectHideFlags: 0
