@@ -41,6 +41,7 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
     public UnityEvent OnBeforeLoopDepth;
     public UnityEvent SkipAnimCB;
     public UnityEvent OnNewRankDisplayedCB;
+    public UnityEvent OnFinalLoopDisplayedCB;
 
     // internals
     [Header("Internals")]
@@ -229,8 +230,14 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
                     WaitHideAnimTask(0.75f, iCT)
                 )
             );
-
             cancelCB.RemoveListener(() => loopPresentationAnim.Cancel());
+
+            if (MGLoop.IsFinalLoop)
+            {
+                OnFinalLoopDisplayedCB?.Invoke();
+                return;
+            }
+            
             if (iCT.IsCancellationRequested)
             {
                 cancelCB.Invoke(); return;

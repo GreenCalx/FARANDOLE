@@ -1,6 +1,8 @@
 using UnityEngine;
 using TMPro;
 
+using static LocalUtils;
+
 public class DogPetMiniGame : MiniGame, IDogMod, IRegularMod
 {
     [Header("DogPetMiniGame")]
@@ -36,7 +38,7 @@ public class DogPetMiniGame : MiniGame, IDogMod, IRegularMod
         inst_dogHead.Reset();
 
         pettings = 0;
-        tapForce = difficultyTapForces[MGM.miniGamesDifficulty - 1];
+        tapForce = LocalUtils.GetValueFromRank(difficultyTapForces, MGM);
         if (MGM.miniGamesDifficulty >= bounceOnRandomTreshold)
         {
             inst_dogHead.bounceRandomOnTap = true;
@@ -46,8 +48,8 @@ public class DogPetMiniGame : MiniGame, IDogMod, IRegularMod
         UpdateMGUI();
         PC.AddTapTracker(inst_dogHead);
 
-        inst_dogHead.SpringAnchorDrag = SpringAnchorDrag[MGM.miniGamesDifficulty - 1];
-        inst_dogHead.m_SpringAnchorDragStrength = SpringAnchorDragStrength[MGM.miniGamesDifficulty - 1];
+        inst_dogHead.SpringAnchorDrag = LocalUtils.GetValueFromRank(SpringAnchorDrag, MGM);
+        inst_dogHead.m_SpringAnchorDragStrength = LocalUtils.GetValueFromRank(SpringAnchorDragStrength, MGM);
         inst_dogHead.tapCB.AddListener(RegisterPetting);
     }
     public override void Play()

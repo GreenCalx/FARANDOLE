@@ -8,6 +8,7 @@ public class MiniGameLoopSnapshot
     public bool IsPerfect = false;
     public bool IsFailed = false;
     public float SavedTime = 0f;
+    public int depth;
     public int LoopScore
     {
         get
@@ -23,6 +24,7 @@ public class MiniGameLoopSnapshot
         IsFailed = !iOriginator.IsLoopPassed();
         comboMultiplier = iOriginator.combo;
         SavedTime = iOriginator.TotalSavedTime; 
+        depth = iOriginator.depth;
     }
 
 

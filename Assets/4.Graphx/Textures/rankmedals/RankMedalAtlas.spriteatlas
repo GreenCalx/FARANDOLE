@@ -43,6 +43,7 @@ SpriteAtlas:
     - db565f62525c7674b8c5d203d6751ac2: 21300000
     - 3dbe73b340ca06d438379b0e862e4e8e: 21300000
     - 85a060f481599c448a0d3ae854190ca6: 2052150712852028022
+    - ec3a4256eb04f2d4086932ddd0b6e22f: 21300000
     - 6d5ef149eab429045b2a561b23c023b3: 21300000
     - bd17a19bc26a2d944b496ab7fbb420a6: 21300000
   m_MasterAtlas: {fileID: 0}
@@ -53,6 +54,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: db565f62525c7674b8c5d203d6751ac2, type: 3}
   - {fileID: 21300000, guid: 3dbe73b340ca06d438379b0e862e4e8e, type: 3}
   - {fileID: 2052150712852028022, guid: 85a060f481599c448a0d3ae854190ca6, type: 3}
+  - {fileID: 21300000, guid: ec3a4256eb04f2d4086932ddd0b6e22f, type: 3}
   - {fileID: 21300000, guid: 6d5ef149eab429045b2a561b23c023b3, type: 3}
   - {fileID: 21300000, guid: bd17a19bc26a2d944b496ab7fbb420a6, type: 3}
   m_PackedSpriteNamesToIndex:
@@ -62,6 +64,7 @@ SpriteAtlas:
   - silver
   - bronze
   - MedalMask_0
+  - divine
   - MedalDotMask
   - master
   m_RenderDataMap: {}

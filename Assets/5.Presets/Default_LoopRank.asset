@@ -18,3 +18,4 @@ MonoBehaviour:
   rankMedal_III: {fileID: 21300000, guid: 7a612610b60a3ed4cb9587e8e5e71b50, type: 3}
   rankMedal_S: {fileID: 21300000, guid: ee0da362350f0484280012e08c8475c7, type: 3}
   rankMedal_M: {fileID: 21300000, guid: bd17a19bc26a2d944b496ab7fbb420a6, type: 3}
+  rankMedal_D: {fileID: 21300000, guid: ec3a4256eb04f2d4086932ddd0b6e22f, type: 3}

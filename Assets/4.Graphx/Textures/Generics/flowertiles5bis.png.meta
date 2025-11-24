@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: bd17a19bc26a2d944b496ab7fbb420a6
+guid: f89051291e8709d4ba39afe54c484250
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4843460787145592052
-    second: master_0
+      213: -1681190675045850028
+    second: flowertiles5bis_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -48,7 +48,7 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 1
   spriteExtrude: 1
-  spriteMeshType: 0
+  spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: master_0
+      name: flowertiles5bis_0
       rect:
         serializedVersion: 2
-        x: 40
-        y: 22
-        width: 432
-        height: 465
+        x: 0
+        y: 0
+        width: 512
+        height: 512
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4fcc8559ced673340800000000000000
-      internalID: 4843460787145592052
+      spriteID: 45461360df53ba8e0800000000000000
+      internalID: -1681190675045850028
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      master_0: 4843460787145592052
+      flowertiles5bis_0: -1681190675045850028
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -102,20 +102,21 @@ public class PlayerController : MonoBehaviour
 
     void Tap(Touch iTouch)
     {
+        if (tapTrackersModified)
+        {
+            tapTrackers = tapTrackers
+            .Where(e => (e != null) && e.enabled)
+            .OrderByDescending(e => e.GetDisplayPriority())
+            .ToList();
+            tapTrackersModified = false;
+        }
+
         if (freezeInputs)
             return;
 
         Vector2 tapPos = GetWorldPos(iTouch.screenPosition);
         try
         {
-            if (tapTrackersModified)
-            {
-                tapTrackers = tapTrackers
-                .Where(e => (e!=null) && e.enabled)
-                .OrderByDescending(e => e.GetDisplayPriority())
-                .ToList();
-                tapTrackersModified = false;
-            }
             foreach (ITapTracker tracker in tapTrackers)
             {
                 if (tracker == null)

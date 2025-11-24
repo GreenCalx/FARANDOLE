@@ -7,6 +7,10 @@ using System;
 using System.Collections.Generic;
 using static Utils;
 
+/// <summary>
+///  Async utils for UniTask
+/// should stay decorrelated from any game logic. 
+/// </summary>
 public static class AsyncUtils
 {
     public static async UniTask LerpTask(float iFrom, float iTo, float iDuration, Action<float> iLerpCallback, CancellationToken iTok)

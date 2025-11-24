@@ -9,7 +9,8 @@ public enum LoopRank
     II = 1,
     III = 2,
     S = 3,
-    M = 4
+    M = 4,
+    D = 5
 }
 
 public class MiniGameLoop : IEnumerator<MiniGame>
@@ -23,6 +24,7 @@ public class MiniGameLoop : IEnumerator<MiniGame>
     public int depth;
     public int combo;
     public int previousCombo;
+    public bool IsFinalLoop => depth >= GameData.GetSettings.MaxLoopDepth;
     public int count => inst_miniGames!=null ? inst_miniGames.Count : 0;
     public bool IsRankUpdateRequested {
         get { return rankUpdateRequest; }
@@ -238,8 +240,8 @@ public class MiniGameLoop : IEnumerator<MiniGame>
             case LoopRank.M:
                 if (!IsLoopPassed())
                     RankDown();
-                else
-                    return;
+                else if (IsLoopPerfect() && (combo>=GameData.GetSettings.MaxLoopDepth))
+                    RankUp();
                 break;
             default:
                 Debug.LogWarning("tryRankUp:: Unkown loop rank : " + (int)rank);

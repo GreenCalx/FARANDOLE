@@ -9,6 +9,9 @@ using static GOBuilder;
 
 public class GameManager : MonoBehaviour
 {
+    private static GameManager instance = null;
+    public static GameManager Get => instance;
+
     public bool GameStarted = false;
     [Header("Managers")]
     public MiniGameManager MGM;
@@ -27,6 +30,15 @@ public class GameManager : MonoBehaviour
     
     UIGameOver inst_UIGameOver;
     
+    void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+        instance = this;
+    }
     void Start()
     {
         StartCoroutine(Init());
@@ -81,7 +93,6 @@ public class GameManager : MonoBehaviour
         MGM.OnHPLossCB.AddListener(playerData.LoseHP);
         MGM.OnMiniGameComplete.AddListener(OnMiniGameCompletion);
         MGM.OnMiniGameTransitionCB.AddListener(OnMiniGameTransition);
-       // MGM.ShowPostGameUICB.AddListener(UI.ShowSuccessArea);
 
         UI.OnBeforeLoopDepth.AddListener(OnLoopDepthUpdate);
         UI.h_PauseMenu.h_ResumeBtn.clickCallback.AddListener(() => { UI.h_PauseMenu.Toggle(); });
@@ -94,7 +105,6 @@ public class GameManager : MonoBehaviour
         MGM.OnHPLossCB.RemoveListener(playerData.LoseHP);
         MGM.OnMiniGameComplete.RemoveListener(OnMiniGameCompletion);
         MGM.OnMiniGameTransitionCB.RemoveListener(OnMiniGameTransition);
-       // MGM.ShowPostGameUICB.RemoveListener(UI.ShowSuccessArea);
 
         UI.OnBeforeLoopDepth.RemoveListener(OnLoopDepthUpdate);
         UI.h_PauseMenu.h_ResumeBtn.clickCallback.RemoveListener(() => { UI.h_PauseMenu.Toggle(); });
@@ -152,13 +162,6 @@ public class GameManager : MonoBehaviour
 
     void OnLoopDepthUpdate()
     {
-        // Check if Player reached the end
-        if (MGM.MGLoop.depth >= GameData.GetSettings.MaxLoopDepth)
-        {
-            playerData.FullLoopCompleted = true;
-            GameOver();
-        }
-
         // playGround Mat update
         PG.RefreshRendering(MGM.MGLoop.depth, MGM.MGLoop.HasRankChanged, MGM.MGLoop.rank);
 
@@ -172,15 +175,15 @@ public class GameManager : MonoBehaviour
         AUDIO.gameBGM.RefreshSpeed(playerData.timeScale);
     }
 
-    void GameOver()
+    public void GameOver()
     {
         Time.timeScale = 1f;
 
         PC.Freeze();
         PC.Flush();
 
+        playerData.loopHistory.RankOnFullCompletion = MGM.MGLoop.rank;
         MGM.GameOver();
-        playerData.loopHistory.AddSnapshot(MGM.MGLoop);
 
         StopGame();
         UI.ShowMiniGameMode(false);
@@ -199,6 +202,11 @@ public class GameManager : MonoBehaviour
         inst_UIGameOver.Animate(IsHighScore, PG, cts.Token);
     }
 
+    public void OnFullLoopCompleted()
+    {
+        playerData.FullLoopCompleted = true;
+        GameOver();
+    }
 
 
     void Update()

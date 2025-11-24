@@ -73,6 +73,7 @@ public class DogHead : MonoBehaviour, ITapTracker
 
         AnchorPointRB.linearVelocity = Vector3.zero;
         AnchorPointRB.transform.position = Vector3.zero;
+        AnchorPointRB.transform.rotation = Quaternion.identity;
         
         m_Spring = GetComponent<SpringJoint2D>();
         if (DrawSpring)

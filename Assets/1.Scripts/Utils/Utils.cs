@@ -1,6 +1,11 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+
+/// <summary>
+/// Generic util methods
+/// should stay decorrelated from any game logic. 
+/// </summary>
 public static class Utils
 {
     public static Vector2[] ToVec2(Vector3[] iVec3)

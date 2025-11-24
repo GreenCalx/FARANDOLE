@@ -200,6 +200,9 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
             () => { AUDIO.LerpRank(prevRank, newRank); }
             );
 
+        handle_animLoopSuccess.OnFinalLoopDisplayedCB = new UnityEvent();
+        handle_animLoopSuccess.OnFinalLoopDisplayedCB.AddListener( () => GameManager.Get.OnFullLoopCompleted());
+
         ANIM.TrackAnimator(handle_animLoopSuccess.m_Animator, iCT);
         ANIM.QueueAnimRange(handle_animLoopSuccess.m_Animator, handle_animLoopSuccess.GetAnimQueue(iCT));
         await ANIM.PlayAnim(handle_animLoopSuccess.m_Animator);
