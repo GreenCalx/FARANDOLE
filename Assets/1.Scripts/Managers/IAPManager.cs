@@ -177,6 +177,11 @@ public class IAPManager : MonoBehaviour
         return false;
     }
 
+    public void DebugPremiumUnlock()
+    {
+        PlayerPrefs.SetInt(kLocalPremiumUnlocked, 1);
+    }
+
     public void OpenStore()
     {
         //m_HandleStorePage.gameObject.SetActive(true);

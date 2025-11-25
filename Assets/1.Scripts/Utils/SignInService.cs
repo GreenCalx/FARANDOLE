@@ -53,6 +53,7 @@ public class SignInService : MonoBehaviour
     public void OfflineMode()
     {
         SessionData.IsOnline = true;
+        IAPManager.Get.DebugPremiumUnlock();
     }
 
     public void TrySignIn()

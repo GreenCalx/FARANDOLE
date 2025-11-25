@@ -29,12 +29,34 @@ public class UIPanel : MonoBehaviour
         }
         return links;
     }
-    public void Disable()
+    public void DisableCanvas()
     {
         m_CanvasGroup.alpha = 0f;
         m_CanvasGroup.interactable = false;
         m_CanvasGroup.blocksRaycasts = false;
     }
+    public void DisableChilds()
+    {
+        foreach (Transform t in transform)
+        {
+            t.gameObject.SetActive(false);
+        }
+    }
+    public void DisableAll() { DisableCanvas();  DisableChilds();}
+    public void EnableCanvas()
+    {
+        m_CanvasGroup.alpha = 1f;
+        m_CanvasGroup.interactable = true;
+        m_CanvasGroup.blocksRaycasts = true;
+    }
+    public void EnableChilds()
+    {
+        foreach (Transform t in transform)
+        {
+            t.gameObject.SetActive(true);
+        }
+    }
+    public void EnableAll() { EnableCanvas();  EnableChilds();}
 
     public virtual void OnNavEnter(CancellationToken iCT)
     {
@@ -49,4 +71,6 @@ public class UIPanel : MonoBehaviour
         m_CanvasGroup.interactable = false;
         m_CanvasGroup.blocksRaycasts = false;
     }
+
+
 }

@@ -15,13 +15,14 @@ public class ManagedAnimation : MonoBehaviour
     public CancellationTokenSource cancellationTokenSource;
     public async UniTask WaitAnimState(string iStateName, float iCompletionFrac, CancellationToken iCT)
     {
-        while (!m_Animator.GetCurrentAnimatorStateInfo(0).IsName(iStateName))
+        while ((m_Animator!=null) && !m_Animator.GetCurrentAnimatorStateInfo(0).IsName(iStateName))
         {
             if (iCT.IsCancellationRequested)
                 return;
             await UniTask.Yield();
         }
         while (
+            (m_Animator!=null) &&
             (m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime < iCompletionFrac) &&
             (m_Animator.GetCurrentAnimatorStateInfo(0).IsName(iStateName))
             )

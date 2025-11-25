@@ -209,8 +209,8 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         ANIM.StopTrackAnimator(handle_animLoopSuccess.m_Animator);
         //await handle_animLoopSuccess.Animate(colors, iLoopPassed, iRankUp, iLoopDepth, iCT);
         powerBar.StopProgress();
-        
-        handle_animLoopSuccess.OnBeforeLoopDepth.RemoveListener(()=>OnBeforeLoopDepth?.Invoke());
-        handle_animLoopSuccess.OnNewRankDisplayedCB.RemoveListener(()=> { AUDIO.LerpRank(prevRank, newRank); });
+                
+        handle_animLoopSuccess.OnBeforeLoopDepth.RemoveAllListeners();
+        handle_animLoopSuccess.OnNewRankDisplayedCB.RemoveAllListeners();
     }
 }

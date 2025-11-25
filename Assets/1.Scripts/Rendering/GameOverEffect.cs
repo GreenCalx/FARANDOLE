@@ -47,17 +47,17 @@ public class GameOverEffect : MonoBehaviour
         {
             elapsedTime += Time.deltaTime;
 
-            if (elapsedTime >= duration)
-            {
-                //elapsedTime = duration;
-                //FXMat.SetFloat("_ControlledTime", duration); // reset
-                //StopFX();
-            } else
-            {
-                float frac = Mathf.Clamp01(elapsedTime / duration);
+            // if (elapsedTime >= duration)
+            // {
+            //     //elapsedTime = duration;
+            //     //FXMat.SetFloat("_ControlledTime", duration); // reset
+            //     //StopFX();
+            // } else
+            // {
+                //float frac = Mathf.Clamp01(elapsedTime / duration);
                 FXMat.SetFloat("_ControlledTime", elapsedTime);
                 //FXMat.SetFloat("_RippleStrength", RippleStrengthOverTime.Evaluate(frac));
-            }
+            // }
         }
 
         // Debug trigger

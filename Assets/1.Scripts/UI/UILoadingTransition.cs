@@ -11,7 +11,7 @@ public class UILoadingTransition : MonoBehaviour
     [Header("Internals")]
     public CanvasGroup canvasGroup;
 
-    void Start()
+    void Awake()
     {
         canvasGroup = GetComponent<CanvasGroup>();
     }

@@ -67,7 +67,7 @@ public class UITitle : UINavigator
         m_CustomMode?.clickCallback.AddListener(() => StartCustom());
         m_LaunchSinglesMode?.onClick.AddListener(() => StartSingles(m_LaunchSinglesGame.selectedGame.ID));
 
-        
+
         handle_PopUpPanel.NavigateBackCB.AddListener(()=> base.OnBack());
 
         backBtn?.clickCallback.AddListener(() => base.OnBack());

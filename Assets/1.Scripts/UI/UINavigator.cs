@@ -35,19 +35,27 @@ public class UINavigator : MonoBehaviour
         foreach(UIPanel p in m_SubscribedElements)
         {
             p.gameObject.SetActive(true);
+
+            p.m_PanelAnimation.AfterHideCB.AddListener(()=>p.DisableCanvas());
+            p.m_PanelAnimation.AfterHideCB.AddListener(()=>p.DisableChilds());
+
+            p.m_PanelAnimation.PreShowCB.AddListener(()=>p.EnableChilds());
+            p.m_PanelAnimation.AfterShowCB.AddListener(()=>p.EnableCanvas());
+
             if (p==m_Home)
-                continue;  
-            p.Disable();
+                p.EnableAll();
+            else
+                p.DisableAll();
         }
 
         panels = new Stack<UIPanel>();
         panels.Push(m_Home);
-        
 
         m_CTS = new CancellationTokenSource();
         
         m_NavigationPanel.Setup(this);
         
+        //NavigateTo(m_Home);
         m_Home.OnNavEnter(m_CTS.Token);
     }
 

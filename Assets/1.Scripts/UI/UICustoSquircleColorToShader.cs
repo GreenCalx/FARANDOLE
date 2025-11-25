@@ -25,7 +25,7 @@ public class UICustoSquircleColorToShader : MonoBehaviour
 
     void OnDisable()
     {
-        if (target == null)
+        if ((target == null)||(matColorOverride == null))
             return;
         matColorOverride.PropertyValue = initColor;
     }

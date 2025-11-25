@@ -130,4 +130,5 @@ public class UIButton : Button, IPointerUpHandler, IPointerDownHandler, IPointer
         pressed = false;
         UpdateImage();
     }
+
 }
