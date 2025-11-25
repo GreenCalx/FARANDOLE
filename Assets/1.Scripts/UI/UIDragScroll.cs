@@ -32,7 +32,7 @@ public class UIDragScroll : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             CalculateBounds();
     }
 
-    void CalculateBounds()
+    public void CalculateBounds()
     {
         float viewHeight = viewArea.rect.height;
         float contentHeight = content.rect.height;
@@ -41,38 +41,46 @@ public class UIDragScroll : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         lowerLimit = Mathf.Min(0f, viewHeight - contentHeight); // negative if content taller
     }
 
-    public void OnBeginDrag(PointerEventData eventData)
+public void OnBeginDrag(PointerEventData eventData)
+{
+    dragging = true;
+    velocity = Vector2.zero;
+    RectTransformUtility.ScreenPointToLocalPointInRectangle(
+        viewArea, eventData.position, eventData.pressEventCamera, out pointerStartLocalPos);
+    // Store the content's current position
+    contentStartPos = content.anchoredPosition;
+    // Adjust pointerStartLocalPos to be relative to the content's top
+    pointerStartLocalPos.y += content.anchoredPosition.y;
+}
+
+
+public void OnDrag(PointerEventData eventData)
+{
+    Vector2 localPoint;
+    RectTransformUtility.ScreenPointToLocalPointInRectangle(
+        viewArea, eventData.position, eventData.pressEventCamera, out localPoint);
+    // Adjust localPoint to be relative to the content's top
+    localPoint.y += content.anchoredPosition.y;
+    // Calculate delta
+    Vector2 delta = localPoint - pointerStartLocalPos;
+    // Apply delta to content's Y position
+    float newY = contentStartPos.y + delta.y;
+    // Apply bounce or clamp
+    if (enableBounce)
     {
-        dragging = true;
-        velocity = Vector2.zero;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(viewArea, eventData.position, eventData.pressEventCamera, out pointerStartLocalPos);
-        contentStartPos = content.anchoredPosition;
+        if (newY > upperLimit)
+            newY = Mathf.Lerp(newY, upperLimit, 0.5f);
+        else if (newY < lowerLimit)
+            newY = Mathf.Lerp(newY, lowerLimit, 0.5f);
     }
-
-    public void OnDrag(PointerEventData eventData)
+    else
     {
-        Vector2 localPoint;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(viewArea, eventData.position, eventData.pressEventCamera, out localPoint);
-        Vector2 delta = localPoint - pointerStartLocalPos;
-
-        // Use only Y axis for movement
-        float newY = contentStartPos.y + delta.y;
-
-        // Apply soft limits (bounce)
-        if (enableBounce)
-        {
-            if (newY > upperLimit)
-                newY = Mathf.Lerp(newY, upperLimit, 0.5f);
-            else if (newY < lowerLimit)
-                newY = Mathf.Lerp(newY, lowerLimit, 0.5f);
-        }
-        else
-        {
-            newY = Mathf.Clamp(newY, lowerLimit, upperLimit);
-        }
-
-        content.anchoredPosition = new Vector2(contentStartPos.x, newY);
+        newY = Mathf.Clamp(newY, lowerLimit, upperLimit);
     }
+    // Update content position
+    content.anchoredPosition = new Vector2(content.anchoredPosition.x, newY);
+}
+
 
     public void OnEndDrag(PointerEventData eventData)
     {

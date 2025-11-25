@@ -16,6 +16,8 @@ public class UIRunOverview : MonoBehaviour
     RectTransform inst_RunTailThumbnail;
     public UILineRenderer LR;
 
+    public UIDragScroll dragScroll;
+
     public void Setup(PlayerData iPlayerData)
     {
         MiniGameLoopHistory history = iPlayerData.loopHistory;
@@ -82,5 +84,7 @@ public class UIRunOverview : MonoBehaviour
 
         LR.Points[1] = inst_rankLines.Last().GetComponent<RectTransform>().anchoredPosition;
         LR.gameObject.SetActive(true);
+
+        dragScroll.CalculateBounds();
     }
 }

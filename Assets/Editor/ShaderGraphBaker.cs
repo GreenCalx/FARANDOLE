@@ -6,7 +6,11 @@ using System.IO;
 public class ShaderGraphBaker : EditorWindow
 {
     private Material shaderGraphMaterial;
-    private int resolution = 512;
+
+    private int output_resolution_w = 512;
+    private int output_resolution_h = 512;
+    private int render_resolution = 512;
+
     private Color background = Color.black;
     private string fileName = "BakedShaderGraph";
 
@@ -18,9 +22,14 @@ public class ShaderGraphBaker : EditorWindow
 
     private void OnGUI()
     {
-        GUILayout.Label("🎨 URP ShaderGraph Texture Baker", EditorStyles.boldLabel);
+        GUILayout.Label("URP ShaderGraph Texture Baker", EditorStyles.boldLabel);
         shaderGraphMaterial = (Material)EditorGUILayout.ObjectField("ShaderGraph Material", shaderGraphMaterial, typeof(Material), false);
-        resolution = EditorGUILayout.IntPopup("Resolution", resolution, new[] { "256", "512", "1024", "2048" }, new[] { 256, 512, 1024, 2048 });
+        
+        render_resolution = EditorGUILayout.IntPopup("Render Resolution", render_resolution, new[] { "2", "8","256", "512", "1024", "2048" }, new[] { 2,8, 256, 512, 1024, 2048 });
+
+        output_resolution_h = EditorGUILayout.IntPopup("Output Resolution Height", output_resolution_h, new[] { "1", "8","256", "512", "1024", "2048" }, new[] { 1,8, 256, 512, 1024, 2048 });
+        output_resolution_w = EditorGUILayout.IntPopup("Output Resolution Width", output_resolution_w, new[] { "1", "8", "256", "512", "1024", "2048" }, new[] { 1,8, 256, 512, 1024, 2048 });
+       
         background = EditorGUILayout.ColorField("Background Color", background);
         fileName = EditorGUILayout.TextField("File Name", fileName);
         EditorGUILayout.Space();
@@ -58,19 +67,19 @@ public class ShaderGraphBaker : EditorWindow
         quad.transform.localScale = Vector3.one * 2f;
 
         // Create RenderTexture
-        RenderTexture rt = new RenderTexture(resolution, resolution, 24, RenderTextureFormat.ARGB32);
+        RenderTexture rt = new RenderTexture(render_resolution, render_resolution, 24, RenderTextureFormat.ARGB32);
         cam.targetTexture = rt;
 
         cam.Render();
 
         // Read pixels
         RenderTexture.active = rt;
-        Texture2D tex = new Texture2D(resolution, resolution, TextureFormat.RGBA32, false);
-        tex.ReadPixels(new Rect(0, 0, resolution, resolution), 0, 0);
+        Texture2D tex = new Texture2D(output_resolution_w, output_resolution_h, TextureFormat.RGBA32, false);
+        tex.ReadPixels(new Rect(0, 0, output_resolution_w, output_resolution_h), 0, 0);
         tex.Apply();
 
         // Save PNG
-        string path = EditorUtility.SaveFilePanel("Save Baked Texture", Application.dataPath, $"{fileName}.png", "png");
+        string path = EditorUtility.SaveFilePanel("Save Baked Texture", Application.dataPath + "\\4.Graphx\\Textures\\BakedTextures", $"{fileName}.png", "png");
         if (!string.IsNullOrEmpty(path))
         {
             File.WriteAllBytes(path, tex.EncodeToPNG());

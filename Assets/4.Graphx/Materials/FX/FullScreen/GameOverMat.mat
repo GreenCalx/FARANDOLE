@@ -27,6 +27,14 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _FullLoopCompletedGradientTex:
+        m_Texture: {fileID: 2800000, guid: 2373fed7daec2df459a007d78f2d8fd9, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GameOverGradientTex:
+        m_Texture: {fileID: 2800000, guid: 3b0d77b2c1d80c043809bd416584b22b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -88,7 +96,7 @@ Material:
     - _Speed: 1
     - _StartSize: 0
     - _Strength: 1
-    - _UseWinGradient: 0
+    - _UseWinGradient: 1
     - _ZWrite: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
