@@ -67,28 +67,18 @@ public class UIMiniGameSelectionGrid : MonoBehaviour
                 MGImages.Add(newImg);
             }
 
-            //SelectGameValidationBtn.enabled      = selectedGame != null;
             selectedGame = null;
             selectedImage = null;
             SelectGameValidationBtn.interactable = false;
             SelectGameValidationBtn.UpdateImage();
-            //SelectGameValidationBtn.onClick.AddListener(()=>{});
++
         }
     }
 
     void Update()
     {
-        bool mg_selected = selectedGame != null;
-        if (mg_selected && !SelectGameValidationBtn.interactable)
-        {
-            SelectGameValidationBtn.interactable = true;
-            SelectGameValidationBtn.UpdateImage();
-        } else if ((!mg_selected) && SelectGameValidationBtn.interactable)
-        {
-            SelectGameValidationBtn.interactable = false;
-            SelectGameValidationBtn.UpdateImage();
-        }
-        
+        SelectGameValidationBtn.interactable = selectedGame != null;
+        SelectGameValidationBtn.UpdateImage();
     }
 
     void OnEnable()

@@ -85,7 +85,7 @@ public class MiniGameManager : MonoBehaviour, IManager
         #endif
 
         prefab_miniGames.Clear();
-        if (GameData.Get.MiniGameSeeds != null && GameData.Get.MiniGameSeeds.Count > 0)
+        if (GameData.Get.currentGameMode == GAME_MODE.SINGLES)
         {
             prefab_miniGames = GameData.GetMGBank.GetFromSeeds();
         } else
