@@ -16,7 +16,7 @@ MonoBehaviour:
   loopSize: 1
   percentOfLoopSizeToPass: 0.5
   ComboRequirementForSuper: 2
-  ComboRequirementForMaster: 5
+  ComboRequirementForMaster: 3
   MiniGameTime: 1
   MaxTimeScale: 2
   timeScaleOverLoopLevel:
@@ -44,7 +44,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   LoopLevelColorGrading: {fileID: 2800000, guid: 646f8794914852640ae82f11d8f46b30, type: 3}
-  MaxLoopDepth: 12
+  MaxLoopDepth: 6
   titleScreenFadeoutTime: 3
   GameUIScreenProportion: 0.05
   GameFieldScreenProportion: 0.8

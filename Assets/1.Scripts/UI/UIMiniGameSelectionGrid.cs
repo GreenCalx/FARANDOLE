@@ -71,7 +71,7 @@ public class UIMiniGameSelectionGrid : MonoBehaviour
             selectedImage = null;
             SelectGameValidationBtn.interactable = false;
             SelectGameValidationBtn.UpdateImage();
-+
+
         }
     }
 

@@ -39,7 +39,6 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
     public UIPauseMenu h_PauseMenu;
     [Header("Callbacks")]
     public UnityEvent OnBeforeLoopDepth;
-    public UIButton skipAnimBtn;
     
     [Header("Internal references")]
     bool InitDone = false;

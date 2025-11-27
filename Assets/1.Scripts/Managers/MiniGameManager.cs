@@ -209,10 +209,9 @@ public class MiniGameManager : MonoBehaviour, IManager
 
             // Cancel animation init
             LoopCompleteAnimCTS = new CancellationTokenSource();
-            if (!MGLoop.IsFinalLoop)
-                UI.skipAnimBtn.clickCallback.AddListener(() => LoopCompleteAnimCTS.Cancel());
-            else 
-                UI.skipAnimBtn.gameObject.SetActive(false);
+
+                //UI.skipAnimBtn.clickCallback.AddListener(() => LoopCompleteAnimCTS.Cancel());
+
 
             // Rank update
             UI.inst_loopPresentationAnim.rankMedalAnimation.UpdateCurrentRank(MGLoop);
@@ -226,13 +225,14 @@ public class MiniGameManager : MonoBehaviour, IManager
             // play animation
             await UI.LoopCompleteAnim(MGLoop, LoopCompleteAnimCTS.Token);
 
-            if (!MGLoop.IsFinalLoop)
-                UI.skipAnimBtn.clickCallback.RemoveListener(() => LoopCompleteAnimCTS.Cancel());
-            
+                //UI.skipAnimBtn.clickCallback.RemoveListener(() => LoopCompleteAnimCTS.Cancel());
+
+
             MGLoop.Reset();
         }
         //await PG.OpenPlaygroundAnim();
-        PlayCurrent();
+        if (!MGLoop.IsFinalLoop)
+            PlayCurrent();
     }
 
     public LoopHighScore GetLoopHighScore()

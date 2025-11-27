@@ -471,6 +471,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Animator: {fileID: 195231272}
   IsShown: 0
+  IsSkippable: 1
+  prefab_LongTapListener: {fileID: 0}
   PreHideCB:
     m_PersistentCalls:
       m_Calls: []
@@ -1875,6 +1877,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Animator: {fileID: 558358832}
   IsShown: 0
+  IsSkippable: 1
+  prefab_LongTapListener: {fileID: 0}
   PreHideCB:
     m_PersistentCalls:
       m_Calls: []
@@ -2711,6 +2715,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Animator: {fileID: 697608646}
   IsShown: 0
+  IsSkippable: 1
+  prefab_LongTapListener: {fileID: 0}
   PreHideCB:
     m_PersistentCalls:
       m_Calls: []
@@ -4208,6 +4214,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Animator: {fileID: 1465907415}
   IsShown: 0
+  IsSkippable: 1
+  prefab_LongTapListener: {fileID: 0}
   PreHideCB:
     m_PersistentCalls:
       m_Calls: []
@@ -4675,6 +4683,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Animator: {fileID: 1576953429}
   IsShown: 0
+  IsSkippable: 1
+  prefab_LongTapListener: {fileID: 0}
   PreHideCB:
     m_PersistentCalls:
       m_Calls: []
@@ -5564,6 +5574,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Animator: {fileID: 1936791983}
   IsShown: 0
+  IsSkippable: 1
+  prefab_LongTapListener: {fileID: 0}
   PreHideCB:
     m_PersistentCalls:
       m_Calls: []

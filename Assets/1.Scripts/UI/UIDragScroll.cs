@@ -38,7 +38,7 @@ public class UIDragScroll : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         float contentHeight = content.rect.height;
 
         upperLimit = 0f;
-        lowerLimit = Mathf.Min(0f, viewHeight - contentHeight); // negative if content taller
+        lowerLimit = viewHeight - contentHeight; // negative if content taller
     }
 
 public void OnBeginDrag(PointerEventData eventData)

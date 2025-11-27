@@ -158,6 +158,7 @@ public class GameManager : MonoBehaviour
     public async void OnMiniGameTransition()
     {
         // nothing ?
+        PC.Flush();
     }
 
     void OnLoopDepthUpdate()
@@ -205,6 +206,7 @@ public class GameManager : MonoBehaviour
     public void OnFullLoopCompleted()
     {
         playerData.FullLoopCompleted = true;
+
         GameOver();
     }
 

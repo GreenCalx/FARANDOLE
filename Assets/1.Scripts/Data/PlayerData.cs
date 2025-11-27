@@ -36,7 +36,7 @@ public class PlayerData
 
     public LoopRank GetMaxRank()
     {
-        LoopRank maxRank = LoopRank.I;
+        LoopRank maxRank = loopHistory.RankOnFullCompletion;
         foreach (MiniGameLoopSnapshot snap in loopHistory)
         {
             if (snap.completionRank > maxRank)

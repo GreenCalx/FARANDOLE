@@ -32,6 +32,7 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
     public const string OnPerfectTextValue = "PERFECT";
     public const string OnPassedTextValue = "PASSED";
     public const string OnFailedTextValue = "FAILED";
+    [Header("References")]
     public UITextFaderAnimation loopPassedTextAnim;
     public TextMeshProUGUI loopPassedTxt;
     public TextMeshProUGUI loopComboTxt;
@@ -39,10 +40,8 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
     public TextMeshProUGUI loopDepthValueTxt;
     [Header("Callbacks")]
     public UnityEvent OnBeforeLoopDepth;
-    public UnityEvent SkipAnimCB;
     public UnityEvent OnNewRankDisplayedCB;
     public UnityEvent OnFinalLoopDisplayedCB;
-
     // internals
     [Header("Internals")]
     MiniGameLoop MGLoop;
@@ -65,6 +64,8 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
     public void Skip()
     {
         m_Animator.SetTrigger(LoopAnimSkipTrigger);
+        if (inst_SkipHandler != null)
+            GameObject.Destroy(inst_SkipHandler.gameObject);
     }
 
     public void Init(MiniGameLoop iMGLoop, UILoopPresentationAnim iLoopPresentationAnim)
@@ -127,9 +128,14 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
             cancelCB.AddListener(() => OnNewRankDisplayedCB?.Invoke());
         
         // Animation loop
-            Func<UniTask> step1 = async () =>
+        Func<UniTask> step1 = async () =>
         {
             await UniTask.SwitchToMainThread();
+            inst_SkipHandler = GOBuilder.Create(prefab_LongTapListener)
+                                        .WithParent(transform)
+                                        .BuildAs<LongTapListener>();
+            inst_SkipHandler.m_OnTapEvent.AddListener( () => Skip() );
+
             m_Animator.SetBool(LoopRankUpBoolParm, MGLoop.IsRankUpdateRequested);
             m_Animator.SetTrigger(LoopPassedTrigger);
             await WaitMainAnimTask(1f, iCT); // full anim
@@ -262,6 +268,8 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
         Func<UniTask> step8 = async () =>
         {
             await UniTask.SwitchToMainThread();
+            if (inst_SkipHandler != null)
+                GameObject.Destroy(inst_SkipHandler.gameObject);
             await WaitBackToIdle(1f, iCT);
         };
         q.Enqueue(step8);

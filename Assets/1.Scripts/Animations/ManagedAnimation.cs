@@ -12,6 +12,9 @@ public class ManagedAnimation : MonoBehaviour
     public Animator m_Animator;
     [Header("ManagedAnimation : Internals")]
     public bool IsShown = false;
+    public bool IsSkippable = true;
+    public GameObject prefab_LongTapListener;
+    protected LongTapListener inst_SkipHandler;
     public CancellationTokenSource cancellationTokenSource;
     public async UniTask WaitAnimState(string iStateName, float iCompletionFrac, CancellationToken iCT)
     {
