@@ -200,33 +200,26 @@ public class MiniGameManager : MonoBehaviour, IManager
 
         if (!MGLoop.MoveNext())
         {
-            MGLoop.ComboUpdate();
-
+            // Freeze present loop state
             PData.loopHistory.AddSnapshot(MGLoop);
 
+            // Prepare next loop
+            MGLoop.RankUpdate();
+            MGLoop.ComboUpdate();
             MGLoop.depth++;
             OnLoopComplete.Invoke();
 
             // Cancel animation init
             LoopCompleteAnimCTS = new CancellationTokenSource();
-
-                //UI.skipAnimBtn.clickCallback.AddListener(() => LoopCompleteAnimCTS.Cancel());
-
+            //UI.skipAnimBtn.clickCallback.AddListener(() => LoopCompleteAnimCTS.Cancel());
 
             // Rank update
-            UI.inst_loopPresentationAnim.rankMedalAnimation.UpdateCurrentRank(MGLoop);
-            MGLoop.RankUpdate();
-            
-            if (MGLoop.IsRankUpdateRequested)
-            {
-                UI.inst_loopPresentationAnim.rankMedalAnimation.UpdateNewRank(MGLoop);
-            }
+
                 
             // play animation
             await UI.LoopCompleteAnim(MGLoop, LoopCompleteAnimCTS.Token);
 
-                //UI.skipAnimBtn.clickCallback.RemoveListener(() => LoopCompleteAnimCTS.Cancel());
-
+            //UI.skipAnimBtn.clickCallback.RemoveListener(() => LoopCompleteAnimCTS.Cancel());
 
             MGLoop.Reset();
         }

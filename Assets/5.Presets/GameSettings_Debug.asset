@@ -17,7 +17,8 @@ MonoBehaviour:
   percentOfLoopSizeToPass: 0.5
   ComboRequirementForSuper: 2
   ComboRequirementForMaster: 3
-  MiniGameTime: 1
+  MaxComboPoints: 3
+  MiniGameTime: 6
   MaxTimeScale: 2
   timeScaleOverLoopLevel:
     serializedVersion: 2

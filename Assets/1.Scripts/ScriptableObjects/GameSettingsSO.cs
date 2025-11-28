@@ -11,8 +11,9 @@ public class GameSettingsSO : ScriptableObject
 
     [Tooltip("Inclusive")]
     public float percentOfLoopSizeToPass = 0.5f;
-    public int ComboRequirementForSuper = 2;
-    public int ComboRequirementForMaster = 5;
+    public int ComboRequirementForSuper = 2; // TODO check full combo bar instead
+    public int ComboRequirementForMaster = 5; // TODO Check for time spent at a full combo bar
+    public int MaxComboPoints = 3;
     public int loopPassThreshold
     {
         get { return (int)Mathf.Floor((float)loopSize / 2f); }

@@ -24,6 +24,11 @@ public class MiniGameLoopHistory : IEnumerable
     {
         snapshots.Add(new MiniGameLoopSnapshot(iTarget));
     }
+
+    public MiniGameLoopSnapshot Peek()
+    {
+        return snapshots[snapshots.Count - 1];
+    }
 }
 
 public class MiniGameLoopHistoryEnum : IEnumerator<MiniGameLoopSnapshot>

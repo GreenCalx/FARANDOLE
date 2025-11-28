@@ -187,13 +187,21 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
 
     public async UniTask LoopCompleteAnim(MiniGameLoop iMGLoop, CancellationToken iCT)
     {
-        handle_animLoopSuccess.Init(iMGLoop, inst_loopPresentationAnim);
+        MiniGameLoopSnapshot finishedLoop = m_PlayerData.loopHistory.Peek();
+
+        inst_loopPresentationAnim.rankMedalAnimation.UpdateCurrentRank(finishedLoop);
+        //if (iMGLoop.IsRankUpdateRequested)
+        //{
+            inst_loopPresentationAnim.rankMedalAnimation.UpdateNewRank(iMGLoop);
+        //}
+
+        handle_animLoopSuccess.Init(finishedLoop, iMGLoop, inst_loopPresentationAnim);
         handle_animLoopSuccess.OnBeforeLoopDepth = new UnityEvent();
         handle_animLoopSuccess.OnBeforeLoopDepth.AddListener(()=>OnBeforeLoopDepth?.Invoke());
         powerBar.Setup(iMGLoop, handle_animLoopSuccess.loopPresentationAnim);
                 
         float newRank = (float)iMGLoop.rank;
-        float prevRank = iMGLoop.rank > 0 ? newRank - 1f : 0f;
+        float prevRank = (float) finishedLoop.completionRank;
         handle_animLoopSuccess.OnNewRankDisplayedCB = new UnityEvent();
         handle_animLoopSuccess.OnNewRankDisplayedCB.AddListener(
             () => { AUDIO.LerpRank(prevRank, newRank); }

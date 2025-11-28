@@ -35,7 +35,10 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
     [Header("References")]
     public UITextFaderAnimation loopPassedTextAnim;
     public TextMeshProUGUI loopPassedTxt;
-    public TextMeshProUGUI loopComboTxt;
+    [Header("Combo References")]
+    public RectTransform handle_ComboBarLayout;
+    public GameObject prefab_UIComboPointContainer;
+    public List<UIComboPoint> m_ComboPoints;
     [Header("Loop Depth")]
     public TextMeshProUGUI loopDepthValueTxt;
     [Header("Callbacks")]
@@ -45,12 +48,14 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
     // internals
     [Header("Internals")]
     MiniGameLoop MGLoop;
+    MiniGameLoopSnapshot previousMGLoop;
     public UILoopPresentationAnim loopPresentationAnim;
+    public bool PresentationShown => loopPresentationAnim.PresentationShown;
 
     void Start()
     {
         m_Animator = GetComponent<Animator>();
-
+        cancellationTokenSource = new CancellationTokenSource();
         loopPassedTxt.color = new Color
         (
             loopPassedTxt.color.r,
@@ -59,6 +64,7 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
             0
         );
         loopPassedTxt.ForceMeshUpdate();
+        InitComboPoints();
     }
 
     public void Skip()
@@ -68,19 +74,83 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
             GameObject.Destroy(inst_SkipHandler.gameObject);
     }
 
-    public void Init(MiniGameLoop iMGLoop, UILoopPresentationAnim iLoopPresentationAnim)
+    void InitComboPoints()
     {
-        loopDepthValueTxt.text = iMGLoop.depth.ToString();
-        loopComboTxt.text =  "X" + iMGLoop.previousCombo.ToString();
-        MGLoop = iMGLoop;
-        loopPresentationAnim = iLoopPresentationAnim;
+        if (m_ComboPoints!=null && m_ComboPoints.Count >= GameData.GetSettings.MaxComboPoints)
+        {
+            PreviousComboPoints(cancellationTokenSource.Token);
+            return;
+        }
 
-        if (GameData.Get.currentGameMode == GAME_MODE.DAILY_SEED)
+        foreach( Transform child in handle_ComboBarLayout.transform)
+            GameObject.Destroy(child.gameObject);
+
+        m_ComboPoints = new List<UIComboPoint>(GameData.GetSettings.MaxComboPoints);
+        for (int i=0; i < GameData.GetSettings.MaxComboPoints; i++)
+        {
+            m_ComboPoints.Add(GOBuilder.Create(prefab_UIComboPointContainer)
+                                    .WithName("ComboPoint " + i)
+                                    .WithParent(handle_ComboBarLayout)
+                                    .WithLocalPosition(Vector3.zero)
+                                    .BuildAs<UIComboPoint>());
+            RectTransform as_rt = m_ComboPoints[i].GetComponent<RectTransform>();
+            handle_ComboBarLayout.sizeDelta += new Vector2(as_rt.rect.width, 0f);
+        }
+        PreviousComboPoints(cancellationTokenSource.Token);
+    }
+
+    void PreviousComboPoints(CancellationToken iCT)
+    {
+        for (int i=0; i < m_ComboPoints.Count; i++)
+        {
+            if (previousMGLoop.comboMultiplier > i)
+            {
+                m_ComboPoints[i].DefaultShow(iCT);
+                continue;
+            }
+            m_ComboPoints[i].DefaultHide(iCT);
+        }
+    }
+    void RefreshComboPoints(CancellationToken iCT)
+    {
+        for (int i=0; i < m_ComboPoints.Count; i++)
+        {
+            if (MGLoop.combo > i)
+            {
+                m_ComboPoints[i].DefaultShow(iCT);
+                continue;
+            }
+            m_ComboPoints[i].DefaultHide(iCT);
+        }
+    }
+
+    void HideComboPoints(CancellationToken iCT)
+    {
+        for (int i=0; i < m_ComboPoints.Count; i++)
+        {
+            m_ComboPoints[i].DefaultHide(iCT);
+        }
+    }
+
+    public void Init(MiniGameLoopSnapshot iFinishedMGLoop, MiniGameLoop iNextMGLoop, UILoopPresentationAnim iLoopPresentationAnim)
+    {
+        MGLoop = iNextMGLoop;
+        previousMGLoop = iFinishedMGLoop;
+
+        // Depth
+        loopDepthValueTxt.text = MGLoop.depth.ToString();
+
+        // Combo
+        //loopComboTxt.text =  "X" + MGLoop.previousCombo.ToString();
+        InitComboPoints();
+        
+        loopPresentationAnim = iLoopPresentationAnim;
+        //if (GameData.Get.currentGameMode == GAME_MODE.DAILY_SEED)
             loopPresentationAnim.DisableThumbnailButtons();
         loopPresentationAnim.ResetLights();
 
         // Init ani text
-        if (iMGLoop.IsLoopPerfect())
+        if (iFinishedMGLoop.IsPerfect)
         {
             loopPassedTxt.text = OnPerfectTextValue;
             loopPassedTxt.color = new Color
@@ -91,7 +161,7 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
                 0
             );
         }
-        else if (!iMGLoop.IsLoopPassed())
+        else if (iFinishedMGLoop.IsFailed)
         {
             loopPassedTxt.text = OnFailedTextValue;
             loopPassedTxt.color = new Color
@@ -152,7 +222,7 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
         {
             await UniTask.SwitchToMainThread();
             cancelCB.AddListener(() => loopPresentationAnim.Cancel());
-            
+            InitComboPoints();
             // Show Presentation Loop
             await
             UniTask.WhenAll(
@@ -166,6 +236,7 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
             }
 
             // Show Thumbnail Lights and fill power bar
+            
             await loopPresentationAnim.ShowLights(MGLoop, true, iCT);
             if (iCT.IsCancellationRequested)
             {
@@ -184,10 +255,16 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
             await UniTask.SwitchToMainThread();
 
             CancellationTokenSource ctsTextAnim = new CancellationTokenSource();
-            loopComboTxt.text = "X" + MGLoop.combo.ToString();
+
             loopPresentationAnim.rankMedalAnimation.AnimateShake();
             loopPassedTextAnim.Animate(ctsTextAnim.Token, iCT);
+            
+            await WaitShowSuccessAnimTask(0.5f, iCT);
+
+            RefreshComboPoints(iCT);
+
             await WaitShowSuccessAnimTask(1f, iCT);
+            
             //ctsTextAnim.Cancel();
 
             if (iCT.IsCancellationRequested)
@@ -229,6 +306,7 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
         {
             await UniTask.SwitchToMainThread();
             m_Animator.SetTrigger(LoopHideTrigger);
+            HideComboPoints(iCT);
             await UniTask.WhenAll(
                 loopPresentationAnim.Hide(iCT),
                 UniTask.WhenAny(
@@ -236,6 +314,7 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
                     WaitHideAnimTask(0.75f, iCT)
                 )
             );
+            
             cancelCB.RemoveListener(() => loopPresentationAnim.Cancel());
 
             if (MGLoop.IsFinalLoop)

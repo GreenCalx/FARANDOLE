@@ -59,19 +59,21 @@ public class UIRankMedalAnim : ManagedAnimation
     {
         //newRankImage.material.SetInt(shaderParmShine, 1);
     }
+    public void UpdateCurrentRank(MiniGameLoopSnapshot iMGSnap)
+    {
+        currentRankText.text = iMGSnap.completionRank.ToString();
+        currentRankImage.sprite = GameData.GetSettings.RankSettings.GetImageFromRank(iMGSnap.completionRank);
+    }
+
     public void UpdateCurrentRank(MiniGameLoop iMGLoop)
     {
         currentRankText.text = iMGLoop.GetRankStr();
         currentRankImage.sprite = GameData.GetSettings.RankSettings.GetImageFromRank(iMGLoop.rank);
-        //currentRankImage.material.SetInt(shaderParmShine, 0);
-        
     }
-
     public void UpdateNewRank(MiniGameLoop iMGLoop)
     {
         newRankText.text = iMGLoop.GetRankStr();
         newRankImage.sprite = GameData.GetSettings.RankSettings.GetImageFromRank(iMGLoop.rank);
-        //newRankImage.material.SetInt(shaderParmShine, 0);
     }
 
     void Update()

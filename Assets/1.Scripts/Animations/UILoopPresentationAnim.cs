@@ -26,6 +26,7 @@ public class UILoopPresentationAnim : ManagedAnimation
     bool init = false;
     [Header("Internals")]
     UILoopStartImage inst_loopStartImage;
+    public bool PresentationShown => IsShown;
     public int DisplayedSuccessLights
     {
         get

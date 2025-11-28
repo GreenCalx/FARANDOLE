@@ -22,7 +22,13 @@ public class MiniGameLoop : IEnumerator<MiniGame>
     public int index = 0;
     public LoopRank rank;
     public int depth;
-    public int combo;
+    int m_Combo;
+    public int combo
+    {
+        set { m_Combo = Mathf.Clamp(value, 0, GameData.GetSettings.MaxComboPoints); }
+        get { return m_Combo; }
+    }
+    public bool IsFullCombo => combo >= GameData.GetSettings.MaxComboPoints;
     public int previousCombo;
     public bool IsFinalLoop => depth >= GameData.GetSettings.MaxLoopDepth;
     public int count => inst_miniGames!=null ? inst_miniGames.Count : 0;
@@ -228,9 +234,7 @@ public class MiniGameLoop : IEnumerator<MiniGame>
                     RankDown();
                 else if (IsLoopPerfect())
                 {
-                    // master loop check
-                    // TODO : not a simple combo requirement
-                    if (combo >= GameData.GetSettings.ComboRequirementForMaster)
+                    if (IsFullCombo)
                         RankUp();
                 } else
                 {

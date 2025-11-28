@@ -11,7 +11,7 @@ public class ManagedAnimation : MonoBehaviour
     [Header("ManagedAnimation : References")]
     public Animator m_Animator;
     [Header("ManagedAnimation : Internals")]
-    public bool IsShown = false;
+    protected bool IsShown = false;
     public bool IsSkippable = true;
     public GameObject prefab_LongTapListener;
     protected LongTapListener inst_SkipHandler;
@@ -43,6 +43,14 @@ public class ManagedAnimation : MonoBehaviour
         m_Animator.SetTrigger(animTriggerCancel);
         cancellationTokenSource?.Cancel();
     }
+
+    public virtual void SetAsShown()
+    {
+        IsShown = true;
+        m_Animator.SetBool(DefaultShowAnimParm, true);
+        m_Animator.Play(DefaultShowStateName, 0, 0.8f);
+    }
+
 
     public virtual async UniTask DefaultShow(CancellationToken iCT)
     {
