@@ -92,6 +92,7 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
                                     .WithName("ComboPoint " + i)
                                     .WithParent(handle_ComboBarLayout)
                                     .WithLocalPosition(Vector3.zero)
+                                    .WithLocalScale(Vector3.one)
                                     .BuildAs<UIComboPoint>());
             RectTransform as_rt = m_ComboPoints[i].GetComponent<RectTransform>();
             handle_ComboBarLayout.sizeDelta += new Vector2(as_rt.rect.width, 0f);

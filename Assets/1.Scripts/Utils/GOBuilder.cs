@@ -47,6 +47,12 @@ public class GOBuilder
         return this;
     }
 
+    public GOBuilder WithLocalScale(Vector3 iSCale)
+    {
+        GO.transform.localScale = iSCale;
+        return this;
+    }
+
     public GOBuilder WithZRotation(float iAngle, bool iAlignWithUp = false)
     {
         float angle = iAlignWithUp ? iAngle - 90f : iAngle;
