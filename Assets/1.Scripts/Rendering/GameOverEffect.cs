@@ -15,6 +15,9 @@ public class GameOverEffect : MonoBehaviour
     UnityEvent m_CallbackOnDone;
     bool pendingFX = false;
 
+    public Texture GradientOnWin;
+    public Texture  GradientOnLose;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void OnEnable()
     {
@@ -71,7 +74,8 @@ public class GameOverEffect : MonoBehaviour
     public void SetupFX(PlayerData iPlayerData)
     {
         // Shadergraph expose bool as floats..
-        FXMat.SetFloat("_UseWinGradient", iPlayerData.FullLoopCompleted ? 1f : 0f);
+        //FXMat.SetFloat("_UseWinGradient", iPlayerData.FullLoopCompleted ? 1f : 0f);
+        FXMat.SetTexture("_ColorGradientTex", iPlayerData.FullLoopCompleted ? GradientOnWin : GradientOnLose);
     }
 
     public void StopFX()

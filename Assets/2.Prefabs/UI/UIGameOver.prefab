@@ -2264,6 +2264,14 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5054683042348079319, guid: 5f763f13eee67b446aab1c4000b0cc3f, type: 3}
+      propertyPath: GradientOnWin
+      value: 
+      objectReference: {fileID: 2800000, guid: 6d9efc10e375e544b80cce6bc816c5ef, type: 3}
+    - target: {fileID: 5054683042348079319, guid: 5f763f13eee67b446aab1c4000b0cc3f, type: 3}
+      propertyPath: GradientOnLose
+      value: 
+      objectReference: {fileID: 2800000, guid: 3b0d77b2c1d80c043809bd416584b22b, type: 3}
+    - target: {fileID: 5054683042348079319, guid: 5f763f13eee67b446aab1c4000b0cc3f, type: 3}
       propertyPath: StartOnEnabled
       value: 0
       objectReference: {fileID: 0}

@@ -85,6 +85,6 @@ public class UIRunOverview : MonoBehaviour
         LR.Points[1] = inst_rankLines.Last().GetComponent<RectTransform>().anchoredPosition;
         LR.gameObject.SetActive(true);
 
-        dragScroll.CalculateBounds();
+        //dragScroll.CalculateBounds();
     }
 }
