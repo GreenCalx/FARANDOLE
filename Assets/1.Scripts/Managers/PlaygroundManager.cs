@@ -14,11 +14,6 @@ public class PlaygroundManager : MonoBehaviour, IManager
 {
     public Bounds bounds;
     public CompositeCollider2D compositeCollider;
-    public DynamicPatternSO diff1Pattern;
-    public DynamicPatternSO diff2Pattern;
-    public DynamicPatternSO diff3Pattern;
-    public DynamicPatternSO diff4Pattern;
-    public DynamicPatternSO diff5Pattern;
     public Material forgroundMat;
     public Material playFieldMat;
     public Material clearAnimMat;
@@ -28,14 +23,15 @@ public class PlaygroundManager : MonoBehaviour, IManager
     private float currAnimationDeltaTime;
     public FinalClapAnim finalClapAnimation;
     public DynamicPatternCrossfader PGPatternFader;
-    List<Color> loopLevelColors;
+    List<Color> loopColors;
     GameObject go_colliders, go_fg, go_playfield;
     DoorAnim doorAnimation;
 
     MeshRenderer FG_MR, PF_MR;
     Coroutine AnimationCoroutine;
     Coroutine LerpColorCoroutine;
-    Coroutine LerpToNextStateCoroutine;
+    Coroutine LerpToNextColorCoroutine;
+    Coroutine LerpToNextPatternCoroutine;
     LayerManager2D LM2D;
     MiniGameManager MGM;
     AnimationManager ANIM;
@@ -80,17 +76,19 @@ public class PlaygroundManager : MonoBehaviour, IManager
 
     void InitColorGrading()
     {
-        Color32[] colors = GameData.GetSettings.LoopLevelColorGrading.GetPixels32(0);
-        loopLevelColors = new List<Color>(colors.Length);
+        Color32[] colors = GameData.GetSettings.LoopRankColorGrading.GetPixels32(0);
+        loopColors = new List<Color>(colors.Length);
         for (int i = 0; i < colors.Length; i++)
         {
-            loopLevelColors.Add(colors[i]);
+            loopColors.Add(colors[i]);
         }
     }
 
     void InitRendering()
     {
-        PGPatternFader.Init(FG_MR.material, diff1Pattern, diff2Pattern);
+        FG_MR.material.SetColor("_Tint", GetLoopRankColor((int)LoopRank.I));
+        forgroundFrameLR.material.SetColor("_Color", GetLoopRankColor((int)LoopRank.I));
+        PGPatternFader.Init(FG_MR.material, GameData.GetSettings.LoopDepthPatternCollection.patterns[0], GameData.GetSettings.LoopDepthPatternCollection.patterns[1]);
     }
 
     void BuildPlayground()
@@ -320,49 +318,78 @@ public class PlaygroundManager : MonoBehaviour, IManager
         finalClapAnimation.OpenAnim();
     }
 
-    public void RefreshRendering(int iLoopLevel, bool iRankedUp, LoopRank iLoopRank)
+    public void RefreshPatternFromDepth(MiniGameLoop iNextLoop)
     {
-        if (LerpToNextStateCoroutine != null)
+        if (LerpToNextPatternCoroutine != null)
         {
-            StopCoroutine(LerpToNextStateCoroutine);
-            LerpToNextStateCoroutine = null;
+            StopCoroutine(LerpToNextPatternCoroutine);
+            LerpToNextPatternCoroutine = null;
         }
-        LerpToNextStateCoroutine = StartCoroutine(LerpToNextStateCo(iLoopLevel, iRankedUp, iLoopRank));
+        LerpToNextPatternCoroutine = StartCoroutine(LerpDepthPatternCo(iNextLoop));
     }
 
-    public Color GetPreviousColor(int iLoopLevel)
+    public void RefreshColorFromRank(MiniGameLoop iNextLoop)
     {
-        return (iLoopLevel > 0) ? loopLevelColors[iLoopLevel - 1] : loopLevelColors[0];
-    }
-    
-    public Color GetCurrentColor(int iLoopLevel)
-    {
-        return (iLoopLevel >= loopLevelColors.Count) ? loopLevelColors[loopLevelColors.Count - 1] : loopLevelColors[iLoopLevel];
+        if (LerpToNextColorCoroutine != null)
+        {
+            StopCoroutine(LerpToNextColorCoroutine);
+            LerpToNextColorCoroutine = null;
+        }
+        LerpToNextColorCoroutine = StartCoroutine(LerpRankColorCo(iNextLoop));
     }
 
-    IEnumerator LerpToNextStateCo(int iLoopLevel, bool iRankedUp,LoopRank iLoopRank)
+    public Color GetLoopRankColor(int iRank)
+    {
+        return loopColors[iRank];
+    }
+
+    public DynamicPatternSO GetLoopDepthPattern(int iDepth)
+    {
+        PlaygroundPatternCollectionSO collection = GameData.GetSettings.LoopDepthPatternCollection;
+        if (iDepth < 0)
+            return collection.patterns[0];
+        else if (iDepth > collection.Count)
+            return collection.patterns[collection.Count-1];
+
+        return collection.patterns[iDepth];
+    }
+
+    IEnumerator LerpDepthPatternCo(MiniGameLoop iNextMGLoop)
     {
         float startTime = Time.time;
         float frac = 0f;
 
-        Color prevC   = GetPreviousColor(iLoopLevel);
-        Color newC    = GetCurrentColor(iLoopLevel);
-
         bool fadePattern = false;
-        if (iRankedUp)
-            fadePattern = PGPatternFader.TrySetNewCrossfadeTarget(GetRankPattern(iLoopRank));
+        if (!PGPatternFader.TrySetNewCrossfadeTarget(GetLoopDepthPattern(iNextMGLoop.depth)))
+        {
+            Debug.LogError("Failed to set new pattern for the playground. Trying to enforce new pattern as fallback.");
+            PGPatternFader.SetToNewPattern(GetLoopDepthPattern(iNextMGLoop.depth));
+            yield break;
+        }
+
+        while (frac < 1f)
+        {
+            frac = Mathf.Clamp01((Time.time - startTime) / GameData.GetSettings.PlayGroundPatternLerpTimeSec);
+            PGPatternFader.Crossfade(frac);
+            yield return null;
+        }
+        PGPatternFader.SetToNewPattern(GetLoopDepthPattern(iNextMGLoop.depth));
+    }
+
+    IEnumerator LerpRankColorCo(MiniGameLoop iNextMGLoop)
+    {
+        float startTime = Time.time;
+        float frac = 0f;
+
+        Color prevC   = GetLoopRankColor((int)GameManager.Get.playerData.loopHistory.Peek()?.completionRank);
+        Color newC    = GetLoopRankColor((int)iNextMGLoop.rank);
         while (frac < 1f)
         {
             frac = Mathf.Clamp01((Time.time - startTime) / GameData.GetSettings.PlayGroundColorLerpTimeSec);
             LerpColor(prevC, newC, frac);
-            if (iRankedUp && fadePattern)
-                PGPatternFader.Crossfade(frac);
             yield return null;
         }
-
         LerpColor(prevC, newC, 1f);
-        if (iRankedUp)
-            PGPatternFader.SetToNewPattern(GetRankPattern(iLoopRank));
     }
 
     void LerpColor(Color A, Color B, float iLerp)
@@ -370,25 +397,6 @@ public class PlaygroundManager : MonoBehaviour, IManager
         Color c = Color.Lerp(A, B, iLerp);
         FG_MR.material.SetColor("_Tint", c);
         forgroundFrameLR.material.SetColor("_Color", c);
-    }
-
-    public DynamicPatternSO GetRankPattern(LoopRank iLoopRank)
-    {
-        switch (iLoopRank)
-        {
-            case LoopRank.I:
-                return diff1Pattern;
-            case LoopRank.II:
-                return diff2Pattern;
-            case LoopRank.III:
-                return diff3Pattern;
-            case LoopRank.S:
-                return diff4Pattern;
-            case LoopRank.M:
-                return diff5Pattern;
-            default:
-                return diff1Pattern;
-        }        
     }
 
     IEnumerator AnimateCo()

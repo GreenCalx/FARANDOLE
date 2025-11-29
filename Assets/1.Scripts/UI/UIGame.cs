@@ -39,6 +39,7 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
     public UIPauseMenu h_PauseMenu;
     [Header("Callbacks")]
     public UnityEvent OnBeforeLoopDepth;
+    public UnityEvent OnLoopRankUpdate;
     
     [Header("Internal references")]
     bool InitDone = false;
@@ -203,9 +204,8 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         float newRank = (float)iMGLoop.rank;
         float prevRank = (float) finishedLoop.completionRank;
         handle_animLoopSuccess.OnNewRankDisplayedCB = new UnityEvent();
-        handle_animLoopSuccess.OnNewRankDisplayedCB.AddListener(
-            () => { AUDIO.LerpRank(prevRank, newRank); }
-            );
+        handle_animLoopSuccess.OnNewRankDisplayedCB.AddListener( () => {AUDIO.LerpRank(prevRank, newRank); });
+        handle_animLoopSuccess.OnNewRankDisplayedCB.AddListener( () => OnLoopRankUpdate?.Invoke());
 
         handle_animLoopSuccess.OnFinalLoopDisplayedCB = new UnityEvent();
         handle_animLoopSuccess.OnFinalLoopDisplayedCB.AddListener( () => GameManager.Get.OnFullLoopCompleted());

@@ -21,8 +21,9 @@ public class GameSettingsSO : ScriptableObject
     public float MiniGameTime = 5f;
     public float MaxTimeScale = 3f;
     public AnimationCurve timeScaleOverLoopLevel;
-    public Texture2D LoopLevelColorGrading;
+    public Texture2D LoopRankColorGrading;
     public int MaxLoopDepth = 12;
+    public PlaygroundPatternCollectionSO LoopDepthPatternCollection;
 
     [Header("UI Tweaks")]
     public float titleScreenFadeoutTime = 1f;
@@ -38,6 +39,7 @@ public class GameSettingsSO : ScriptableObject
     public int PostMiniGameLatchInMs = 500;
     public int PreMiniGameLatchInMs = 500;
     public float PlayGroundColorLerpTimeSec = 1f;
+    public float PlayGroundPatternLerpTimeSec = 1f;
     public float BGMRankLerpTimeSec = 1f;
     public float GameClockScaleAnimDuration = 0.25f;
     public int PostShowLoopResultDelayInMs = 1000;

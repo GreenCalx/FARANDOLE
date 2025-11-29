@@ -44,8 +44,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  LoopLevelColorGrading: {fileID: 2800000, guid: 646f8794914852640ae82f11d8f46b30, type: 3}
+  LoopRankColorGrading: {fileID: 2800000, guid: 646f8794914852640ae82f11d8f46b30, type: 3}
   MaxLoopDepth: 6
+  LoopDepthPatternCollection: {fileID: 11400000, guid: c646ee98acc4c2146876ed9b317fc2fa, type: 2}
   titleScreenFadeoutTime: 3
   GameUIScreenProportion: 0.05
   GameFieldScreenProportion: 0.8
@@ -56,7 +57,8 @@ MonoBehaviour:
   ShowLaunchGameButtonInSec: 0.5
   PostMiniGameLatchInMs: 250
   PreMiniGameLatchInMs: 250
-  PlayGroundColorLerpTimeSec: 1
+  PlayGroundColorLerpTimeSec: 0.3
+  PlayGroundPatternLerpTimeSec: 1
   BGMRankLerpTimeSec: 1
   GameClockScaleAnimDuration: 0.25
   PostShowLoopResultDelayInMs: 500

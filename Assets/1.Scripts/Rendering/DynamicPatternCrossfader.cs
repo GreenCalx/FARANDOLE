@@ -38,6 +38,10 @@ public Material renderedMat;
         Vector2 lerpOffset = Vector2.Lerp(patternA.offset, patternB.offset, crossfader);
         renderedMat.SetVector("_PatternOffset", new Vector4(lerpOffset.x, lerpOffset.y, 0f, 0f) );
 
+        Vector4 truchetAngles = Vector4.Lerp(patternA.truchetAngles, patternB.truchetAngles, crossfader);
+        Vector4 tAngles = new Vector4( truchetAngles.x, truchetAngles.y, truchetAngles.z, truchetAngles.w );
+        renderedMat.SetVector("_TruchetRotations", tAngles);
+
         _faderLock = false;
     }
 

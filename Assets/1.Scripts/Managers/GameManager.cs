@@ -95,6 +95,7 @@ public class GameManager : MonoBehaviour
         MGM.OnMiniGameTransitionCB.AddListener(OnMiniGameTransition);
 
         UI.OnBeforeLoopDepth.AddListener(OnLoopDepthUpdate);
+        UI.OnLoopRankUpdate.AddListener(OnLoopRankUpdate);
         UI.h_PauseMenu.h_ResumeBtn.clickCallback.AddListener(() => { UI.h_PauseMenu.Toggle(); });
         UI.h_PauseMenu.h_TryAgainBtn.clickCallback.AddListener(() => { UI.h_PauseMenu.Toggle(); RestartGame(); });
         UI.h_PauseMenu.h_ExitBtn.clickCallback.AddListener(() => { UI.h_PauseMenu.Toggle(); ExitToTitle(); });
@@ -107,6 +108,7 @@ public class GameManager : MonoBehaviour
         MGM.OnMiniGameTransitionCB.RemoveListener(OnMiniGameTransition);
 
         UI.OnBeforeLoopDepth.RemoveListener(OnLoopDepthUpdate);
+        UI.OnLoopRankUpdate.RemoveListener(OnLoopRankUpdate);
         UI.h_PauseMenu.h_ResumeBtn.clickCallback.RemoveListener(() => { UI.h_PauseMenu.Toggle(); });
         UI.h_PauseMenu.h_TryAgainBtn.clickCallback.RemoveListener(() => { UI.h_PauseMenu.Toggle(); RestartGame(); });
         UI.h_PauseMenu.h_ExitBtn.clickCallback.RemoveListener(() => { UI.h_PauseMenu.Toggle(); ExitToTitle(); });
@@ -164,7 +166,7 @@ public class GameManager : MonoBehaviour
     void OnLoopDepthUpdate()
     {
         // playGround Mat update
-        PG.RefreshRendering(MGM.MGLoop.depth, MGM.MGLoop.HasRankChanged, MGM.MGLoop.rank);
+        PG.RefreshPatternFromDepth(MGM.MGLoop);
 
         // Global time scale update based on depth
         AnimationCurve timeScaleCurve = GameData.Get.gameSettings.timeScaleOverLoopLevel;
@@ -174,6 +176,12 @@ public class GameManager : MonoBehaviour
         Time.timeScale = playerData.timeScale;
 
         AUDIO.gameBGM.RefreshSpeed(playerData.timeScale);
+    }
+
+    void OnLoopRankUpdate()
+    {
+        // playGround Mat update
+        PG.RefreshColorFromRank(MGM.MGLoop);
     }
 
     public void GameOver()

@@ -244,12 +244,12 @@ public class MiniGameManager : MonoBehaviour, IManager
 
     public Color GetCurrentColor()
     {
-        return PG.GetCurrentColor(MGLoop.depth);
+        return PG.GetLoopRankColor((int)MGLoop.rank);
     }
 
     public Color GetPreviousColor()
     {
-        return PG.GetPreviousColor(MGLoop.depth);
+        return PG.GetLoopRankColor((int)PData.loopHistory.Peek()?.completionRank);
     }
 
     void Update()

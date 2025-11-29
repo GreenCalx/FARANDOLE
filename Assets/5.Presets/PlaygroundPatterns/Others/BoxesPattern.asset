@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 29ddc3d223a194d4191ca9a438f1aab7, type: 3}
-  m_Name: Rank1Pattern
+  m_Name: BoxesPattern
   m_EditorClassIdentifier: 
-  pattern: 0
-  angle: 0
-  boxSize: 0.71
-  tiling: 2.12
+  pattern: 1
+  angle: 4.25
+  boxSize: 0.7
+  tiling: 2.95
   offset: {x: 0, y: 0}
+  truchetAngles: {x: 0, y: 0, z: 0, w: 0}
