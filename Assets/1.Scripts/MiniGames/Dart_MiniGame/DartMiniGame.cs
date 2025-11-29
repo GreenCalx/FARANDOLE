@@ -85,6 +85,8 @@ public class DartMiniGame : MiniGame
         } 
     }
 
+    
+
     public void PopTarget(ObjectTarget iTarget)
     {
         GameObject bundleTarget = iTarget.transform.parent.gameObject;
@@ -142,5 +144,20 @@ public class DartMiniGame : MiniGame
         if (GameIsLost)
             return false;
         return balloons.Count <= 0;
+    }
+
+    void Update()
+    {
+        foreach (GameObject b in balloons)
+        {
+            ObjectTarget asTarget = b.GetComponentInChildren<ObjectTarget>();
+            if (asTarget==null)
+                continue;
+            if (!Utils.IsContained2D(new Vector2(asTarget.transform.position.x, asTarget.transform.position.y), MGM.PG.bounds))
+            {
+                PopTarget(asTarget);
+            }
+        }
+        
     }
 }
