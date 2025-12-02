@@ -1,0 +1,17 @@
+# Install Firebase
+
+Go Here : https://firebase.google.com/docs/unity/setup
+
+Step4: Download Firebase Unity SDK
+> Unzip it any location 
+> Open Farandole Project in Unity
+> Go to the unzip location and launch :
+FirebaseInstallations
+FirebaseAuth
+FirebaseFirestore
+
+Open via Unity in Windows prompt popup
+Click import in Unity prompt popup
+
+Firebase should work properly then.
+If any missing symbols, try installing other firebase packages even though its not planned today [02/12/2025]
