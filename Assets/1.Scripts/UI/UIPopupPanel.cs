@@ -20,6 +20,7 @@ public class UIPopupPanel : UIPanel
         if (m_ActivePopup==null)
             return;
         m_ActivePopup.gameObject.SetActive(true);
+        m_ActivePopup.Setup();
         m_ActivePopup.OnPopUpValidation.AddListener( () => NavigateBackCB?.Invoke());
     }
 
@@ -30,7 +31,6 @@ public class UIPopupPanel : UIPanel
                             .WithParent(transform)
                             .WithLocalPosition(Vector3.zero)
                             .BuildAs<UIPopup>();
-        
         SetupActivePopup();
     }
 

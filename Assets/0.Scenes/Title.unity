@@ -470,7 +470,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Animator: {fileID: 195231272}
-  IsShown: 0
   IsSkippable: 1
   prefab_LongTapListener: {fileID: 0}
   PreHideCB:
@@ -1876,7 +1875,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Animator: {fileID: 558358832}
-  IsShown: 0
   IsSkippable: 1
   prefab_LongTapListener: {fileID: 0}
   PreHideCB:
@@ -2714,7 +2712,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Animator: {fileID: 697608646}
-  IsShown: 0
   IsSkippable: 1
   prefab_LongTapListener: {fileID: 0}
   PreHideCB:
@@ -4213,7 +4210,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Animator: {fileID: 1465907415}
-  IsShown: 0
   IsSkippable: 1
   prefab_LongTapListener: {fileID: 0}
   PreHideCB:
@@ -4268,6 +4264,50 @@ MonoBehaviour:
   NavigateBackCB:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &1473892435
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1473892437}
+  - component: {fileID: 1473892436}
+  m_Layer: 0
+  m_Name: DDOL.FirebaseManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1473892436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1473892435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0db7794a266d7664291f3c2ce7d54c4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1473892437
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1473892435}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1479437465
 GameObject:
   m_ObjectHideFlags: 0
@@ -4682,7 +4722,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Animator: {fileID: 1576953429}
-  IsShown: 0
   IsSkippable: 1
   prefab_LongTapListener: {fileID: 0}
   PreHideCB:
@@ -4952,92 +4991,6 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!1 &1618228070
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1618228072}
-  - component: {fileID: 1618228071}
-  m_Layer: 0
-  m_Name: SignInService
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1618228071
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1618228070}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8fd0e83c22e97024699206fd50a8e125, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SignInBtn: {fileID: 0}
-  OfflineBtn: {fileID: 0}
-  connectionText: {fileID: 0}
-  OnSignIn:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 504428399}
-        m_TargetAssemblyTypeName: UINavigator, FarandoleAsm
-        m_MethodName: OnBack
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1618228070}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 7395053242066745299}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
---- !u!4 &1618228072
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1618228070}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 540, y: 522.66, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 1
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1670179719
 GameObject:
   m_ObjectHideFlags: 0
@@ -5573,7 +5526,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Animator: {fileID: 1936791983}
-  IsShown: 0
   IsSkippable: 1
   prefab_LongTapListener: {fileID: 0}
   PreHideCB:
@@ -6778,11 +6730,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5104f71546a2479449b8fb6657852c14, type: 3}
---- !u!1 &7395053242066745299 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 698777789418867605, guid: 5104f71546a2479449b8fb6657852c14, type: 3}
-  m_PrefabInstance: {fileID: 7395053242066745298}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &7395053242066745305 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1869372342655729526, guid: 5104f71546a2479449b8fb6657852c14, type: 3}
@@ -6793,7 +6740,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7231652369313555601, guid: 5104f71546a2479449b8fb6657852c14, type: 3}
   m_PrefabInstance: {fileID: 7395053242066745298}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7395053242066745299}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8e67c7edf9f2d3a4581a768179293e7c, type: 3}
@@ -6807,7 +6754,7 @@ SceneRoots:
   - {fileID: 504428403}
   - {fileID: 788669956}
   - {fileID: 1765342134}
-  - {fileID: 1618228072}
   - {fileID: 2007130990}
   - {fileID: 771577246}
   - {fileID: 5831278878409132102}
+  - {fileID: 1473892437}

@@ -1,12 +1,10 @@
 using UnityEngine;
 using UnityEngine.Events;
-using System;
-using Cysharp.Threading.Tasks;
-using System.Threading.Tasks;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
-using UnityEngine.UI;
+using Cysharp.Threading.Tasks;
 using TMPro;
+using UnityEngine.UI;
 
 public class SignInService : MonoBehaviour
 {
@@ -15,114 +13,96 @@ public class SignInService : MonoBehaviour
     public TextMeshProUGUI connectionText;
     public UnityEvent OnSignIn;
 
-    bool authentificationProcessed = false;
-    bool userAuthentificationProcessed = false;
-    bool retry = false;
     bool kill = false;
 
-    PlayGamesLocalUser localUser;
-
-    public void Start()
+    void Start()
     {
-        if (PlayGamesPlatform.Instance.IsAuthenticated())
-        {
-            Destroy(gameObject);
-        }
-
-        SessionData.IsOnline = false;
-        retry = true;
-
         PlayGamesPlatform.Activate();
         PlayGamesPlatform.DebugLogEnabled = true;
 
-        authentificationProcessed = false;
-        SignInBtn?.onClick.AddListener(() => TrySignIn());
-        OfflineBtn?.onClick.AddListener(() => OfflineMode());
+        SignInBtn.onClick.AddListener(() => TryGoogleSignIn().Forget());
+        OfflineBtn.onClick.AddListener(() => OfflineMode());
 
-        WaitSignIn();
+        // Auto start full sign-in flow
+        FullSignInFlow().Forget();
     }
 
     void OnDestroy()
     {
-        SignInBtn?.onClick.RemoveListener(() => TrySignIn());
-        OfflineBtn?.onClick.RemoveListener(() => OfflineMode());
-
         kill = true;
+        SignInBtn.onClick.RemoveAllListeners();
+        OfflineBtn.onClick.RemoveAllListeners();
     }
 
-    public void OfflineMode()
+    //------------------------------------
+    // SIGN IN MAIN
+    //------------------------------------
+    async UniTaskVoid FullSignInFlow()
     {
-        SessionData.IsOnline = true;
-        IAPManager.Get.DebugPremiumUnlock();
+        // Firebase base identity (NO internet required)
+        await FirebaseManager.WaitReady();
+        await FirebaseManager.SignInAnonymous();
+        await FirebaseManager.CreateUserIfMissing();
+
+        // log profile metadata
+        #if UNITY_ANDROID
+        // Try auto GPGS login (non-blocking)
+        await TryGoogleSignIn();
+        #endif
+
+        OnSignIn?.Invoke();
     }
 
-    public void TrySignIn()
+    //------------------------------------
+    // OFFLINE MODE
+    //------------------------------------
+    void OfflineMode()
     {
-        authentificationProcessed = false;
-        PlayGamesPlatform.Instance.Authenticate(ProcessAuthentication);
+        connectionText.text = "Offline mode";
+        SessionData.IsOnline = false;
+        SessionData.IsOffline = true;
+        OnSignIn?.Invoke();
     }
 
-    async UniTaskVoid WaitSignIn()
+    //------------------------------------
+    // GOOGLE SIGN-IN (PROFILE ONLY)
+    //------------------------------------
+    public async UniTask TryGoogleSignIn()
     {
-        await SignIn();
-        OnSignIn.Invoke();
-    }
-    async UniTask SignIn()
-    {
-        while (!SessionData.IsOnline && !kill)
+        if (kill)
+            return;
+
+        var tcs = new UniTaskCompletionSource<bool>();
+
+        PlayGamesPlatform.Instance.Authenticate((status) =>
         {
-            //     if (retry)
-            //     {
-            //         PlayGamesPlatform.Instance.Authenticate(ProcessAuthentication);
-            //     }
-            //     await Task.Delay(500); // half a sec wait time inbetween attempts
+            tcs.TrySetResult(status == SignInStatus.Success);
+        });
 
-            await Task.Yield();
-        }
-        // retry = false;
-        return;
-    }
+        bool success = await tcs.Task;
 
-    internal void ProcessAuthentication(SignInStatus status)
-    {
-        if (status == SignInStatus.Success)
+        if (!success)
         {
-            // Continue with Play Games Services
-            
-            // TODO
-            // When google cloud connection is available, fetch user name and
-            // sign in used through ProcessUserAuthentication
-            
-            //SessionData.LocalUser = PlayGamesPlatform.Instance.localUser;
-            //localUser.Authenticate(ProcessUserAuthentication);
-            SessionData.IsOnline = true;
-        }
-        else
-        {
-            connectionText.text = "Failed to connect to google play services";
-            // Disable your integration with Play Games Services or show a login button
-            // to ask users to sign-in. Clicking it should call
-            // PlayGamesPlatform.Instance.ManuallyAuthenticate(ProcessAuthentication).
+            connectionText.text = "Failed to connect to Google Play Games";
             SessionData.IsOnline = false;
-            //retry = true;
+            return;
         }
-        authentificationProcessed = true;
-    }
 
-    internal void ProcessUserAuthentication(bool status)
-    {
-        if (status)
+        // SUCCESS → extract profile
+        var user = Social.localUser;
+        if (user != null && user.authenticated)
         {
-            SessionData.UserName = PlayGamesPlatform.Instance.localUser.userName;
-            connectionText.text = "Signed in as " + SessionData.UserName;
             SessionData.IsOnline = true;
+            SessionData.UserName = user.userName;
+
+            string googleId   = user.id;
+            string googleName = user.userName;
+            string avatarUrl  = user.image != null ? user.image.ToString() : "";
+
+            connectionText.text = "Connected as " + googleName;
+
+            // Store profile in Firestore
+            await FirebaseManager.SaveGoogleProfile(googleId, googleName, avatarUrl);
         }
-        else
-        {
-            connectionText.text = "Failed to connect to authenticate user";
-            SessionData.IsOnline = false;
-        }
-        userAuthentificationProcessed = true;
     }
-    
 }

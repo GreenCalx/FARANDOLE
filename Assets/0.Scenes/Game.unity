@@ -672,11 +672,6 @@ MonoBehaviour:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
   compositeCollider: {fileID: 1431966741}
-  diff1Pattern: {fileID: 11400000, guid: d55dfaed82ef78046aed37696cfe035b, type: 2}
-  diff2Pattern: {fileID: 11400000, guid: c8152ed6644d30c43887c2642f867aa4, type: 2}
-  diff3Pattern: {fileID: 11400000, guid: 2d148bf1b03b946409e7e2c4497b73d7, type: 2}
-  diff4Pattern: {fileID: 11400000, guid: c3901d316935d154f9a4ec9281be4c8f, type: 2}
-  diff5Pattern: {fileID: 11400000, guid: c4daf73cc8bb72849b721334b91513af, type: 2}
   forgroundMat: {fileID: 2100000, guid: 85f130548d231f148be3b875de155db5, type: 2}
   playFieldMat: {fileID: 2100000, guid: 10297d9c3a9557e43a58da2bfeefbfb0, type: 2}
   clearAnimMat: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}

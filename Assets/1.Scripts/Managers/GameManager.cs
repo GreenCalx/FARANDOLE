@@ -85,7 +85,9 @@ public class GameManager : MonoBehaviour
 
         InitCallbacks();
         UI.PresentLoop();
-        UI.launchGameBtn?.clickCallback.AddListener(() => StartGame());
+
+        UI.launchGameCommand?.SwipeCallback.AddListener(() => StartGame());
+        PC.AddSwipeTracker(UI.launchGameCommand);
     }
 
     void InitCallbacks()
@@ -116,8 +118,8 @@ public class GameManager : MonoBehaviour
 
     async UniTaskVoid StartGame()
     {
-        UI.launchGameBtn?.clickCallback.RemoveListener(() => StartGame());
-        UI.launchGameBtn.gameObject.SetActive(false);
+        UI.launchGameCommand?.SwipeCallback.RemoveListener(() => StartGame());
+        PC.RemoveSwipeTracker(UI.launchGameCommand);
         UI.h_LaunchGameCanvas.gameObject.SetActive(false);
         if ((UI.inst_loopPresentationAnim!=null) && UI.inst_loopPresentationAnim.PresentationShown)
             await UI.HideLoopPresentation();

@@ -1,7 +1,10 @@
 using UnityEngine;
 using System;
+using System.Collections;
 using System.Collections.Generic;
-
+using System.Security.Cryptography;
+using System.Text;
+using System.Linq;
 /// <summary>
 /// Generic util methods
 /// should stay decorrelated from any game logic. 
@@ -203,6 +206,18 @@ public static class Utils
                 randPoint.y -= randY;
         }
         return randPoint;
+    }
+
+    public static int GetTodaySeed()
+    {
+        string today = DateTime.UtcNow.ToString("yyyy-MM-dd");
+        int rawseed = 0;
+        using (SHA256 sha = SHA256.Create())
+        {
+            byte[] hash = sha.ComputeHash(Encoding.UTF8.GetBytes(today));
+            rawseed = Mathf.Abs(BitConverter.ToInt32(hash, 0)); 
+        }
+        return rawseed;
     }
 
 }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "481751521818",
+    "project_id": "farandole",
+    "storage_bucket": "farandole.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:481751521818:android:5b7069782260092ab94fa3",
+        "android_client_info": {
+          "package_name": "com.XLS.farandole"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTR2270m0ZVfDBHlwMKmb2LY4jFi5cUUQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

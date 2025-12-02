@@ -67,7 +67,6 @@ public class UITitle : UINavigator
         m_CustomMode?.clickCallback.AddListener(() => StartCustom());
         m_LaunchSinglesMode?.onClick.AddListener(() => StartSingles(m_LaunchSinglesGame.selectedGame.ID));
 
-
         handle_PopUpPanel.NavigateBackCB.AddListener(()=> base.OnBack());
 
         backBtn?.clickCallback.AddListener(() => base.OnBack());
@@ -90,25 +89,30 @@ public class UITitle : UINavigator
 
     void StartMutationMode()
     {
-        DelayedLaunch(GAME_MODE.MUTATION);
+        GameData.Get.PickGameMode(GAME_MODE.MUTATION);
+        DelayedLaunch();
     }
     void StartDailySeed()
     {
-        DelayedLaunch(GAME_MODE.DAILY_SEED);
+        GameData.Get.PickGameMode(GAME_MODE.DAILY_SEED);
+        GameData.Get.SetToDailySeed();
+        DelayedLaunch();
     }
     void StartCustom()
     {
-        DelayedLaunch(GAME_MODE.CUSTOM);
+        GameData.Get.PickGameMode(GAME_MODE.CUSTOM);
+        DelayedLaunch();
     }
 
     void StartSingles(int iMiniGameIndex)
     {
+        GameData.Get.PickGameMode(GAME_MODE.SINGLES);
         GameData.Get.NewGameSeed();
         GameData.Get.AddGameSeed(iMiniGameIndex);
-        DelayedLaunch(GAME_MODE.SINGLES);
+        DelayedLaunch();
     }
 
-    async UniTaskVoid DelayedLaunch(GAME_MODE iGameMode)
+    async UniTaskVoid DelayedLaunch()
     {
         bgmEmitter.SetParameter(ExitMenuParm, 1);
         GetComponent<CanvasGroup>().interactable = false;
@@ -118,7 +122,7 @@ public class UITitle : UINavigator
             titleAnimations.ExitAnim()
         );
         //titleAnimations.CancelAnimation();
-        GameData.Get.PickGameMode(iGameMode);
+
         SceneManager.LoadScene(GameScene, LoadSceneMode.Single);
     }
 

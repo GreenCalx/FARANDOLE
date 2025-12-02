@@ -34,7 +34,7 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
 
     [Header("Launch Game")]
     public CanvasGroup h_LaunchGameCanvas;
-    public UIButton launchGameBtn;
+    public UISwiper launchGameCommand;
     [Header("Pause Menu")]
     public UIPauseMenu h_PauseMenu;
     [Header("Callbacks")]
@@ -121,12 +121,12 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
 
     public async UniTask PresentLoop()
     {
-        launchGameBtn.gameObject.SetActive(false);
+        launchGameCommand.gameObject.SetActive(false);
         h_LaunchGameCanvas.alpha = 0f;
 
         await inst_loopPresentationAnim.Show(MGM.MGLoop);
 
-        launchGameBtn.gameObject.SetActive(true);
+        launchGameCommand.gameObject.SetActive(true);
         await ShowLaunchGameCanvas();
     }
 

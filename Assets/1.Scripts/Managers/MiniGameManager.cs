@@ -85,7 +85,7 @@ public class MiniGameManager : MonoBehaviour, IManager
         #endif
 
         prefab_miniGames.Clear();
-        if (GameData.Get.currentGameMode == GAME_MODE.SINGLES)
+        if (GameData.Get.HasSeeds)
         {
             prefab_miniGames = GameData.GetMGBank.GetFromSeeds();
         } else
@@ -249,6 +249,8 @@ public class MiniGameManager : MonoBehaviour, IManager
 
     public Color GetPreviousColor()
     {
+        if ((PData.loopHistory == null)||(PData.loopHistory.Count < 1))
+            return PG.GetLoopRankColor((int)MGLoop.rank);
         return PG.GetLoopRankColor((int)PData.loopHistory.Peek()?.completionRank);
     }
 

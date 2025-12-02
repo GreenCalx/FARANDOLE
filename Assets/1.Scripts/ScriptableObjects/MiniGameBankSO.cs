@@ -9,6 +9,7 @@ using static Utils;
 public class MiniGameBankSO : ScriptableObject
 {
     public List<MiniGameSO> GameBank;
+    public int Size => GameBank.Count;
 
     public List<GameObject> GetFromGameMode(GAME_MODE iGameMode)
     {

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class UIPopup : MonoBehaviour
 {
-    public UnityEvent OnPopUpValidation = new UnityEvent();
+    public UnityEvent OnPopUpValidation;
     public List<UIButton> ValidatingButtons;
 
     public void Setup()

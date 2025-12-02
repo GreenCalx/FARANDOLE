@@ -88,6 +88,13 @@ crashlytics-build.properties
 /[Aa]ssets/StreamingAssets/**/*.bank
 /[Aa]ssets/StreamingAssets/**/*.bank.meta
 
+# Firebase / Google Play Games native binaries (ignore large files)
+Assets/Firebase/Plugins/x86_64/
+Assets/Firebase/Plugins/x86/
+Assets/Firebase/Plugins/Android/*.so
+Assets/Firebase/Plugins/Android/*.aar
+Assets/GooglePlayGames/Plugins/Android/*.aar
+
 # If the source bank files are kept outside of the StreamingAssets folder then these can be ignored.
 # Log files can be ignored.
 fmod_editor.log

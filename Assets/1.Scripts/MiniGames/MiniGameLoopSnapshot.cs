@@ -13,7 +13,8 @@ public class MiniGameLoopSnapshot
     {
         get
         {
-            return (((int)(completionRank)) + 1) * succeededStages * comboMultiplier;
+            int savedTimeScore = (int)Mathf.Ceil(SavedTime);
+            return (((((int)(completionRank)) + 1)  * succeededStages) + savedTimeScore) * comboMultiplier;
         }
     }
     public MiniGameLoopSnapshot(MiniGameLoop iOriginator)

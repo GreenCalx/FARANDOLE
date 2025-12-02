@@ -20,8 +20,7 @@
         "Unity.Purchasing",
         "Unity.Purchasing.Stores",
         "Unity.Purchasing.Apple",
-        "Unity.Services.Core",
-        ""
+        "Unity.Services.Core"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

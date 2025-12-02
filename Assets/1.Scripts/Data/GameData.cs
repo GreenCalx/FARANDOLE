@@ -1,11 +1,16 @@
 using UnityEngine;
+using System;
+using System.Text;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
-
+using System.Security.Cryptography;
+using static Utils;
 public class GameData : MonoBehaviour
 {
     public List<int> m_MiniGameSeeds;
     public List<int> MiniGameSeeds => m_MiniGameSeeds;
+    public bool HasSeeds => m_MiniGameSeeds!=null && m_MiniGameSeeds.Count > 0;
     public GAME_MODE currentGameMode;
     public GameModesSO gameModes;
     public GameSettingsSO gameSettings;
@@ -77,5 +82,29 @@ public class GameData : MonoBehaviour
             m_MiniGameSeeds.Clear();
     }
     
+    public void SetToDailySeed()
+    {
+        NewGameSeed();
+
+        // Generate a stable seed across platforms.
+        int rawseed = Utils.GetTodaySeed();
+
+         // load RNG to shuffle mini games
+        System.Random rng = new System.Random(rawseed);
+        List<int> order = Enumerable.Range(0, GetMGBank.Size).ToList();
+        for (int i = order.Count - 1; i > 0; i--)
+        {
+            int j = rng.Next(0, i + 1);
+            int temp = order[i];
+            order[i] = order[j];
+            order[j] = temp;
+        }
+
+        // Fill seeds
+        for (int i=0; i < gameSettings.loopSize; i++)
+        {
+            AddGameSeed(order[i]);
+        }
+    }
 }
  
