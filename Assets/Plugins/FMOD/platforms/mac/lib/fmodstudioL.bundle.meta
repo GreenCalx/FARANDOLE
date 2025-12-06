@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: cc6ab29369e13244f824f873359c3cc7
+guid: 3b13efd0a4ce42a4da0817e76486a172
 PluginImporter:
   externalObjects: {}
   serializedVersion: 3
@@ -22,7 +22,8 @@ PluginImporter:
         OS: OSX
     OSXUniversal:
       enabled: 1
-      settings: {}
+      settings:
+        CPU: AnyCPU
   userData: 
   assetBundleName: 
   assetBundleVariant: 

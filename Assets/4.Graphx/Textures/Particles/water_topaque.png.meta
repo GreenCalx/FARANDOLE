@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      water_topaque_0: -4416558716976046007
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

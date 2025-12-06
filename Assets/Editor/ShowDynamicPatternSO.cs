@@ -1,3 +1,4 @@
+#if !UNITY_ANDROID
 using UnityEngine;
 using UnityEditor;
 
@@ -108,3 +109,4 @@ public class ShowDynamicPatternSO : Editor
         ));
     }
 }
+#endif

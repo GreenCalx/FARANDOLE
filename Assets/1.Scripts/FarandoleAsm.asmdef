@@ -5,7 +5,6 @@
         "UnityEngine.UI",
         "Unity.TextMeshPro",
         "Unity.InputSystem.ForUI",
-        "Google.Play.Games",
         "Unity.InputSystem",
         "Unity.Postprocessing.Runtime",
         "UnityUIExtensions",
@@ -20,9 +19,16 @@
         "Unity.Purchasing",
         "Unity.Purchasing.Stores",
         "Unity.Purchasing.Apple",
-        "Unity.Services.Core"
+        "Unity.Services.Core",
+        "Unity.Services.Authentication",
+        "DOTween.Modules",
+        "UniTask.DOTween",
+        "Google.Play.Games"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Android",
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

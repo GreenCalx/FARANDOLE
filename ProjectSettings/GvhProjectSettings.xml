@@ -3,6 +3,13 @@
   <projectSetting name="com.google.external-dependency-managerAnalyticsEnabled" value="False" />
   <projectSetting name="com.google.firebaseAnalyticsCookie" value="3d786a95a4074f998c742449b43260fd" />
   <projectSetting name="com.google.firebaseAnalyticsEnabled" value="True" />
+  <projectSetting name="Google.PackageManagerResolver.Enable" value="True" />
+  <projectSetting name="Google.PackageManagerResolver.PromptToAddRegistries" value="True" />
+  <projectSetting name="Google.PackageManagerResolver.PromptToMigratePackages" value="True" />
+  <projectSetting name="Google.PackageManagerResolver.VerboseLoggingEnabled" value="False" />
+  <projectSetting name="Google.VersionHandler.CleanUpPromptEnabled" value="True" />
+  <projectSetting name="Google.VersionHandler.RenameToCanonicalFilenames" value="False" />
+  <projectSetting name="Google.VersionHandler.RenameToDisableFilesEnabled" value="True" />
   <projectSetting name="Google.VersionHandler.VerboseLoggingEnabled" value="True" />
   <projectSetting name="Google.VersionHandler.VersionHandlingEnabled" value="True" />
   <projectSetting name="GooglePlayServices.AndroidPackageInstallationEnabled" value="True" />
@@ -19,7 +26,7 @@
   <projectSetting name="GooglePlayServices.UseFullCustomMavenRepoPathWhenExport" value="True" />
   <projectSetting name="GooglePlayServices.UseFullCustomMavenRepoPathWhenNotExport" value="False" />
   <projectSetting name="GooglePlayServices.UseGradleDaemon" value="False" />
-  <projectSetting name="GooglePlayServices.UseJetifier" value="False" />
+  <projectSetting name="GooglePlayServices.UseJetifier" value="True" />
   <projectSetting name="GooglePlayServices.UserRejectedGradleUpgrade" value="False" />
-  <projectSetting name="GooglePlayServices.VerboseLogging" value="False" />
+  <projectSetting name="GooglePlayServices.VerboseLogging" value="True" />
 </projectSettings>

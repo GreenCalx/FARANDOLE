@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using static GOBuilder;
-
+using static AsyncUtils;
 public class GameManager : MonoBehaviour
 {
     private static GameManager instance = null;
@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
     [Header("Audio Refs")]
     
     UIGameOver inst_UIGameOver;
-    
+    CancellationTokenSource cts;
     void Awake()
     {
         if (instance != null && instance != this)
@@ -186,9 +186,25 @@ public class GameManager : MonoBehaviour
         PG.RefreshColorFromRank(MGM.MGLoop);
     }
 
+    async UniTaskVoid ResetTimeScale(float iDuration)
+    {
+        float timescale = Time.timeScale;
+        cts = new CancellationTokenSource();
+        await LerpTask(
+            timescale, 1f,
+            iDuration,
+            (f)=>Time.timeScale = f,
+            cts.Token
+        );
+
+        Time.timeScale = 1f;
+    }
+
     public void GameOver()
     {
-        Time.timeScale = 1f;
+        cts = new CancellationTokenSource();
+
+        ResetTimeScale(1f);
 
         PC.Freeze();
         PC.Flush();
@@ -199,8 +215,6 @@ public class GameManager : MonoBehaviour
         StopGame();
         UI.ShowMiniGameMode(false);
         
-        CancellationTokenSource cts = new CancellationTokenSource();
-
         inst_UIGameOver = GOBuilder.Create(prefab_UIGameOver).BuildAs<UIGameOver>();
         inst_UIGameOver.Setup(this);
         inst_UIGameOver.TryAgainBtn.clickCallback.AddListener(() => { cts.Cancel(); RestartGame(); });

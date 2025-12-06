@@ -1,26 +1,34 @@
 using UnityEngine;
 using UnityEngine.UI;
-using GooglePlayGames;
-using GooglePlayGames.BasicApi;
+
 using TMPro;
 public class UIPlayerProfileCard : MonoBehaviour
 {
+    public bool Invalidate = false;
     public TextMeshProUGUI m_UserNameText;
     public RectTransform m_HandlePremiumAcc;
     public RectTransform m_HandleNotPremiumAcc;
     public UIButton m_ProfileCardButton;
-    PlayGamesLocalUser localUser;
+
 
     void OnEnable()
     {
-        Refresh();
+        Invalidate = true;
+    }
+    void Update()
+    {
+        if (Invalidate)
+        {
+            Refresh();
+            Invalidate = false;
+        }
     }
 
     public void Refresh()
     {
         // Set premium features
         bool isPremium = SessionData.IsPremium;
-        Debug.Log("Refresh premium = " + isPremium);
+
         m_HandlePremiumAcc.gameObject.SetActive(isPremium);
         m_HandleNotPremiumAcc.gameObject.SetActive(!isPremium);
 
@@ -31,11 +39,9 @@ public class UIPlayerProfileCard : MonoBehaviour
         else
             m_ProfileCardButton?.onClick.AddListener(() => OpenProfileEdit());
 
-        // update profile
-        if (PlayGamesPlatform.Instance.IsAuthenticated())
-            m_UserNameText.text = PlayGamesPlatform.Instance.GetUserDisplayName();
-        else
-            m_UserNameText.text = "Guest";
+
+        // update
+        m_UserNameText.text = SessionData.UserName;
     }
 
     public void OpenStore()

@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      teapot_0: -1833727312862450921
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

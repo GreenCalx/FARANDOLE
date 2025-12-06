@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      BlueNeonGradient_0: 1820500499874267955
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

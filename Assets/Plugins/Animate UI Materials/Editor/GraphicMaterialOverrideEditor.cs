@@ -332,21 +332,21 @@ namespace Plugins.Animate_UI_Materials.Editor
       // Get the actual Shader Property
       MaterialProperty materialProperty = MaterialEditor.GetMaterialProperty(_editorMaterialArray, modifier.PropertyName);
 
-      MaterialProperty.PropFlags oldFlags = materialProperty.flags;
-      MaterialProperty.PropFlags flags = oldFlags;
+      UnityEngine.Rendering.ShaderPropertyFlags oldFlags = materialProperty.propertyFlags;
+      UnityEngine.Rendering.ShaderPropertyFlags flags = oldFlags;
 
       // Hide the scale offset in the texture property drawer
       if (modifier is GraphicPropertyOverrideTexture or GraphicPropertyOverrideScaleAndOffset)
       {
         bool wantsScaleOffset = modifier is GraphicPropertyOverrideScaleAndOffset;
 
-        flags &= ~MaterialProperty.PropFlags.NoScaleOffset;
+        flags &= ~UnityEngine.Rendering.ShaderPropertyFlags.NoScaleOffset;
 
         if (!wantsScaleOffset)
-          flags |= MaterialProperty.PropFlags.NoScaleOffset;
+          flags |= UnityEngine.Rendering.ShaderPropertyFlags.NoScaleOffset;
       }
 
-      flags &= ~MaterialProperty.PropFlags.PerRendererData;
+      flags &= ~UnityEngine.Rendering.ShaderPropertyFlags.PerRendererData;
 
       if (oldFlags != flags)
       {

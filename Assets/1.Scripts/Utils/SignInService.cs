@@ -1,108 +1,75 @@
 using UnityEngine;
-using UnityEngine.Events;
-using GooglePlayGames;
-using GooglePlayGames.BasicApi;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine.UI;
-
+using Unity.Services.Core;
+using Unity.Services.Authentication;
 public class SignInService : MonoBehaviour
 {
-    public Button SignInBtn;
+    public Button GoogleBtn;
     public Button OfflineBtn;
     public TextMeshProUGUI connectionText;
-    public UnityEvent OnSignIn;
 
-    bool kill = false;
-
-    void Start()
+    async void Start()
     {
-        PlayGamesPlatform.Activate();
-        PlayGamesPlatform.DebugLogEnabled = true;
-
-        SignInBtn.onClick.AddListener(() => TryGoogleSignIn().Forget());
+#if UNITY_ANDROID
+        GoogleBtn.onClick.AddListener(() => GoogleLogin().Forget());
+#else // TODO iOS
+        GoogleBtn.onClick.AddListener(() => AnonymousLogin().Forget());
+#endif
         OfflineBtn.onClick.AddListener(() => OfflineMode());
 
-        // Auto start full sign-in flow
-        FullSignInFlow().Forget();
+        await UGSAuthenticationManager.InitializeAndSignIn();
+
+        SessionData.UserName = AuthenticationService.Instance.PlayerId;
+        // connectionText.text =
+        //     $"Player ID:\n{AuthenticationService.Instance.PlayerId}\n\n" +
+        //     $"Anonymous: {AuthenticationService.Instance.PlayerInfo?.CreatedAt}";
+
+        connectionText.text = "Anonymous login OK";
     }
 
-    void OnDestroy()
+    //--------------------------------------
+    // Anonymous SIGN-IN
+    //--------------------------------------
+    public async UniTaskVoid AnonymousLogin()
     {
-        kill = true;
-        SignInBtn.onClick.RemoveAllListeners();
-        OfflineBtn.onClick.RemoveAllListeners();
+#if UNITY_ANDROID
+        
+
+#endif
     }
 
-    //------------------------------------
-    // SIGN IN MAIN
-    //------------------------------------
-    async UniTaskVoid FullSignInFlow()
+
+    //--------------------------------------
+    // GOOGLE SIGN-IN
+    //--------------------------------------
+public async UniTaskVoid GoogleLogin()
+{
+#if UNITY_ANDROID
+    string idToken = await GPGSAuthentication.SignInAndGetIdToken();
+
+    if (string.IsNullOrEmpty(idToken))
     {
-        // Firebase base identity (NO internet required)
-        await FirebaseManager.WaitReady();
-        await FirebaseManager.SignInAnonymous();
-        await FirebaseManager.CreateUserIfMissing();
-
-        // log profile metadata
-        #if UNITY_ANDROID
-        // Try auto GPGS login (non-blocking)
-        await TryGoogleSignIn();
-        #endif
-
-        OnSignIn?.Invoke();
+        connectionText.text = "Google sign-in failed";
+        return;
     }
 
-    //------------------------------------
-    // OFFLINE MODE
-    //------------------------------------
+    await AuthenticationService.Instance.LinkWithGoogleAsync(idToken);
+
+    SessionData.UserName = GPGSAuthentication.GetDisplayName();
+    connectionText.text = SessionData.UserName;
+#endif
+}
+
+
+    //--------------------------------------
+    // OFFLINE
+    //--------------------------------------
     void OfflineMode()
     {
-        connectionText.text = "Offline mode";
-        SessionData.IsOnline = false;
         SessionData.IsOffline = true;
-        OnSignIn?.Invoke();
-    }
-
-    //------------------------------------
-    // GOOGLE SIGN-IN (PROFILE ONLY)
-    //------------------------------------
-    public async UniTask TryGoogleSignIn()
-    {
-        if (kill)
-            return;
-
-        var tcs = new UniTaskCompletionSource<bool>();
-
-        PlayGamesPlatform.Instance.Authenticate((status) =>
-        {
-            tcs.TrySetResult(status == SignInStatus.Success);
-        });
-
-        bool success = await tcs.Task;
-
-        if (!success)
-        {
-            connectionText.text = "Failed to connect to Google Play Games";
-            SessionData.IsOnline = false;
-            return;
-        }
-
-        // SUCCESS → extract profile
-        var user = Social.localUser;
-        if (user != null && user.authenticated)
-        {
-            SessionData.IsOnline = true;
-            SessionData.UserName = user.userName;
-
-            string googleId   = user.id;
-            string googleName = user.userName;
-            string avatarUrl  = user.image != null ? user.image.ToString() : "";
-
-            connectionText.text = "Connected as " + googleName;
-
-            // Store profile in Firestore
-            await FirebaseManager.SaveGoogleProfile(googleId, googleName, avatarUrl);
-        }
+        SessionData.IsOnline = false;
+        connectionText.text = "Offline mode";
     }
 }
