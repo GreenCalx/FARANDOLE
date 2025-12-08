@@ -5,44 +5,29 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+using Unity.Services.Leaderboards;
+using Unity.Services.Leaderboards.Models;
+
 public class UIHighScoreBlock : MonoBehaviour
 {
-    public GameObject prefab_miniGameMiniature;
+    public TextMeshProUGUI position;
+    public TextMeshProUGUI playerName;
     public TextMeshProUGUI scoreValue;
-    public TextMeshProUGUI gameModeValue;
-    public Button challengeScoreBtn;
-    public RectTransform handle_Miniatures;
-    List<UIMiniGameMiniature> mgMiniatures;
-    LoopHighScore LHS;
-    [HideInInspector]
-    public LoopHighScore associatedLHS
+    public UICustomSquircle Frame;
+    public Color baseFrameColor;
+    public Color localPlayerFrameColor;
+    public void Setup(LeaderboardEntry iEntry)
     {
-        set
-        {
-            LHS = value;
-            BuildFromLHS();
-        }
-        get
-        {
-            return LHS;
-        }
-    }
+        position.text = "#"+(iEntry.Rank+1).ToString(); // rank start at 0
+        playerName.text = iEntry.PlayerName;
+        scoreValue.text = iEntry.Score.ToString();
 
-    void BuildFromLHS()
-    {
-        
-        scoreValue.text = LHS.score.ToString();
-        gameModeValue.text = LHS.gameMode.ToString();
-        // Ids
-        mgMiniatures = new List<UIMiniGameMiniature>(LHS.ids.Length);
-        foreach (byte id in LHS.ids)
+        if (iEntry.PlayerName == SessionData.UserName)
         {
-            UIMiniGameMiniature mini = GOBuilder.Create(prefab_miniGameMiniature)
-                                        .WithName("mini_" + id)
-                                        .WithParent(handle_Miniatures)
-                                        .Build().GetComponent<UIMiniGameMiniature>();
-            mini.mgIDLabel.text = id.ToString();
-            mgMiniatures.Add(mini);
+            Frame.color = localPlayerFrameColor;
+        } else
+        {
+            Frame.color = baseFrameColor;
         }
     }
 }

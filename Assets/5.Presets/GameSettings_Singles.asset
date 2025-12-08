@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87a63174ee8c328448bbdd11b0cb13ae, type: 3}
   m_Name: GameSettings_Singles
   m_EditorClassIdentifier: 
-  PlayerHP: 10
+  PlayerHP: 3
   loopSize: 1
   percentOfLoopSizeToPass: 0.5
   ComboRequirementForSuper: 2
   ComboRequirementForMaster: 4
   MaxComboPoints: 3
-  MiniGameTime: 15
+  MiniGameTime: 7
   MaxTimeScale: 2
   timeScaleOverLoopLevel:
     serializedVersion: 2

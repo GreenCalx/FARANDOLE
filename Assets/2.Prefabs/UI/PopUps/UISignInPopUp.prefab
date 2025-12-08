@@ -195,6 +195,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -331,6 +332,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -1044,7 +1046,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fd0e83c22e97024699206fd50a8e125, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GoogleBtn: {fileID: 324254002600578380}
+  SignInBtn: {fileID: 324254002600578380}
   OfflineBtn: {fileID: 8258558810010296884}
   connectionText: {fileID: 4717328150654716682}
 --- !u!1 &8747548231171475853
@@ -1152,6 +1154,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0

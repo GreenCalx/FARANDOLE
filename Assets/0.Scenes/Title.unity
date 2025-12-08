@@ -2216,10 +2216,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 504428403}
     m_Modifications:
-    - target: {fileID: 394224497548202948, guid: d3543805b47bbfb42a1be089fee35452, type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 4cf335b52745c3d4f874b40d0ef8c46f, type: 2}
     - target: {fileID: 3577477607735500506, guid: d3543805b47bbfb42a1be089fee35452, type: 3}
       propertyPath: m_Name
       value: UIHighScores
@@ -6627,7 +6623,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1869372342655729526, guid: 5104f71546a2479449b8fb6657852c14, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -64
+      value: -128
       objectReference: {fileID: 0}
     - target: {fileID: 1869372342655729526, guid: 5104f71546a2479449b8fb6657852c14, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -6691,6 +6687,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4021511318575674003, guid: 5104f71546a2479449b8fb6657852c14, type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5042675343523233223, guid: 5104f71546a2479449b8fb6657852c14, type: 3}
+      propertyPath: m_PresetInfoIsWorld
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

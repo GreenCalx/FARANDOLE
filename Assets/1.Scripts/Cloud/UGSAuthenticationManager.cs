@@ -6,6 +6,7 @@ using Unity.Services.Authentication;
 public class UGSAuthenticationManager : MonoBehaviour
 {
     public static string PlayerId => AuthenticationService.Instance.PlayerId;
+    public static string PlayerName => AuthenticationService.Instance.PlayerName;
 
     async void Awake()
     {
@@ -19,7 +20,7 @@ public class UGSAuthenticationManager : MonoBehaviour
         if (!AuthenticationService.Instance.IsSignedIn)
         {
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
-            Debug.Log("[UGS] Anonymous login OK: " + PlayerId);
+            Debug.Log("[UGS] Anonymous login OK: " + PlayerName);
         }
     }
 

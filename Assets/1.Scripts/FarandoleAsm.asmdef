@@ -21,9 +21,11 @@
         "Unity.Purchasing.Apple",
         "Unity.Services.Core",
         "Unity.Services.Authentication",
+        "Unity.Services.CloudSave",
         "DOTween.Modules",
         "UniTask.DOTween",
-        "Google.Play.Games"
+        "Google.Play.Games",
+        "Unity.Services.Leaderboards"
     ],
     "includePlatforms": [
         "Android",

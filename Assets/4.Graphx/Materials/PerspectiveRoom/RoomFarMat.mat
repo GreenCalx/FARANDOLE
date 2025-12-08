@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: RoomFarMat
-  m_Shader: {fileID: 4800000, guid: e260cfa7296ee7642b167f1eb5be5023, type: 3}
+  m_Shader: {fileID: 4800000, guid: ca6e32ca5fe19b64ebdb49a82d9bf85e, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -42,9 +42,9 @@ Material:
     m_Ints: []
     m_Floats:
     - PixelSnap: 0
-    - _BlendDst: 0
-    - _BlendSrc: 1
-    - _CullMode: 2
+    - _BlendDst: 10
+    - _BlendSrc: 5
+    - _CullMode: 0
     - _EnableExternalAlpha: 0
     - _ZWrite: 0
     m_Colors:

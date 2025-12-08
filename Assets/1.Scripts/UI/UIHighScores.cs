@@ -3,10 +3,15 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System.Threading.Tasks;
 using System.Threading;
+
+using Unity.Services.Leaderboards;
+using Unity.Services.Leaderboards.Models;
+
 public class UIHighScores : UIPanel
 {
     public GameObject prefab_scoreBlocks;
     public RectTransform handle_blockLayout;
+    public int MAX_SCORE_PER_PAGE = 14;
     List<UIHighScoreBlock> inst_scoreBlocks;
 
     public override void OnNavEnter(CancellationToken iCT)
@@ -28,20 +33,24 @@ public class UIHighScores : UIPanel
         inst_scoreBlocks.Clear();
     }
 
-    public void InitScores()
+    public async UniTask InitScores()
     {
-        UserHighScores uhs = UserData.userHighScores;
-        List<LoopHighScore> lhs_list = uhs.highScores;
-
-        foreach (LoopHighScore lhs in lhs_list)
+        List<LeaderboardEntry> leaderboardEntries = await UGSCloudSaveManager.FetchTodayDailySeedLeaderboard(MAX_SCORE_PER_PAGE);
+        foreach(LeaderboardEntry entry in leaderboardEntries)
         {
             UIHighScoreBlock uihsb = GOBuilder.Create(prefab_scoreBlocks)
-                                .WithName("HighScoreBlock")
-                                .WithParent(handle_blockLayout)
-                                .BuildAs<UIHighScoreBlock>();
+                    .WithName("HighScoreBlock")
+                    .WithParent(handle_blockLayout)
+                    .BuildAs<UIHighScoreBlock>();
+            uihsb.Setup(entry);
             inst_scoreBlocks.Add(uihsb);
-            uihsb.associatedLHS = lhs;
+
+            if (inst_scoreBlocks.Count >= MAX_SCORE_PER_PAGE)
+            {
+                Debug.LogWarning("PAGE IS FULL");
+                // TODO Pages
+                return;
+            }
         }
-        
     }
 }

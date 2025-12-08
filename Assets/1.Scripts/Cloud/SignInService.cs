@@ -6,25 +6,20 @@ using Unity.Services.Core;
 using Unity.Services.Authentication;
 public class SignInService : MonoBehaviour
 {
-    public Button GoogleBtn;
+    public Button SignInBtn;
     public Button OfflineBtn;
     public TextMeshProUGUI connectionText;
 
     async void Start()
     {
 #if UNITY_ANDROID
-        GoogleBtn.onClick.AddListener(() => GoogleLogin().Forget());
+        SignInBtn.onClick.AddListener(() => GoogleLogin().Forget());
 #else // TODO iOS
-        GoogleBtn.onClick.AddListener(() => AnonymousLogin().Forget());
+        SignInBtn.onClick.AddListener(() => AnonymousLogin().Forget());
 #endif
         OfflineBtn.onClick.AddListener(() => OfflineMode());
 
         await UGSAuthenticationManager.InitializeAndSignIn();
-
-        SessionData.UserName = AuthenticationService.Instance.PlayerId;
-        // connectionText.text =
-        //     $"Player ID:\n{AuthenticationService.Instance.PlayerId}\n\n" +
-        //     $"Anonymous: {AuthenticationService.Instance.PlayerInfo?.CreatedAt}";
 
         connectionText.text = "Anonymous login OK";
     }
@@ -36,8 +31,8 @@ public class SignInService : MonoBehaviour
     {
 #if UNITY_ANDROID
         
-
 #endif
+        connectionText.text = "Guest Session OK";
     }
 
 
@@ -57,8 +52,7 @@ public async UniTaskVoid GoogleLogin()
 
     await AuthenticationService.Instance.LinkWithGoogleAsync(idToken);
 
-    SessionData.UserName = GPGSAuthentication.GetDisplayName();
-    connectionText.text = SessionData.UserName;
+    connectionText.text = "Google Play Sign in OK";
 #endif
 }
 

@@ -39,9 +39,10 @@ public class UIPlayerProfileCard : MonoBehaviour
         else
             m_ProfileCardButton?.onClick.AddListener(() => OpenProfileEdit());
 
-
         // update
         m_UserNameText.text = SessionData.UserName;
+
+        Debug.Log("Profile refreshed");
     }
 
     public void OpenStore()

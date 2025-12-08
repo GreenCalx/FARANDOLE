@@ -258,6 +258,13 @@ public class GameManager : MonoBehaviour
         int score = playerData.GetLoopScore();
         LoopRank maxRank = playerData.GetMaxRank();
 
+        // Submit to leaderboard
+        if (GameData.Get.currentGameMode == GAME_MODE.DAILY_SEED)
+        {
+            UGSCloudSaveManager.SubmitDailySeedScore(score);    
+        }
+
+        // local storage, may be obsolete TODO
         int loopSize = GameData.GetSettings.loopSize;
         byte[] gameIDs = new byte[loopSize];
         for (int i = 0; i < loopSize; i++)

@@ -62,7 +62,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _BumpScale: 1
-    - _CellScale: 3.91
+    - _CellScale: 5.2
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
@@ -70,7 +70,7 @@ Material:
     - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _Metallic: 0
-    - _MinDist: 1
+    - _MinDist: 1.4
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
