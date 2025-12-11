@@ -14,7 +14,7 @@ public class MiniGameLoopSnapshot
         get
         {
             int savedTimeScore = (int)Mathf.Ceil(SavedTime);
-            return (((((int)(completionRank)) + 1)  * succeededStages) + savedTimeScore) * comboMultiplier;
+            return (((((int)(completionRank)) + 1)  * succeededStages) + savedTimeScore) * (comboMultiplier+1);
         }
     }
     public MiniGameLoopSnapshot(MiniGameLoop iOriginator)

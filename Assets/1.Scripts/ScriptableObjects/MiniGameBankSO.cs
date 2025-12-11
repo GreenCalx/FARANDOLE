@@ -11,30 +11,11 @@ public class MiniGameBankSO : ScriptableObject
     public List<MiniGameSO> GameBank;
     public int Size => GameBank.Count;
 
-    public List<GameObject> GetFromGameMode(GAME_MODE iGameMode)
-    {
-        switch (iGameMode)
-        {
-            case GAME_MODE.DAILY_SEED:
-                return GetRandom(GameData.GetSettings.loopSize);
-            case GAME_MODE.MUTATION:
-                return GetDaily(GameData.GetSettings.loopSize);
-            case GAME_MODE.CUSTOM:
-                return GetRandom(GameData.GetSettings.loopSize);
-            default:
-                return GetFromGameMode(GAME_MODE.DAILY_SEED);
-        }
-    }
     public List<GameObject> GetRandom(int iNumber)
     {
         return GetRandomSelectionFromPool(GameBank, iNumber);
     }
 
-    public List<GameObject> GetDaily(int iNumber)
-    {
-        // TODO : Fetch remote seed here
-        return GetRandomSelectionFromPool(GameBank,iNumber);
-    }
 
     public List<GameObject> GetFromSeeds()
     {

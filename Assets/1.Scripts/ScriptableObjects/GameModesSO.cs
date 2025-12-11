@@ -8,7 +8,7 @@ public enum GAME_MODE
     DAILY_SEED,
     MUTATION,
     SINGLES,
-    CUSTOM
+    RANDOM
 };
 
 [CreateAssetMenu(fileName = "GameModesSO", menuName = "Scriptable Objects/GameModesSO")]

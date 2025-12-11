@@ -49,6 +49,8 @@ public class MiniGameLoop : IEnumerator<MiniGame>
             float retval= 0f;
             foreach (MiniGame mg in inst_miniGames)
             {
+                if ((mg.successState==MiniGameSuccessState.NONE)||(mg.successState==MiniGameSuccessState.PENDING))
+                    continue;
                 retval += GameData.GetSettings.MiniGameTime - mg.CompletionTime;
             }
             return retval;

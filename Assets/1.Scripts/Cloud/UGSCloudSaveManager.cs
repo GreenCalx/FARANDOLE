@@ -48,12 +48,12 @@ public static class UGSCloudSaveManager
     }
 
     /// HIGH SCORES
-    public static async UniTaskVoid SubmitDailySeedScore(int iScore)
+    public static async UniTaskVoid SubmitDailySeedScore(double iScore)
     {
         string dateKey = GetTodayKey();
         string leaderboardID = GetDailySeedLeaderboardKey(dateKey);
 
-        int bestToday = await LoadTodayBestScore(leaderboardID);
+        double bestToday = await LoadTodayBestScore(leaderboardID);
         if (iScore <= bestToday)
             return;
 
@@ -65,7 +65,7 @@ public static class UGSCloudSaveManager
         );
     }
 
-    static async UniTask SaveDailySeedHighScore(string iKey, int iScore)
+    static async UniTask SaveDailySeedHighScore(string iKey, double iScore)
     {
         await CloudSaveService.Instance.Data.Player.SaveAsync(
             new Dictionary<string, object>
@@ -75,7 +75,28 @@ public static class UGSCloudSaveManager
         );
     }
 
-    static async UniTask<int> LoadTodayBestScore(string iKey)
+    static async UniTask<double> LoadTodayBestScore(string iKey)
+    {
+        string dateKey = GetTodayKey();
+        string leaderboardID = GetDailySeedLeaderboardKey(dateKey);
+
+        try
+        {
+            LeaderboardEntry entry = await LeaderboardsService.Instance.GetPlayerScoreAsync(
+                "LEADERBOARD_DAILY_SEED"
+            );
+            return entry.Score;
+        } catch (Exception e)
+        {
+            // Can happen if not found ( first score of the day)
+            // TODO Can also triggered otherwise I guess so check it out
+            
+            // swallow for now
+        }
+        return 0;
+    }
+
+    static async UniTask<int> LoadAllTimeBestDailySeedScore(string iKey)
     {
         var result = await CloudSaveService.Instance.Data.Player.LoadAsync(
             new HashSet<string> { iKey }

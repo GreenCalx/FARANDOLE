@@ -211,6 +211,8 @@ public class GameManager : MonoBehaviour
 
         playerData.loopHistory.RankOnFullCompletion = MGM.MGLoop.rank;
         MGM.GameOver();
+        if (!playerData.FullLoopCompleted)
+            playerData.loopHistory.AddSnapshot(MGM.MGLoop);
 
         StopGame();
         UI.ShowMiniGameMode(false);
@@ -258,40 +260,21 @@ public class GameManager : MonoBehaviour
         int score = playerData.GetLoopScore();
         LoopRank maxRank = playerData.GetMaxRank();
 
-        // Submit to leaderboard
+        // Submit to Local cache
+
+        // Submit to Cloud
         if (GameData.Get.currentGameMode == GAME_MODE.DAILY_SEED)
         {
             UGSCloudSaveManager.SubmitDailySeedScore(score);    
         }
-
-        // local storage, may be obsolete TODO
-        int loopSize = GameData.GetSettings.loopSize;
-        byte[] gameIDs = new byte[loopSize];
-        for (int i = 0; i < loopSize; i++)
+        else if (GameData.Get.currentGameMode == GAME_MODE.SINGLES)
         {
-            gameIDs[i] = MGM.MGLoop.At(i).descriptor.ID;
+            int MGID = MGM.MGLoop.At(0).descriptor.ID;
+            //UGSCloudSaveManager.SaveSinglesCompletion(MGID, score, maxRank, playerData.FullLoopCompleted);   
         }
-        LoopHighScore lhs = new LoopHighScore(GameData.Get.currentGameMode, gameIDs, score, DateTime.Now);
-        lhs.maxRank = maxRank;
-        LoopHighScore replacedHS = null;
-        if (UserData.IsNewHighScore(lhs, out replacedHS))
-        {
-            if (replacedHS != null)
-                UserData.RemoveHighScore(replacedHS);
-            UserData.AddHighScore(lhs);
-            // <!> load all high score beforehand to avoid overwriting prev data
-            UserData.SaveHighScores();
 
-            // inst_UIGameOver.scoreDisplayHandle.gameObject.SetActive(false);
-            // inst_UIGameOver.newHighScoreDisplayHandle.gameObject.SetActive(true);
-            return true;
-        }
-        return false;
-        // else
-        // {
-        //     inst_UIGameOver.scoreDisplayHandle.gameObject.SetActive(true);
-        //     inst_UIGameOver.newHighScoreDisplayHandle.gameObject.SetActive(false);
-        // }
+        return true;
+
     }
 
 

@@ -112,6 +112,7 @@ public class MiniGameManager : MonoBehaviour, IManager
         gameClock.Freeze(true);
         //gameClock.Reset();
         MGLoop.Current.CompletionTime = gameClock.GetElapsedTime();
+        MGLoop.Current.successState = MiniGameSuccessState.FAILED;
         MGLoop.Current.Lose();
     }
 

@@ -7,6 +7,7 @@ Properties
 	[PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
 	_Color ("Tint", Color) = (1,1,1,1)
 	[MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
+	_StencilRef ("Stencil ID", Float) = 1
 }
  
 SubShader
@@ -31,7 +32,7 @@ SubShader
 	{
 		Stencil
 		{
-			Ref 1
+			Ref [_StencilRef]
 			Comp NotEqual
 		}
  

@@ -75,18 +75,7 @@ public class UIMiniGameSelectionGrid : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        SelectGameValidationBtn.interactable = selectedGame != null;
-        SelectGameValidationBtn.UpdateImage();
-    }
-
-    void OnEnable()
-    {
-        Setup();
-    }
-
-    void OnDisable()
+    public void Clear()
     {
         foreach(var mg in MGImages)
         {
@@ -95,5 +84,21 @@ public class UIMiniGameSelectionGrid : MonoBehaviour
         MGImages.Clear();
         selectedImage = null;
         selectedGame = null;
+    }
+
+    void Update()
+    {
+        SelectGameValidationBtn.interactable = selectedGame != null;
+        SelectGameValidationBtn.UpdateImage();
+    }
+
+    void OnEnable()
+    {
+        //Setup();
+    }
+
+    void OnDisable()
+    {
+        // CLear();
     }
 }

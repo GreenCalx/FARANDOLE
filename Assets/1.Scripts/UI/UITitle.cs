@@ -64,7 +64,7 @@ public class UITitle : UINavigator
 
         m_MutationMode?.clickCallback.AddListener(() => StartMutationMode());
         m_DailySeedMode?.clickCallback.AddListener(() => StartDailySeed());
-        m_CustomMode?.clickCallback.AddListener(() => StartCustom());
+        m_CustomMode?.clickCallback.AddListener(() => StartRandom());
         m_LaunchSinglesMode?.onClick.AddListener(() => StartSingles(m_LaunchSinglesGame.selectedGame.ID));
 
         handle_PopUpPanel.NavigateBackCB.AddListener(()=> { handle_profilePanel.Invalidate = true;  base.OnBack(); });
@@ -98,9 +98,10 @@ public class UITitle : UINavigator
         GameData.Get.SetToDailySeed();
         DelayedLaunch();
     }
-    void StartCustom()
+    void StartRandom()
     {
-        GameData.Get.PickGameMode(GAME_MODE.CUSTOM);
+        GameData.Get.NewGameSeed(); // leave empty for random
+        GameData.Get.PickGameMode(GAME_MODE.RANDOM);
         DelayedLaunch();
     }
 
