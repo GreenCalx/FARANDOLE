@@ -14,6 +14,7 @@ public class UIMiniGamePresentationImage : ManagedAnimation, ITapTracker
     public UICustomSquircle MiniGameThumbnail;
     public UICustomSquircle light;
     public UICustomSquircle BG;
+    public UICustomSquircle MASK;
     public Sprite defaultSprite;
     [Header("InfoBubble")]
     public UIButton infoBubbleBtn;

@@ -4,7 +4,7 @@ public class PlayerData
 {
     public bool FullLoopCompleted = false;
     public float HP;
-    public int score {
+    public double score {
         get
         {
             return GetLoopScore();
@@ -24,9 +24,9 @@ public class PlayerData
         HP -= iLostHP;
     }
 
-    public int GetLoopScore()
+    public double GetLoopScore()
     {
-        int ls = 0;
+        double ls = 0;
         foreach (MiniGameLoopSnapshot snap in loopHistory)
         {
             ls += snap.LoopScore;

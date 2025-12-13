@@ -43,6 +43,7 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
     public TextMeshProUGUI loopDepthValueTxt;
     [Header("Callbacks")]
     public UnityEvent OnBeforeLoopDepth;
+    public UnityEvent OnLoopResultProcessedCB;
     public UnityEvent OnNewRankDisplayedCB;
     public UnityEvent OnFinalLoopDisplayedCB;
     // internals
@@ -102,6 +103,9 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
 
     void PreviousComboPoints(CancellationToken iCT)
     {
+        if (previousMGLoop==null)
+            return;
+
         for (int i=0; i < m_ComboPoints.Count; i++)
         {
             if (previousMGLoop.comboMultiplier > i)
@@ -197,6 +201,7 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
         cancelCB.AddListener(() => OnBeforeLoopDepth?.Invoke());
         if (MGLoop.IsRankUpdateRequested)
             cancelCB.AddListener(() => OnNewRankDisplayedCB?.Invoke());
+        cancelCB.AddListener(()=>OnLoopResultProcessedCB?.Invoke());
         
         // Animation loop
         Func<UniTask> step1 = async () =>
@@ -273,6 +278,7 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
                 cancelCB.Invoke();
                 return;
             }
+            OnLoopResultProcessedCB?.Invoke();
             await UniTask.Delay(GameData.GetSettings.PostShowLoopResultDelayInMs);
         };
         q.Enqueue(step3);

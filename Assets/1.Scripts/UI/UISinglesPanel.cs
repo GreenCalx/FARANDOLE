@@ -38,8 +38,9 @@ public class UISinglesPanel : UIPanel
         // Rebuild Singles Data
 
         // data available, proceed
-
-        miniGameGrid.Setup();
-        completionBar.Setup();
+        completionBar.Setup(0f, (float)ids_to_load.Count);
+        miniGameGrid.Setup(completionBar);
+        await UniTask.Yield();
+        miniGameGrid.ShowAll();
     }
 }

@@ -257,7 +257,7 @@ public class GameManager : MonoBehaviour
 
     public bool PostGameScoreProcessing()
     {
-        int score = playerData.GetLoopScore();
+        double score = playerData.GetLoopScore();
         LoopRank maxRank = playerData.GetMaxRank();
 
         // Submit to Local cache
@@ -270,6 +270,12 @@ public class GameManager : MonoBehaviour
         else if (GameData.Get.currentGameMode == GAME_MODE.SINGLES)
         {
             int MGID = MGM.MGLoop.At(0).descriptor.ID;
+            SinglesModeProgress.SaveLocalProgress(
+                mgId: MGID,
+                completed:playerData.FullLoopCompleted,
+                score: score,
+                maxRank: maxRank
+            );
             //UGSCloudSaveManager.SaveSinglesCompletion(MGID, score, maxRank, playerData.FullLoopCompleted);   
         }
 

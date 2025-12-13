@@ -19,6 +19,8 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
     public Image timeIndicatorImg;
     public RotateAlongTimeAnim timeNeedleAnim;
     public RectTransform infoArea;
+    public UIGameScore h_UIGameScore;
+    [Header("Animations")]
     public UIDoorAnim handle_UIDoorAnim;
     public UILoopCompleteAnimation handle_animLoopSuccess; 
     [Header("Transition")]
@@ -191,14 +193,12 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         MiniGameLoopSnapshot finishedLoop = m_PlayerData.loopHistory.Peek();
 
         inst_loopPresentationAnim.rankMedalAnimation.UpdateCurrentRank(finishedLoop);
-        //if (iMGLoop.IsRankUpdateRequested)
-        //{
-            inst_loopPresentationAnim.rankMedalAnimation.UpdateNewRank(iMGLoop);
-        //}
+        inst_loopPresentationAnim.rankMedalAnimation.UpdateNewRank(iMGLoop);
 
         handle_animLoopSuccess.Init(finishedLoop, iMGLoop, inst_loopPresentationAnim);
         handle_animLoopSuccess.OnBeforeLoopDepth = new UnityEvent();
         handle_animLoopSuccess.OnBeforeLoopDepth.AddListener(()=>OnBeforeLoopDepth?.Invoke());
+
         powerBar.Setup(iMGLoop, handle_animLoopSuccess.loopPresentationAnim);
                 
         float newRank = (float)iMGLoop.rank;
@@ -206,7 +206,10 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
         handle_animLoopSuccess.OnNewRankDisplayedCB = new UnityEvent();
         handle_animLoopSuccess.OnNewRankDisplayedCB.AddListener( () => {AUDIO.LerpRank(prevRank, newRank); });
         handle_animLoopSuccess.OnNewRankDisplayedCB.AddListener( () => OnLoopRankUpdate?.Invoke());
-
+        
+        handle_animLoopSuccess.OnLoopResultProcessedCB = new UnityEvent();
+        handle_animLoopSuccess.OnLoopResultProcessedCB.AddListener(()=>UpdateScore(finishedLoop.LoopScore));
+        
         handle_animLoopSuccess.OnFinalLoopDisplayedCB = new UnityEvent();
         handle_animLoopSuccess.OnFinalLoopDisplayedCB.AddListener( () => GameManager.Get.OnFullLoopCompleted());
 
@@ -219,5 +222,10 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
                 
         handle_animLoopSuccess.OnBeforeLoopDepth.RemoveAllListeners();
         handle_animLoopSuccess.OnNewRankDisplayedCB.RemoveAllListeners();
+    }
+
+    public void UpdateScore(double iScore)
+    {
+        h_UIGameScore.Refresh(iScore);
     }
 }

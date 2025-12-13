@@ -229,20 +229,6 @@ public class MiniGameManager : MonoBehaviour, IManager
             PlayCurrent();
     }
 
-    public LoopHighScore GetLoopHighScore()
-    {
-        int loopSize = GameData.GetSettings.loopSize;
-        byte[] gameIDs = new byte[loopSize];
-        for (int i = 0; i < loopSize; i++)
-        {
-            gameIDs[i] = MGLoop.At(i).descriptor.ID;
-        }
-        // TODO : Fetch time from server to ensure that
-        // the datetime is right as the current impl depends on 
-        // the device time ( which can be modified )
-        return new LoopHighScore(GameData.Get.currentGameMode, gameIDs, PData.score, DateTime.Now);
-    }
-
     public Color GetCurrentColor()
     {
         return PG.GetLoopRankColor((int)MGLoop.rank);

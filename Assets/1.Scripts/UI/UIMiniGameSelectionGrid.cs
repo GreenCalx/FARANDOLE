@@ -15,12 +15,14 @@ public class UIMiniGameSelectionGrid : MonoBehaviour
     public MiniGameSO selectedGame;
     public UIMiniGamePresentationImage selectedImage;
     public UIButton SelectGameValidationBtn;
-    public void Setup()
+    CancellationTokenSource cts;
+
+    public void Setup(UICompletionBar iCompletionBar = null)
     {
+        cts = new CancellationTokenSource();
         MGImages = new List<UIMiniGamePresentationImage>();
         if (LoadAll)
         {
-            CancellationTokenSource cts = new CancellationTokenSource();
             List<LoopHighScore> singlesHighScores = UserData.GetGameModeHighScores(GAME_MODE.SINGLES);
             foreach(MiniGameSO MGDesc in GameData.GetMGBank.GameBank)
             {
@@ -28,7 +30,6 @@ public class UIMiniGameSelectionGrid : MonoBehaviour
                                                         .WithParent(transform)
                                                         .BuildAs<UIMiniGamePresentationImage>();
                 newImg.SetFromMiniGameDesc(MGDesc);
-                newImg.DefaultShow(cts.Token);
                 newImg.infoBubbleBtn.onClick.AddListener(
                     ()=> {
                         if (selectedImage == newImg)
@@ -50,20 +51,25 @@ public class UIMiniGameSelectionGrid : MonoBehaviour
                         }
                     );
 
-                LoopHighScore gameHS = null;
-                try
+                // Init From Savefile
+                if (SinglesModeProgress.TryLoadLocalProgress(MGDesc.ID, out var sd))
                 {
-                    gameHS = singlesHighScores.Single( e => e.ids[0] == MGDesc.ID);
-                } catch (InvalidOperationException exc)
+                    newImg.ShowRank(sd.maxRank);
+                    if (sd.completed)
+                    {
+                        newImg.MASK.color = Color.yellow;
+                        newImg.MASK.SetVerticesDirty();
+                        if (iCompletionBar!=null)
+                        {
+                            iCompletionBar.Increment();
+                        }
+                    }
+                } else
                 {
-                    gameHS = null;
-                }
-                
-                if (gameHS==null)
                     newImg.ShowRank(LoopRank.I);
-                else
-                    newImg.ShowRank(gameHS.maxRank);
+                }
 
+                // Finalize
                 MGImages.Add(newImg);
             }
 
@@ -72,8 +78,18 @@ public class UIMiniGameSelectionGrid : MonoBehaviour
             SelectGameValidationBtn.interactable = false;
             SelectGameValidationBtn.UpdateImage();
 
+
         }
     }
+
+    public void ShowAll()
+    {
+        foreach(UIMiniGamePresentationImage img in MGImages )
+        {
+            img.DefaultShow(cts.Token);
+        }
+    }
+
 
     public void Clear()
     {

@@ -154,7 +154,13 @@ public class IAPManager : MonoBehaviour
 
     public bool CanAccessPremiumContent()
     {
-        return PlayerPrefs.GetInt(kLocalPremiumUnlocked, 0) == 1 || CheckPremiumPurchased();
+        if (CheckPremiumPurchased())
+            return true;
+
+        if (BuildConfig.AllowPremiumOverride)
+            return true;
+
+        return false;
     }
 
     public bool CheckPremiumPurchased()
@@ -192,4 +198,5 @@ public class IAPManager : MonoBehaviour
         //m_HandleStorePage.gameObject.SetActive(false);
         CheckPremiumPurchased();
     }
+
 }

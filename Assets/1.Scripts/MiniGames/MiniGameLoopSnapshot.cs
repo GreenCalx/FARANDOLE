@@ -9,12 +9,12 @@ public class MiniGameLoopSnapshot
     public bool IsFailed = false;
     public float SavedTime = 0f;
     public int depth;
-    public int LoopScore
+    public double LoopScore
     {
         get
         {
             int savedTimeScore = (int)Mathf.Ceil(SavedTime);
-            return (((((int)(completionRank)) + 1)  * succeededStages) + savedTimeScore) * (comboMultiplier+1);
+            return (double)(((((int)(completionRank)) + 1)  * succeededStages) + savedTimeScore) * (comboMultiplier+1);
         }
     }
     public MiniGameLoopSnapshot(MiniGameLoop iOriginator)
