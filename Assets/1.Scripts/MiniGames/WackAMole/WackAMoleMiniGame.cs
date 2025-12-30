@@ -3,7 +3,7 @@ using UnityEngine.Events;
 using System.Collections.Generic;
 using System;
 using TMPro;
-public class WackAMoleMiniGame : MiniGame, ISpawnerMod<Mole>, ITheaterMod
+public class WackAMoleMiniGame : MiniGame, IRegularFamily
 {
     [Header("WackAMoleGame")]
 
@@ -37,8 +37,6 @@ public class WackAMoleMiniGame : MiniGame, ISpawnerMod<Mole>, ITheaterMod
 
     public override void Reset()
     {
-        if (GetTags().Contains(EMiniGameTags.SPAWNER))
-            Debug.Log("Spawner Mini game !");
             
         colSize = colSizes[MGM.miniGamesDifficulty - 1];
         rowSize = rowSizes[MGM.miniGamesDifficulty - 1];
@@ -114,11 +112,12 @@ public class WackAMoleMiniGame : MiniGame, ISpawnerMod<Mole>, ITheaterMod
     #endregion
 
     #region ISpawnerMod
-
     public void ApplyMod()
     {
         // TODO : Change spawn Interval or spawn probability random range
     }
+
+    #endregion
     public Mole Spawn(GameObject iPrefab)
     {
         Mole currMole = GOBuilder.Create(iPrefab)
@@ -134,7 +133,6 @@ public class WackAMoleMiniGame : MiniGame, ISpawnerMod<Mole>, ITheaterMod
         
         return currMole;
     }
-    #endregion
 
     void Update()
     {

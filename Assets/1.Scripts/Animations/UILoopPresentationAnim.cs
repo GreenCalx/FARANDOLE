@@ -48,7 +48,7 @@ public class UILoopPresentationAnim : ManagedAnimation
 
     public void Init(MiniGameLoop iMGLoop)
     {
-        uiImages = new List<UIMiniGamePresentationImage>(iMGLoop.inst_miniGames.Count);
+        uiImages = new List<UIMiniGamePresentationImage>(iMGLoop.count);
 
         int index = 0;
         float angle_step = Mathf.PI * 2f / (GameData.GetSettings.loopSize + 1);
@@ -68,8 +68,9 @@ public class UILoopPresentationAnim : ManagedAnimation
 
         // Mini Game Images
         index = 1;
-        foreach (MiniGame mg in iMGLoop.inst_miniGames)
+        foreach (MiniGameLoopSocket socket in iMGLoop.sockets)
         {
+            MiniGame mg = socket.inst_miniGame;
             angle = (index * angle_step);
             pos = new Vector3(
                 radius * Mathf.Cos(angle_offset - angle),

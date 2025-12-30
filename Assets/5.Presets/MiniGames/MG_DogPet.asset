@@ -17,5 +17,6 @@ MonoBehaviour:
   goal: Tap the dog 10 times
   thumbNailImg: {fileID: 21300000, guid: bfda841933d97454e9e71dca0a77cc5a, type: 3}
   prefab_MiniGame: {fileID: 6891743480671891591, guid: ca650ba5ffb5e9c4d8e5e5b7a7fdaeae, type: 3}
-  tags: 02000000
+  family: 1
+  compatibleMods: 
   orientationRequirement: 0

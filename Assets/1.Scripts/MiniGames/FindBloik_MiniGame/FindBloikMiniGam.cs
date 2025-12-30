@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System;
 using Unity.VisualScripting;
 
-public class FindBloik_MiniGame : MiniGame, IDogMod, IRegularMod
+public class FindBloik_MiniGame : MiniGame, IDogFamily
 {
     [Header("FindBloikMiniGame")]
     public GameObject prefabs_unoStickers;

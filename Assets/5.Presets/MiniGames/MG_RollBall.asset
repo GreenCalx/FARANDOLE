@@ -17,5 +17,6 @@ MonoBehaviour:
   goal: Free the ball from the box
   thumbNailImg: {fileID: 21300000, guid: 5f84ee867ef9ec742b5c7f46a299cb85, type: 3}
   prefab_MiniGame: {fileID: 2266623309687070485, guid: 67427fb2e7a156040a46de5c04e05297, type: 3}
-  tags: 01000000
+  family: 8
+  compatibleMods: 
   orientationRequirement: 0

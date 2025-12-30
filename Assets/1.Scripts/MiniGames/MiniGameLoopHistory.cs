@@ -27,6 +27,8 @@ public class MiniGameLoopHistory : IEnumerable
 
     public MiniGameLoopSnapshot Peek()
     {
+        if (snapshots.Count < 1)
+            return null;
         return snapshots[snapshots.Count - 1];
     }
 }

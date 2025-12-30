@@ -1,7 +1,6 @@
 using UnityEngine;
-
-public interface ISpawnerMod<T> : IMiniGameMod where T: ISpawnable
+using System.Collections.Generic;
+public interface ISpawnerMod : IMiniGameMod
 {
-    public EMiniGameTags AssociatedTag() { return EMiniGameTags.SPAWNER; }
-    public T Spawn(GameObject iPrefab);
+    public EMiniGameMods AssociatedTag() { return EMiniGameMods.SPAWNER; }
 }

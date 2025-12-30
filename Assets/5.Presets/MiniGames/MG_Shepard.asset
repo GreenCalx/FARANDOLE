@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: MG_Shepard
   m_EditorClassIdentifier: 
   ID: 12
-  name: Sheep sheep
+  name: Sheepwork
   goal: Drag the sheeps inside
   thumbNailImg: {fileID: 6266472923241529454, guid: eae1c8f96d9b9324387990603535f716, type: 3}
   prefab_MiniGame: {fileID: 7290227812237360906, guid: 8d03cb744500bd949b2e5f6baf6a0f84, type: 3}
-  tags: 01000000
+  implementation: {fileID: 0}
   orientationRequirement: 2

@@ -84,7 +84,10 @@ public class GameManager : MonoBehaviour
         MGM.UI = UI; // TODO dirty fix
 
         InitCallbacks();
+        
         UI.PresentLoop();
+        OnLoopDepthUpdate();
+        OnLoopRankUpdate();
 
         UI.launchGameCommand?.SwipeCallback.AddListener(() => StartGame());
         PC.AddSwipeTracker(UI.launchGameCommand);
@@ -121,6 +124,7 @@ public class GameManager : MonoBehaviour
         UI.launchGameCommand?.SwipeCallback.RemoveListener(() => StartGame());
         PC.RemoveSwipeTracker(UI.launchGameCommand);
         UI.h_LaunchGameCanvas.gameObject.SetActive(false);
+
         if ((UI.inst_loopPresentationAnim!=null) && UI.inst_loopPresentationAnim.PresentationShown)
             await UI.HideLoopPresentation();
 
@@ -129,7 +133,6 @@ public class GameManager : MonoBehaviour
             Destroy(inst_UIGameOver.gameObject);
             inst_UIGameOver = null;
         }
-        //InitCallbacks();
 
         await MGM.Launch();
         UI.ShowMiniGameMode(true);

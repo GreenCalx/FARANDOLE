@@ -15,25 +15,44 @@ public enum MiniGameSuccessState
     FAILED = 3
 }
 
-public enum EMiniGameTags
+public enum EMiniGameFamily
 {
-    NONE = 0,
-    REGULAR = 1,
-    SPAWNER = 2,
-    DOG = 3,
-    EXTENDABLE = 4,
-    ARCADE = 5,
-    SCIENCE = 6,
-    PHYSICS = 7, 
-    THEATER = 8,
-    CHESS = 9
+    REGULAR=0,
+    DOG=1,
+    CHESS=2,
+    ARCADE=4,
+    PHYSICS=8
+}
+public enum EMiniGameMods
+{
+    NONE=0,
+    SPAWNER=1,
+    EXTENDABLE=2,
+    CHESSBOARD=3,
+    BALL=4
 }
 
-public class MiniGame : MonoBehaviour, IMiniGame
+public abstract class MiniGame : MonoBehaviour, IMiniGame
 {
-
     [Header("MiniGame Mand")]
     public MiniGameSO descriptor;
+    [SerializeReference, SerializeField]
+    public List<MiniGameExtension> extensions = new();
+    public bool TryGetExtension<T>(out T ext) where T : MiniGameExtension
+    {
+        foreach (var e in extensions)
+        {
+            if (e is T t)
+            {
+                ext = t;
+                return true;
+            }
+        }
+
+        ext = null;
+        return false;
+    }
+
     [Header("MiniGame Internal View")]
     public MiniGameManager MGM;
     public PlayerController PC;
@@ -50,9 +69,9 @@ public class MiniGame : MonoBehaviour, IMiniGame
     // Use Reflection to retrieve all interface deriving from IMiniGame for current MiniGame
     private static readonly MethodInfo AssociatedTagMethod =
         typeof(IMiniGameMod).GetMethod(nameof(IMiniGameMod.AssociatedTag));
-    public List<EMiniGameTags> GetTags()
+    public List<EMiniGameFamily> GetTags()
     {
-        List<EMiniGameTags> retval = new List<EMiniGameTags>();
+        List<EMiniGameFamily> retval = new List<EMiniGameFamily>();
         foreach (Type tinterface in this.GetType().GetInterfaces())
         {
             if (typeof(IMiniGameMod).IsAssignableFrom(tinterface) && tinterface != typeof(IMiniGameMod))
@@ -63,7 +82,7 @@ public class MiniGame : MonoBehaviour, IMiniGame
                 );
                 if (method != null)
                 {
-                    EMiniGameTags tag = (EMiniGameTags)method.Invoke(this, null);
+                    EMiniGameFamily tag = (EMiniGameFamily)method.Invoke(this, null);
                     retval.Add(tag);
                 }
             }
@@ -95,6 +114,7 @@ public class MiniGame : MonoBehaviour, IMiniGame
     }
     public virtual void Win()
     {
+        MGM.WinMiniGame();
         IsInPostGame = true;
     }
     public virtual void Lose()

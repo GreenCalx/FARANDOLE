@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using static Utils;
-public class WaveformMatcherMiniGame : MiniGame, IArcadeMod, IScienceMod
+public class WaveformMatcherMiniGame : MiniGame, IArcadeFamily
 {
     internal enum EWaveForms
     {

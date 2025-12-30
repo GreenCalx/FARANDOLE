@@ -17,5 +17,6 @@ MonoBehaviour:
   goal: Don't let pawns promote!
   thumbNailImg: {fileID: 21300000, guid: 5ff6c3ba8312b1a45acf5ac6e5be1136, type: 3}
   prefab_MiniGame: {fileID: 38687925018564972, guid: 65f9575b2786ab94092d50af34343720, type: 3}
-  implementation: {fileID: 0}
+  family: 2
+  compatibleMods: 
   orientationRequirement: 2

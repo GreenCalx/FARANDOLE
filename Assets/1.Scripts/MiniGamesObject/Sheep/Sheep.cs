@@ -1,7 +1,7 @@
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 
-public class Sheep : Dragable
+public class Sheep : Dragable, ISpawnable
 {
     public Color outlineInFence;
     public Color outlineOutFence;

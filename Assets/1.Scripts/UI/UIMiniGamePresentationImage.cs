@@ -48,14 +48,18 @@ public class UIMiniGamePresentationImage : ManagedAnimation, ITapTracker
         infoBubbleBtn.onClick.AddListener(() => { bubbleShown = !bubbleShown; h_InfoBubbleAnchor.gameObject.SetActive(bubbleShown); });
         h_InfoBubbleText.text = selfDesc.goal;
 
-        inst_infoBubbleTags = new List<TextMeshProUGUI>(iMGDesc.tags.Count);
-        foreach (EMiniGameTags tag in iMGDesc.tags)
+        // family
+        inst_infoBubbleTags = new List<TextMeshProUGUI>();
+        TextMeshProUGUI newTagText = GOBuilder.Create(prefab_InfoBubbleTag)
+                                    .WithParent(h_InfoBubbleTags)
+                                    .BuildAs<TextMeshProUGUI>();
+        newTagText.text = "[" + iMGDesc.family.ToString() + "]";
+        inst_infoBubbleTags.Add(newTagText);
+
+        // display compatible mods ?
+        foreach (EMiniGameMods mods in iMGDesc.compatibleMods)
         {
-            TextMeshProUGUI newTagText = GOBuilder.Create(prefab_InfoBubbleTag)
-                                        .WithParent(h_InfoBubbleTags)
-                                        .BuildAs<TextMeshProUGUI>();
-            newTagText.text = "[" + tag.ToString() + "]";
-            inst_infoBubbleTags.Add(newTagText);
+            // TODO ..
         }
     }
 

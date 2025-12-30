@@ -381,7 +381,9 @@ public class PlaygroundManager : MonoBehaviour, IManager
         float startTime = Time.time;
         float frac = 0f;
 
-        Color prevC   = GetLoopRankColor((int)GameManager.Get.playerData.loopHistory.Peek()?.completionRank);
+        Color prevC   = GameManager.Get.playerData.loopHistory.Count > 0 ?
+            GetLoopRankColor((int)GameManager.Get.playerData.loopHistory.Peek()?.completionRank):
+            GetLoopRankColor((int)LoopRank.I);
         Color newC    = GetLoopRankColor((int)iNextMGLoop.rank);
         while (frac < 1f)
         {

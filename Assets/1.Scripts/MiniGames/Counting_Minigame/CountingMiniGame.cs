@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using Unity.VisualScripting;
 
-public class Counting_MiniGame : MiniGame, IRegularMod, ISpawnerMod<CounterObject>
+public class Counting_MiniGame : MiniGame, IRegularFamily
 {
     [Header("CountingMiniGame")]
     public GameObject prefabs_dice;
@@ -166,11 +166,6 @@ public class Counting_MiniGame : MiniGame, IRegularMod, ISpawnerMod<CounterObjec
     public void ApplyMod()
     {
 
-    }
-    public CounterObject Spawn(GameObject iPrefab)
-    {
-        // no impl atm
-        return null;
     }
     #endregion
 

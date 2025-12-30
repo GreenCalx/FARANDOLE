@@ -17,5 +17,6 @@ MonoBehaviour:
   goal: Aim and shoot at the balloons
   thumbNailImg: {fileID: 21300000, guid: 354cd8a97af96fc40b28e7c62beaa44b, type: 3}
   prefab_MiniGame: {fileID: 5205109001117507003, guid: ef698d4e9557cd14dbc5770833ba666b, type: 3}
-  tags: 01000000
+  family: 0
+  compatibleMods: 0100000002000000
   orientationRequirement: 0

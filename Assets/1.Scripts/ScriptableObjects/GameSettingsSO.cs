@@ -19,7 +19,6 @@ public class GameSettingsSO : ScriptableObject
         get { return (int)Mathf.Floor((float)loopSize / 2f); }
     }
     public float MiniGameTime = 5f;
-    public float MaxTimeScale = 3f;
     public AnimationCurve timeScaleOverLoopLevel;
     public Texture2D LoopRankColorGrading;
     public int MaxLoopDepth = 12;

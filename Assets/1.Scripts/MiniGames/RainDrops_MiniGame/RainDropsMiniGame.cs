@@ -5,7 +5,7 @@ using System.Collections;
 using System.Threading.Tasks;
 using System.IO;
 using Unity.VisualScripting;
-public class RainDropsMiniGame : MiniGame
+public class RainDropsMiniGame : MiniGame, IArcadeFamily
 {
     [Header("RainDropsMiniGame")]
     public GameObject prefab_walker;

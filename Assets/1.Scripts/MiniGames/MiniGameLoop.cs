@@ -13,12 +13,14 @@ public enum LoopRank
     D = 5
 }
 
+
+
 public class MiniGameLoop : IEnumerator<MiniGame>
 {
-    public MiniGame Current { get { return miniGame; } }
+    public MiniGame Current { get { return socket.inst_miniGame; } }
     object IEnumerator.Current { get { return Current; } }
-    MiniGame miniGame;
-    public List<MiniGame> inst_miniGames;
+    public MiniGameLoopSocket socket;
+    public List<MiniGameLoopSocket> sockets;
     public int index = 0;
     public LoopRank rank;
     public int depth;
@@ -31,7 +33,7 @@ public class MiniGameLoop : IEnumerator<MiniGame>
     public bool IsFullCombo => combo >= GameData.GetSettings.MaxComboPoints;
     public int previousCombo;
     public bool IsFinalLoop => depth >= GameData.GetSettings.MaxLoopDepth;
-    public int count => inst_miniGames!=null ? inst_miniGames.Count : 0;
+    public int count => sockets!=null ? sockets.Count : 0;
     public bool IsRankUpdateRequested {
         get { return rankUpdateRequest; }
     }
@@ -47,11 +49,11 @@ public class MiniGameLoop : IEnumerator<MiniGame>
         get
         {
             float retval= 0f;
-            foreach (MiniGame mg in inst_miniGames)
+            foreach (MiniGameLoopSocket s in sockets)
             {
-                if ((mg.successState==MiniGameSuccessState.NONE)||(mg.successState==MiniGameSuccessState.PENDING))
+                if ((s.inst_miniGame.successState==MiniGameSuccessState.NONE)||(s.inst_miniGame.successState==MiniGameSuccessState.PENDING))
                     continue;
-                retval += GameData.GetSettings.MiniGameTime - mg.CompletionTime;
+                retval += GameData.GetSettings.MiniGameTime - s.inst_miniGame.CompletionTime;
             }
             return retval;
         }
@@ -66,7 +68,8 @@ public class MiniGameLoop : IEnumerator<MiniGame>
         index = 0;
         rankUpdateRequest = false;
         rankChanged = false;
-        inst_miniGames = new List<MiniGame>();
+        sockets = new List<MiniGameLoopSocket>();
+
     }
 
     public void Init(MiniGameManager iMGM, List<GameObject> iPrefabs)
@@ -80,7 +83,7 @@ public class MiniGameLoop : IEnumerator<MiniGame>
             as_mg.MGM = iMGM;
             as_mg.PC = iMGM.PC;
             as_mg.PG = iMGM.PG;
-            inst_miniGames.Add(as_mg);
+            sockets.Add(new MiniGameLoopSocket(as_mg));
             as_mg.Init();
             new_mg.SetActive(false);
         }
@@ -90,19 +93,17 @@ public class MiniGameLoop : IEnumerator<MiniGame>
 
     public bool MoveNext()
     {
-        if (++index >= inst_miniGames.Count)
+        if (++index >= sockets.Count)
             return false;
-        miniGame = inst_miniGames[index];
+
+        socket = sockets[index];
         return true;
     }
 
     public void Start()
     {
         ResetAll();
-
-        miniGame.gameObject.SetActive(true);
-        miniGame.IsInPostGame = false;
-        miniGame.successState = MiniGameSuccessState.PENDING;
+        socket.Run();
     }
     public void ResetAll()
     {
@@ -114,31 +115,30 @@ public class MiniGameLoop : IEnumerator<MiniGame>
     }
     public void Reset()
     {
-        foreach (MiniGame mg in inst_miniGames)
+        foreach (MiniGameLoopSocket socket in sockets)
         {
-            mg.successState = MiniGameSuccessState.PENDING;
-            mg.IsInPostGame = false;
+            socket.Reset();
         }
         index = 0;
-        miniGame = inst_miniGames[index];
+        socket = sockets[index];
         rankUpdateRequest = false;
         rankChanged = false;
     }
 
     public MiniGame At(int i)
     {
-        return inst_miniGames[i];
+        return sockets[i].inst_miniGame;
     }
     
     public bool IsLoopPassed()
     {
         int n_passed = 0;
-        foreach (MiniGame mg in inst_miniGames)
+        foreach (MiniGameLoopSocket socket in sockets)
         {
-            if (mg.successState == MiniGameSuccessState.PASSED)
+            if (socket.IsValidated())
                 n_passed++;
         }
-        if (inst_miniGames.Count == 1)
+        if (sockets.Count == 1)
         {
             return n_passed == 1;
         }
@@ -150,9 +150,9 @@ public class MiniGameLoop : IEnumerator<MiniGame>
 
     public bool IsLoopPerfect()
     {
-        foreach (MiniGame mg in inst_miniGames)
+        foreach (MiniGameLoopSocket socket in sockets)
         {
-            if (mg.successState != MiniGameSuccessState.PASSED)
+            if (!socket.IsValidated())
             {
                 return false;
             }
@@ -162,11 +162,11 @@ public class MiniGameLoop : IEnumerator<MiniGame>
 
     public MiniGameSuccessState GetSuccessState(MiniGameSO iMGDesc)
     {
-        foreach (MiniGame mg in inst_miniGames)
+        foreach (MiniGameLoopSocket socket in sockets)
         {
-            if (mg.descriptor == iMGDesc)
+            if (socket.inst_miniGame.descriptor == iMGDesc)
             {
-                return mg.successState;
+                return socket.inst_miniGame.successState;
             }
         }
         return MiniGameSuccessState.NONE;
@@ -174,10 +174,10 @@ public class MiniGameLoop : IEnumerator<MiniGame>
 
     public MiniGameSuccessState[] GetSuccessStates()
     {
-        MiniGameSuccessState[] states = new MiniGameSuccessState[inst_miniGames.Count];
-        for (int i = 0; i < inst_miniGames.Count; i++)
+        MiniGameSuccessState[] states = new MiniGameSuccessState[sockets.Count];
+        for (int i = 0; i < sockets.Count; i++)
         {
-            states[i] = inst_miniGames[i].successState;
+            states[i] = sockets[i].inst_miniGame.successState;
         }
 
         return states;

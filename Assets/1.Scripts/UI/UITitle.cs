@@ -73,8 +73,12 @@ public class UITitle : UINavigator
         quitBtn?.clickCallback.AddListener(() => QuitGame());
 
         // Start with sign in pop up active
-        handle_PopUpPanel.SignInPopup();
-        NavigateTo(handle_PopUpPanel);
+        if (!UGSAuthenticationManager.IsSignedInUGS())
+        {
+            handle_PopUpPanel.NavigateBackCB.AddListener(()=>handle_profilePanel.Refresh());
+            handle_PopUpPanel.SignInPopup();
+            NavigateTo(handle_PopUpPanel);
+        }
     }
 
     void Update()

@@ -3,7 +3,7 @@ using TMPro;
 
 using static LocalUtils;
 
-public class DogPetMiniGame : MiniGame, IDogMod, IRegularMod
+public class DogPetMiniGame : MiniGame, IDogFamily
 {
     [Header("DogPetMiniGame")]
     public GameObject prefab_dogHead;

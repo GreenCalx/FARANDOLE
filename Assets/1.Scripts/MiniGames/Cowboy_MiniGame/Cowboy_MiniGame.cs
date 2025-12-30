@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.Events;
 using DG.Tweening;
 
-public class CowboyMiniGame : MiniGame, ITheaterMod, ISpawnerMod<Cowboy>
+public class CowboyMiniGame : MiniGame, IRegularFamily
 {
     [Header("CowboyMiniGame")]
     public GameObject prefab_PerspectiveRoom;
@@ -185,14 +185,6 @@ public class CowboyMiniGame : MiniGame, ITheaterMod, ISpawnerMod<Cowboy>
     {
         // TODO : Change spawn Interval or spawn probability random range
     }
-    public Cowboy Spawn(GameObject iPrefab)
-    {
-        Cowboy newCowboy = GOBuilder.Create(prefab_cowboy)
-            .WithName("Cowboy" )
-            .WithParent(this.gameObject.transform)
-            .BuildAs<Cowboy>();
-    
-        return newCowboy;
-    }
+
     #endregion
 }

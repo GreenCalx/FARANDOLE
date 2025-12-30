@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System;
 using Cysharp.Threading.Tasks;
 using System.Threading;
-public class MemoryMiniGame : MiniGame, IDogMod, IRegularMod
+public class MemoryMiniGame : MiniGame, IDogFamily
 {
     [Header("MemoryMiniGame")]
     public GameObject[] prefabs_card;

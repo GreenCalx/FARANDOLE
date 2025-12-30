@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.Events;
-public class LabyrinthMiniGame : MiniGame
+public class LabyrinthMiniGame : MiniGame, IPhysicsFamily
 {
     [Header("LabyrinthMiniGame")]
     public FinishLine finishLine;

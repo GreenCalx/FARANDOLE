@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.Events;
 using Cysharp.Threading.Tasks;
 
-public class DragLabyrinthMiniGame : MiniGame
+public class DragLabyrinthMiniGame : MiniGame, IRegularFamily
 {
     [Header("DragLabyrinthMiniGame")]
     public float electrifyDuration = 1f;

@@ -3,7 +3,7 @@ using UnityEngine.Events;
 using System.Collections.Generic;
 using System;
 
-public class SheepMiniGame : MiniGame
+public class SheepMiniGame : MiniGame, IRegularFamily
 {
     [Header("SheepMiniGame")]
     public GameObject prefab_sheep;
@@ -82,4 +82,10 @@ public class SheepMiniGame : MiniGame
         }
     }
     
+    #region MODS
+    public void ApplyMod()
+    {
+
+    }
+    #endregion
 }

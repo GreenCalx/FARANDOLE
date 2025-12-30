@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87a63174ee8c328448bbdd11b0cb13ae, type: 3}
+  m_Name: GameSettings_Random
+  m_EditorClassIdentifier: 
+  PlayerHP: 10
+  loopSize: 7
+  percentOfLoopSizeToPass: 0.5
+  ComboRequirementForSuper: 2
+  ComboRequirementForMaster: 5
+  MaxComboPoints: 3
+  MiniGameTime: 6
+  timeScaleOverLoopLevel:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0.029018108
+      outSlope: 0.029018108
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.08620094
+    - serializedVersion: 3
+      time: 12
+      value: 2.25
+      inSlope: 0.025827948
+      outSlope: 0.025827948
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.1375839
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  LoopRankColorGrading: {fileID: 2800000, guid: 646f8794914852640ae82f11d8f46b30, type: 3}
+  MaxLoopDepth: 12
+  LoopDepthPatternCollection: {fileID: 11400000, guid: c646ee98acc4c2146876ed9b317fc2fa, type: 2}
+  titleScreenFadeoutTime: 3
+  GameUIScreenProportion: 0.1
+  GameFieldScreenProportion: 0.8
+  LoopPefectColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  LoopPassedColor: {r: 0, g: 1, b: 0, a: 1}
+  LoopFailedColor: {r: 1, g: 0, b: 0, a: 1}
+  RankSettings: {fileID: 11400000, guid: 6a32a64a12bcf2d4abaea25fad902b82, type: 2}
+  ShowLaunchGameButtonInSec: 0.5
+  PostMiniGameLatchInMs: 500
+  PreMiniGameLatchInMs: 500
+  PlayGroundColorLerpTimeSec: 0.3
+  PlayGroundPatternLerpTimeSec: 1
+  BGMRankLerpTimeSec: 1
+  GameClockScaleAnimDuration: 0.25
+  PostShowLoopResultDelayInMs: 500
+  PostShowNewRankDelayInMs: 1000
+  ShowLightTotalTimeInMs: 2000
+  MaxLightUpMiniGameThumbnailTime: 250

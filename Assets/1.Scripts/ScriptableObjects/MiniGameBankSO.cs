@@ -30,7 +30,7 @@ public class MiniGameBankSO : ScriptableObject
         return filtered;
     }
 
-    public List<GameObject> GetByTags(int iNumber, List<EMiniGameTags> iTags)
+    public List<GameObject> GetByFamily(int iNumber, List<EMiniGameFamily> iTags)
     {
         List<MiniGameSO> filtered = new List<MiniGameSO>();
         foreach (MiniGameSO go in GameBank)
@@ -38,9 +38,9 @@ public class MiniGameBankSO : ScriptableObject
             MiniGame as_mg = go.prefab_MiniGame.GetComponent<MiniGame>();
             if (as_mg == null)
                 continue;
-            foreach (EMiniGameTags tag in iTags)
+            foreach (EMiniGameFamily tag in iTags)
             {
-                if (as_mg.descriptor.tags.Contains(tag))
+                if (iTags.Contains(as_mg.descriptor.family))
                 {
                     filtered.Add(go);
                     break;

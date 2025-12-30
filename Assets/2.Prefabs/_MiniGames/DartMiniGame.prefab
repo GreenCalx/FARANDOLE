@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5205109001117507003
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8536167099261624320}
+  - component: {fileID: 2617645745361538587}
+  m_Layer: 0
+  m_Name: DartMiniGame
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &8536167099261624320
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5205109001117507003}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2617645745361538587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5205109001117507003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64e6abe5937e8ae4d9c06c6c9e98b74d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  descriptor: {fileID: 11400000, guid: 301c97c72abc44c4fa0b5ad706ef517b, type: 2}
+  extensions:
+  - rid: 5311456299385094566
+  MGM: {fileID: 0}
+  PC: {fileID: 0}
+  PG: {fileID: 0}
+  IsActiveMiniGame: 0
+  IsInPostGame: 0
+  GameIsLost: 0
+  successState: 0
+  CompletionTime: 0
+  hasIntro: 0
+  prefab_gun: {fileID: 653498583214564742, guid: a878bb01b767c4649b8d4ff2fa8162fb, type: 3}
+  n_balloons: 0500000006000000070000000700000008000000
+  n_bigballoons: 0000000001000000020000000100000002000000
+  rock: 0000000101
+  prefab_Balloon: {fileID: 980553201171756042, guid: 2590b816f7e5b0f41a347f51dc8ec656, type: 3}
+  prefab_BigBalloon: {fileID: 980553201171756042, guid: 7261dfdc2a46b464c9c0ca91b7ceade1, type: 3}
+  prefab_Rock: {fileID: 9008469230258281967, guid: de3b292e826e69846bc7f8b5b53f3aa0, type: 3}
+  references:
+    version: 2
+    RefIds:
+    - rid: 5311456299385094566
+      type: {class: SpawnerExtension, ns: , asm: FarandoleAsm}
+      data:
+        DataOverSpawnables:
+          items: []

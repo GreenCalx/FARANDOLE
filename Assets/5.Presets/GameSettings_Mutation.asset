@@ -19,7 +19,6 @@ MonoBehaviour:
   ComboRequirementForMaster: 5
   MaxComboPoints: 3
   MiniGameTime: 6
-  MaxTimeScale: 2.5
   timeScaleOverLoopLevel:
     serializedVersion: 2
     m_Curve:
@@ -33,13 +32,13 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0.08620094
     - serializedVersion: 3
-      time: 16
-      value: 3
-      inSlope: 0.28929704
-      outSlope: 0.28929704
+      time: 12
+      value: 2
+      inSlope: 0.13842441
+      outSlope: 0.13842441
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.035121977
+      inWeight: 0.070469774
       outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2

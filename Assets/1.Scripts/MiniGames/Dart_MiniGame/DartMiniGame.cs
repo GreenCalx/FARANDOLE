@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Linq;
 using System;
 
-public class DartMiniGame : MiniGame
+public class DartMiniGame : MiniGame, IRegularFamily
 {
     [Header("DartMiniGame")]
     public GameObject prefab_gun;
@@ -18,7 +18,6 @@ public class DartMiniGame : MiniGame
 
     private BlockingRock inst_rock;
     DartThrower inst_gun;
-
 
     public override void Init()
     {
@@ -83,6 +82,9 @@ public class DartMiniGame : MiniGame
         {
             asTarget.OnTargetHit.AddListener(PopTarget);
         } 
+
+        // Balloons can be bumped out of bounds on spawn
+        OutOfBoundCheck();
     }
 
     
@@ -114,6 +116,24 @@ public class DartMiniGame : MiniGame
     public override void Play()
     {
         IsActiveMiniGame = true;
+
+        // destroy potential balloons out of the PG
+        OutOfBoundCheck();
+    }
+
+    public void OutOfBoundCheck()
+    {
+        GameObject[] snap = balloons.ToArray();
+        foreach (GameObject b in snap)
+        {
+            ObjectTarget asTarget = b.GetComponentInChildren<ObjectTarget>();
+            if (asTarget==null)
+                continue;
+            if (!Utils.IsContained2D(new Vector2(asTarget.transform.position.x, asTarget.transform.position.y), MGM.PG.bounds))
+            {
+                PopTarget(asTarget);
+            }
+        }
     }
     public override void Stop()
     {
@@ -148,16 +168,8 @@ public class DartMiniGame : MiniGame
 
     void Update()
     {
-        foreach (GameObject b in balloons)
-        {
-            ObjectTarget asTarget = b.GetComponentInChildren<ObjectTarget>();
-            if (asTarget==null)
-                continue;
-            if (!Utils.IsContained2D(new Vector2(asTarget.transform.position.x, asTarget.transform.position.y), MGM.PG.bounds))
-            {
-                PopTarget(asTarget);
-            }
-        }
+
+
         
     }
 }

@@ -15,7 +15,7 @@ public class MiniGameSO : ScriptableObject
     public string goal;
     public Sprite thumbNailImg;
     public GameObject prefab_MiniGame;
-    public List<EMiniGameTags> tags => prefab_MiniGame?.GetComponent<MiniGame>()?.GetTags();
-    public MiniGame implementation;
+    public EMiniGameFamily family;
+    public List<EMiniGameMods> compatibleMods;
     public SCREEN_ORIENTATION orientationRequirement = SCREEN_ORIENTATION.PORTRAIT;
 }

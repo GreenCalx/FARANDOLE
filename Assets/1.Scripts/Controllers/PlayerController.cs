@@ -76,7 +76,10 @@ public class PlayerController : MonoBehaviour
 
         firstTimeTouch = Time.fixedUnscaledTime;
         firstTouchWorldPos = GetWorldPos(finger.screenPosition);
-        positionTrackers.ForEach(e => e.OnStartTracking(firstTouchWorldPos));
+
+        var snapshot = positionTrackers.ToArray();
+        foreach (var e in snapshot)
+            e?.OnStartTracking(firstTouchWorldPos);
     }
 
     void FingerUp(EnhancedTouch.Finger finger)
@@ -86,7 +89,11 @@ public class PlayerController : MonoBehaviour
 
         lastTimeTouch = Time.fixedUnscaledTime;
         lastTouchWorldPos = GetWorldPos(finger.screenPosition);
-        positionTrackers.ForEach(e => e.OnStopTracking(lastTouchWorldPos));
+
+        var snapshot = positionTrackers.ToArray();
+        foreach (var e in snapshot)
+            e?.OnStopTracking(lastTouchWorldPos);
+
         if (HaveSwipers())
             Swipe();
     }
@@ -97,7 +104,11 @@ public class PlayerController : MonoBehaviour
             return;
 
         Vector2 newPos = GetWorldPos(iTouch.screenPosition);
-        positionTrackers.ForEach(e => e.OnPositionChanged(newPos));
+
+        var snapshot = positionTrackers.ToArray();
+
+        foreach (var e in snapshot)
+            e?.OnPositionChanged(newPos);
     }
 
     void Tap(Touch iTouch)
@@ -115,16 +126,17 @@ public class PlayerController : MonoBehaviour
             return;
 
         Vector2 tapPos = GetWorldPos(iTouch.screenPosition);
+        
+        var snapshot = tapTrackers.ToArray();
         try
         {
-            foreach (ITapTracker tracker in tapTrackers)
+            foreach (ITapTracker tracker in snapshot)
             {
-                if (tracker == null)
+                if (tracker==null)
                     continue;
-                if (tracker.OnTap(tapPos) && tracker.stopPropagation)
-                {
-                    return;
-                }
+                if (tracker.OnTap(tapPos))
+                    if (tracker.stopPropagation)
+                        return;
             }   
         }
         catch (InvalidOperationException ioe)
@@ -143,10 +155,14 @@ public class PlayerController : MonoBehaviour
         if (swipeDir.magnitude < 0.01f)
              return; // min swipe length requirement
 
+        var snapshot = swipeTrackers.ToArray();
+
         if (Mathf.Abs(swipeDir.x) >= Mathf.Abs(swipeDir.y))
-            swipeTrackers.ForEach(e => e.OnHorizontalSwipe(swipeDir.x));
+            foreach (var e in snapshot)
+                e?.OnHorizontalSwipe(swipeDir.x);
         else
-            swipeTrackers.ForEach(e => e.OnVerticalSwipe(swipeDir.y));
+            foreach (var e in snapshot)
+                e?.OnVerticalSwipe(swipeDir.y);
     }
 
     public void ClearAllTrackers()

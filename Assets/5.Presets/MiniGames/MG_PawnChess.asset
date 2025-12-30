@@ -17,5 +17,6 @@ MonoBehaviour:
   goal: Promote and get the kings
   thumbNailImg: {fileID: 21300000, guid: cac3d40a8a7141f47a5e8858d46e594c, type: 3}
   prefab_MiniGame: {fileID: 7478234881393395322, guid: 6f69b90e1be52f14397d84abebee9de2, type: 3}
-  implementation: {fileID: 0}
+  family: 2
+  compatibleMods: 
   orientationRequirement: 2
