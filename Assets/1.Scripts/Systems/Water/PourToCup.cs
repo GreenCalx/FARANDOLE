@@ -26,6 +26,9 @@ public class PourToCup : MonoBehaviour
             {
                 OnCupFilledCB?.Invoke();
             }
+        } else
+        {
+            cup.UpdateVisual(false);
         }
 
 

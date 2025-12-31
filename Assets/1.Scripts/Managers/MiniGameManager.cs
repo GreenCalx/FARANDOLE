@@ -41,6 +41,7 @@ public class MiniGameManager : MonoBehaviour, IManager
     CancellationTokenSource LoopClearAnimCTS;
     CancellationTokenSource introAnimCancelCTS;
     public List<SpriteSwapOnWin> autoSwappersOnWin;
+    public int LoopRank => (int)MGLoop.rank;
 
     #region IManager
     public void Init(GameManager iGameManager)

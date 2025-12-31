@@ -9,7 +9,8 @@ public class WaterPourMiniGame : MiniGame
     public TorqueRotater rotater;
     public PourToCup pourToCup;
     public StreamFilled cup;
-    public int[] fillOverLevels;
+    public float[] fillOverLevels;
+    public float[] maxFillRateOverLevels;
     // TODO : Move the cup
 
     public override void Init()
@@ -21,7 +22,11 @@ public class WaterPourMiniGame : MiniGame
         base.Reset();
 
         rotater.Init();
+        
         cup.Flush();
+        cup.maxFill = fillOverLevels[MGM.LoopRank];
+        pourToCup.fillRate = maxFillRateOverLevels[MGM.LoopRank];
+
         PC.AddPositionTracker(rotater);
         pourToCup.OnCupFilledCB.AddListener(() => {Win();} );
     }
