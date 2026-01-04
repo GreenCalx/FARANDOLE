@@ -76,9 +76,9 @@ public class PawnChessMinigame : MiniGame
 
         for (int i = 1; i <= n_enemies; i++)
         {
-            board.SpawnPiece(board.getRandomUnoccupiedTile(Vector2Int.zero), PlayerColor.Black, PieceType.King);
+            board.SpawnPieceAtRandom(0, PlayerColor.Black, PieceType.King);
         }
-        board.SpawnPiece(board.getRandomUnoccupiedTile(new Vector2Int(1, 1)), PlayerColor.White, PieceType.Pawn);
+        board.SpawnPieceAtRandom(1, PlayerColor.White, PieceType.Pawn);
         board.blackPlays = true;
 
     }

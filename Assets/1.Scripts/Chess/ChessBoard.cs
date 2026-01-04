@@ -108,6 +108,22 @@ public class ChessBoard : MonoBehaviour
         return cp;
     }
 
+    public ChessPiece SpawnPieceAtRandom(int iMargin, PlayerColor iPlayerColor, PieceType iPieceType)
+    {
+        Tile t = getRandomUnoccupiedTile(new Vector2Int(iMargin, iMargin));
+
+        ChessPiece piece = SpawnPiece(t, iPlayerColor, iPieceType);
+        int safeLoop = 0;
+        while (piece.GetLegalMoves().Count < 1)
+        {
+            Tile t2 = getRandomUnoccupiedTile(new Vector2Int(iMargin, iMargin));
+            MovePiece( t, t2, piece );
+            if (safeLoop++ > 10)
+                break;
+        }
+        return piece;
+    }
+
     public Tile GetTile(int x, int y)
     {
         if (x < 0 || y < 0 || x >= boardSize.x || y >= boardSize.y)
@@ -254,7 +270,9 @@ public class ChessBoard : MonoBehaviour
         {
             x = Random.Range(margin.x, boardSize.x - margin.x);
             y = Random.Range(margin.y, boardSize.y - margin.y);
-        } while (tiles[x, y] == null || tiles[x, y].IsOccupied());
+        } while (   tiles[x, y] == null || 
+                    tiles[x, y].IsOccupied()
+                    );
 
         return tiles[x, y];
     }

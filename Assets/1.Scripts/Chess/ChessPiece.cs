@@ -77,8 +77,14 @@ public abstract class ChessPiece : MonoBehaviour
         sr.enabled = false;
         await UniTask.WaitForSeconds(particles.main.startLifetime.constantMax);
 
-        if (this.gameObject!=null)
+        try
+        {
             Destroy(this.gameObject);
+        } catch (MissingReferenceException e)
+        {
+            // swallow
+        }
+            
     }
 
     public void playParticles()

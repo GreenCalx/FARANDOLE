@@ -74,12 +74,13 @@ public class KnightChessMinigame : MiniGame
         int n_enemies = enemyCounters[MGM.miniGamesDifficulty - 1];
         int knightMargin = knightMargins[MGM.miniGamesDifficulty - 1];
 
-        board.SpawnPiece(board.getRandomUnoccupiedTile(Vector2Int.zero), PlayerColor.White, PieceType.Knight);
+
+        board.SpawnPieceAtRandom(0, PlayerColor.White, PieceType.Knight);
+
         for (int i = 1; i <= n_enemies; i++)
         {
-            board.SpawnPiece(board.getRandomUnoccupiedTile(new Vector2Int(knightMargin,knightMargin)), PlayerColor.Black, PieceType.Knight);
+            board.SpawnPieceAtRandom(knightMargin, PlayerColor.Black, PieceType.Knight);
         }
-
     }
 
     bool[,] ShapeBoard()
