@@ -31,7 +31,7 @@ public class ItemWaitLine : WaitLine<ShopItem>
                 return;
             await UniTask.Yield(); 
         }
-        while (!Peek().isCrafted)
+        while (Peek()!=null && !Peek().isCrafted)
         {
             if (CTS.IsCancellationRequested)
                 return;

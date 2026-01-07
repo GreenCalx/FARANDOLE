@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using DG.Tweening;
 
 public class StreamFilled : MonoBehaviour
@@ -11,14 +12,17 @@ public class StreamFilled : MonoBehaviour
     public float maxFill = 1f;
     public float CurrentFill { get; private set; }
     public bool IsOverflowing => CurrentFill >= maxFill;
+    public float FillRatio => CurrentFill / maxFill;
     public Sprite idleSprite;
     public Sprite filledSprited;
-
+    [Header("events")]
+    public UnityEvent OnLiquidFillCB;
     [Header("Shake config")]
     public float shakeStrengthOnFill =0.2f;
     public float shakeDuration = 0.5f;
     public float shakeVibrato = 1f;
     bool shakeLock = false;
+
 
     public void Flush()
     {
@@ -31,6 +35,8 @@ public class StreamFilled : MonoBehaviour
         CurrentFill = Mathf.Clamp(CurrentFill + amount, 0, maxFill);
         UpdateVisual(true);
         UpdateMass();
+
+        OnLiquidFillCB?.Invoke();
     }
 
     public void UpdateMass()

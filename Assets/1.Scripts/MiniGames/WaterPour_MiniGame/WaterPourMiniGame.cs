@@ -4,14 +4,16 @@ using System.Collections.Generic;
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using UnityEngine.Splines;
 public class WaterPourMiniGame : MiniGame
 {
     public TorqueRotater rotater;
     public PourToCup pourToCup;
     public StreamFilled cup;
+    public SplineWalker cupWalker;
     public float[] fillOverLevels;
     public float[] maxFillRateOverLevels;
-    // TODO : Move the cup
+    public SplineContainer[] splinesOverLevels;
 
     public override void Init()
     {
@@ -26,9 +28,12 @@ public class WaterPourMiniGame : MiniGame
         cup.Flush();
         cup.maxFill = fillOverLevels[MGM.LoopRank];
         pourToCup.fillRate = maxFillRateOverLevels[MGM.LoopRank];
+        cupWalker.SetSpline(splinesOverLevels[MGM.LoopRank]);
+
+        pourToCup.OnCupFilledCB.AddListener(() => {Win();} );
+        cup.OnLiquidFillCB.AddListener(() => cupWalker.UpdatePosition(cup.FillRatio));
 
         PC.AddPositionTracker(rotater);
-        pourToCup.OnCupFilledCB.AddListener(() => {Win();} );
     }
     public override void Play()
     {

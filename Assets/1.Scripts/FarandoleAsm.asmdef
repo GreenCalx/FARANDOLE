@@ -25,7 +25,9 @@
         "DOTween.Modules",
         "UniTask.DOTween",
         "Google.Play.Games",
-        "Unity.Services.Leaderboards"
+        "Unity.Services.Leaderboards",
+        "Unity.Splines",
+        "Unity.Mathematics"
     ],
     "includePlatforms": [
         "Android",
