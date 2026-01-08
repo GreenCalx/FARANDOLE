@@ -41,13 +41,13 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _ArrowCount: 6
+    - _ArrowCount: 10
     - _ArrowSpeed: -0.4
     - _EdgeFade: 0
     - _EnableExternalAlpha: 0
     - _HeadLength: 0.685
     - _Scroll: 0
-    - _ShaftWidth: 0.558
+    - _ShaftWidth: 1
     - _ZWrite: 0
     m_Colors:
     - _Color: {r: 0.8113208, g: 0.7425837, b: 0.3099858, a: 0.59607846}

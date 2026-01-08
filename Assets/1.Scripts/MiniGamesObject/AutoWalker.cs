@@ -6,10 +6,12 @@ using DG.Tweening;
 
 public class AutoWalker : MonoBehaviour
 {
+    [Header("MAND")]
+    public SplineWalker splineWalker;
     [Header("Tweaks")]
     public SpriteRenderer handle_Renderer;
-    public float walkDuration = 3f;
     public float animCycle = 0.3f;
+    public float walkDuration = 2.5f;
     public bool ReverseBehaviour = false;
     public UnityEvent<bool> OnAutoWalkToggleCB;
     public UnityEvent OnReachCB;
@@ -18,8 +20,6 @@ public class AutoWalker : MonoBehaviour
     public UnityEvent OnKilledCB;
     [Header("Internals")]
     public bool AutoWalk = false;
-    public Vector3 from;
-    public Vector3 to;
     protected float elapsedTime;
     protected Coroutine DelayedCo;
     public bool isDelayed = false;
@@ -27,14 +27,15 @@ public class AutoWalker : MonoBehaviour
     public int GetDisplayPriority() { return 0; }
     protected Vector3 baseScale;
     protected Rigidbody2D RB2D;
+    public float pathFrac = 0f;
     protected void Start()
     {
         if (ReverseBehaviour)
         {
             AutoWalk = true;
         }
-        transform.position = from;
         elapsedTime = 0f;
+        splineWalker.UpdatePosition(0f);;
         OnReachCB.AddListener(() => transform.DOKill());
         baseScale = transform.localScale;
         RB2D = GetComponent<Rigidbody2D>();
@@ -43,14 +44,13 @@ public class AutoWalker : MonoBehaviour
 
     protected void Update()
     {
-        if (AutoWalk)
+        if ((splineWalker!=null) && AutoWalk)
         {
             elapsedTime += Time.deltaTime;
-            float frac = elapsedTime / walkDuration;
-            transform.position = Vector3.Lerp(from, to, frac);
-            if (Vector3.Distance(transform.position, to) <= 0.01f)
+            pathFrac = Mathf.Clamp01(elapsedTime / walkDuration);
+            splineWalker.UpdatePosition(pathFrac);
+            if (pathFrac >= 1f)
             {
-                transform.position = to;
                 AutoWalk = false;
                 OnReachCB.Invoke();
             }

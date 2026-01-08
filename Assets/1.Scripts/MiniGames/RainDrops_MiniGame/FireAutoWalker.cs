@@ -9,7 +9,6 @@ public class FireAutoWalker : AutoWalker
     public Sprite deathSprite;
     public bool isDead = false;
     public bool isOnCandle = false;
-    public float[] walkDurations;
     void Start()
     {
         base.Start();
@@ -69,7 +68,6 @@ public class FireAutoWalker : AutoWalker
     public void ResetWalker()
     {
         elapsedTime = 0;
-        walkDuration = walkDurations[nextPositionIndex - 1];
         AutoWalk = true;
     }
 }

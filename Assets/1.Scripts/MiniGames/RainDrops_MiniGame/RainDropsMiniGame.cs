@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Splines;
 using UnityEngine.Events;
 using System.Collections.Generic;
 using System.Collections;
@@ -10,9 +11,10 @@ public class RainDropsMiniGame : MiniGame, IArcadeFamily
     [Header("RainDropsMiniGame")]
     public GameObject prefab_walker;
     public GameObject prefab_rainDrop;
-
-    public List<LineRenderer> linesDiff;
-    private LineRenderer pathLine;
+    public float[] walkDurations;
+    public List<SplineContainer> linesDiff;
+    private SplineContainer pathLine;
+    public SplinePathRenderer SPR;
     Vector3[] positions;
     int positionCount;
     public UIArcadeInputs m_ArcadeInputs;
@@ -21,6 +23,7 @@ public class RainDropsMiniGame : MiniGame, IArcadeFamily
     float lastDropTime = 0f;
     FireAutoWalker inst_walker;
     int inst_walker_layerPosition = 0;
+    float pathCompletionRatio;
     List<AutoWalkKiller> inst_rainDrops;
 
     public GameObject rightTree;
@@ -32,12 +35,10 @@ public class RainDropsMiniGame : MiniGame, IArcadeFamily
 
     public override void Reset()
     {
-        pathLine = linesDiff[MGM.miniGamesDifficulty - 1];
+        pathCompletionRatio = 0f;
+
+        pathLine = linesDiff[MGM.LoopRank];
         pathLine.gameObject.SetActive(true);
-        positionCount = pathLine.positionCount;
-        positions = new Vector3[positionCount];
-        pathLine.GetPositions(positions);
-        MGM.LM2D.PlaceObject(pathLine);
 
         SpawnFireWalker();
 
@@ -101,30 +102,15 @@ public class RainDropsMiniGame : MiniGame, IArcadeFamily
         inst_walker = GOBuilder.Create(prefab_walker)
                         .WithName("FireWalker")
                         .WithParent(transform)
-                        .WithPosition(positions[0])
+                        .WithPosition(Vector3.zero)
                         .BuildAs<FireAutoWalker>();
-        inst_walker.from = positions[0];
-        inst_walker.to = positions[1];
-        float[] distances = new float[positionCount - 1];
-        float totalDistance = 0f;
-        inst_walker.walkDurations = new float[positionCount - 1];
+        inst_walker.splineWalker.selfPathRenderer = SPR;
+        inst_walker.splineWalker.SetSpline(pathLine);
+        inst_walker.splineWalker.UpdatePosition(pathCompletionRatio);
 
-        for (int i = 0; i < distances.Length; i++)
-        {
-            distances[i] = Vector3.Distance(positions[i], positions[i + 1]);
-            totalDistance += distances[i];
-        }
-        float frac;
-        for(int i = 0; i < distances.Length; i++)
-        {
-            frac = distances[i] / totalDistance;
-            inst_walker.walkDurations[i] = inst_walker.walkDuration * frac;
-        }
-
-        inst_walker.nextPositionIndex = 1;
-        inst_walker.OnReachCB.AddListener(ReachPos);
+        inst_walker.OnReachCB.AddListener(() => Win());
         inst_walker.OnKilledCB.AddListener(() => SpawnFireWalker());
-        inst_walker.walkDuration = inst_walker.walkDurations[0];
+        inst_walker.walkDuration = walkDurations[MGM.LoopRank];
 
         m_ArcadeInputs.Btn1Unbind();
         m_ArcadeInputs.OnBtn1Press(() => { inst_walker.AutoWalk = true; });
@@ -145,21 +131,6 @@ public class RainDropsMiniGame : MiniGame, IArcadeFamily
         newDrop.OnDestroyCB.AddListener(() => inst_rainDrops.Remove(newDrop));
         MGM.LM2D.PlaceObject(newDrop.handle_Renderer);
         inst_rainDrops.Add(newDrop);
-    }
-
-    void ReachPos()
-    {
-        if (inst_walker.nextPositionIndex == positionCount - 1)
-        {
-            Win();
-        }
-        else
-        {
-            inst_walker.from = positions[inst_walker.nextPositionIndex];
-            inst_walker.nextPositionIndex += 1;
-            inst_walker.to = positions[inst_walker.nextPositionIndex];
-            inst_walker.ResetWalker();
-        }
     }
     
     void preCompute()

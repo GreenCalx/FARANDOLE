@@ -6,13 +6,15 @@ public class SplinePathRenderer : MonoBehaviour
 {
     [Header("Source")]
     public SplineContainer splineContainer;
+    public MeshRenderer MR;
 
     [Header("Shape")]
     public int resolution = 32;
     public float width = 0.1f;
-
+    [Header("PathGuideArrows")]
+    public bool pathGuideAutoSize = false; 
+    public float ratio = 1.0f;
     Mesh mesh;
-
     // Cached buffers (no allocations after Awake)
     Vector3[] vertices;
     Vector2[] uvs;
@@ -26,6 +28,8 @@ public class SplinePathRenderer : MonoBehaviour
         };
 
         GetComponent<MeshFilter>().sharedMesh = mesh;
+        MR = GetComponent<MeshRenderer>();
+
 
         AllocateBuffers();
     }
@@ -113,6 +117,18 @@ public class SplinePathRenderer : MonoBehaviour
         mesh.uv = uvs;
         mesh.triangles = triangles;
         mesh.RecalculateBounds();
+
+        UpdateMaterial();
+    }
+
+    void UpdateMaterial()
+    {
+        if (pathGuideAutoSize)
+        {
+            float pathLength = splineContainer.Splines[0].GetLength();
+
+            MR.material.SetFloat("Arrows Count",ratio*pathLength);
+        }
     }
 
 #if UNITY_EDITOR
