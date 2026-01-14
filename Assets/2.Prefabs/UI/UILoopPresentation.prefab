@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b33b2e663e78774c9f0c9af55018725, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 2100000, guid: f5f50084159d27f40aaa4a873667c48b, type: 2}
+  m_Material: {fileID: 2100000, guid: 1f49cac2ba68d2246883eee0d2b8593e, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -348,7 +348,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Animator: {fileID: 289530761544596789}
-  IsShown: 0
+  IsSkippable: 1
+  prefab_LongTapListener: {fileID: 0}
   prefab_LoopStartImage: {fileID: 5733051450864779848, guid: 7f2c204ff255dcf4d9d003576316b970, type: 3}
   prefab_MiniGamePresentationImage: {fileID: 5733051450864779848, guid: 3c1be2cfe02e840438132dee7c6f88c6, type: 3}
   handle_LoopShow: {fileID: 8392689232544831756}

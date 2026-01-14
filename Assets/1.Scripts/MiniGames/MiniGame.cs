@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using Cysharp.Threading.Tasks;
 using System.Threading;
+using static LocalUtils;
 
 public enum MiniGameSuccessState
 {
@@ -37,20 +38,35 @@ public abstract class MiniGame : MonoBehaviour, IMiniGame
     [Header("MiniGame Mand")]
     public MiniGameSO descriptor;
     [SerializeReference, SerializeField]
-    public List<MiniGameExtension> extensions = new();
-    public bool TryGetExtension<T>(out T ext) where T : MiniGameExtension
+    public List<MiniGameExtension> extensions;
+    private Dictionary<Type, MiniGameExtension> _extensionCache = null;
+    private void BuildExtensionCache()
     {
-        foreach (var e in extensions)
+        _extensionCache = new Dictionary<Type, MiniGameExtension>();
+
+        foreach (var ext in extensions)
         {
-            if (e is T t)
+            var type = ext.GetType();
+            _extensionCache[type] = ext;
+
+            foreach (var iface in type.GetInterfaces())
             {
-                ext = t;
-                return true;
+            if (LocalUtils.IsMiniGameExtensionInterface(iface))
+            {
+                _extensionCache[iface] = ext;
+            }
             }
         }
+    }
 
-        ext = null;
-        return false;
+    public T GetExtension<T>()
+    {
+        if (_extensionCache == null)
+            BuildExtensionCache();
+
+        return _extensionCache.TryGetValue(typeof(T), out var ext)
+            ? (T)(object)ext
+            : default;
     }
 
     [Header("MiniGame Internal View")]

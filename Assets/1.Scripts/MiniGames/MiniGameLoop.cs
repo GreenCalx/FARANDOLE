@@ -103,6 +103,11 @@ public class MiniGameLoop : IEnumerator<MiniGame>
     public void Start()
     {
         ResetAll();
+        PlayCurrent();
+    }
+
+    public void PlayCurrent()
+    {
         socket.Run();
     }
     public void ResetAll()

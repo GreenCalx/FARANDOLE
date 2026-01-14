@@ -13,9 +13,13 @@ public class MiniGameLoopSocket
 
     public void Run()
     {
+        ApplyCompatibleMods();
+        
         inst_miniGame.gameObject.SetActive(true);
         inst_miniGame.IsInPostGame = false;
         inst_miniGame.successState = MiniGameSuccessState.PENDING;
+
+        inst_miniGame.Play();
     }
 
     public void Reset()
@@ -24,9 +28,25 @@ public class MiniGameLoopSocket
         inst_miniGame.IsInPostGame = false;
     }
 
+    public void ResetMods()
+    {
+        if (mods!=null)
+            mods.Clear();
+    }
+
     public bool IsValidated()
     {
         return (inst_miniGame.successState == MiniGameSuccessState.PASSED);
+    }
+
+    public void AddMod(IMiniGameMod iMGMod)
+    {
+        mods.Add(iMGMod);
+    }
+
+    public void RemoveMod(IMiniGameMod iMGMod)
+    {
+        mods.Remove(iMGMod);
     }
 
     public void ApplyCompatibleMods()
@@ -34,7 +54,7 @@ public class MiniGameLoopSocket
         foreach(IMiniGameMod mod in mods)
         {
             if (inst_miniGame.descriptor.compatibleMods.Contains(mod.AssociatedTag()))
-                mod.ApplyOn(this);
+                mod.Apply(this);
         }
     }
 }

@@ -141,7 +141,7 @@ public class MiniGameManager : MonoBehaviour, IManager
         }
         
         PC.UnFreeze();
-        MGLoop.Current.Play();
+        MGLoop.PlayCurrent();
 
         gameClock.Reset();
         gameClock.Freeze(false);

@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df4722e330c07064bb61f6a824b12c27, type: 3}
-  m_Name: DartSpawnableDef
+  m_Name: BigBalloonSpawnableDef
   m_EditorClassIdentifier: FarandoleAsm::SpawnableDef
-  prefab: {fileID: 0}
+  prefab: {fileID: 980553201171756042, guid: 7261dfdc2a46b464c9c0ca91b7ceade1, type: 3}
