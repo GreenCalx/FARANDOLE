@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df4722e330c07064bb61f6a824b12c27, type: 3}
+  m_Name: SheepSpawnableDef
+  m_EditorClassIdentifier: FarandoleAsm::SpawnableDef
+  prefab: {fileID: 4327790928247864163, guid: 860c4b0bb8a565c4ebc6c0ebcb57aec6, type: 3}

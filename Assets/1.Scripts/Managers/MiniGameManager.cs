@@ -37,11 +37,12 @@ public class MiniGameManager : MonoBehaviour, IManager
     public PlaygroundManager PG;
     public PlayerData PData;
     public UIGame UI;
+    public int LoopRank => (int)MGLoop.rank;
+    public List<SpriteSwapOnWin> autoSwappersOnWin;
     CancellationTokenSource LoopCompleteAnimCTS;
     CancellationTokenSource LoopClearAnimCTS;
     CancellationTokenSource introAnimCancelCTS;
-    public List<SpriteSwapOnWin> autoSwappersOnWin;
-    public int LoopRank => (int)MGLoop.rank;
+    private bool IsGameOver = false;
 
     #region IManager
     public void Init(GameManager iGameManager)
@@ -104,12 +105,14 @@ public class MiniGameManager : MonoBehaviour, IManager
 
     public async UniTask Launch()
     {
+        IsGameOver = false;
         MGLoop.Start();
         await PlayCurrent();
     }
 
     public void GameOver()
     {
+        IsGameOver = true;
         gameClock.Freeze(true);
         //gameClock.Reset();
         MGLoop.Current.CompletionTime = gameClock.GetElapsedTime();
@@ -161,6 +164,9 @@ public class MiniGameManager : MonoBehaviour, IManager
 
     public void WinMiniGame()
     {
+        if(IsGameOver)
+            return;
+            
         if (MGLoop.Current.IsInPostGame)
         {
             Debug.LogWarning("WinMiniGame fired multiple times by current Minigame. Not good !!");
@@ -196,6 +202,9 @@ public class MiniGameManager : MonoBehaviour, IManager
 
     async void Next()
     {
+        if (IsGameOver)
+            return;
+
         gameClock.Freeze(true);
         await PG.ClosePlaygroundAnim();
         StopCurrent();
@@ -217,7 +226,6 @@ public class MiniGameManager : MonoBehaviour, IManager
 
             // Rank update
 
-                
             // play animation
             await UI.LoopCompleteAnim(MGLoop, LoopCompleteAnimCTS.Token);
 

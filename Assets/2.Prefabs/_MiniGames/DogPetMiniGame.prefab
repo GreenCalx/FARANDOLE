@@ -205,6 +205,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -284,12 +285,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   descriptor: {fileID: 11400000, guid: fe56d2c1af5727141b16b6de5bc0a683, type: 2}
+  extensions:
+  - rid: 4020496560388046993
   MGM: {fileID: 0}
   PC: {fileID: 0}
   PG: {fileID: 0}
   IsActiveMiniGame: 0
   IsInPostGame: 0
+  GameIsLost: 0
   successState: 0
+  CompletionTime: 0
   hasIntro: 0
   prefab_dogHead: {fileID: 2552087635930286327, guid: c4141d031335370439c23e6e7c103037, type: 3}
   difficultyTapForces: 0300000005000000050000000600000008000000
@@ -302,3 +307,25 @@ MonoBehaviour:
   - 4
   bounceOnRandomTreshold: 3
   UIworld_petCounter: {fileID: 5601667270289216680}
+  references:
+    version: 2
+    RefIds:
+    - rid: 4020496560388046993
+      type: {class: TargetObjectiveExtension, ns: , asm: FarandoleAsm}
+      data:
+        DataOverIDs:
+          items:
+          - Key: DogPettings
+            Value:
+              DataOverRanks:
+                items:
+                - Key: 0
+                  Value: 10
+                - Key: 1
+                  Value: 10
+                - Key: 2
+                  Value: 10
+                - Key: 3
+                  Value: 10
+                - Key: 4
+                  Value: 10

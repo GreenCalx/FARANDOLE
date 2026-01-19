@@ -45,12 +45,39 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   descriptor: {fileID: 11400000, guid: 35d5261eef3bc8047ad1dbd9ae99f8fe, type: 2}
+  extensions:
+  - rid: 4020496560388046968
   MGM: {fileID: 0}
   PC: {fileID: 0}
   PG: {fileID: 0}
   IsActiveMiniGame: 0
   IsInPostGame: 0
+  GameIsLost: 0
   successState: 0
+  CompletionTime: 0
+  hasIntro: 0
   prefab_sheep: {fileID: 4327790928247864163, guid: 860c4b0bb8a565c4ebc6c0ebcb57aec6, type: 3}
   prefab_fence: {fileID: 2641230967751962187, guid: 83a86b38116d4c344805e91bfaec5588, type: 3}
-  sheepsCounts: 0300000004000000050000000600000007000000
+  sheepDef: {fileID: 11400000, guid: 1eb1be26cb9337c418168d4eee2d693e, type: 2}
+  references:
+    version: 2
+    RefIds:
+    - rid: 4020496560388046968
+      type: {class: SpawnerExtension, ns: , asm: FarandoleAsm}
+      data:
+        DataOverSpawnables:
+          items:
+          - Key: {fileID: 11400000, guid: 1eb1be26cb9337c418168d4eee2d693e, type: 2}
+            Value:
+              DataOverRanks:
+                items:
+                - Key: 0
+                  Value: 3
+                - Key: 1
+                  Value: 4
+                - Key: 2
+                  Value: 5
+                - Key: 3
+                  Value: 6
+                - Key: 4
+                  Value: 7

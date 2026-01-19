@@ -30,7 +30,9 @@ public enum EMiniGameMods
     SPAWNER=1,
     EXTENDABLE=2,
     CHESSBOARD=3,
-    BALL=4
+    BALL=4,
+    TARGET_OBJECTIVE=5,
+    PATH = 6
 }
 
 public abstract class MiniGame : MonoBehaviour, IMiniGame

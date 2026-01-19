@@ -8,9 +8,6 @@ public class DartMiniGame : MiniGame, IRegularFamily
     [Header("DartMiniGame")]
     public GameObject prefab_gun;
     List<GameObject> balloons;
-    public int[] n_balloons;
-    public int[] n_bigballoons;
-    public bool[] rock;
     public SpawnableDef balloonDef;
     public SpawnableDef bigBalloonDef;
     public SpawnableDef rockDef;
