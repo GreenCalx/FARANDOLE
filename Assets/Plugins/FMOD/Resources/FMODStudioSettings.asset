@@ -476,8 +476,11 @@ MonoBehaviour:
   VirtualChannelSettings: []
   RealChannelSettings: []
   Plugins: []
-  MasterBanks: []
-  Banks: []
+  MasterBanks:
+  - Master
+  Banks:
+  - MainGameBank
+  - TitleSceneBank
   BanksToLoad: []
   LiveUpdatePort: 9264
   EnableMemoryTracking: 0

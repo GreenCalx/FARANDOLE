@@ -287,4 +287,19 @@ public class MiniGameLoop : IEnumerator<MiniGame>
     {
         return rank.ToString();
     }
+
+    public void RefreshMutations()
+    {
+        List<Artefact> artefacts = GameManager.Get.playerData.bag;
+        foreach (Artefact art in artefacts)
+        {
+            foreach(MiniGameLoopSocket socket in sockets)
+            {
+                foreach(IMiniGameMod mod in art.mods)
+                {
+                    mod.Apply(socket);
+                }
+            }
+        }
+    }
 }

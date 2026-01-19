@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Splines;
 using System;
 
 [Serializable]
@@ -10,49 +11,50 @@ public class PathExtension : MiniGameExtension, IPathExtension
     public SerializableDictionary<PathDef, PathExtensionData>
         DataOverPathes = new();
 
-    public int Get(PathDef def, LoopRank rank)
+    public SplineContainer Get(PathDef def, LoopRank rank)
     {
         if (def == null)
-            return 0;
+            return null;
 
         if (!DataOverPathes.Dictionary.TryGetValue(def, out var data))
-            return 0;
+            return null;
 
         return data.DataOverRanks.Dictionary.TryGetValue(rank, out var v)
             ? v
-            : 0;
+            : null;
     }
 
-    public void Set(PathDef def, LoopRank rank, int value)
+    public void Set(PathDef def, LoopRank rank, SplineContainer value)
     {
         if (def == null)
             return;
 
         if (!DataOverPathes.Dictionary.TryGetValue(def, out var data))
         {
-            data = new SpawnerExtensionData();
-            DataOverPathes.Add(def, data);
+            data = new PathExtensionData();
+                DataOverPathes.Add(def, data);
         }
 
         data.DataOverRanks.Dictionary[rank] = value;
     }
 
-    public void Mutate(PathDef def, LoopRank rank, int delta)
+    public void Mutate(PathDef def, LoopRank rank, SplineContainer delta)
     {
-        Set(def, rank, Get(def, rank) + delta);
+        // TODO
+        //Set(def, rank, Get(def, rank) + delta);
     }
 
     // INTERFACE BRIDGE
-    int IMiniGameExtension<int>.Get(object key, LoopRank rank)
-        => key is PathDef def ? Get(def, rank) : 0;
+    SplineContainer IMiniGameExtension<SplineContainer>.Get(object key, LoopRank rank)
+        => key is PathDef def ? Get(def, rank) : null;
 
-    void IMiniGameExtension<int>.Set(object key, LoopRank rank, int value)
+    void IMiniGameExtension<SplineContainer>.Set(object key, LoopRank rank, SplineContainer value)
     {
         if (key is PathDef def)
             Set(def, rank, value);
     }
 
-    void IMiniGameExtension<int>.Mutate(object key, LoopRank rank, int delta)
+    void IMiniGameExtension<SplineContainer>.Mutate(object key, LoopRank rank, SplineContainer delta)
     {
         if (key is PathDef def)
             Mutate(def, rank, delta);

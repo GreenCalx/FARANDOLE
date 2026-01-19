@@ -41,6 +41,8 @@ public abstract class MiniGame : MonoBehaviour, IMiniGame
     public MiniGameSO descriptor;
     [SerializeReference, SerializeField]
     public List<MiniGameExtension> extensions;
+    public MiniGameExtension AlphaMut => extensions != null && extensions.Count > 0 ? extensions[0] : null;
+    public MiniGameExtension BetaMut => extensions != null && extensions.Count > 1 ? extensions[1] : null;
     private Dictionary<Type, MiniGameExtension> _extensionCache = null;
     private void BuildExtensionCache()
     {
