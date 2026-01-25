@@ -16,6 +16,8 @@ public class UIMiniGamePresentationImage : ManagedAnimation, ITapTracker
     public UICustomSquircle BG;
     public UICustomSquircle MASK;
     public Sprite defaultSprite;
+    [Header("Mutations")]
+    public UIMutationIndicators h_MutationIndicators;
     [Header("InfoBubble")]
     public UIButton infoBubbleBtn;
     public RectTransform h_InfoBubbleAnchor;
@@ -56,11 +58,17 @@ public class UIMiniGamePresentationImage : ManagedAnimation, ITapTracker
         newTagText.text = "[" + iMGDesc.family.ToString() + "]";
         inst_infoBubbleTags.Add(newTagText);
 
-        // display compatible mods ?
-        foreach (EMiniGameMods mods in iMGDesc.compatibleMods)
+    }
+
+    public void RefreshMutations(MiniGame iMiniGame)
+    {
+        if (!iMiniGame.HaveMutations)
         {
-            // TODO ..
+            h_MutationIndicators.gameObject.SetActive(false);
+            return;   
         }
+        h_MutationIndicators.gameObject.SetActive(true);
+        h_MutationIndicators.Refresh(iMiniGame);
     }
 
     public void DisableButton()

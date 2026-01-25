@@ -82,12 +82,16 @@ public class UILoopPresentationAnim : ManagedAnimation
                                                 .WithAnchoredPosition(pos)
                                                 .BuildAs<UIMiniGamePresentationImage>();
             newImg.SetFromMiniGameDesc(mg.descriptor);
+            newImg.RefreshMutations(socket.inst_miniGame);
+            
             uiImages.Add(newImg);
             index++;
         }
 
         // rank medals
         rankMedalAnimation.UpdateCurrentRank(iMGLoop);
+
+        
 
         DrawUtils.DrawUICircle(handle_LR, radius);
         UpdateLights(iMGLoop);

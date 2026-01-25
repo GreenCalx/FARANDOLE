@@ -1,5 +1,7 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 [Serializable]
 public class SpawnerExtension : MiniGameExtension, ISpawnerExtension
@@ -10,12 +12,45 @@ public class SpawnerExtension : MiniGameExtension, ISpawnerExtension
     public SerializableDictionary<SpawnableDef, SpawnerExtensionData>
         DataOverSpawnables = new();
 
+    [System.NonSerialized]
+    Dictionary<SpawnableDef, SpawnerExtensionData> RTData;
+
+    public override void ResetMutation()
+    {
+        RTData = new Dictionary<SpawnableDef, SpawnerExtensionData>();
+
+        foreach (var kvp in DataOverSpawnables.Dictionary)
+        {
+            RTData[kvp.Key] = kvp.Value.Clone();
+        }
+    }
+
+    public override void ApplyMutation(float iChannel)
+    {
+        if (RTData == null)
+            return;
+
+        foreach (var spawnable in RTData.Values)
+        {
+            var dict = spawnable.DataOverRanks.Dictionary;
+            var keys = dict.Keys.ToArray(); // avoid collection modification
+
+            foreach (var rank in keys)
+            {
+                int baseValue = dict[rank];
+                // v Actual mutation v
+                dict[rank] = Mathf.RoundToInt(baseValue + (baseValue*iChannel));
+            }
+        }
+    }
+
+
     public int Get(SpawnableDef def, LoopRank rank)
     {
         if (def == null)
             return 0;
 
-        if (!DataOverSpawnables.Dictionary.TryGetValue(def, out var data))
+        if (!RTData.TryGetValue(def, out var data))
             return 0;
 
         return data.DataOverRanks.Dictionary.TryGetValue(rank, out var v)

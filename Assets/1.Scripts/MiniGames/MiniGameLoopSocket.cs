@@ -41,8 +41,12 @@ public class MiniGameLoopSocket
 
     public void ApplyMutation()
     {
+        // Reset mutation values to base
+        foreach (var ext in inst_miniGame.extensions)
+            ext.ResetMutation();
+
         // Apply Alpha mutation
-        //inst_miniGame.AlphaMut?.Mutate(alpha_channel);
-        //inst_miniGame.BetaMut?.Mutate(beta_channel);
+        inst_miniGame.AlphaMut?.ApplyMutation(alpha_channel);
+        inst_miniGame.BetaMut?.ApplyMutation(beta_channel);
     }
 }

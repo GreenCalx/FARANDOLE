@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.Splines;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 [Serializable]
 public class PathExtension : MiniGameExtension, IPathExtension

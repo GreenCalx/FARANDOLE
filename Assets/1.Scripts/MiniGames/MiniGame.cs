@@ -43,10 +43,14 @@ public abstract class MiniGame : MonoBehaviour, IMiniGame
     public List<MiniGameExtension> extensions;
     public MiniGameExtension AlphaMut => extensions != null && extensions.Count > 0 ? extensions[0] : null;
     public MiniGameExtension BetaMut => extensions != null && extensions.Count > 1 ? extensions[1] : null;
+    public bool HaveMutations => (AlphaMut!=null) || (BetaMut!=null);
     private Dictionary<Type, MiniGameExtension> _extensionCache = null;
     private void BuildExtensionCache()
     {
         _extensionCache = new Dictionary<Type, MiniGameExtension>();
+
+        if (extensions == null)
+            return;
 
         foreach (var ext in extensions)
         {
