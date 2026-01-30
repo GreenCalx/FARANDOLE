@@ -22,6 +22,13 @@ public class MiniGameLoopSocket
         inst_miniGame.Play();
     }
 
+    public void Stop()
+    {
+        inst_miniGame.IsInPostGame = true;
+        inst_miniGame.Stop();
+        inst_miniGame.gameObject.SetActive(false);
+    }
+
     public void Reset()
     {
         inst_miniGame.successState = MiniGameSuccessState.PENDING;

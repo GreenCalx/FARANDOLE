@@ -642,7 +642,6 @@ MonoBehaviour:
   descriptor: {fileID: 11400000, guid: 731fafa9c4ef2e0459f2e2a356cdf60e, type: 2}
   extensions:
   - rid: 4020496582877904997
-  - rid: 4020496582877905018
   MGM: {fileID: 0}
   PC: {fileID: 0}
   PG: {fileID: 0}
@@ -690,15 +689,6 @@ MonoBehaviour:
                   Value: 29
                 - Key: 4
                   Value: 34
-    - rid: 4020496582877905018
-      type: {class: SpawnerExtension, ns: , asm: FarandoleAsm}
-      data:
-        DataOverSpawnables:
-          items:
-          - Key: {fileID: 0}
-            Value:
-              DataOverRanks:
-                items: []
 --- !u!1 &1201520564353225881
 GameObject:
   m_ObjectHideFlags: 0

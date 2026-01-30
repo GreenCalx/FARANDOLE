@@ -110,6 +110,10 @@ public class MiniGameLoop : IEnumerator<MiniGame>
     {
         socket.Run();
     }
+    public void StopCurrent()
+    {
+        socket.Stop();
+    }
     public void ResetAll()
     {
         Reset();
@@ -291,6 +295,7 @@ public class MiniGameLoop : IEnumerator<MiniGame>
     public void RefreshMutations()
     {
         List<Artefact> artefacts = GameManager.Get.playerData.bag;
+        Debug.Log($"RefreshMutations: Applying {artefacts.Count} artefacts to {sockets.Count} mini-games");
         foreach (Artefact art in artefacts)
         {
             foreach(MiniGameLoopSocket socket in sockets)

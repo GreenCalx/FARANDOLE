@@ -107,6 +107,7 @@ public class MiniGameManager : MonoBehaviour, IManager
     {
         IsGameOver = false;
         MGLoop.Start();
+        MGLoop.RefreshMutations();
         await PlayCurrent();
     }
 
@@ -154,8 +155,7 @@ public class MiniGameManager : MonoBehaviour, IManager
     {
         gameClock.Reset();
         if (MGLoop.Current.IsActiveMiniGame)
-            MGLoop.Current.Stop();
-        MGLoop.Current.gameObject.SetActive(false);
+            MGLoop.StopCurrent();
         PC.ClearAllTrackers();
         LM2D.ClearLayers();
 
@@ -231,6 +231,7 @@ public class MiniGameManager : MonoBehaviour, IManager
 
             //UI.skipAnimBtn.clickCallback.RemoveListener(() => LoopCompleteAnimCTS.Cancel());
 
+            MGLoop.RefreshMutations();
             MGLoop.Reset();
         }
         //await PG.OpenPlaygroundAnim();
