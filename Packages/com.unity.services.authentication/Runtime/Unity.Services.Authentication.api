@@ -1,0 +1,206 @@
+// This file is generated. Do not modify by hand.
+// XML documentation file not found. To check if public methods have XML comments,
+// make sure the XML doc file is present and located next to the scraped dll
+namespace Unity.Services.Authentication
+{
+    public static class AuthenticationErrorCodes
+    {
+        public static readonly int AccountAlreadyLinked = 10003;
+        public static readonly int AccountLinkLimitExceeded = 10004;
+        public static readonly int BannedUser = 10009;
+        public static readonly int ClientInvalidProfile = 10006;
+        public static readonly int ClientInvalidUserState = 10000;
+        public static readonly int ClientNoActiveSession = 10001;
+        public static readonly int ClientUnlinkExternalIdNotFound = 10005;
+        public static readonly int EnvironmentMismatch = 10010;
+        public static readonly int InvalidParameters = 10002;
+        public static readonly int InvalidProvider = 10008;
+        public static readonly int InvalidSessionToken = 10007;
+        public static readonly int MinValue = 10000;
+    }
+
+    public sealed class AuthenticationException : Unity.Services.Core.RequestFailedException
+    {
+        public System.Collections.Generic.List<Notification> Notifications { get; }
+        public static Unity.Services.Core.RequestFailedException Create(int errorCode, string message, System.Exception innerException = default(System.Exception));
+    }
+
+    public static class AuthenticationExtensions
+    {
+        public static Unity.Services.Core.InitializationOptions SetProfile(this Unity.Services.Core.InitializationOptions options, string profile);
+    }
+
+    public static class AuthenticationService
+    {
+        public static IAuthenticationService Instance { get; }
+    }
+
+    public interface IAuthenticationService
+    {
+        public event System.Action Expired;
+        public event System.Action<string> PlayerIdChanged;
+        public event System.Action<PlayerInfo> PlayerInfoChanged;
+        public event System.Action<string> PlayerNameChanged;
+        public event System.Action SignedIn;
+        public event System.Action SignedOut;
+        public event System.Action SignInCodeExpired;
+        public event System.Action<SignInCodeInfo> SignInCodeReceived;
+        public event System.Action<Unity.Services.Core.RequestFailedException> SignInFailed;
+        public string AccessToken { get; }
+        public bool IsAuthorized { get; }
+        public bool IsExpired { get; }
+        public bool IsSignedIn { get; }
+        public string LastNotificationDate { get; }
+        public System.Collections.Generic.List<Notification> Notifications { get; }
+        public string PlayerId { get; }
+        public PlayerInfo PlayerInfo { get; }
+        public string PlayerName { get; }
+        public string Profile { get; }
+        public string SessionToken { get; }
+        public bool SessionTokenExists { get; }
+        public System.Threading.Tasks.Task AddUsernamePasswordAsync(string username, string password);
+        public void ClearSessionToken();
+        public System.Threading.Tasks.Task ConfirmCodeAsync(string code, string idProvider = default(string), string externalToken = default(string));
+        public System.Threading.Tasks.Task DeleteAccountAsync();
+        public System.Threading.Tasks.Task<SignInCodeInfo> GenerateSignInCodeAsync(string identifier = default(string));
+        public System.Threading.Tasks.Task<System.Collections.Generic.List<Notification>> GetNotificationsAsync();
+        public System.Threading.Tasks.Task<PlayerInfo> GetPlayerInfoAsync();
+        public System.Threading.Tasks.Task<string> GetPlayerNameAsync(bool autoGenerate = true);
+        public System.Threading.Tasks.Task<SignInCodeInfo> GetSignInCodeInfoAsync(string code);
+        public System.Threading.Tasks.Task LinkWithAppleAsync(string idToken, LinkOptions options = default(LinkOptions));
+        public System.Threading.Tasks.Task LinkWithAppleGameCenterAsync(string signature, string teamPlayerId, string publicKeyURL, string salt, System.UInt64 timestamp, LinkOptions options = default(LinkOptions));
+        public System.Threading.Tasks.Task LinkWithFacebookAsync(string accessToken, LinkOptions options = default(LinkOptions));
+        public System.Threading.Tasks.Task LinkWithGoogleAsync(string idToken, LinkOptions options = default(LinkOptions));
+        public System.Threading.Tasks.Task LinkWithGooglePlayGamesAsync(string authCode, LinkOptions options = default(LinkOptions));
+        public System.Threading.Tasks.Task LinkWithOculusAsync(string nonce, string userId, LinkOptions options = default(LinkOptions));
+        public System.Threading.Tasks.Task LinkWithOpenIdConnectAsync(string idProviderName, string idToken, LinkOptions options = default(LinkOptions));
+        [System.Obsolete(@"This method is deprecated as of version 2.7.1. Please use the LinkWithSteamAsync method with the 'identity' parameter for better security.")] public System.Threading.Tasks.Task LinkWithSteamAsync(string sessionTicket, LinkOptions options = default(LinkOptions));
+        public System.Threading.Tasks.Task LinkWithSteamAsync(string sessionTicket, string identity, LinkOptions options = default(LinkOptions));
+        public System.Threading.Tasks.Task LinkWithSteamAsync(string sessionTicket, string identity, string appId, LinkOptions options = default(LinkOptions));
+        public System.Threading.Tasks.Task LinkWithUnityAsync(string token, LinkOptions options = default(LinkOptions));
+        public void ProcessAuthenticationTokens(string accessToken, string sessionToken = default(string));
+        public System.Threading.Tasks.Task SignInAnonymouslyAsync(SignInOptions options = default(SignInOptions));
+        public System.Threading.Tasks.Task SignInWithAppleAsync(string idToken, SignInOptions options = default(SignInOptions));
+        public System.Threading.Tasks.Task SignInWithAppleGameCenterAsync(string signature, string teamPlayerId, string publicKeyURL, string salt, System.UInt64 timestamp, SignInOptions options = default(SignInOptions));
+        public System.Threading.Tasks.Task SignInWithCodeAsync(bool usePolling = false, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        public System.Threading.Tasks.Task SignInWithFacebookAsync(string accessToken, SignInOptions options = default(SignInOptions));
+        public System.Threading.Tasks.Task SignInWithGoogleAsync(string idToken, SignInOptions options = default(SignInOptions));
+        public System.Threading.Tasks.Task SignInWithGooglePlayGamesAsync(string authCode, SignInOptions options = default(SignInOptions));
+        public System.Threading.Tasks.Task SignInWithOculusAsync(string nonce, string userId, SignInOptions options = default(SignInOptions));
+        public System.Threading.Tasks.Task SignInWithOpenIdConnectAsync(string idProviderName, string idToken, SignInOptions options = default(SignInOptions));
+        [System.Obsolete(@"This method is deprecated as of version 2.7.1. Please use the SignInWithSteamAsync method with the 'identity' parameter for better security.")] public System.Threading.Tasks.Task SignInWithSteamAsync(string sessionTicket, SignInOptions options = default(SignInOptions));
+        public System.Threading.Tasks.Task SignInWithSteamAsync(string sessionTicket, string identity, SignInOptions options = default(SignInOptions));
+        public System.Threading.Tasks.Task SignInWithSteamAsync(string sessionTicket, string identity, string appId, SignInOptions options = default(SignInOptions));
+        public System.Threading.Tasks.Task SignInWithUnityAsync(string token, SignInOptions options = default(SignInOptions));
+        public System.Threading.Tasks.Task SignInWithUsernamePasswordAsync(string username, string password);
+        public void SignOut(bool clearCredentials = false);
+        public System.Threading.Tasks.Task SignUpWithUsernamePasswordAsync(string username, string password);
+        public void SwitchProfile(string profile);
+        public System.Threading.Tasks.Task UnlinkAppleAsync();
+        public System.Threading.Tasks.Task UnlinkAppleGameCenterAsync();
+        public System.Threading.Tasks.Task UnlinkFacebookAsync();
+        public System.Threading.Tasks.Task UnlinkGoogleAsync();
+        public System.Threading.Tasks.Task UnlinkGooglePlayGamesAsync();
+        public System.Threading.Tasks.Task UnlinkOculusAsync();
+        public System.Threading.Tasks.Task UnlinkOpenIdConnectAsync(string idProviderName);
+        public System.Threading.Tasks.Task UnlinkSteamAsync();
+        public System.Threading.Tasks.Task UnlinkUnityAsync();
+        public System.Threading.Tasks.Task UpdatePasswordAsync(string currentPassword, string newPassword);
+        public System.Threading.Tasks.Task<string> UpdatePlayerNameAsync(string name);
+    }
+
+    public sealed class Identity
+    {
+        public string TypeId;
+        public string UserId;
+    }
+
+    public sealed class LinkOptions
+    {
+        public bool ForceLink { get; set; }
+        public LinkOptions() {}
+    }
+
+    public struct Notification
+    {
+        public string CaseId;
+        public string CreatedAt;
+        public string Id;
+        public string Message;
+        public string PlayerId;
+        public string ProjectId;
+        public string Type;
+    }
+
+    public sealed class PlayerInfo
+    {
+        public event System.Action<PlayerInfo> InfoChanged;
+        public System.Nullable<System.DateTime> CreatedAt { get; }
+        public string Id { get; }
+        public System.Collections.Generic.List<Identity> Identities { get; }
+        [JetBrains.Annotations.CanBeNull] public System.Nullable<System.DateTime> LastPasswordUpdate { get; }
+        [JetBrains.Annotations.CanBeNull] public string Username { get; }
+        public string GetAppleGameCenterId();
+        public string GetAppleId();
+        public string GetCustomId();
+        public string GetFacebookId();
+        public string GetGoogleId();
+        public string GetGooglePlayGamesId();
+        public string GetOculusId();
+        public string GetOpenIdConnectId(string idProviderName);
+        public System.Collections.Generic.List<Identity> GetOpenIdConnectIdProviders();
+        public string GetSteamId();
+        public string GetUnityId();
+    }
+
+    public sealed class SignInCodeInfo
+    {
+        public string Expiration { get; }
+        public string Identifier { get; }
+        public string SignInCode { get; }
+        public SignInCodeInfo() {}
+    }
+
+    public sealed class SignInOptions
+    {
+        public bool CreateAccount { get; set; }
+        public SignInOptions() {}
+    }
+}
+
+namespace Unity.Services.Authentication.Components
+{
+    [UnityEngine.AddComponentMenu(@"Services/Player Authentication")] public class PlayerAuthentication : Unity.Services.Core.Components.ServicesBehaviour
+    {
+        [UnityEngine.Header(@"Events")] [UnityEngine.SerializeField] public PlayerAuthenticationEvents Events;
+        [UnityEngine.Header(@"On Sign In")] [UnityEngine.SerializeField] [UnityEngine.Tooltip(@"Fetches the player info upon sign in. This provides the player creation time, username, etc.")] public bool FetchPlayerInfo;
+        [UnityEngine.SerializeField] [UnityEngine.Tooltip(@"Fetches the player name upon sign in.")] public bool FetchPlayerName;
+        [Unity.Services.Core.Internal.Visibility(@"FetchPlayerName", true)] [UnityEngine.SerializeField] [UnityEngine.Tooltip(@"Pass in the option to autogenerate the name if none exist.")] public bool GenerateName;
+        [Unity.Services.Core.Internal.Visibility(@"SetCustomProfile", true)] [UnityEngine.SerializeField] [UnityEngine.Tooltip(@"The profile is a local scope for persisted player credentials that you can use to get different players.")] public string Profile;
+        [UnityEngine.Header(@"On Initialization")] [UnityEngine.SerializeField] [UnityEngine.Tooltip(@"Option to set a custom profile to scope persisted credentials and get different players.")] public bool SetCustomProfile;
+        [UnityEngine.SerializeField] [UnityEngine.Tooltip(@"Option to sign in anonymously automatically after services initialization.")] public bool SignInAnonymously;
+        public IAuthenticationService AuthenticationService { get; }
+        protected override void Cleanup();
+        protected override void OnServicesInitialized();
+        protected override void OnServicesReady();
+    }
+
+    public class PlayerAuthenticationEvents
+    {
+        [UnityEngine.SerializeField] public UnityEngine.Events.UnityEvent Expired;
+        [UnityEngine.SerializeField] public UnityEngine.Events.UnityEvent SignedIn;
+        [UnityEngine.SerializeField] public UnityEngine.Events.UnityEvent SignedOut;
+        [UnityEngine.SerializeField] public UnityEngine.Events.UnityEvent SignInCodeExpired;
+        [UnityEngine.SerializeField] public UnityEngine.Events.UnityEvent<SignInCodeInfo> SignInCodeReceived;
+        [UnityEngine.SerializeField] public UnityEngine.Events.UnityEvent<System.Exception> SignInFailed;
+        public PlayerAuthenticationEvents() {}
+    }
+}
+
+namespace Unity.Services.Core
+{
+    public static class UnityServicesExtensions
+    {
+        public static Unity.Services.Authentication.IAuthenticationService GetAuthenticationService(this IUnityServices unityServices);
+    }
+}

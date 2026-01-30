@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: da1cb4f2f1551d948a65d84276aef03d
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 253197
+  packageName: Animate UI Materials
+  packageVersion: 1.3.1
+  assetPath: Assets/Plugins/Animate UI Materials/Examples/UI Overlay.mat
+  uploadId: 843736

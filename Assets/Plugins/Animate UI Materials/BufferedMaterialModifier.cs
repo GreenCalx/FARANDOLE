@@ -90,11 +90,18 @@ namespace Plugins.Animate_UI_Materials
       {
         // Set a new name, to warn about editor modifications
         name = $"{realSource.name} {suffix}",
-        hideFlags = HideFlags.DontSaveInBuild | HideFlags.DontSaveInEditor,
+        // Prevent saving, but don't set HideFlags.HideAndDontSave since it prevents destruction on scene change
+        hideFlags = HideFlags.DontSaveInBuild | HideFlags.DontSaveInEditor
+        // Add NotEditable to avoid user modifying material in preview, since changes will be lost
+                                              | HideFlags.NotEditable,
       };
       // Set parent if supported
+      // If masking is enabled, or another modifier is present, don't try to parent at all, since it causes issues in editor
 #if UNITY_2022_1_OR_NEWER && UNITY_EDITOR
-      modifiedMaterial.parent = realSource;
+      if (baseMaterial == realSource)
+      {
+        modifiedMaterial.parent = realSource;
+      }
 #endif
       return modifiedMaterial;
     }

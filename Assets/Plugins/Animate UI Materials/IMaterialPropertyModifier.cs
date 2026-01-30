@@ -17,7 +17,7 @@ namespace Plugins.Animate_UI_Materials
     /// <summary>
     ///   The "enabled" value of the modifier component
     /// </summary>
-    bool enabled { get; set; }
+    bool enabled { get; set;  }
 
     /// <summary>
     ///   The "gameObject" value of the modifier component
@@ -35,6 +35,5 @@ namespace Plugins.Animate_UI_Materials
     /// If the source material cannot be found, reset to sensible defaults
     /// </summary>
     void ResetPropertyToDefault();
-
   }
 }
