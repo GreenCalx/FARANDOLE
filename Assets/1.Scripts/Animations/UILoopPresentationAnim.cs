@@ -20,6 +20,7 @@ public class UILoopPresentationAnim : ManagedAnimation
     public UIRankMedalAnim rankMedalAnimation;
     public int timeBetweenShowLinesInMs = 200;
     List<UIMiniGamePresentationImage> uiImages;
+    public List<UIMiniGamePresentationImage> UIImages => uiImages;
 
     public float radius = 50f;
     public int LR_resolution = 2;
@@ -241,6 +242,22 @@ public class UILoopPresentationAnim : ManagedAnimation
         foreach (UIMiniGamePresentationImage img in uiImages)
         {
             img.DisableButton();
+        }
+    }
+
+    public void EnableThumbnailSelection()
+    {
+        foreach (UIMiniGamePresentationImage img in uiImages)
+        {
+            img.EnableSelection();
+        }
+    }
+
+    public void DisableThumbnailSelection()
+    {
+        foreach (UIMiniGamePresentationImage img in uiImages)
+        {
+            img.DisableSelection();
         }
     }
 }

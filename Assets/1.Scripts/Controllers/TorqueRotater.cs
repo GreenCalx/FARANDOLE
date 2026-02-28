@@ -7,6 +7,16 @@ public class TorqueRotater : MonoBehaviour, IPositionTracker
     public float rotationGain = 5f;
     public float damping = 0.9f;
 
+    [Header("Angle Limits")]
+    public bool useAngleLimits = true;
+    public float minAngle = -45f;
+    public float maxAngle = 90f;
+    public float limitBounceFactor = 0.3f;
+
+    [Header("Ballistic")]
+    public float angularDrag = 2f;
+    public float releaseVelocityScale = 0.8f;
+
     private bool isTracking;
     private float initialRotation;
 
@@ -17,6 +27,7 @@ public class TorqueRotater : MonoBehaviour, IPositionTracker
 
     private float lastRawRotAngle;
     private float cumilativeRotAngle;
+    private float currentVelocity;
 
     public void Init()
     {
@@ -29,6 +40,7 @@ public class TorqueRotater : MonoBehaviour, IPositionTracker
         lastRawTargetAngle = 0f;
         lastRawRotAngle = 0f;
         rawTargetAngle = 0f;
+        currentVelocity = 0f;
     }
 
     public void OnStartTracking(Vector2 pos)
@@ -63,20 +75,27 @@ public class TorqueRotater : MonoBehaviour, IPositionTracker
     public void OnStopTracking(Vector2 pos)
     {
         isTracking = false;
-        targetRB.freezeRotation = true;
-        targetRB.bodyType = RigidbodyType2D.Kinematic;
-        targetRB.angularVelocity = 0f;
+        currentVelocity = targetRB.angularVelocity * releaseVelocityScale;
     }
 
     void FixedUpdate()
     {
-        if (isTracking && targetRB != null)
+        if (targetRB == null)
+            return;
+
+        float dt = Time.fixedDeltaTime;
+
+        if (isTracking)
         {
             float dRb = targetRB.rotation - lastRawRotAngle;
             cumilativeRotAngle += dRb;
             lastRawRotAngle = targetRB.rotation;
 
             float targetAngle = initialRotation + (cumulativeRawTargetAngle - rawInitAngle);
+
+            if (useAngleLimits)
+                targetAngle = Mathf.Clamp(targetAngle, minAngle, maxAngle);
+
             float angleDiff = targetAngle - cumilativeRotAngle;
 
             float desiredAngularVelocity = angleDiff * rotationGain;
@@ -84,6 +103,34 @@ public class TorqueRotater : MonoBehaviour, IPositionTracker
             desiredAngularVelocity = Mathf.Clamp(desiredAngularVelocity, -maxAngularSpeed, maxAngularSpeed);
 
             targetRB.angularVelocity = desiredAngularVelocity;
+            currentVelocity = desiredAngularVelocity;
+        }
+        else
+        {
+            currentVelocity -= currentVelocity * angularDrag * dt;
+
+            if (Mathf.Abs(currentVelocity) < 0.1f)
+                currentVelocity = 0f;
+
+            float newRotation = targetRB.rotation + currentVelocity * dt;
+
+            if (useAngleLimits)
+            {
+                if (newRotation < minAngle)
+                {
+                    newRotation = minAngle;
+                    currentVelocity = -currentVelocity * limitBounceFactor;
+                }
+                else if (newRotation > maxAngle)
+                {
+                    newRotation = maxAngle;
+                    currentVelocity = -currentVelocity * limitBounceFactor;
+                }
+            }
+
+            targetRB.rotation = newRotation;
+            cumilativeRotAngle = newRotation;
+            lastRawRotAngle = newRotation;
         }
     }
 }

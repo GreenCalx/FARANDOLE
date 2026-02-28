@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: TheBeast
   m_EditorClassIdentifier: FarandoleAsm::ArtefactSO
   name: artefact_name
+  descriptiion: artefact_description
+  icon: {fileID: -5879514480746932602, guid: 481227394aa30b94c99ec7d1420792c3, type: 3}

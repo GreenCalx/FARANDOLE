@@ -1185,11 +1185,15 @@ MonoBehaviour:
   m_Animator: {fileID: 317005901450341987}
   IsSkippable: 1
   prefab_LongTapListener: {fileID: 0}
-  infoBubbleEnabled: 1
-  MiniGameThumbnail: {fileID: 6257878755790239029}
   light: {fileID: 8473245674179717308}
   BG: {fileID: 2544000830564825186}
   MASK: {fileID: 1448006738359887600}
+  isSelected: 0
+  onSelected:
+    m_PersistentCalls:
+      m_Calls: []
+  infoBubbleEnabled: 1
+  MiniGameThumbnail: {fileID: 6257878755790239029}
   defaultSprite: {fileID: 21300000, guid: 438f102f85f2ed449b4634f1b87e3a3b, type: 3}
   h_MutationIndicators: {fileID: 606172026754429709}
   infoBubbleBtn: {fileID: 8633530062930571679}
@@ -1202,8 +1206,8 @@ MonoBehaviour:
   h_rankTexts:
   - {fileID: 8842245953868764366}
   - {fileID: 4974899301949238768}
+  selectButton: {fileID: 3282632515884456526}
   MGSuccessState: 0
-  LightShown: 0
   selfDesc: {fileID: 0}
 --- !u!225 &3861991439688198403
 CanvasGroup:

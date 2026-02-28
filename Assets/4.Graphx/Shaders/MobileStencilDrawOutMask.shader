@@ -6,6 +6,7 @@ Properties
 {
 	[PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
 	_Color ("Tint", Color) = (1,1,1,1)
+	_Tiling ("Tiling", Vector) = (1,1,0,0)
 	[MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
 	_StencilRef ("Stencil ID", Float) = 1
 }
@@ -57,12 +58,13 @@ SubShader
 		};
  
 		fixed4 _Color;
+		float4 _Tiling;
  
 		v2f vert(appdata_t IN)
 		{
 			v2f OUT;
 			OUT.vertex = UnityObjectToClipPos(IN.vertex);
-			OUT.texcoord = IN.texcoord;
+			OUT.texcoord = IN.texcoord * _Tiling.xy;
 			OUT.color = IN.color * _Color;
 			#ifdef PIXELSNAP_ON
 			OUT.vertex = UnityPixelSnap (OUT.vertex);

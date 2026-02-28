@@ -50,6 +50,9 @@ public class SpawnerExtension : MiniGameExtension, ISpawnerExtension
         if (def == null)
             return 0;
 
+        if (RTData == null)
+            ResetMutation();
+
         if (!RTData.TryGetValue(def, out var data))
             return 0;
 

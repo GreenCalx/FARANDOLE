@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(wc:*)",
+      "Bash(grep:*)",
+      "Bash(dir:*)",
+      "Bash(find \"F:\\\\UNITY\\\\FARANDOLE\\\\FARANDOLE\\\\Assets\\\\1.Scripts\" -type f -name \"*.cs\" -exec grep -l \"class.*IMiniGameMod\" {} ;)"
+    ]
+  }
+}

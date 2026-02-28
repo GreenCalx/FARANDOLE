@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: Alchemist
   m_EditorClassIdentifier: FarandoleAsm::ArtefactSO
   name: artefact_name
+  descriptiion: artefact_description
+  icon: {fileID: 21300000, guid: e534b4c923ef8f742aa923f197b29ec6, type: 3}

@@ -306,7 +306,39 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
             q.Enqueue(step4);
         }
 
-        // TODO Mutation & mods here
+        // Mutation & Artefact Selection (only in MUTATION game mode)
+        if (GameData.Get.currentGameMode == GAME_MODE.MUTATION)
+        {
+            Func<UniTask> step5 = async () =>
+            {
+                await UniTask.SwitchToMainThread();
+
+                GameManager gm = GameManager.Get;
+                if (gm?.UI?.mutationPanel != null)
+                {
+                    List<Artefact> artefactChoices = GenerateArtefactChoices(3);
+
+                    gm.UI.mutationPanel.Setup(MGLoop, loopPresentationAnim, artefactChoices);
+                    gm.UI.mutationPanel.ShowPanel();
+
+                    while (gm.UI.mutationPanel.gameObject.activeSelf && !iCT.IsCancellationRequested)
+                    {
+                        await UniTask.Yield();
+                    }
+
+                    if (iCT.IsCancellationRequested)
+                    {
+                        cancelCB.Invoke();
+                        return;
+                    }
+
+                    gm.MGM.MGLoop.RefreshMutations();
+                }
+
+                await UniTask.Delay(GameData.GetSettings.PostMutationSelectionDelayInMs);
+            };
+            q.Enqueue(step5);
+        }
 
         // Hide Loop Complete UI
         Func<UniTask> step6 = async () =>
@@ -400,5 +432,31 @@ public class UILoopCompleteAnimation : ManagedAnimation, IAnimationQueue
     {
         await WaitAnimState(LoopShowSuccessStateName, iCompletionFrac, iCT);
     }
-    
+
+    private List<Artefact> GenerateArtefactChoices(int iCount)
+    {
+        List<Artefact> choices = new List<Artefact>();
+
+        if (GameData.GetArtefactCollection?.artefacts == null || GameData.GetArtefactCollection.artefacts.Count == 0)
+        {
+            Debug.LogWarning("No artefacts available in collection");
+            return choices;
+        }
+
+        List<ArtefactSO> availableArtefacts = new List<ArtefactSO>(GameData.GetArtefactCollection.artefacts);
+        int count = Mathf.Min(iCount, availableArtefacts.Count);
+
+        for (int i = 0; i < count; i++)
+        {
+            int randomIndex = UnityEngine.Random.Range(0, availableArtefacts.Count);
+            ArtefactSO selected = availableArtefacts[randomIndex];
+            availableArtefacts.RemoveAt(randomIndex);
+
+            Artefact artefact = new Artefact(selected);
+            choices.Add(artefact);
+        }
+
+        return choices;
+    }
+
 }

@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: Weakness
   m_EditorClassIdentifier: FarandoleAsm::ArtefactSO
   name: artefact_name
+  descriptiion: artefact_description
+  icon: {fileID: 21300000, guid: 417e280738e85d94ab34233fe7da86f5, type: 3}

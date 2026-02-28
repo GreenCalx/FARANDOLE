@@ -16,6 +16,7 @@ public class GameData : MonoBehaviour
     public GameSettingsSO gameSettings;
     public MiniGameBankSO gameBank;
     public UIThemeSO UITheme;
+    public ArtefactCollectionSO artefactCollection;
     public AccessibilitySettingsSO accessibilitySettingsSO;
     public GlobalSettingsSO globalSettingsSO;
     private static GameData instance = null;
@@ -23,6 +24,7 @@ public class GameData : MonoBehaviour
     public static GameSettingsSO GetSettings => instance.gameSettings;
     public static MiniGameBankSO GetMGBank => instance.gameBank;
     public static UIThemeSO GetUITheme => instance.UITheme;
+    public static ArtefactCollectionSO GetArtefactCollection => instance.artefactCollection;
     public static AccessibilitySettingsSO GetAccessibilitySettings => instance.accessibilitySettingsSO;
     public static GlobalSettingsSO GetGlobalSettings => instance.globalSettingsSO;
 
@@ -30,6 +32,10 @@ public class GameData : MonoBehaviour
     {
         if (instance != null && instance != this)
         {
+            #if UNITY_EDITOR
+            // Apply editor launch config to existing instance
+            instance.ApplyEditorLaunchConfig();
+            #endif
             Destroy(this.gameObject);
             return;
         }
@@ -38,10 +44,60 @@ public class GameData : MonoBehaviour
             instance = this;
             DontDestroyOnLoad(this.gameObject);
 
+            #if UNITY_EDITOR
+            ApplyEditorLaunchConfig();
+            #endif
+
             ApplyGlobalSettings();
             LoadUserData();
         }
     }
+
+    #if UNITY_EDITOR
+    private void ApplyEditorLaunchConfig()
+    {
+        const string KEY_ACTIVE = "EditorLaunch_Active";
+        const string KEY_MODE = "EditorLaunch_Mode";
+        const string KEY_SINGLES_INDEX = "EditorLaunch_SinglesIndex";
+
+        if (PlayerPrefs.GetInt(KEY_ACTIVE, 0) != 1)
+            return;
+
+        GAME_MODE mode = (GAME_MODE)PlayerPrefs.GetInt(KEY_MODE, 0);
+        int singlesIndex = PlayerPrefs.GetInt(KEY_SINGLES_INDEX, -1);
+
+        Debug.Log($"[GameData] Editor launch config: {mode}" +
+                  (mode == GAME_MODE.SINGLES ? $" (MiniGame: {singlesIndex})" : ""));
+
+        switch (mode)
+        {
+            case GAME_MODE.RANDOM:
+                NewGameSeed();
+                PickGameMode(GAME_MODE.RANDOM);
+                break;
+            case GAME_MODE.DAILY_SEED:
+                PickGameMode(GAME_MODE.DAILY_SEED);
+                SetToDailySeed();
+                break;
+            case GAME_MODE.MUTATION:
+                NewGameSeed();
+                PickGameMode(GAME_MODE.MUTATION);
+                break;
+            case GAME_MODE.SINGLES:
+                PickGameMode(GAME_MODE.SINGLES);
+                NewGameSeed();
+                if (singlesIndex >= 0)
+                    AddGameSeed(singlesIndex);
+                break;
+        }
+
+        // Clear launch data
+        PlayerPrefs.DeleteKey(KEY_ACTIVE);
+        PlayerPrefs.DeleteKey(KEY_MODE);
+        PlayerPrefs.DeleteKey(KEY_SINGLES_INDEX);
+        PlayerPrefs.Save();
+    }
+    #endif
 
     void ApplyGlobalSettings()
     {

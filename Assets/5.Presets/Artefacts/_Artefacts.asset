@@ -12,4 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1593b7c0704b8b40b2a8d58135acff6, type: 3}
   m_Name: _Artefacts
   m_EditorClassIdentifier: FarandoleAsm::ArtefactCollectionSO
-  artefacts: []
+  artefacts:
+  - {fileID: 11400000, guid: 86c7d5a9ef4632d4c86387441c8c363b, type: 2}
+  - {fileID: 11400000, guid: 19108c0bb078ea047bcc1a3acb0211c7, type: 2}
+  - {fileID: 11400000, guid: 1688d31371bc58b4e9c4b0818cb56fa0, type: 2}
+  - {fileID: 11400000, guid: 253e96af55c627d4e9883d6ccc0fb7e3, type: 2}
+  - {fileID: 11400000, guid: dd26e66dfcd475845a654dff2149d008, type: 2}

@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: TheBeauty
   m_EditorClassIdentifier: FarandoleAsm::ArtefactSO
   name: artefact_name
+  descriptiion: artefact_description
+  icon: {fileID: 21300000, guid: e34a98542ca0f8b4588c2f21dfd8b5ab, type: 3}

@@ -231,7 +231,6 @@ public class MiniGameManager : MonoBehaviour, IManager
 
             //UI.skipAnimBtn.clickCallback.RemoveListener(() => LoopCompleteAnimCTS.Cancel());
 
-            MGLoop.RefreshMutations();
             MGLoop.Reset();
         }
         //await PG.OpenPlaygroundAnim();

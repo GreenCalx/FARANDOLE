@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   descriptor: {fileID: 11400000, guid: 35d5261eef3bc8047ad1dbd9ae99f8fe, type: 2}
   extensions:
-  - rid: 4020496560388046968
+  - rid: 7632437025082704297
   MGM: {fileID: 0}
   PC: {fileID: 0}
   PG: {fileID: 0}
@@ -62,7 +62,7 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 4020496560388046968
+    - rid: 7632437025082704297
       type: {class: SpawnerExtension, ns: , asm: FarandoleAsm}
       data:
         DataOverSpawnables:

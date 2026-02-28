@@ -43,6 +43,7 @@ public class GameSettingsSO : ScriptableObject
     public float GameClockScaleAnimDuration = 0.25f;
     public int PostShowLoopResultDelayInMs = 1000;
     public int PostShowNewRankDelayInMs = 1000;
+    public int PostMutationSelectionDelayInMs = 500;
     public float ShowLightTotalTimeInMs = 2000f;
     public int MaxLightUpMiniGameThumbnailTime = 250;
 

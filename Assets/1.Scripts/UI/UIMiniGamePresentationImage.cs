@@ -7,14 +7,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-public class UIMiniGamePresentationImage : ManagedAnimation, ITapTracker
+public class UIMiniGamePresentationImage : UISelectableImage, ITapTracker
 {
     [Header("UIMiniGamePresentationImage")]
     public bool infoBubbleEnabled = true;
     public UICustomSquircle MiniGameThumbnail;
-    public UICustomSquircle light;
-    public UICustomSquircle BG;
-    public UICustomSquircle MASK;
     public Sprite defaultSprite;
     [Header("Mutations")]
     public UIMutationIndicators h_MutationIndicators;
@@ -29,16 +26,35 @@ public class UIMiniGamePresentationImage : ManagedAnimation, ITapTracker
     public RectTransform h_RankMedalAnchor;
     public Image h_RankMedalImage;
     public List<TextMeshProUGUI> h_rankTexts;
+    [Header("Selection")]
+    public UIButton selectButton;
     [Header("Internals")]
     public MiniGameSuccessState MGSuccessState;
     public bool stopPropagation => false;
     public bool Successed => MGSuccessState == MiniGameSuccessState.PASSED;
-    public bool LightShown = false;
     public MiniGameSO selfDesc;
-    readonly string showLightStateName = "MiniGameImageShowLight";
-    readonly string hideLightStateName = "MiniGameImageHideLight";
-    readonly string showLightParam = "showlight";
     bool bubbleShown = false;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        if (selectButton != null)
+        {
+            selectButton.onClick.AddListener(OnSelectButtonClicked);
+        }
+    }
+
+    private void OnSelectButtonClicked()
+    {
+        Select();
+    }
+
+    public override void Select()
+    {
+        base.Select();
+        UpdateLightColor(GameData.GetUITheme.thumbnailSuccessLightColor);
+    }
+
     public void SetFromMiniGameDesc(MiniGameSO iMGDesc)
     {
         selfDesc = iMGDesc;
@@ -72,9 +88,45 @@ public class UIMiniGamePresentationImage : ManagedAnimation, ITapTracker
     }
 
     public void DisableButton()
-    { 
+    {
         infoBubbleBtn.interactable = false;
         infoBubbleBtn.enabled = false;
+    }
+
+    public void EnableSelection()
+    {
+        if (selectButton != null)
+        {
+            selectButton.interactable = true;
+            selectButton.enabled = true;
+        }
+
+        // Redirect infoBubbleBtn to selection instead of tooltip
+        if (infoBubbleBtn != null)
+        {
+            infoBubbleBtn.onClick.RemoveAllListeners();
+            infoBubbleBtn.onClick.AddListener(OnSelectButtonClicked);
+        }
+        HideInfoBubble();
+    }
+
+    public void DisableSelection()
+    {
+        if (selectButton != null)
+        {
+            selectButton.interactable = false;
+            selectButton.enabled = false;
+        }
+
+        // Restore infoBubbleBtn to tooltip behavior
+        if (infoBubbleBtn != null && selfDesc != null)
+        {
+            infoBubbleBtn.onClick.RemoveAllListeners();
+            infoBubbleBtn.onClick.AddListener(() => {
+                bubbleShown = !bubbleShown;
+                h_InfoBubbleAnchor.gameObject.SetActive(bubbleShown);
+            });
+        }
     }
 
     public void HideInfoBubble()
@@ -97,8 +149,7 @@ public class UIMiniGamePresentationImage : ManagedAnimation, ITapTracker
             default:
                 break;
         }
-        c.a = 0f;
-        light.color = c;
+        UpdateLightColor(c);
     }
 
     public void UpdateMGState(MiniGameSuccessState iMGState)
@@ -106,23 +157,10 @@ public class UIMiniGamePresentationImage : ManagedAnimation, ITapTracker
         MGSuccessState = iMGState;
     }
 
-    public void ShowLight(bool iShow)
-    {
-        m_Animator.SetBool(showLightParam, iShow);
-    }
-
     public override async UniTask DefaultHide(CancellationToken iCT)
     {
         h_InfoBubbleAnchor.gameObject.SetActive(false);
-
-        m_Animator.SetBool(DefaultShowAnimParm, false);
-        m_Animator.SetBool(showLightParam, false);
-
-        await UniTask.WhenAny(
-            WaitAnimState(DefaultHideStateName, 1f, iCT),
-            WaitAnimState(hideLightStateName, 1f, iCT)
-        );
-        IsShown = false;
+        await base.DefaultHide(iCT);
     }
 
     public void ShowRank(LoopRank iRank)
