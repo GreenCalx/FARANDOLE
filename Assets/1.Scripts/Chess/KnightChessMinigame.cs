@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
-
+using System.Collections.Generic;
+using System.Linq;
 public class KnightChessMinigame : MiniGame
 {
     public GameObject boardPrefab;
@@ -8,6 +9,8 @@ public class KnightChessMinigame : MiniGame
     public int[] boardSizes;
     public int[] knightMargins;
     public int[] enemyCounters;
+
+    public int[] maxDistWithPlayer;
 
 
     public override void Reset()
@@ -71,17 +74,65 @@ public class KnightChessMinigame : MiniGame
 
     void PlaceInitialPieces()
     {
-        int n_enemies = enemyCounters[MGM.miniGamesDifficulty - 1];
-        int knightMargin = knightMargins[MGM.miniGamesDifficulty - 1];
+        int nEnemies = enemyCounters[MGM.miniGamesDifficulty - 1];
+        int maxDist = maxDistWithPlayer[MGM.miniGamesDifficulty - 1];
 
+        Knight player = (Knight) board.SpawnPieceAtRandom(
+            0,
+            PlayerColor.White,
+            PieceType.Knight
+        );
 
-        board.SpawnPieceAtRandom(0, PlayerColor.White, PieceType.Knight);
+        Tile startTile = board.GetTile(player.x, player.y);
 
-        for (int i = 1; i <= n_enemies; i++)
+        HashSet<Tile> visited = new HashSet<Tile>();
+        HashSet<Tile> reachableTiles = new HashSet<Tile>();
+
+        Queue<(Tile tile, int depth)> queue = new Queue<(Tile, int)>();
+
+        queue.Enqueue((startTile, 0));
+        visited.Add(startTile);
+
+        while (queue.Count > 0)
         {
-            board.SpawnPieceAtRandom(knightMargin, PlayerColor.Black, PieceType.Knight);
+            var (current, depth) = queue.Dequeue();
+
+            if (depth == maxDist)
+            {
+                reachableTiles.Add(current);
+                continue;
+            }
+
+            if (depth > maxDist)
+                continue;
+
+            foreach (Tile next in Knight.GetLegalMovesFromPos(current.x, current.y, board))
+            {
+                if (visited.Add(next))
+                {
+                    queue.Enqueue((next, depth + 1));
+                }
+            }
+        }
+
+        reachableTiles.Remove(startTile);
+
+        List<Tile> spawnList = reachableTiles.ToList();
+
+        for (int i = 0; i < nEnemies && spawnList.Count > 0; i++)
+        {
+            int index = UnityEngine.Random.Range(0, spawnList.Count);
+            Tile spawnTile = spawnList[index];
+            spawnList.RemoveAt(index);
+
+            board.SpawnPiece(
+                spawnTile,
+                PlayerColor.Black,
+                PieceType.Knight
+            );
         }
     }
+
 
     bool[,] ShapeBoard()
     {

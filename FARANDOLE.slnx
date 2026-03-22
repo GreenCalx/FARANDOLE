@@ -1,0 +1,18 @@
+﻿<Solution>
+  <Project Path="FarandoleAsm.csproj" />
+  <Project Path="UnityUIExtensions.csproj" />
+  <Project Path="Google.Play.Games.Editor.csproj" />
+  <Project Path="Google.Play.Games.csproj" />
+  <Project Path="UnityUIExtensions.editor.csproj" />
+  <Project Path="UnityEditor.UI.csproj" />
+  <Project Path="FMODUnityEditor.csproj" />
+  <Project Path="FMODUnity.csproj" />
+  <Project Path="DOTween.Modules.csproj" />
+  <Project Path="Assembly-CSharp-Editor.csproj" />
+  <Project Path="Assembly-AnimateGraphicMaterials-Editor.csproj" />
+  <Project Path="FMODUnityResonance.csproj" />
+  <Project Path="Assembly-GraphicMaterialOverride.csproj" />
+  <Project Path="FMODUnityResonanceEditor.csproj" />
+  <Project Path="FMODUnityHaptics.csproj" />
+  <Project Path="Assembly-CSharp.csproj" />
+</Solution>
