@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f772bfecd73e0a64ca2b7000d99e16b6, type: 3}
   m_Name: MG_Windmill
   m_EditorClassIdentifier: 
-  ID: 20
+  ID: 17
   name: Windmill
   goal: Turn the sail !
-  thumbNailImg: {fileID: 21300000, guid: d244883b12f743347a194a8bda79ba80, type: 3}
-  prefab_MiniGame: {fileID: 1909478198656075728, guid: cef212286e31f0741a9e80e6d6cc25ed, type: 3}
+  thumbNailImg: {fileID: 5629372615036235299, guid: 9aa243e2453e14c4ebe42c294197b5c3, type: 3}
+  prefab_MiniGame: {fileID: 8862122990250927850, guid: cef212286e31f0741a9e80e6d6cc25ed, type: 3}
   family: 1
   compatibleMods: 
   orientationRequirement: 2
