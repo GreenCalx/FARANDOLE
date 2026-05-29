@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   descriptor: {fileID: 11400000, guid: 301c97c72abc44c4fa0b5ad706ef517b, type: 2}
   extensions:
-  - rid: 973395705234981118
+  - rid: 5311456299385094566
   MGM: {fileID: 0}
   PC: {fileID: 0}
   PG: {fileID: 0}
@@ -60,56 +60,14 @@ MonoBehaviour:
   n_balloons: 0500000006000000070000000700000008000000
   n_bigballoons: 0000000001000000020000000100000002000000
   rock: 0000000101
-  balloonDef: {fileID: 11400000, guid: ab9cd8e46f9a57d498553d6dcb1fcd86, type: 2}
-  bigBalloonDef: {fileID: 11400000, guid: 7b7710c3ceaf5be44a98bb047f03a563, type: 2}
-  rockDef: {fileID: 11400000, guid: 2b164af1d3760dc4ebdca18bd7092477, type: 2}
+  prefab_Balloon: {fileID: 980553201171756042, guid: 2590b816f7e5b0f41a347f51dc8ec656, type: 3}
+  prefab_BigBalloon: {fileID: 980553201171756042, guid: 7261dfdc2a46b464c9c0ca91b7ceade1, type: 3}
+  prefab_Rock: {fileID: 9008469230258281967, guid: de3b292e826e69846bc7f8b5b53f3aa0, type: 3}
   references:
     version: 2
     RefIds:
-    - rid: 973395705234981118
+    - rid: 5311456299385094566
       type: {class: SpawnerExtension, ns: , asm: FarandoleAsm}
       data:
         DataOverSpawnables:
-          items:
-          - Key: {fileID: 11400000, guid: ab9cd8e46f9a57d498553d6dcb1fcd86, type: 2}
-            Value:
-              DataOverRanks:
-                items:
-                - Key: 0
-                  Value: 5
-                - Key: 1
-                  Value: 5
-                - Key: 2
-                  Value: 5
-                - Key: 3
-                  Value: 7
-                - Key: 4
-                  Value: 7
-          - Key: {fileID: 11400000, guid: 7b7710c3ceaf5be44a98bb047f03a563, type: 2}
-            Value:
-              DataOverRanks:
-                items:
-                - Key: 0
-                  Value: 0
-                - Key: 1
-                  Value: 1
-                - Key: 2
-                  Value: 2
-                - Key: 3
-                  Value: 1
-                - Key: 4
-                  Value: 2
-          - Key: {fileID: 11400000, guid: 2b164af1d3760dc4ebdca18bd7092477, type: 2}
-            Value:
-              DataOverRanks:
-                items:
-                - Key: 0
-                  Value: 0
-                - Key: 1
-                  Value: 0
-                - Key: 2
-                  Value: 0
-                - Key: 3
-                  Value: 1
-                - Key: 4
-                  Value: 1
+          items: []

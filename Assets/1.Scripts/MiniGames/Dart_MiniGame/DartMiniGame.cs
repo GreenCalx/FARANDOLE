@@ -8,9 +8,14 @@ public class DartMiniGame : MiniGame, IRegularFamily
     [Header("DartMiniGame")]
     public GameObject prefab_gun;
     List<GameObject> balloons;
-    public SpawnableDef balloonDef;
-    public SpawnableDef bigBalloonDef;
-    public SpawnableDef rockDef;
+    public int[] n_balloons;
+    public int[] n_bigballoons;
+    public bool[] rock;
+    public GameObject prefab_Balloon;
+    public GameObject prefab_BigBalloon;
+
+    public GameObject prefab_Rock;
+
     private BlockingRock inst_rock;
     DartThrower inst_gun;
 
@@ -29,21 +34,17 @@ public class DartMiniGame : MiniGame, IRegularFamily
         if (balloons != null && balloons.Count > 0)
             balloons.ForEach(e => Destroy(e.gameObject));
 
-        ISpawnerExtension spawnerExt = GetExtension<ISpawnerExtension>();
+        int n_spawns = n_balloons[MGM.miniGamesDifficulty-1];
+        int n_bigSpawns = n_bigballoons[MGM.miniGamesDifficulty-1];
 
-        int n_spawns    = spawnerExt?.Get(balloonDef, MGM.MGLoop.rank) ?? 0;
-        int n_bigSpawns = spawnerExt?.Get(bigBalloonDef, MGM.MGLoop.rank) ?? 0;
-        int n_rocks     = spawnerExt?.Get(rockDef, MGM.MGLoop.rank) ?? 0;
-
-        if (n_rocks > 0)
+        if (rock[MGM.miniGamesDifficulty-1])
         {
-            inst_rock = GOBuilder.Create(rockDef.prefab)
+            inst_rock = GOBuilder.Create(prefab_Rock)
                 .WithPosition(new Vector3(UnityEngine.Random.Range(PG.bounds.min.x, PG.bounds.max.x), PG.GetYPosFromHeightFrac(0.5f), 0f))
                 .WithParent(this.transform)
                 .BuildAs<BlockingRock>();
             inst_rock.StartPatrol(PG.bounds.min.x, PG.bounds.max.x);
         }
-
         balloons = new List<GameObject>(n_spawns+n_bigSpawns*2);
         for (int i = 0; i < n_spawns + n_bigSpawns; i++)
         {
@@ -57,11 +58,11 @@ public class DartMiniGame : MiniGame, IRegularFamily
     {
         if (big)
         {
-            balloons.Add(Instantiate(bigBalloonDef.prefab));
+            balloons.Add(Instantiate(prefab_BigBalloon));
             balloons[index].gameObject.tag = "BigBalloon";
         }
         else
-            balloons.Add(Instantiate(balloonDef.prefab));
+            balloons.Add(Instantiate(prefab_Balloon));
         balloons[index].name = "BalloonBundle " + index;
         balloons[index].transform.parent = transform;
 
@@ -122,9 +123,6 @@ public class DartMiniGame : MiniGame, IRegularFamily
 
     public void OutOfBoundCheck()
     {
-        if (balloons==null)
-            return;
-            
         GameObject[] snap = balloons.ToArray();
         foreach (GameObject b in snap)
         {

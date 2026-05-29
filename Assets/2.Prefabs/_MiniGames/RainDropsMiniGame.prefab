@@ -1306,8 +1306,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   descriptor: {fileID: 11400000, guid: 49bbfab5fab911945ad17d4c79218f79, type: 2}
-  extensions:
-  - rid: 4020496582877905032
+  extensions: []
   MGM: {fileID: 0}
   PC: {fileID: 0}
   PG: {fileID: 0}
@@ -1342,26 +1341,7 @@ MonoBehaviour:
   rightTree: {fileID: 5283812145962866507}
   references:
     version: 2
-    RefIds:
-    - rid: 4020496582877905032
-      type: {class: PathExtension, ns: , asm: FarandoleAsm}
-      data:
-        DataOverSpawnables:
-          items:
-          - Key: {fileID: 11400000, guid: 8c5761b010abbd34b964f61f843aaf3d, type: 2}
-            Value:
-              DataOverRanks:
-                items:
-                - Key: 0
-                  Value: 0
-                - Key: 0
-                  Value: 0
-                - Key: 0
-                  Value: 0
-                - Key: 0
-                  Value: 0
-                - Key: 0
-                  Value: 0
+    RefIds: []
 --- !u!1 &8086056775360541407
 GameObject:
   m_ObjectHideFlags: 0

@@ -640,8 +640,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   descriptor: {fileID: 11400000, guid: 731fafa9c4ef2e0459f2e2a356cdf60e, type: 2}
-  extensions:
-  - rid: 4020496582877904997
+  extensions: []
   MGM: {fileID: 0}
   PC: {fileID: 0}
   PG: {fileID: 0}
@@ -655,6 +654,7 @@ MonoBehaviour:
   m_ShopOrderManager: {fileID: 5916672421250025907}
   m_CustomerManager: {fileID: 674489046825633244}
   UIShopGame: {fileID: 683680860607083304}
+  targetValues: 0a00000014000000140000001c00000022000000
   customerSpawnIntervals:
   - 1
   - 0.8
@@ -669,26 +669,7 @@ MonoBehaviour:
   - {fileID: 146215031822171927, guid: 405d37c668c7b1941a123fed5c59c044, type: 3}
   references:
     version: 2
-    RefIds:
-    - rid: 4020496582877904997
-      type: {class: TargetObjectiveExtension, ns: , asm: FarandoleAsm}
-      data:
-        DataOverIDs:
-          items:
-          - Key: TargetCoins
-            Value:
-              DataOverRanks:
-                items:
-                - Key: 0
-                  Value: 12
-                - Key: 1
-                  Value: 18
-                - Key: 2
-                  Value: 23
-                - Key: 3
-                  Value: 29
-                - Key: 4
-                  Value: 34
+    RefIds: []
 --- !u!1 &1201520564353225881
 GameObject:
   m_ObjectHideFlags: 0
@@ -1384,8 +1365,8 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: -1321468233
-  m_SortingOrder: 80
+  m_SortingLayerID: 1817917733
+  m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!222 &2280257876626567104
 CanvasRenderer:

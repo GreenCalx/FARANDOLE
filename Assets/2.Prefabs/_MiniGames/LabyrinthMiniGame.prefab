@@ -576,12 +576,6 @@ MonoBehaviour:
   maxAngularSpeed: 140
   rotationGain: 3.5
   damping: 0.9
-  useAngleLimits: 0
-  minAngle: 0
-  maxAngle: 360
-  limitBounceFactor: 0.3
-  angularDrag: 2
-  releaseVelocityScale: 0.8
 --- !u!1 &2266623309687070485
 GameObject:
   m_ObjectHideFlags: 0
@@ -629,15 +623,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   descriptor: {fileID: 11400000, guid: bdea08be711ff25419bbb92932d60431, type: 2}
-  extensions: []
   MGM: {fileID: 0}
   PC: {fileID: 0}
   PG: {fileID: 0}
   IsActiveMiniGame: 0
   IsInPostGame: 0
-  GameIsLost: 0
   successState: 0
-  CompletionTime: 0
   hasIntro: 0
   finishLine: {fileID: 2639687645726103807}
   rotater: {fileID: 2312872446023885790}
@@ -662,9 +653,6 @@ MonoBehaviour:
   diffMLayouts:
   - {fileID: 4726206639710619473, guid: 2083680c36cf6e542b40bd8953e75ead, type: 3}
   ballSizeDownScalesPerBall: []
-  references:
-    version: 2
-    RefIds: []
 --- !u!1 &3278629205828269616
 GameObject:
   m_ObjectHideFlags: 0
@@ -5515,7 +5503,7 @@ ParticleSystem:
     vectorLabel1_3: W
 --- !u!199 &1131243120929276073
 ParticleSystemRenderer:
-  serializedVersion: 7
+  serializedVersion: 6
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -5534,8 +5522,6 @@ ParticleSystemRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
-  m_ForceMeshLod: -1
-  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -5557,11 +5543,9 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_MaskInteraction: 0
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -5593,6 +5577,7 @@ ParticleSystemRenderer:
   m_MeshWeighting1: 1
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
+  m_MaskInteraction: 0
 --- !u!1 &5675539631122881333
 GameObject:
   m_ObjectHideFlags: 0

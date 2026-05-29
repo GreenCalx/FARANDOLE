@@ -117,7 +117,8 @@ public class ChessBoard : MonoBehaviour
         while (piece.GetLegalMoves().Count < 1)
         {
             Tile t2 = getRandomUnoccupiedTile(new Vector2Int(iMargin, iMargin));
-            MovePiece( t, t2, piece );
+            MovePiece(t, t2, piece);
+            t = t2;
             if (safeLoop++ > 10)
                 break;
         }

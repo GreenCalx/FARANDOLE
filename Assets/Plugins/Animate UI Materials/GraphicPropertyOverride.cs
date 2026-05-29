@@ -45,7 +45,6 @@ namespace Plugins.Animate_UI_Materials
       SetMaterialDirty(true);
     }
 #endif
-
     /// <summary>
     /// Try to retrieve and apply the default property value
     /// If the source material cannot be found, reset to sensible defaults

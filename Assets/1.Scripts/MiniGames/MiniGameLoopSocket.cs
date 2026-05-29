@@ -4,29 +4,18 @@ using System.Collections.Generic;
 public class MiniGameLoopSocket
 {
     public MiniGame inst_miniGame;
-    public int alpha_channel = 0;
-    public int beta_channel = 0;
+    public List<IMiniGameMod> mods;
     public MiniGameLoopSocket(MiniGame iMiniGame)
     {
         inst_miniGame = iMiniGame;
+        mods = new List<IMiniGameMod>();
     }
 
     public void Run()
     {
-        ApplyMutation();
-        
         inst_miniGame.gameObject.SetActive(true);
         inst_miniGame.IsInPostGame = false;
         inst_miniGame.successState = MiniGameSuccessState.PENDING;
-
-        inst_miniGame.Play();
-    }
-
-    public void Stop()
-    {
-        inst_miniGame.IsInPostGame = true;
-        inst_miniGame.Stop();
-        inst_miniGame.gameObject.SetActive(false);
     }
 
     public void Reset()
@@ -35,25 +24,17 @@ public class MiniGameLoopSocket
         inst_miniGame.IsInPostGame = false;
     }
 
-    public void ResetChannels()
-    {
-        alpha_channel = 0;
-        beta_channel = 0;
-    }
-
     public bool IsValidated()
     {
         return (inst_miniGame.successState == MiniGameSuccessState.PASSED);
     }
 
-    public void ApplyMutation()
+    public void ApplyCompatibleMods()
     {
-        // Reset mutation values to base
-        foreach (var ext in inst_miniGame.extensions)
-            ext.ResetMutation();
-
-        // Apply Alpha mutation
-        inst_miniGame.AlphaMut?.ApplyMutation(alpha_channel);
-        inst_miniGame.BetaMut?.ApplyMutation(beta_channel);
+        foreach(IMiniGameMod mod in mods)
+        {
+            if (inst_miniGame.descriptor.compatibleMods.Contains(mod.AssociatedTag()))
+                mod.ApplyOn(this);
+        }
     }
 }

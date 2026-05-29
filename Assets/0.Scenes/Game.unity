@@ -163,8 +163,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80b8b58d2f403e84aa6ce22d65c5011f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MiniGameToTest: {fileID: 0}
-  infiniteTimeOnTest: 0
+  MiniGameToTest: {fileID: 8862122990250927850, guid: cef212286e31f0741a9e80e6d6cc25ed, type: 3}
+  infiniteTimeOnTest: 1
   prefab_miniGames:
   - {fileID: 6891743480671891591, guid: ca650ba5ffb5e9c4d8e5e5b7a7fdaeae, type: 3}
   - {fileID: 5205109001117507003, guid: ef698d4e9557cd14dbc5770833ba666b, type: 3}
@@ -1506,6 +1506,10 @@ PrefabInstance:
     - target: {fileID: 5047154483820792814, guid: df5d7df267dc5bc4ba1454afb1ad01cf, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5692731238145463991, guid: df5d7df267dc5bc4ba1454afb1ad01cf, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7112755786650378321, guid: df5d7df267dc5bc4ba1454afb1ad01cf, type: 3}
       propertyPath: m_AnchorMax.y

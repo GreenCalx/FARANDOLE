@@ -130,9 +130,6 @@ public class WaveformMatcherMiniGame : MiniGame, IArcadeFamily
 
         FuncSelect();
 
-        DrawTarget();
-        DrawControlled();
-
         DisableUnavailableFunc();
     }
     public override void Play()
@@ -140,6 +137,9 @@ public class WaveformMatcherMiniGame : MiniGame, IArcadeFamily
         if (IsActiveMiniGame)
             return;
 
+        FuncSelect();
+        DrawTarget();
+        DrawControlled();
         IsActiveMiniGame = true;
     }
     public override void Stop()
@@ -186,7 +186,6 @@ public class WaveformMatcherMiniGame : MiniGame, IArcadeFamily
             return;
         if (SuccessCheck())
             Win();
-        //DrawTarget();
     }
 
     void FuncSelect()

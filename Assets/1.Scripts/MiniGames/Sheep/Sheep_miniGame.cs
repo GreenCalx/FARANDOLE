@@ -10,7 +10,8 @@ public class SheepMiniGame : MiniGame, IRegularFamily
     public GameObject prefab_fence;
     private Sheep[] inst_sheeps;
     private Fence inst_fence;
-    public SpawnableDef sheepDef;
+
+    public int[] sheepsCounts;
     int sheepCount;
     public override void Init()
     {
@@ -19,10 +20,7 @@ public class SheepMiniGame : MiniGame, IRegularFamily
 
     public override void Reset()
     {
-        ISpawnerExtension spawnerExt = GetExtension<ISpawnerExtension>();
-
-        sheepCount = spawnerExt?.Get(sheepDef, MGM.MGLoop.rank) ?? 0;
-
+        sheepCount = sheepsCounts[MGM.miniGamesDifficulty - 1];
         inst_fence = GOBuilder.Create(prefab_fence)
                     .WithParent(transform)
                     .BuildAs<Fence>();

@@ -107,16 +107,7 @@ public class MiniGameLoop : IEnumerator<MiniGame>
     public void Start()
     {
         ResetAll();
-        PlayCurrent();
-    }
-
-    public void PlayCurrent()
-    {
         socket.Run();
-    }
-    public void StopCurrent()
-    {
-        socket.Stop();
     }
     public void ResetAll()
     {
@@ -299,21 +290,5 @@ public class MiniGameLoop : IEnumerator<MiniGame>
     public string GetRankStr()
     {
         return rank.ToString();
-    }
-
-    public void RefreshMutations()
-    {
-        List<Artefact> artefacts = GameManager.Get.playerData.bag;
-        Debug.Log($"RefreshMutations: Applying {artefacts.Count} artefacts to {sockets.Count} mini-games");
-        foreach (Artefact art in artefacts)
-        {
-            foreach(MiniGameLoopSocket socket in sockets)
-            {
-                foreach(IMiniGameMod mod in art.mods)
-                {
-                    mod.Apply(socket);
-                }
-            }
-        }
     }
 }

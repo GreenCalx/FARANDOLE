@@ -8,18 +8,17 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 public class BakeryMiniGame : MiniGame, IDogFamily
 {
-    private readonly string kTargetCoins = "TargetCoins";
     public Slider progressBar; 
     public ShopOrderManager m_ShopOrderManager;
     public CustomerManager m_CustomerManager;
     public UIBakeryShop UIShopGame;
+    public int[] targetValues;
     public float[] customerSpawnIntervals;
     public GameObject[] spawnablePerRank;
     
     Coroutine customerSpawnCo;
-    
+
     int currentCoins;
-    int targetCoins;
 
     public override void Init()
     {
@@ -30,11 +29,7 @@ public class BakeryMiniGame : MiniGame, IDogFamily
     {
         base.Reset();
 
-        ITargetObjectiveExtension targetExt = GetExtension<ITargetObjectiveExtension>();
-        ISpawnerExtension spawnerExt = GetExtension<ISpawnerExtension>();
-
         m_CustomerManager.Setup(spawnablePerRank[(int)MGM.MGLoop.rank]);
-        //m_CustomerManager.Setup(spawnerExt?.Get());
         
         m_ShopOrderManager.Reset();
         m_ShopOrderManager.Setup();
@@ -49,11 +44,9 @@ public class BakeryMiniGame : MiniGame, IDogFamily
             }
             );
         
-
         currentCoins = 0;
-        targetCoins = targetExt?.Get(kTargetCoins, MGM.MGLoop.rank) ?? 1;
         progressBar.minValue = 0f;
-        progressBar.maxValue = targetCoins;
+        progressBar.maxValue = targetValues[(int)MGM.MGLoop.rank];
         progressBar.value = currentCoins;
 
         UIShopGame.gameObject.SetActive(false);
@@ -89,7 +82,7 @@ public class BakeryMiniGame : MiniGame, IDogFamily
     }
     public override bool SuccessCheck()
     {
-        return currentCoins >= targetCoins;
+        return currentCoins >= targetValues[(int)MGM.MGLoop.rank];
     }
 
     public override async UniTask IntroAnim(CancellationToken token)

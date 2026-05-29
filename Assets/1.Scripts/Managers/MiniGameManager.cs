@@ -37,12 +37,11 @@ public class MiniGameManager : MonoBehaviour, IManager
     public PlaygroundManager PG;
     public PlayerData PData;
     public UIGame UI;
-    public int LoopRank => (int)MGLoop.rank;
-    public List<SpriteSwapOnWin> autoSwappersOnWin;
     CancellationTokenSource LoopCompleteAnimCTS;
     CancellationTokenSource LoopClearAnimCTS;
     CancellationTokenSource introAnimCancelCTS;
-    private bool IsGameOver = false;
+    public List<SpriteSwapOnWin> autoSwappersOnWin;
+    public int LoopRank => (int)MGLoop.rank;
 
     #region IManager
     public void Init(GameManager iGameManager)
@@ -105,15 +104,12 @@ public class MiniGameManager : MonoBehaviour, IManager
 
     public async UniTask Launch()
     {
-        IsGameOver = false;
         MGLoop.Start();
-        MGLoop.RefreshMutations();
         await PlayCurrent();
     }
 
     public void GameOver()
     {
-        IsGameOver = true;
         gameClock.Freeze(true);
         //gameClock.Reset();
         MGLoop.Current.CompletionTime = gameClock.GetElapsedTime();
@@ -145,7 +141,7 @@ public class MiniGameManager : MonoBehaviour, IManager
         }
         
         PC.UnFreeze();
-        MGLoop.PlayCurrent();
+        MGLoop.Current.Play();
 
         gameClock.Reset();
         gameClock.Freeze(false);
@@ -155,7 +151,8 @@ public class MiniGameManager : MonoBehaviour, IManager
     {
         gameClock.Reset();
         if (MGLoop.Current.IsActiveMiniGame)
-            MGLoop.StopCurrent();
+            MGLoop.Current.Stop();
+        MGLoop.Current.gameObject.SetActive(false);
         PC.ClearAllTrackers();
         LM2D.ClearLayers();
 
@@ -164,9 +161,6 @@ public class MiniGameManager : MonoBehaviour, IManager
 
     public void WinMiniGame()
     {
-        if(IsGameOver)
-            return;
-            
         if (MGLoop.Current.IsInPostGame)
         {
             Debug.LogWarning("WinMiniGame fired multiple times by current Minigame. Not good !!");
@@ -202,9 +196,6 @@ public class MiniGameManager : MonoBehaviour, IManager
 
     async void Next()
     {
-        if (IsGameOver)
-            return;
-
         gameClock.Freeze(true);
         await PG.ClosePlaygroundAnim();
         StopCurrent();
@@ -242,8 +233,11 @@ public class MiniGameManager : MonoBehaviour, IManager
 
                 await UI.LoopCompleteAnim(MGLoop, LoopCompleteAnimCTS.Token);
 
-                //UI.skipAnimBtn.clickCallback.RemoveListener(() => LoopCompleteAnimCTS.Cancel());
-            }
+                
+            // play animation
+            await UI.LoopCompleteAnim(MGLoop, LoopCompleteAnimCTS.Token);
+
+            //UI.skipAnimBtn.clickCallback.RemoveListener(() => LoopCompleteAnimCTS.Cancel());
 
             MGLoop.Reset();
         }

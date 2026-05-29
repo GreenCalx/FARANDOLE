@@ -1,8 +1,7 @@
 using UnityEngine;
 using System;
-using System.Collections.Generic;
 
-[CreateAssetMenu(fileName = "SpawnableDef", menuName = "MiniGameExtensions/SpawnableDef")]
+[CreateAssetMenu(fileName = "SpawnableDef", menuName = "Scriptable Objects/SpawnableDef")]
 [Serializable]
 public class SpawnableDef : ScriptableObject
 {

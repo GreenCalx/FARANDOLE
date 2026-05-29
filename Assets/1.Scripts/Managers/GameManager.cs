@@ -63,6 +63,7 @@ public class GameManager : MonoBehaviour
         PG.ForceDoorClose();
 
         MGM.Init(this);
+        MGM.LoadLoop();
         while (!MGM.IsReady())
         { yield return null; }
 

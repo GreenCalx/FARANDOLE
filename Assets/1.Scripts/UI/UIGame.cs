@@ -33,8 +33,6 @@ public class UIGame : MonoBehaviour, IManager, IDynamicUI
     public UILoopPresentationAnim inst_loopPresentationAnim;
     [Header("PowerBar")]
     public UIPowerBar powerBar;
-    [Header("Mutation")]
-    public UIMutationPanel mutationPanel;
 
     [Header("Launch Game")]
     public CanvasGroup h_LaunchGameCanvas;

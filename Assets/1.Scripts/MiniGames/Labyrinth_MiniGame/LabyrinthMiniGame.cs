@@ -17,7 +17,6 @@ public class LabyrinthMiniGame : MiniGame, IPhysicsFamily
     public List<GameObject> diffMLayouts;
     public List<float> ballSizeDownScalesPerBall;
     LabyrinthLayout selectedLayout;
-    Bounds labyrinthLocalBounds;
 
     public void ClearLayout()
     {
@@ -77,9 +76,6 @@ public class LabyrinthMiniGame : MiniGame, IPhysicsFamily
         inst_movingLabyrinth.SetFromLayout(selectedLayout, MGM.LM2D);
         inst_movingLabyrinth.InitColor(MGM.GetCurrentColor());
         inst_movingLabyrinth.transform.rotation = Quaternion.identity;
-
-        labyrinthLocalBounds = selectedLayout.CC2D.bounds;
-        labyrinthLocalBounds.Expand(0.05f);
 
         for (int i = 0; i < selectedLayout.ballNumber ; i++)
         {
@@ -143,31 +139,10 @@ public class LabyrinthMiniGame : MiniGame, IPhysicsFamily
         return inst_RollingBalls.Where(e => e != null).ToList().Count == 0;
     }
 
-    void CheckBallBounds()
-    {
-        for (int i = inst_RollingBalls.Count - 1; i >= 0; i--)
-        {
-            GameObject ballGO = inst_RollingBalls[i];
-            if (ballGO == null)
-                continue;
-
-            Vector3 localPos = inst_movingLabyrinth.transform.InverseTransformPoint(ballGO.transform.position);
-            if (!labyrinthLocalBounds.Contains(localPos))
-            {
-                Debug.LogWarning($"[Labyrinth] Ball clipped out of bounds — destroying");
-                RollingBall ball = ballGO.GetComponent<RollingBall>();
-                ball?.OnFinishCB?.Invoke();
-            }
-        }
-    }
-
     void Update()
     {
         if (IsInPostGame)
             return;
-
-        if (IsActiveMiniGame)
-            CheckBallBounds();
 
         if (SuccessCheck())
             Win();

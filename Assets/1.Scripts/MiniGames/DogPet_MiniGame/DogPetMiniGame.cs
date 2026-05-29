@@ -6,7 +6,6 @@ using static LocalUtils;
 public class DogPetMiniGame : MiniGame, IDogFamily
 {
     [Header("DogPetMiniGame")]
-    readonly string pettingCountKey = "DogPettings";
     public GameObject prefab_dogHead;
     DogHead inst_dogHead;
     int pettings = 0;
@@ -30,9 +29,12 @@ public class DogPetMiniGame : MiniGame, IDogFamily
     }
     public override void Reset()
     {
-        ITargetObjectiveExtension objectiveExt = GetExtension<ITargetObjectiveExtension>();
-        targetPetting = objectiveExt?.Get(pettingCountKey, MGM.MGLoop.rank) ?? 10;
-
+        // inst_dogHead = GOBuilder.Create(prefab_dogHead)
+        //                 .WithName("DogHead")
+        //                 .WithPosition(Vector3.zero)
+        //                 .WithParent(transform)
+        //                 .BuildAs<DogHead>();
+        // inst_dogHead.Init();
         inst_dogHead.Reset();
 
         pettings = 0;

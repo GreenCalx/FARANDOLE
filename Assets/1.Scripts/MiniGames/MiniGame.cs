@@ -6,7 +6,6 @@ using UnityEngine;
 using UnityEngine.Events;
 using Cysharp.Threading.Tasks;
 using System.Threading;
-using static LocalUtils;
 
 public enum MiniGameSuccessState
 {
@@ -30,9 +29,7 @@ public enum EMiniGameMods
     SPAWNER=1,
     EXTENDABLE=2,
     CHESSBOARD=3,
-    BALL=4,
-    TARGET_OBJECTIVE=5,
-    PATH = 6
+    BALL=4
 }
 
 public abstract class MiniGame : MonoBehaviour, IMiniGame
@@ -40,41 +37,20 @@ public abstract class MiniGame : MonoBehaviour, IMiniGame
     [Header("MiniGame Mand")]
     public MiniGameSO descriptor;
     [SerializeReference, SerializeField]
-    public List<MiniGameExtension> extensions;
-    public MiniGameExtension AlphaMut => extensions != null && extensions.Count > 0 ? extensions[0] : null;
-    public MiniGameExtension BetaMut => extensions != null && extensions.Count > 1 ? extensions[1] : null;
-    public bool HaveMutations => (AlphaMut!=null) || (BetaMut!=null);
-    private Dictionary<Type, MiniGameExtension> _extensionCache = null;
-    private void BuildExtensionCache()
+    public List<MiniGameExtension> extensions = new();
+    public bool TryGetExtension<T>(out T ext) where T : MiniGameExtension
     {
-        _extensionCache = new Dictionary<Type, MiniGameExtension>();
-
-        if (extensions == null)
-            return;
-
-        foreach (var ext in extensions)
+        foreach (var e in extensions)
         {
-            var type = ext.GetType();
-            _extensionCache[type] = ext;
-
-            foreach (var iface in type.GetInterfaces())
+            if (e is T t)
             {
-            if (LocalUtils.IsMiniGameExtensionInterface(iface))
-            {
-                _extensionCache[iface] = ext;
-            }
+                ext = t;
+                return true;
             }
         }
-    }
 
-    public T GetExtension<T>()
-    {
-        if (_extensionCache == null)
-            BuildExtensionCache();
-
-        return _extensionCache.TryGetValue(typeof(T), out var ext)
-            ? (T)(object)ext
-            : default;
+        ext = null;
+        return false;
     }
 
     [Header("MiniGame Internal View")]

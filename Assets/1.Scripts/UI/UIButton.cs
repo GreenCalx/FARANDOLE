@@ -124,8 +124,7 @@ public class UIButton : Button, IPointerUpHandler, IPointerDownHandler, IPointer
     // IPointerExitHandler
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (btn_animator != null && !string.IsNullOrEmpty(animationTriggers.normalTrigger))
-            btn_animator.ResetTrigger(animationTriggers.pressedTrigger);
+        btn_animator.SetTrigger(animationTriggers.normalTrigger);
         DoStateTransition(SelectionState.Normal, true);
         clickCancelled = true;
         pressed = false;

@@ -1,6 +1,4 @@
-﻿using UnityEditor;
-
-namespace Plugins.Animate_UI_Materials.Editor
+﻿namespace UnityEditor
 {
  /// <summary>
  /// Broken implementation of MaterialEditor meant to be injected in a standard Editor

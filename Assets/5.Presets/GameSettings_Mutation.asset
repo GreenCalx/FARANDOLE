@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GameSettings_Mutation
   m_EditorClassIdentifier: 
   PlayerHP: 10
-  loopSize: 4
+  loopSize: 7
   percentOfLoopSizeToPass: 0.5
   ComboRequirementForSuper: 2
   ComboRequirementForMaster: 5
@@ -62,6 +62,5 @@ MonoBehaviour:
   GameClockScaleAnimDuration: 0.25
   PostShowLoopResultDelayInMs: 1000
   PostShowNewRankDelayInMs: 1000
-  PostMutationSelectionDelayInMs: 500
   ShowLightTotalTimeInMs: 2000
   MaxLightUpMiniGameThumbnailTime: 250

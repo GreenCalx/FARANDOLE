@@ -6,6 +6,4 @@ using System.Collections.Generic;
 public abstract class MiniGameExtension
 {
     public abstract EMiniGameMods Tag { get; }
-    public virtual void ResetMutation() {}
-    public virtual void ApplyMutation(float  iMutChannelValue) {}
 }
