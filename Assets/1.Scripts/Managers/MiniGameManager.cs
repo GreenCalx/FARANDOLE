@@ -233,11 +233,8 @@ public class MiniGameManager : MonoBehaviour, IManager
 
                 await UI.LoopCompleteAnim(MGLoop, LoopCompleteAnimCTS.Token);
 
-                
-            // play animation
-            await UI.LoopCompleteAnim(MGLoop, LoopCompleteAnimCTS.Token);
-
-            //UI.skipAnimBtn.clickCallback.RemoveListener(() => LoopCompleteAnimCTS.Cancel());
+                //UI.skipAnimBtn.clickCallback.RemoveListener(() => LoopCompleteAnimCTS.Cancel());
+            }
 
             MGLoop.Reset();
         }
