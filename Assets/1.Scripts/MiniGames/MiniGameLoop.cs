@@ -79,7 +79,11 @@ public class MiniGameLoop : IEnumerator<MiniGame>
             GameObject new_mg = GOBuilder.Create(prefab).Build();
             MiniGame as_mg = new_mg.GetComponent<MiniGame>();
             if (as_mg == null)
-                return;
+            {
+                Debug.LogError($"MiniGameLoop.Init: prefab '{prefab.name}' has no MiniGame component. Skipping.");
+                UnityEngine.Object.Destroy(new_mg);
+                continue;
+            }
             as_mg.MGM = iMGM;
             as_mg.PC = iMGM.PC;
             as_mg.PG = iMGM.PG;
@@ -129,6 +133,11 @@ public class MiniGameLoop : IEnumerator<MiniGame>
             socket.Reset();
         }
         index = 0;
+        if (sockets.Count == 0)
+        {
+            Debug.LogError("MiniGameLoop.Reset: sockets list is empty.");
+            return;
+        }
         socket = sockets[index];
         rankUpdateRequest = false;
         rankChanged = false;

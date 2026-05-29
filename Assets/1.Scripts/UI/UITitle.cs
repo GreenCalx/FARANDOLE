@@ -65,7 +65,7 @@ public class UITitle : UINavigator
         m_MutationMode?.clickCallback.AddListener(() => StartMutationMode());
         m_DailySeedMode?.clickCallback.AddListener(() => StartDailySeed());
         m_CustomMode?.clickCallback.AddListener(() => StartRandom());
-        m_LaunchSinglesMode?.onClick.AddListener(() => StartSingles(m_LaunchSinglesGame.selectedGame.ID));
+        m_LaunchSinglesMode?.clickCallback.AddListener(() => StartSingles(m_LaunchSinglesGame.selectedGame.ID));
 
         handle_PopUpPanel.NavigateBackCB.AddListener(()=> { handle_profilePanel.Invalidate = true;  base.OnBack(); });
 

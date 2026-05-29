@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
     
     UIGameOver inst_UIGameOver;
     CancellationTokenSource cts;
+    UnityAction launchGameAction;
     void Awake()
     {
         if (instance != null && instance != this)
@@ -88,7 +89,8 @@ public class GameManager : MonoBehaviour
         OnLoopDepthUpdate();
         OnLoopRankUpdate();
 
-        UI.launchGameCommand?.SwipeCallback.AddListener(() => StartGame());
+        launchGameAction = () => StartGame();
+        UI.launchGameCommand?.SwipeCallback.AddListener(launchGameAction);
         PC.AddSwipeTracker(UI.launchGameCommand);
     }
 
@@ -100,9 +102,9 @@ public class GameManager : MonoBehaviour
 
         UI.OnBeforeLoopDepth.AddListener(OnLoopDepthUpdate);
         UI.OnLoopRankUpdate.AddListener(OnLoopRankUpdate);
-        UI.h_PauseMenu.h_ResumeBtn.clickCallback.AddListener(() => { UI.h_PauseMenu.Toggle(); });
-        UI.h_PauseMenu.h_TryAgainBtn.clickCallback.AddListener(() => { UI.h_PauseMenu.Toggle(); RestartGame(); });
-        UI.h_PauseMenu.h_ExitBtn.clickCallback.AddListener(() => { UI.h_PauseMenu.Toggle(); ExitToTitle(); });
+        UI.h_PauseMenu.h_ResumeBtn.clickCallback.AddListener(OnResumeClicked);
+        UI.h_PauseMenu.h_TryAgainBtn.clickCallback.AddListener(OnTryAgainClicked);
+        UI.h_PauseMenu.h_ExitBtn.clickCallback.AddListener(OnExitClicked);
     }
 
     void RemoveCallbacks()
@@ -113,14 +115,18 @@ public class GameManager : MonoBehaviour
 
         UI.OnBeforeLoopDepth.RemoveListener(OnLoopDepthUpdate);
         UI.OnLoopRankUpdate.RemoveListener(OnLoopRankUpdate);
-        UI.h_PauseMenu.h_ResumeBtn.clickCallback.RemoveListener(() => { UI.h_PauseMenu.Toggle(); });
-        UI.h_PauseMenu.h_TryAgainBtn.clickCallback.RemoveListener(() => { UI.h_PauseMenu.Toggle(); RestartGame(); });
-        UI.h_PauseMenu.h_ExitBtn.clickCallback.RemoveListener(() => { UI.h_PauseMenu.Toggle(); ExitToTitle(); });
+        UI.h_PauseMenu.h_ResumeBtn.clickCallback.RemoveListener(OnResumeClicked);
+        UI.h_PauseMenu.h_TryAgainBtn.clickCallback.RemoveListener(OnTryAgainClicked);
+        UI.h_PauseMenu.h_ExitBtn.clickCallback.RemoveListener(OnExitClicked);
     }
+
+    void OnResumeClicked() => UI.h_PauseMenu.Toggle();
+    void OnTryAgainClicked() { UI.h_PauseMenu.Toggle(); RestartGame(); }
+    void OnExitClicked() { UI.h_PauseMenu.Toggle(); ExitToTitle(); }
 
     async UniTaskVoid StartGame()
     {
-        UI.launchGameCommand?.SwipeCallback.RemoveListener(() => StartGame());
+        UI.launchGameCommand?.SwipeCallback.RemoveListener(launchGameAction);
         PC.RemoveSwipeTracker(UI.launchGameCommand);
         UI.h_LaunchGameCanvas.gameObject.SetActive(false);
 
@@ -267,7 +273,7 @@ public class GameManager : MonoBehaviour
         // Submit to Cloud
         if (GameData.Get.currentGameMode == GAME_MODE.DAILY_SEED)
         {
-            UGSCloudSaveManager.SubmitDailySeedScore(score);    
+            UGSCloudSaveManager.SubmitDailySeedScore(score);
         }
         else if (GameData.Get.currentGameMode == GAME_MODE.SINGLES)
         {
@@ -278,11 +284,15 @@ public class GameManager : MonoBehaviour
                 score: score,
                 maxRank: maxRank
             );
-            //UGSCloudSaveManager.SaveSinglesCompletion(MGID, score, maxRank, playerData.FullLoopCompleted);   
+            //UGSCloudSaveManager.SaveSinglesCompletion(MGID, score, maxRank, playerData.FullLoopCompleted);
         }
 
-        return true;
-
+        var sockets = MGM.MGLoop.sockets;
+        byte[] ids = new byte[sockets.Count];
+        for (int i = 0; i < sockets.Count; i++)
+            ids[i] = (byte)sockets[i].inst_miniGame.descriptor.ID;
+        LoopHighScore lhs = new LoopHighScore(GameData.Get.currentGameMode, ids, (int)score, DateTime.Now);
+        return UserData.IsNewHighScore(lhs, out _);
     }
 
 

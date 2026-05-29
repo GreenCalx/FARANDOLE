@@ -422,7 +422,7 @@ public class PlaygroundManager : MonoBehaviour, IManager
     public bool IsScreenPosOOB(Vector2 iScreenPos)
     {
         Vector3 proj = Camera.main.ScreenToWorldPoint(iScreenPos);
-        return bounds.Contains(proj);
+        return !bounds.Contains(proj);
     }
 
     public float GetYPosFromHeightFrac(float iFrac)

@@ -166,6 +166,10 @@ public static class UserData
                     oPrevHS = lhs;
                     return true;
                 }
+                else
+                {
+                    return false;
+                }
             }
         }
         // its a first high score for those game ids

@@ -44,7 +44,7 @@ public class AudioManager : MonoBehaviour, IManager
     async UniTask LerpBGM(float iRankFrom, float iRankTo)
     {
         lerpingBGM = true;
-        float startTime = Time.time;
+        float startTime = Time.realtimeSinceStartup;
         float frac = 0f;
         while (frac < 1f)
         {

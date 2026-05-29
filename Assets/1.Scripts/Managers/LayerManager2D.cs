@@ -31,7 +31,7 @@ public class LayerManager2D : MonoBehaviour, IManager
                 renderers[i] = null;
                 i++;
             }
-            nextSlot = 1;
+            nextSlot = reservedSize + 1;
         }
 
         public void PlaceInReserve(Renderer iRenderer)

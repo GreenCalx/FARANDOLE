@@ -23,7 +23,6 @@ public static class UGSCloudSaveManager
 
     public static string GetDailySeedLeaderboardKey(string iDateKey)
     {
-        //return "LEADERBOARD_DAILY_SEED_" + iDateKey;
         return "LEADERBOARD_DAILY_SEED";
     }
 
@@ -77,21 +76,14 @@ public static class UGSCloudSaveManager
 
     static async UniTask<double> LoadTodayBestScore(string iKey)
     {
-        string dateKey = GetTodayKey();
-        string leaderboardID = GetDailySeedLeaderboardKey(dateKey);
-
         try
         {
-            LeaderboardEntry entry = await LeaderboardsService.Instance.GetPlayerScoreAsync(
-                "LEADERBOARD_DAILY_SEED"
-            );
+            LeaderboardEntry entry = await LeaderboardsService.Instance.GetPlayerScoreAsync(iKey);
             return entry.Score;
-        } catch (Exception e)
+        }
+        catch (Exception)
         {
-            // Can happen if not found ( first score of the day)
-            // TODO Can also triggered otherwise I guess so check it out
-            
-            // swallow for now
+            // Expected when player has no score yet for this leaderboard
         }
         return 0;
     }
@@ -135,5 +127,49 @@ public static class UGSCloudSaveManager
         );
 
         return scores.Results;
+    }
+
+    /// ARCHIVED LEADERBOARDS
+    // Returns the list of past reset versions, most recent first.
+    public static async UniTask<List<LeaderboardVersion>> FetchArchivedVersions(int iLimit = 10)
+    {
+        LeaderboardVersions versions = await LeaderboardsService.Instance.GetVersionsAsync(
+            GetDailySeedLeaderboardKey(GetTodayKey()),
+            new GetVersionsOptions { Limit = iLimit }
+        );
+
+        return versions.Results;
+    }
+
+    // Returns the top scores for a specific archived version (use version.Id from FetchArchivedVersions).
+    public static async UniTask<List<LeaderboardEntry>> FetchArchivedLeaderboard(
+        string iVersionId,
+        int iLimit = 100
+    )
+    {
+        LeaderboardVersionScoresPage scores = await LeaderboardsService.Instance.GetVersionScoresAsync(
+            GetDailySeedLeaderboardKey(GetTodayKey()),
+            iVersionId,
+            new GetVersionScoresOptions { Limit = iLimit }
+        );
+
+        return scores.Results;
+    }
+
+    // Returns the local player's entry in a specific archived version, or null if they have no score.
+    public static async UniTask<LeaderboardVersionEntry> GetPlayerArchivedScore(string iVersionId)
+    {
+        try
+        {
+            return await LeaderboardsService.Instance.GetVersionPlayerScoreAsync(
+                GetDailySeedLeaderboardKey(GetTodayKey()),
+                iVersionId
+            );
+        }
+        catch (Exception)
+        {
+            // Player has no score in this version
+            return null;
+        }
     }
 }

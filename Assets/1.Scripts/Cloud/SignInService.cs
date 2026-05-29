@@ -39,22 +39,21 @@ public class SignInService : MonoBehaviour
     //--------------------------------------
     // GOOGLE SIGN-IN
     //--------------------------------------
-public async UniTaskVoid GoogleLogin()
-{
-#if UNITY_ANDROID
-    string idToken = await GPGSAuthentication.SignInAndGetIdToken();
-
-    if (string.IsNullOrEmpty(idToken))
+    public async UniTaskVoid GoogleLogin()
     {
-        connectionText.text = "Google sign-in failed";
-        return;
-    }
+#if UNITY_ANDROID
+        await UGSAuthenticationManager.LinkGoogleAsync();
 
-    await AuthenticationService.Instance.LinkWithGoogleAsync(idToken);
+        if (string.IsNullOrEmpty(UGSAuthenticationManager.PlayerId))
+        {
+            connectionText.text = "Google sign-in failed";
+            return;
+        }
 
-    connectionText.text = "Google Play Sign in OK";
+        SessionData.IsOnline = true;
+        connectionText.text = UGSAuthenticationManager.PlayerName;
 #endif
-}
+    }
 
 
     //--------------------------------------

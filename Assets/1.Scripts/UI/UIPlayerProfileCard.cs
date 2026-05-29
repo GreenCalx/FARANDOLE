@@ -14,7 +14,14 @@ public class UIPlayerProfileCard : MonoBehaviour
     void OnEnable()
     {
         Invalidate = true;
+        IAPManager.Get?.OnPremiumUnlocked.AddListener(Refresh);
     }
+
+    void OnDisable()
+    {
+        IAPManager.Get?.OnPremiumUnlocked.RemoveListener(Refresh);
+    }
+
     void Update()
     {
         if (Invalidate)
@@ -26,20 +33,17 @@ public class UIPlayerProfileCard : MonoBehaviour
 
     public void Refresh()
     {
-        // Set premium features
         bool isPremium = SessionData.IsPremium;
 
         m_HandlePremiumAcc.gameObject.SetActive(isPremium);
         m_HandleNotPremiumAcc.gameObject.SetActive(!isPremium);
 
-        //m_ProfileCardButton.gameObject.SetActive(true);
-        m_ProfileCardButton?.onClick.RemoveAllListeners();
+        m_ProfileCardButton?.clickCallback.RemoveAllListeners();
         if (!isPremium)
-            m_ProfileCardButton?.onClick.AddListener(() => OpenStore());
+            m_ProfileCardButton?.clickCallback.AddListener(() => OpenStore());
         else
-            m_ProfileCardButton?.onClick.AddListener(() => OpenProfileEdit());
+            m_ProfileCardButton?.clickCallback.AddListener(() => OpenProfileEdit());
 
-        // update
         m_UserNameText.text = SessionData.UserName;
 
         Debug.Log("Profile refreshed");

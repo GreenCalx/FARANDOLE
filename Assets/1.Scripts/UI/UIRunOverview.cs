@@ -85,6 +85,11 @@ public class UIRunOverview : MonoBehaviour
         LR.Points[1] = inst_rankLines.Last().GetComponent<RectTransform>().anchoredPosition;
         LR.gameObject.SetActive(true);
 
-        //dragScroll.CalculateBounds();
+        // Items sit at index * Spacing (negative Y). Set content height explicitly so
+        // UIDragScroll.CalculateBounds() reads the correct value regardless of whether
+        // h_RunDisplay has a ContentSizeFitter or a fixed size in the prefab.
+        float contentHeight = (index + 1) * Mathf.Abs(Spacing); // +1 for bottom padding
+        h_RunDisplay.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, contentHeight);
+        dragScroll?.CalculateBounds();
     }
 }

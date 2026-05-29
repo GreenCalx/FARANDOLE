@@ -17,6 +17,10 @@ public class IAPManager : MonoBehaviour
     private static IAPManager instance = null;
     public static IAPManager Get => instance;
 
+    // Fired when premium is confirmed (on purchase or on restored purchases at startup).
+    // Subscribe in scene UI to refresh premium-gated elements.
+    public UnityEvent OnPremiumUnlocked = new UnityEvent();
+
     readonly string kPremiumAccStoreKey = "premium_account";
     readonly string kLocalPremiumUnlocked = "PremiumFeatures";
     StandardPurchasingModule m_PurchasingModule;
@@ -171,13 +175,20 @@ public class IAPManager : MonoBehaviour
             return true;
 
         var purchases = m_StoreController.GetPurchases();
-        foreach(Order order in purchases)
+        foreach (Order order in purchases)
         {
-            if (order is ConfirmedOrder)
+            if (order is ConfirmedOrder confirmedOrder)
             {
-                Debug.Log("Product " + kPremiumAccStoreKey + " purchase found. ");
-                PlayerPrefs.SetInt(kLocalPremiumUnlocked, 1);
-                return true;
+                foreach (var cartItem in confirmedOrder.CartOrdered.Items())
+                {
+                    if (cartItem.Product.definition.id == kPremiumAccStoreKey)
+                    {
+                        Debug.Log("Product " + kPremiumAccStoreKey + " purchase confirmed.");
+                        PlayerPrefs.SetInt(kLocalPremiumUnlocked, 1);
+                        OnPremiumUnlocked?.Invoke();
+                        return true;
+                    }
+                }
             }
         }
         return false;

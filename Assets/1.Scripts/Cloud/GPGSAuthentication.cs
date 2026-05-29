@@ -5,7 +5,9 @@ using GooglePlayGames;
 
 public static class GPGSAuthentication
 {
-    public static Task<string> SignInAndGetIdToken()
+    // Returns a server auth code suitable for UGS LinkWithGooglePlayGamesAsync.
+    // GPGS v2 requires RequestServerSideAccess — GetUserId() returns a player ID string, not a token.
+    public static Task<string> SignInAndGetAuthCode()
     {
         var tcs = new TaskCompletionSource<string>();
 
@@ -20,17 +22,20 @@ public static class GPGSAuthentication
                 return;
             }
 
-            string idToken = PlayGamesPlatform.Instance.GetUserId();
-
-            if (string.IsNullOrEmpty(idToken))
-            {
-                Debug.LogError("[GPGS] ID Token is empty");
-                tcs.SetResult(null);
-                return;
-            }
-
-            Debug.Log("[GPGS] ID Token received");
-            tcs.SetResult(idToken);
+            PlayGamesPlatform.Instance.RequestServerSideAccess(
+                forceRefreshToken: false,
+                callback: authCode =>
+                {
+                    if (string.IsNullOrEmpty(authCode))
+                    {
+                        Debug.LogError("[GPGS] Server auth code is empty");
+                        tcs.SetResult(null);
+                        return;
+                    }
+                    Debug.Log("[GPGS] Server auth code received");
+                    tcs.SetResult(authCode);
+                }
+            );
         });
 
         return tcs.Task;

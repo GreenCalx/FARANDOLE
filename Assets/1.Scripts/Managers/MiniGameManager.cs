@@ -220,16 +220,30 @@ public class MiniGameManager : MonoBehaviour, IManager
             MGLoop.depth++;
             OnLoopComplete.Invoke();
 
-            // Cancel animation init
-            LoopCompleteAnimCTS = new CancellationTokenSource();
-            //UI.skipAnimBtn.clickCallback.AddListener(() => LoopCompleteAnimCTS.Cancel());
+            if (GameData.Get.currentGameMode == GAME_MODE.SINGLES)
+            {
+                // Bypass the full loop complete animation in Singles — stage clear already played.
+                // Fire state-update events directly so rank, depth, score and audio stay consistent.
+                UI.OnBeforeLoopDepth?.Invoke();
+                float prevRank = (float)PData.loopHistory.Peek().completionRank;
+                UI.OnLoopRankUpdate?.Invoke();
+                GameManager.Get.AUDIO.LerpRank(prevRank, (float)MGLoop.rank);
+                UI.UpdateScore(PData.loopHistory.Peek().LoopScore);
+                if (MGLoop.IsFinalLoop)
+                {
+                    GameManager.Get.OnFullLoopCompleted();
+                    return;
+                }
+            }
+            else
+            {
+                LoopCompleteAnimCTS = new CancellationTokenSource();
+                //UI.skipAnimBtn.clickCallback.AddListener(() => LoopCompleteAnimCTS.Cancel());
 
-            // Rank update
+                await UI.LoopCompleteAnim(MGLoop, LoopCompleteAnimCTS.Token);
 
-            // play animation
-            await UI.LoopCompleteAnim(MGLoop, LoopCompleteAnimCTS.Token);
-
-            //UI.skipAnimBtn.clickCallback.RemoveListener(() => LoopCompleteAnimCTS.Cancel());
+                //UI.skipAnimBtn.clickCallback.RemoveListener(() => LoopCompleteAnimCTS.Cancel());
+            }
 
             MGLoop.Reset();
         }
