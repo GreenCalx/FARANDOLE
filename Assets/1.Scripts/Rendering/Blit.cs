@@ -177,7 +177,7 @@ public class BlitRendererFeature : ScriptableRendererFeature
             // Frame-lock: replay the already-frozen frame through the material.
             if (d.lockReplay)
             {
-                Bind(cmd, d.mainTexProperty, locked);
+                BindSource(d, cmd, locked);
                 CoreUtils.SetRenderTarget(cmd, src);
                 cmd.DrawMesh(d.quad, Matrix4x4.identity, d.material, 0, d.passIndex);
                 return;
@@ -187,7 +187,7 @@ public class BlitRendererFeature : ScriptableRendererFeature
             if (d.lockCapture)
             {
                 Blitter.BlitCameraTexture(cmd, src, locked);
-                Bind(cmd, d.mainTexProperty, locked);
+                BindSource(d, cmd, locked);
                 CoreUtils.SetRenderTarget(cmd, src);
                 cmd.DrawMesh(d.quad, Matrix4x4.identity, d.material, 0, d.passIndex);
                 return;
@@ -195,16 +195,25 @@ public class BlitRendererFeature : ScriptableRendererFeature
 
             // Regular blit: copy camera -> temp, then run the material from temp back onto the camera.
             Blitter.BlitCameraTexture(cmd, src, temp);
-            Bind(cmd, d.mainTexProperty, temp);
+            BindSource(d, cmd, temp);
             CoreUtils.SetRenderTarget(cmd, src);
             cmd.DrawMesh(d.quad, Matrix4x4.identity, d.material, 0, d.passIndex);
         }
 
-        static void Bind(CommandBuffer cmd, string mainTexProperty, RTHandle tex)
+        static void BindSource(PassData d, CommandBuffer cmd, RTHandle tex)
         {
-            cmd.SetGlobalTexture("_MainTex", tex);
-            if (!string.IsNullOrEmpty(mainTexProperty) && mainTexProperty != "_MainTex")
-                cmd.SetGlobalTexture(mainTexProperty, tex);
+            string prop = string.IsNullOrEmpty(d.mainTexProperty) ? "_MainTex" : d.mainTexProperty;
+
+            // Global binding (used by _MainTex_TexelSize-driven shaders and non-exposed reads).
+            cmd.SetGlobalTexture(prop, tex);
+            if (prop != "_MainTex") cmd.SetGlobalTexture("_MainTex", tex);
+
+            // Critical: an *exposed* Shader Graph texture property (m_GeneratePropertyBlock) samples the
+            // material's slot, which falls back to the property's default (White) texture when empty and
+            // OVERRIDES any global of the same name. So write the real source onto the material slot,
+            // exactly like the legacy Execute() pass did, or the effect melts a blank white image.
+            if (d.material != null)
+                d.material.SetTexture(prop, tex);
         }
 
         public void Dispose()
