@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7413221358431396152
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2799946259453991426}
+  - component: {fileID: 2087264664428440975}
+  m_Layer: 0
+  m_Name: SeedSlingPerspectiveRoom
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2799946259453991426
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7413221358431396152}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2087264664428440975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7413221358431396152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c62128b7fe3148541909c899602c44e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cmd_Build: 0
+  cmd_Clean: 0
+  cmd_ContinuousRefresh: 0
+  m_Depth: 5
+  m_NearPlan:
+    area:
+      serializedVersion: 2
+      x: -0.5
+      y: -1.5
+      width: 1
+      height: 3
+    zDepth: 0
+  m_FarPlan:
+    area:
+      serializedVersion: 2
+      x: -2
+      y: 0
+      width: 4
+      height: 2
+    zDepth: 2.1
+  nearObjectScale: 0.5
+  farObjectScale: 0.1
+  m_XDeadZone: 0.5
+  AutoScaleFromVanishingPoint: 0
+  m_TraceLines: 1
+  m_LineTracerMat: {fileID: 2100000, guid: 7e49a6b8b3415754d869225782a84df1, type: 2}
+  m_RowTracerMat: {fileID: 2100000, guid: a9d8194e6ead1fd42818e6a452c1fab7, type: 2}
+  m_LineWidth: 0.06
+  m_LineWidthDepthFalloff: 4
+  m_TracesSortingLayer: GameSprites
+  groundMat: {fileID: 2100000, guid: 53f4b8895d94f3942995915e87ca7529, type: 2}
+  backMat: {fileID: 2100000, guid: 9f5b529b11e79e94095d67d642d66d11, type: 2}
+  wallMat_Left: {fileID: 2100000, guid: 717c1d11dc533b146bbab24b91e02d56, type: 2}
+  wallMat_Right: {fileID: 2100000, guid: 717c1d11dc533b146bbab24b91e02d56, type: 2}
+  m_FOV: 135
+  r_LM2D: {fileID: 0}

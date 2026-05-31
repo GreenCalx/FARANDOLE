@@ -564,6 +564,23 @@ public class PerspectiveRoom : MonoBehaviour
         return m_FarPlan.area.center;
     }
 
+    // Continuous projection (arbitrary depth) for SeedSling.
+    // xFrac: 0..1 across the room width; depthFrac: 0 (near) .. 1 (far).
+    // NOTE: depth/sorting for gameplay objects is handled by LayerManager2D (PlaceObject),
+    // the same way Cowboy/WhackAMole do it — NOT by overriding z here.
+    public Vector3 GroundPointAt(float xFrac, float depthFrac)
+        => PerspectiveMath.GroundPointAt(
+               m_NearPlan.area, m_FarPlan.area, m_NearPlan.zDepth, m_FarPlan.zDepth,
+               xFrac, depthFrac);
+
+    public float ScaleAt(float depthFrac)
+        => PerspectiveMath.ScaleAt(nearObjectScale, farObjectScale, depthFrac);
+
+    // Perspective rake of the floor in degrees (m_FOV is computed in Build() from the
+    // near->far plane offset: atan2(far.min - near.min)). Used to tilt ground decals/reticles
+    // so they lie on the floor plane.
+    public float GetFloorAngleDeg() => Mathf.Abs(m_FOV);
+
     public void PlaceAllOnLayers()
     {
         if (m_Rows.Count < 0)

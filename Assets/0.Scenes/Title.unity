@@ -3079,6 +3079,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_HandleStorePage: {fileID: 0}
+  OnPremiumUnlocked:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &771577246
 Transform:
   m_ObjectHideFlags: 0

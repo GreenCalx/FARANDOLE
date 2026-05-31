@@ -100,3 +100,6 @@ Assets/GooglePlayGames/Plugins/Android/*.aar
 fmod_editor.log
 Assets/Plugins/FMOD/Resources/FMODStudioSettings.asset
 Assets/Plugins/FMOD/Resources/FMODStudioSettings.asset
+/docs
+/.claude
+.mcp.json

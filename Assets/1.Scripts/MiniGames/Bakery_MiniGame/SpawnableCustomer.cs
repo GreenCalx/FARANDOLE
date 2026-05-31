@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class SpawnableCustomer : Customer, ISpawnable
 {
-    public Transform handle_desiredItemDisplay;
+    // handle_desiredItemDisplay is inherited from Customer; re-declaring it here made
+    // Unity serialize the same field name twice (type-tree error on every deserialize).
 
     public void OnCommandSatisfied()
     {

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f772bfecd73e0a64ca2b7000d99e16b6, type: 3}
+  m_Name: MG_SeedSling
+  m_EditorClassIdentifier: FarandoleAsm::MiniGameSO
+  ID: 18
+  name: SeedSling
+  goal: make the flower grow
+  thumbNailImg: {fileID: 3124949146848436715, guid: 67c16b6ebb50bce418c7fcd19104c678, type: 3}
+  prefab_MiniGame: {fileID: 3257291349880845661, guid: de7382d6f1424814cb6c0f77a2c581ab, type: 3}
+  family: 4
+  compatibleMods: 
+  orientationRequirement: 0
