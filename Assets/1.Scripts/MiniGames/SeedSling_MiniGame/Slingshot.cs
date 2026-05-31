@@ -30,6 +30,7 @@ public class Slingshot : MonoBehaviour, IPositionTracker
     public float pouchPullScale = 0.5f; // extra scale at full pull (Z- exaggeration)
     public float seedBaseScale = 1f;
     [Range(0.05f, 1f)] public float seedFarScaleRatio = 0.3f; // seed size at the far plane, as a fraction of launch size
+    [Range(5f, 80f)] public float maxPullAngleDeg = 35f; // half-angle of the band's backward stretch cone
     public float reticleFloorAngleOffsetDeg = 0f; // fine-tune on top of the room's computed floor angle
 
     PerspectiveRoom room;
@@ -80,6 +81,18 @@ public class Slingshot : MonoBehaviour, IPositionTracker
         anchor = (leftAnchor != null && rightAnchor != null)
             ? (leftAnchor.position + rightAnchor.position) * 0.5f
             : (pouch != null ? pouch.position : transform.position);
+
+        // Seat the rest pocket exactly on the room's near-plane ground center, so the seed's launch
+        // origin (SeedArc's (0.5, 0)) coincides with the pocket -> the seed flies straight out of the
+        // band with no teleport. Shift x/y only; z/sorting stay owned by LayerManager2D (foreground).
+        if (room != null)
+        {
+            Vector3 nearGround = room.GroundPointAt(0.5f, 0f);
+            Vector3 shift = new Vector3(nearGround.x - anchor.x, nearGround.y - anchor.y, 0f);
+            transform.position += shift;
+            anchor += shift;
+        }
+
         if (pouch != null) { pouch.position = anchor; pouchRestScale = pouch.localScale; }
 
         Reload();
@@ -132,8 +145,9 @@ public class Slingshot : MonoBehaviour, IPositionTracker
 
     void UpdateAim(Vector2 thumb)
     {
-        pull = new Vector2(thumb.x - anchor.x, thumb.y - anchor.y);
-        if (pull.magnitude > config.maxPull) pull = pull.normalized * config.maxPull;
+        // The pocket is bound by the elastic, not the bare finger: clamp the raw drag into the band's
+        // reachable area (a backward cone of half-angle maxPullAngleDeg, radius <= maxPull).
+        pull = ClampToBandCone(new Vector2(thumb.x - anchor.x, thumb.y - anchor.y));
 
         // Pouch (and loaded projectile) follows the pull; band bends through it.
         Vector3 pouchPoint = anchor + new Vector3(pull.x, pull.y, 0f);
@@ -164,9 +178,10 @@ public class Slingshot : MonoBehaviour, IPositionTracker
 
         LaunchParams lp = SeedArc.FromPull(pull, config);
 
-        // Capture the loaded seed's actual on-screen size *before* the pouch is reset below, so the
-        // flying seed spawns at exactly that size (no size pop at release). Falls back to the tuning
-        // value scaled to the near plane if the loaded sprite is missing.
+        // The seed launches from the band's REST pocket, so snap the pouch back to rest first and then
+        // read its world size there -> the flying seed spawns at the rest size (no pop, no pull-stretch
+        // baked in). Falls back to the tuning value scaled to the near plane if the sprite is missing.
+        if (pouch != null) { pouch.position = anchor; pouch.localScale = pouchRestScale; }
         float launchScale = loadedSR != null
             ? loadedSR.transform.lossyScale.x
             : seedBaseScale * room.ScaleAt(0f);
@@ -184,11 +199,32 @@ public class Slingshot : MonoBehaviour, IPositionTracker
             if (rubberband != null) rubberband.sortingOrder = seedSR.sortingOrder + 1;
         }
 
-        // Snap pouch back to rest and relax the band.
-        if (pouch != null) { pouch.position = anchor; pouch.localScale = pouchRestScale; }
+        // Relax the band back to rest.
         DrawRubberband(anchor);
 
         Reload(); // auto-load next-needed projectile
+    }
+
+    // Constrain a raw drag vector to the band's reachable area: magnitude <= maxPull, and direction
+    // within maxPullAngleDeg of "straight back" (-Y, toward the player). Magnitude is preserved when
+    // only the angle is clamped, so power (depth) still reads from how far the player pulls.
+    Vector2 ClampToBandCone(Vector2 v)
+    {
+        if (v.magnitude > config.maxPull) v = v.normalized * config.maxPull;
+        if (v.sqrMagnitude < 1e-6f) return v;
+
+        Vector2 back = Vector2.down; // a slingshot pocket pulls back/down, never forward past the fork
+        float half = Mathf.Clamp(maxPullAngleDeg, 0f, 89f);
+        float ang = Vector2.SignedAngle(back, v); // degrees CCW from -Y to the drag
+        if (Mathf.Abs(ang) > half)
+        {
+            float clamped = Mathf.Sign(ang) * half * Mathf.Deg2Rad;
+            float c = Mathf.Cos(clamped), s = Mathf.Sin(clamped);
+            // rotate (0,-1) by 'clamped' CCW, keep the original magnitude
+            Vector2 dir = new Vector2(back.x * c - back.y * s, back.x * s + back.y * c);
+            v = dir * v.magnitude;
+        }
+        return v;
     }
 
     void SetReticleVisible(bool v) { if (reticleSR != null) reticleSR.enabled = v; }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Rendering.RenderGraphModule;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Experimental.Rendering; // for GraphicsFormat
 
@@ -24,7 +25,7 @@ public class BlitRendererFeature : ScriptableRendererFeature
     private BlitPass blitPass;
     public bool EnableBlit
     {
-        get { return blitPass.EnableBlit; }
+        get { return blitPass != null && blitPass.EnableBlit; }
         set { if (blitPass != null) { blitPass.EnableBlit = value; } }
     }
     public override void Create()
@@ -43,8 +44,14 @@ public class BlitRendererFeature : ScriptableRendererFeature
     {
         if (blitPass == null) return;
         if (renderingData.cameraData.isSceneViewCamera || renderingData.cameraData.isPreviewCamera) return;
-        
+
         renderer.EnqueuePass(blitPass);
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        blitPass?.Dispose();
+        blitPass = null;
     }
 
     public class BlitPass : ScriptableRenderPass
@@ -54,12 +61,25 @@ public class BlitRendererFeature : ScriptableRendererFeature
         private readonly BlitSettings settings;
         [System.NonSerialized] public bool EnableBlit = false;
 
-        // persistent temp RTHandle
-        RTHandle    tempTarget;
-        RTHandle    lockedFrame;
+        // Persistent (imported) frame used by the frame-lock feature; survives between frames.
+        RTHandle lockedFrame;
         bool frameLockActive = false;
-        RenderTextureDescriptor desc;
         static Mesh fullScreenQuad;
+
+        // Per-frame data captured for the RenderGraph render function.
+        class PassData
+        {
+            public Material material;
+            public int passIndex;
+            public TextureHandle src;     // camera color (read + write)
+            public TextureHandle temp;    // transient copy of the camera color
+            public TextureHandle locked;  // persistent frozen frame (frame-lock only)
+            public string mainTexProperty;
+            public bool useLock;
+            public bool lockReplay;       // replay the already-frozen frame
+            public bool lockCapture;      // freeze this frame, then display it
+            public Mesh quad;
+        }
 
         public BlitPass(BlitSettings settings)
         {
@@ -73,144 +93,134 @@ public class BlitRendererFeature : ScriptableRendererFeature
                 fullScreenQuad = GenerateFullscreenQuad();
         }
 
-        public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
+        public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
         {
-            desc = renderingData.cameraData.cameraTargetDescriptor;
-            desc.depthBufferBits = 0;
-            desc.msaaSamples = 1;
+            if (!EnableBlit) { frameLockActive = false; return; }
+            if (material == null) return;
 
-            // Divide resolution by 2 to perform post fx operation faster
+            UniversalResourceData resourceData = frameData.Get<UniversalResourceData>();
+            // Never sample/blit using the back buffer as the active target.
+            if (resourceData.isActiveTargetBackBuffer) return;
+
+            TextureHandle src = resourceData.activeColorTexture;
+            if (!src.IsValid()) return;
+
+            // Transient half-res / LDR copy of the camera color to feed the material as _MainTex.
+            TextureDesc desc = src.GetDescriptor(renderGraph);
+            desc.name = settings.tempRTName;
+            desc.depthBufferBits = 0;
+            desc.msaaSamples = MSAASamples.None;
             if (settings.opt_HalfResolution)
             {
-                desc.width /= 2;
-                desc.height /= 2;
+                desc.width = Mathf.Max(1, desc.width / 2);
+                desc.height = Mathf.Max(1, desc.height / 2);
             }
             if (settings.opt_GraphicFormat)
+                desc.colorFormat = GraphicsFormatUtility.GetGraphicsFormat(RenderTextureFormat.ARGB32, false);
+            TextureHandle temp = renderGraph.CreateTexture(desc);
+
+            // Persistent frozen-frame target for the frame-lock feature.
+            bool useLock = settings.req_lockFrame;
+            TextureHandle locked = default;
+            if (useLock)
             {
-                desc.graphicsFormat = GraphicsFormatUtility.GetGraphicsFormat(RenderTextureFormat.ARGB32, false);    
+                if (lockedFrame == null || lockedFrame.rt == null
+                    || lockedFrame.rt.width != desc.width || lockedFrame.rt.height != desc.height)
+                {
+                    lockedFrame?.Release();
+                    var rtd = new RenderTextureDescriptor(desc.width, desc.height, desc.colorFormat, 0) { msaaSamples = 1 };
+                    lockedFrame = RTHandles.Alloc(rtd, name: "_LockedTemp");
+                }
+                locked = renderGraph.ImportTexture(lockedFrame);
             }
-            
-            if (settings.req_lockFrame)
+
+            bool lockReplay = useLock && frameLockActive;
+            bool lockCapture = useLock && !frameLockActive;
+
+            using (var builder = renderGraph.AddUnsafePass<PassData>(settings.CommandBufferName, out var data))
             {
-                RenderingUtils.ReAllocateIfNeeded(ref lockedFrame, desc, name:"_LockedTemp");
+                data.material = material;
+                data.passIndex = passIndex;
+                data.src = src;
+                data.temp = temp;
+                data.locked = locked;
+                data.mainTexProperty = settings.mainTexPropertyName;
+                data.useLock = useLock;
+                data.lockReplay = lockReplay;
+                data.lockCapture = lockCapture;
+                data.quad = fullScreenQuad;
+
+                builder.UseTexture(src, AccessFlags.ReadWrite);
+                builder.UseTexture(temp, AccessFlags.ReadWrite);
+                if (useLock) builder.UseTexture(locked, AccessFlags.ReadWrite);
+                builder.AllowPassCulling(false);
+
+                builder.SetRenderFunc((PassData d, UnsafeGraphContext ctx) => ExecutePass(d, ctx));
             }
-            RenderingUtils.ReAllocateIfNeeded(ref tempTarget, desc, name: "_BlitTemp");
+
+            if (lockCapture) frameLockActive = true;
+            if (!useLock) frameLockActive = false;
         }
 
-        public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
+        static void ExecutePass(PassData d, UnsafeGraphContext ctx)
         {
-            if (!EnableBlit)
-            {
-                frameLockActive = false;
-                return;
-            }
-                
-            if (material == null)
-                return;
+            CommandBuffer cmd = CommandBufferHelpers.GetNativeCommandBuffer(ctx.cmd);
 
-            //Debug.Log($"Executing blit pass for material: {material.name}");
+            RTHandle src = d.src;
+            RTHandle temp = d.temp;
+            RTHandle locked = d.useLock ? (RTHandle)d.locked : null;
 
-            var camData = renderingData.cameraData;
-            RTHandle cameraColor = camData.renderer.cameraColorTargetHandle;
-            if (cameraColor == null)
-                return;
-
-            CommandBuffer cmd = CommandBufferPool.Get(settings.CommandBufferName);
-
-            // To match mobile resolution that is not square at all
-            // If we want not adaptation to screen size we can probably make this optional
+            // Match the (often non-square) mobile resolution for the shader's texel maths.
             cmd.SetGlobalVector("_MainTex_TexelSize",
                 new Vector4(1f / Screen.width, 1f / Screen.height, Screen.width, Screen.height));
 
-            GraphicsFormat colorFormat = cameraColor.rt.graphicsFormat;
-            bool projectIsGamma = (QualitySettings.activeColorSpace == ColorSpace.Gamma);
-            if (projectIsGamma && GraphicsFormatUtility.IsSRGBFormat(colorFormat))
-                colorFormat = GraphicsFormatUtility.GetGraphicsFormat(RenderTextureFormat.Default, false);
-
-            /// Minimal work if frame lock requested and processed
-            if (frameLockActive && settings.req_lockFrame)
+            // Frame-lock: replay the already-frozen frame through the material.
+            if (d.lockReplay)
             {
-                CoreUtils.SetRenderTarget(cmd, cameraColor);
-
-               // material.SetTexture("_MainTex", lockedFrame);
-
-                cmd.DrawMesh(fullScreenQuad, Matrix4x4.identity, material, 0, passIndex);
-
-                // Release RT only in Dispose to avoid leaks
-                context.ExecuteCommandBuffer(cmd);
-                CommandBufferPool.Release(cmd);
-
-                return;
-            }
-            /// Freeze Frame and Lock if requested
-            if (!frameLockActive && settings.req_lockFrame)
-            {
-                RenderingUtils.ReAllocateIfNeeded(ref lockedFrame, desc, name:"_LockedTemp");
-                Blitter.BlitCameraTexture(cmd, cameraColor, lockedFrame);
-
-                // Ensures that the texture is in readable format for the shader
-                if (!string.IsNullOrEmpty(settings.mainTexPropertyName))
-                {
-                    Texture tex = tempTarget.rt != null ? (Texture)tempTarget.rt : (Texture)tempTarget;
-                    cmd.SetGlobalTexture(settings.mainTexPropertyName, tex);
-                }
-
-                CoreUtils.SetRenderTarget(cmd, cameraColor);
-
-                material.SetTexture("_MainTex", lockedFrame);
-
-                cmd.DrawMesh(fullScreenQuad, Matrix4x4.identity, material, 0, passIndex);
-
-                // Release RT only in Dispose to avoid leaks
-                context.ExecuteCommandBuffer(cmd);
-                CommandBufferPool.Release(cmd);
-
-                frameLockActive = true;
+                Bind(cmd, d.mainTexProperty, locked);
+                CoreUtils.SetRenderTarget(cmd, src);
+                cmd.DrawMesh(d.quad, Matrix4x4.identity, d.material, 0, d.passIndex);
                 return;
             }
 
-            /// Regular Blit
-            frameLockActive = false;
-            
-            Blitter.BlitCameraTexture(cmd, cameraColor, tempTarget);
-            // Ensures that the texture is in readable format for the shader
-            if (!string.IsNullOrEmpty(settings.mainTexPropertyName))
+            // Frame-lock: capture the current camera into the persistent frame, then display it.
+            if (d.lockCapture)
             {
-                Texture tex = tempTarget.rt != null ? (Texture)tempTarget.rt : (Texture)tempTarget;
-                cmd.SetGlobalTexture(settings.mainTexPropertyName, tex);
+                Blitter.BlitCameraTexture(cmd, src, locked);
+                Bind(cmd, d.mainTexProperty, locked);
+                CoreUtils.SetRenderTarget(cmd, src);
+                cmd.DrawMesh(d.quad, Matrix4x4.identity, d.material, 0, d.passIndex);
+                return;
             }
 
-            CoreUtils.SetRenderTarget(cmd, cameraColor);
-
-            material.SetTexture("_MainTex", tempTarget);
-
-            cmd.DrawMesh(fullScreenQuad, Matrix4x4.identity, material, 0, passIndex);
-
-            // Release RT only in Dispose to avoid leaks
-            context.ExecuteCommandBuffer(cmd);
-            CommandBufferPool.Release(cmd);
+            // Regular blit: copy camera -> temp, then run the material from temp back onto the camera.
+            Blitter.BlitCameraTexture(cmd, src, temp);
+            Bind(cmd, d.mainTexProperty, temp);
+            CoreUtils.SetRenderTarget(cmd, src);
+            cmd.DrawMesh(d.quad, Matrix4x4.identity, d.material, 0, d.passIndex);
         }
 
-         public override void OnCameraCleanup(CommandBuffer cmd)
+        static void Bind(CommandBuffer cmd, string mainTexProperty, RTHandle tex)
         {
-            // No clean up to do as we keep the temp RT allocation alive between frames
+            cmd.SetGlobalTexture("_MainTex", tex);
+            if (!string.IsNullOrEmpty(mainTexProperty) && mainTexProperty != "_MainTex")
+                cmd.SetGlobalTexture(mainTexProperty, tex);
         }
 
         public void Dispose()
         {
-            if (tempTarget != null)
+            if (lockedFrame != null)
             {
-                RTHandles.Release(tempTarget);
-                tempTarget = null;
+                lockedFrame.Release();
+                lockedFrame = null;
             }
         }
 
-        // Generates a real fullscreen quad
+        // Generates a real fullscreen quad.
         // This is because of a weird unity fuckery where the UV is defined
-        // in a different space or some shit
-        // This result on wrong coordinates and displays only half screen
-        // in a triangle.
-        // Using a quad mesh ensures that our UV are correct.
+        // in a different space or some shit.
+        // This results in wrong coordinates and displays only half screen
+        // in a triangle. Using a quad mesh ensures that our UVs are correct.
         private static Mesh GenerateFullscreenQuad()
         {
             var mesh = new Mesh { name = "FullScreenQuad" };
