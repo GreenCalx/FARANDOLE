@@ -6,7 +6,21 @@ public class WindmillMinigame : MiniGame, IDogFamily
     [Header("Difficulty")]
     public float[] flourThresholds;
     // True = seul le sens horaire produit de la farine (AngularSpeed < 0 en convention Unity)
+    // Sert de sens du vent initial quand la fleche est active.
     public bool clockwiseOnly = true;
+
+    [Header("Wind")]
+    // A rotation Y=0 la fleche doit representer le sens horaire (flip Y=180 = anti-horaire)
+    public SpriteRenderer windArrow;
+    public int windArrowMinDifficulty = 2;
+    public int windChangeMinDifficulty = 5;
+    [SerializeField] private float windChangePeriod = 3f;
+    [SerializeField] private float windBlinkDuration = 0.8f;
+    [SerializeField] private float windBlinkFrequency = 4f;
+    [SerializeField] private float windFlipDuration = 0.4f;
+    private bool windClockwise;
+    private bool windIsBlinking;
+    private float windTimer;
 
     public RotateToCursor inst_propeller;
     private float currentFlour;
@@ -63,6 +77,18 @@ public class WindmillMinigame : MiniGame, IDogFamily
         safran.localPosition = new Vector3(initialLocalXSafran, initialLocalYSafran, safran.localPosition.z);
         brouette.DOKill();
         brouette.localPosition = new Vector3(initialLocalXBrouette, brouette.localPosition.y, brouette.localPosition.z);
+        ResetWind();
+    }
+
+    void ResetWind()
+    {
+        windClockwise = Random.value < 0.5f;
+        windIsBlinking = false;
+        windTimer = 0f;
+        windArrow.transform.DOKill();
+        windArrow.transform.localRotation = Quaternion.Euler(0f, windClockwise ? 0f : 180f, 0f);
+        windArrow.enabled = true;
+        windArrow.gameObject.SetActive(MGM.miniGamesDifficulty >= windArrowMinDifficulty);
     }
 
     public override void Play()
@@ -112,8 +138,10 @@ public class WindmillMinigame : MiniGame, IDogFamily
         if (!IsActiveMiniGame || IsInPostGame)
             return;
 
+        UpdateWind();
+
         float speed = inst_propeller.AngularSpeed;
-        bool validDirection = clockwiseOnly ? speed < 0f : speed > 0f;
+        bool validDirection = windClockwise ? speed < 0f : speed > 0f;
         if (validDirection)
         {
             currentFlour += Mathf.Abs(speed) * Time.deltaTime / 360;
@@ -144,9 +172,48 @@ public class WindmillMinigame : MiniGame, IDogFamily
             Win();
     }
 
+    // Au-dessus de windChangeMinDifficulty : clignote pour avertir, puis la fleche
+    // se retourne et le sens valide s'inverse.
+    void UpdateWind()
+    {
+        if (MGM.miniGamesDifficulty < windChangeMinDifficulty)
+            return;
+
+        windTimer += Time.deltaTime;
+        if (!windIsBlinking)
+        {
+            if (windTimer >= windChangePeriod)
+            {
+                windTimer = 0f;
+                windIsBlinking = true;
+            }
+        }
+        else
+        {
+            windArrow.enabled = Mathf.FloorToInt(windTimer * windBlinkFrequency * 2f) % 2 == 0;
+            if (windTimer >= windBlinkDuration)
+            {
+                windTimer = 0f;
+                windIsBlinking = false;
+                windArrow.enabled = true;
+                FlipWind();
+            }
+        }
+    }
+
+    void FlipWind()
+    {
+        windClockwise = !windClockwise;
+        windArrow.transform.DOKill();
+        windArrow.transform.DOLocalRotate(new Vector3(0f, windClockwise ? 0f : 180f, 0f), windFlipDuration)
+            .SetEase(Ease.OutBack);
+    }
+
     void Clean()
     {
         if (inst_propeller != null)
             PC.RemovePositionTracker(inst_propeller);
+        if (windArrow != null)
+            windArrow.transform.DOKill();
     }
 }
